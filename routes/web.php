@@ -17,6 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+<<<<<<< HEAD
 Route::get('/insertar', function () {
 
 	/*
@@ -38,3 +39,8 @@ Route::get('/insertar', function () {
 		VALUES(?,?,?,?,?,?,?,?,?,?)",[1,1,'AA99999','2000',1,1,'Buen docente',1,1,'El Amo']);
 		*/
 });
+=======
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+>>>>>>> fede3fbc55f1e15e1772f8a5bfd7923df41d4201
