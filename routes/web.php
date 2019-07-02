@@ -30,7 +30,7 @@ Route::get('plantillafull/', function () {
 Route::get('/ejemplo/{nombre}', function ($nombre) {
     return view('layout.ejemplo',['nombre'=>$nombre]);
 });
-=======
+
 Route::get('/insertar', function () {
 
 	/*
