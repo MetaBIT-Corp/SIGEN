@@ -14,3 +14,18 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+//Plantillas y ejemplo.
+
+Route::get('plantilla/', function () {
+    return view('layout.plantilla');
+});
+
+Route::get('plantillafull/', function () {
+    return view('layout.plantilla_llena');
+});
+
+Route::get('/ejemplo/{nombre}', function ($nombre) {
+    return view('layout.ejemplo',['nombre'=>$nombre]);
+});

@@ -1,0 +1,71 @@
+.navbar-brand{
+	font-size: 1em;
+}
+
+.logo{
+	margin-left: 3rem;
+}
+
+.logo-text{
+	color: #fff;
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+.arrow-sidebar{
+	float: right;
+}
+
+.arrow-sidebar2{
+
+}
+
+.nav-item{
+	background: rgb(250,30,30);
+	padding:5px 0;
+	margin:10px 0;
+}
+
+.nav-item:hover{
+	background: rgb(150,30,30);
+}
+
+.nav-link{
+	color:#fff;
+	font-weight: bold;
+}
+
+.nav-link:hover{
+	color:#fff;
+}
+
+.icon-sidebar{
+	margin-right: 5px;
+}
+
+.sidebar {
+	padding: 0px;
+}
+
+.sidebar-sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 48px; /* Height of navbar */
+  height: calc(100vh - 48px);
+  padding-top: 0;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+
+}
+
+.first-one{
+	margin:0 0 5px 0;
+}
+
+footer{
+	padding: 1rem 0;
+	text-align: center;
+	color: #fff;
+	background: rgb(52,58,64);
+	bottom: 0;
+}
