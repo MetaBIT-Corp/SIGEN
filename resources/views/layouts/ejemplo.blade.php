@@ -1,4 +1,4 @@
-@extends("layout.plantilla")
+@extends("layouts.plantilla")
 
 @section("a_perfil")
 <?php echo $nombre?>

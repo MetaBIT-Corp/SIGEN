@@ -20,15 +20,15 @@ Route::get('/', function () {
 //Plantillas y ejemplo.
 
 Route::get('plantilla/', function () {
-    return view('layout.plantilla');
+    return view('layouts.plantilla');
 });
 
 Route::get('plantillafull/', function () {
-    return view('layout.plantilla_llena');
+    return view('layouts.plantilla_llena');
 });
 
 Route::get('/ejemplo/{nombre}', function ($nombre) {
-    return view('layout.ejemplo',['nombre'=>$nombre]);
+    return view('layouts.ejemplo',['nombre'=>$nombre]);
 });
 
 Route::get('/insertar', function () {

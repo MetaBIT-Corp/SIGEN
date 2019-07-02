@@ -37,7 +37,7 @@
             <div class="my-2 my-lg-2">
                 <a href="" class="navbar-brand"><i class="fas fa-user"></i> 
                     @yield("a_perfil")</a>
-                <a href="" class="navbar-brand"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="" class="navbar-brand"><i class="fas fa-sign-out-alt"></i> Salir</a>
             </div>
         </nav>
 
