@@ -3,6 +3,9 @@
 @endsection
 
 @section("body")
+@section("ol_breadcrumb")
+    <li class="breadcrumb-item">Materia</li>
+@endsection
 @section("main")
 @if(count($materias)>0)
 <table class="table table-striped">
@@ -30,7 +33,7 @@
       <td>SI</td>
       @endif
       @if(auth()->user()->is_teacher)
-      <td><a href="{{ route('home')}}">Listado Alumnos {{ $materia->id_carg_aca }}</a></td>
+      <td><a href="{{ route('listado_estudiante',$materia->id_carg_aca) }}"> Listado Alumnos  </a></td>
       @endif
     </tr>
     @endforeach
