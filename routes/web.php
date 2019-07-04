@@ -68,11 +68,11 @@ Route::group(['middleware' => 'admin'], function(){
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente
 Route::group(['middleware' => 'teacher'], function(){
-	Route::get('/materiasDocente', 'MateriaController@listarDocente');
+	Route::get('/materiasDocente', 'MateriaController@listarxDocente');
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Estudiante
 Route::group(['middleware' => 'student'], function(){
-
+	Route::get('/materiasEstudiante', 'MateriaController@listarxEstudiante');
 });
 
