@@ -53,6 +53,8 @@ Route::get('/insertar', function () {
 		*/
 });
 
+Route::get('/materia/estudiante/{id}', 'EstudianteController@show')->name('detalle_estudiante');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -75,4 +77,5 @@ Route::group(['middleware' => 'teacher'], function(){
 Route::group(['middleware' => 'student'], function(){
 
 });
+
 
