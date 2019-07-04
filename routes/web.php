@@ -14,15 +14,15 @@ use App\Docente;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-//Plantillas y ejemplo.
-
-Route::get('plantilla/', function () {
     return view('layouts.plantilla');
 });
 
+//Plantillas y ejemplo.
+/*
+Route::get('plantilla/', function () {
+    return view('layouts.plantilla');
+});
+*/
 Route::get('plantillafull/', function () {
     return view('layouts.plantilla_llena');
 });
@@ -65,12 +65,12 @@ Route::get('/materia/listado_estudiante', 'ListadoEstudianteController@listar');
 
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
 Route::group(['middleware' => 'admin'], function(){
-	
+	Route::get('/materia', 'MateriaController@listarAdmin');
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente
 Route::group(['middleware' => 'teacher'], function(){
-
+	Route::get('/materiasDocente', 'MateriaController@listarDocente');
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Estudiante

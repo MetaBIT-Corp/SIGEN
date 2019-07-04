@@ -8,5 +8,4 @@ class Materia extends Model
 {
     //
     Protected $table = "cat_mat_materia";
-    //public $fillable=["codigo_mat"];
 }

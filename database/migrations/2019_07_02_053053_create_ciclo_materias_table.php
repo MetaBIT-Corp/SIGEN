@@ -33,6 +33,6 @@ class CreateCicloMateriasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ciclo_materia');
+        Schema::dropIfExists('materia_ciclo');
     }
 }
