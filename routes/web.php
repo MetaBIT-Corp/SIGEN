@@ -63,12 +63,12 @@ Route::get('/materia', 'MateriaController@listar');
 
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
 Route::group(['middleware' => 'admin'], function(){
-	
+	Route::get('/materia', 'MateriaController@listarAdmin');
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente
 Route::group(['middleware' => 'teacher'], function(){
-
+	Route::get('/materiasDocente', 'MateriaController@listarDocente');
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Estudiante
