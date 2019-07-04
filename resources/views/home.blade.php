@@ -14,7 +14,14 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    @if(auth()->user()->is_admin)
+                        <h1>Eres administrador</h1>
+                    @elseif(auth()->user()->is_teacher)
+                        <h1>Eres docente</h1>
+                    @elseif(auth()->user()->is_student)
+                        <h1>Eres estudiante</h1>
+                    @endif
+                    
                 </div>
             </div>
         </div>

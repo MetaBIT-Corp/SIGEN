@@ -15,8 +15,13 @@ class CreateDetalleInscEstsTable extends Migration
     {
         Schema::create('detalle_insc_est', function (Blueprint $table) {
             $table->increments('id_insc_est');
-            $table->integer('id_est');
-            $table->integer('id_carg_aca');
+
+            $table->integer('id_carg_aca')->unsigned();
+            $table->foreign('id_carg_aca')->references('id_carg_aca')->on('carga_academica');
+
+            $table->integer('id_est')->unsigned();
+            $table->foreign('id_est')->references('id_est')->on('estudiante');
+
             $table->timestamps();
         });
     }

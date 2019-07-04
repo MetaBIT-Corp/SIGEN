@@ -18,6 +18,7 @@ class CreateMateriasTable extends Migration
             $table->string('codigo_mat');
             $table->string('nombre_mar');
             $table->integer('es_electiva');
+            $table->integer('maximo_cant_preguntas');
             $table->timestamps();
         });
     }

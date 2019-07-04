@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class CicloMateria extends Model
 {
     //
-    Protected $table = "ciclo_materia";
+    Protected $table = "materia_ciclo";
 }

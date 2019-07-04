@@ -13,7 +13,7 @@ class CreateCicloMateriasTable extends Migration
      */
     public function up()
     {
-        Schema::create('ciclo_materia', function (Blueprint $table) {
+        Schema::create('materia_ciclo', function (Blueprint $table) {
             $table->increments('id_mat_ci');
 
             $table->integer('id_cat_mat')->unsigned();
@@ -33,6 +33,6 @@ class CreateCicloMateriasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ciclo_materia');
+        Schema::dropIfExists('materia_ciclo');
     }
 }
