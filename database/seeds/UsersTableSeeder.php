@@ -32,5 +32,25 @@ class UsersTableSeeder extends Seeder
     		'password' => bcrypt('sigen2019'),
     		'role' => 2
     	]);
+
+        //Docentes Para Pruebas
+        User::create([
+            'name' => 'Ricardo',
+            'email' => 'el16002@ues.edu.sv',
+            'password' => bcrypt('sigen2019'),
+            'role' => 1
+        ]);
+        User::create([
+            'name' => 'Enrique',
+            'email' => 'mt16007@ues.edu.sv',
+            'password' => bcrypt('sigen2019'),
+            'role' => 1
+        ]);
+        User::create([
+            'name' => 'Pablo',
+            'email' => 'dc16009@ues.edu.sv',
+            'password' => bcrypt('sigen2019'),
+            'role' => 1
+        ]);
     }
 }
