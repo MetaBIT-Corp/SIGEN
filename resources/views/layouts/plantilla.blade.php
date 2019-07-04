@@ -18,6 +18,8 @@
         <!-- Styles -->
         <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
         <link rel="stylesheet" href="{{asset('css/estilo.css')}}">
+
+         @yield("css")
         
     </head>
 
@@ -84,7 +86,7 @@
         
         
 
-
+    @yield("js")
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
