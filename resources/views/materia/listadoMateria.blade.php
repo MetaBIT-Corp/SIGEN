@@ -5,8 +5,8 @@
 @section("body")
 @section("main")
 @if(count($materias)>0)
-<table class="table text-center">
-  <thead class="thead-dark">
+<table class="table table-striped">
+  <thead>
     <tr>	
       <th scope="col">#</th>
       <th scope="col">Codigo Materia</th>
@@ -30,7 +30,7 @@
       <td>SI</td>
       @endif
       @if(auth()->user()->is_teacher)
-      <td><a>Listado Alumnos</a></td>
+      <td><a href="{{ route('home')}}">Listado Alumnos {{ $materia->id_carg_aca }}</a></td>
       @endif
     </tr>
     @endforeach

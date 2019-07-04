@@ -53,28 +53,28 @@ Route::get('/insertar', function () {
 		*/
 });
 
+Route::get('/materia/estudiante/{id}', 'EstudianteController@show')->name('detalle_estudiante');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::get('/materia', 'MateriaController@listar');
+Route::get('/materia', 'MateriaController@listar')->name('materia');
 
 Route::get('/materia/listado_estudiante/{id_carga_acadimica}', 'ListadoEstudianteController@listar');
 
 
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
 Route::group(['middleware' => 'admin'], function(){
-	Route::get('/materia', 'MateriaController@listarAdmin');
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente
 Route::group(['middleware' => 'teacher'], function(){
-	Route::get('/materiasDocente', 'MateriaController@listarDocente');
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Estudiante
 Route::group(['middleware' => 'student'], function(){
-
 });
+
 
