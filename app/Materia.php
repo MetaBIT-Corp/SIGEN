@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Materia extends Model
 {
     //
-    Protected $table = "materia";
+    Protected $table = "cat_mat_materia";
+    //public $fillable=["codigo_mat"];
 }
