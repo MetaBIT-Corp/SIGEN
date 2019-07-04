@@ -60,7 +60,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/materia', 'MateriaController@listar');
 
-Route::get('/materia/listado_estudiante', 'ListadoEstudianteController@listar');
+Route::get('/materia/listado_estudiante/{id_carga_acadimica}', 'ListadoEstudianteController@listar');
 
 
 //Aqui iran las rutas a las que tiene acceso solo el Administrador

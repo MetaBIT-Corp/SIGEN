@@ -41,13 +41,25 @@
                 </tr>
               </tfoot>
               <tbody>
+                @if(count($estudiantes)>0)
+                @foreach($estudiantes as $estudiante)
                 <tr>
-                  <td>hl</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
+                  <td>{{$estudiante->carnet}}</td>
+                  <td>{{$estudiante->nombre}}</td>
+                  @if($estudiante->activo==1)
+                  <td>Activo</td>
+                  @else
+                  <td>Inactivo</td>
+                  @endif
+                  <td>{{$estudiante->anio_ingreso}}</td>
+                  <td><a title="Detalle estudiante" href="http://www.lostejos.com"><img src="{{asset('img/student.ico')}}" width="35" height="35" /></a></td>
                 </tr>
+                 @endforeach
+                 @else
+                  <tr>
+                    <td colspan="5">No se encuentran resultados disponibles</td>
+                </tr>
+                 @endif
               </tbody>
             </table>
           </div>

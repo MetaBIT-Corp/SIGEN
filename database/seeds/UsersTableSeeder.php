@@ -52,5 +52,44 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('sigen2019'),
             'role' => 1
         ]);
+
+        //Estudiantes Para Pruebas
+        User::create([
+            'name' => 'Edwin Joel Amaya Palacios',
+            'email' => 'ap16014@ues.edu.sv',
+            'password' => bcrypt('sigen2019'),
+            'role' => 1
+        ]);
+        User::create([
+            'name' => 'Kilmer Fabricio Maravilla López',
+            'email' => 'ml16006@ues.edu.sv',
+            'password' => bcrypt('sigen2019'),
+            'role' => 1
+        ]);
+        User::create([
+            'name' => 'José Alberto Flores Barillas',
+            'email' => 'fb16014@ues.edu.sv',
+            'password' => bcrypt('sigen2019'),
+            'role' => 1
+        ]);
+
+        User::create([
+            'name' => 'Marco Antonio Flores Ventura',
+            'email' => 'fv16002@ues.edu.sv',
+            'password' => bcrypt('sigen2019'),
+            'role' => 1
+        ]);
+        User::create([
+            'name' => 'Armando Patricio Rivera López',
+            'email' => 'rv16007@ues.edu.sv',
+            'password' => bcrypt('sigen2019'),
+            'role' => 1
+        ]);
+        User::create([
+            'name' => 'Carlos Rene Martinez Rivera',
+            'email' => 'mr11139@ues.edu.sv',
+            'password' => bcrypt('sigen2019'),
+            'role' => 1
+        ]);
     }
 }
