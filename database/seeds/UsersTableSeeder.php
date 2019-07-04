@@ -90,6 +90,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'mr11139@ues.edu.sv',
             'password' => bcrypt('sigen2019'),
             'role' => 1
+        ]);
         //Estudiantes para pruebas
         User::create([
             'name' => 'Jose',
