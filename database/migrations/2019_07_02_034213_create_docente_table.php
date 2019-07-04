@@ -15,6 +15,10 @@ class CreateDocenteTable extends Migration
     {
         Schema::create('pdg_dcn_docente', function (Blueprint $table) {
             $table->increments('id_pdg_dcn');
+
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+
             $table->string('carnet_dcn');
             $table->string('anio_titulo');
             $table->integer('activo');
@@ -23,10 +27,6 @@ class CreateDocenteTable extends Migration
             $table->integer('id_cargo_actual');
             $table->integer('id_segundo_cargo');
             $table->string('nombre_docente');
-            //foranea
-
-            //$table->integer('user_id')->unsigned();
-            //$table->foreign('user_id')->references('id')->on('users');
 
             $table->timestamps();
             
