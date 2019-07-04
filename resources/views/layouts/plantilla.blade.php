@@ -23,7 +23,7 @@
         
     </head>
 
-    <body id="page-top">
+    <body id="page-top" style="background: white;">
         @yield("body")
 
         <nav class="navbar navbar-dark bg-dark sticky-top flex-md-nowrap p-0">
