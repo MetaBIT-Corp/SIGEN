@@ -56,3 +56,19 @@ Route::get('/insertar', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+//Aqui iran las rutas a las que tiene acceso solo el Administrador
+Route::group(['middleware' => 'admin'], function(){
+	
+});
+
+//Aqui iran las rutas a las que tiene acceso solo el Docente
+Route::group(['middleware' => 'teacher'], function(){
+
+});
+
+//Aqui iran las rutas a las que tiene acceso solo el Estudiante
+Route::group(['middleware' => 'student'], function(){
+
+});
+
