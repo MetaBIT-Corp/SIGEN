@@ -14,15 +14,15 @@ use App\Docente;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-//Plantillas y ejemplo.
-
-Route::get('plantilla/', function () {
     return view('layouts.plantilla');
 });
 
+//Plantillas y ejemplo.
+/*
+Route::get('plantilla/', function () {
+    return view('layouts.plantilla');
+});
+*/
 Route::get('plantillafull/', function () {
     return view('layouts.plantilla_llena');
 });
