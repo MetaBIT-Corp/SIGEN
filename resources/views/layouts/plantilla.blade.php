@@ -18,6 +18,8 @@
         <!-- Styles -->
         <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
         <link rel="stylesheet" href="{{asset('css/estilo.css')}}">
+
+         @yield("css")
         
     </head>
 
@@ -34,11 +36,25 @@
                 </a>
             </div>
             
-            <div class="my-2 my-lg-2">
-                <a href="" class="navbar-brand"><i class="fas fa-user"></i> 
-                    @yield("a_perfil")</a>
-                <a href="" class="navbar-brand"><i class="fas fa-sign-out-alt"></i> Salir</a>
-            </div>
+            @if(auth()->check())
+                <div class="my-2 my-lg-2">
+                    <a href="" class="navbar-brand"><i class="fas fa-user"></i> 
+                        @yield("a_perfil")</a>
+                    <a class="navbar-brand" href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                 document.getElementById('logout-form').submit();">
+                        <i class="fas fa-sign-out-alt"></i>
+                    {{ __('Salir') }}</a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+
+                </div>
+            @else if
+                <a href="/login" class="navbar-brand"><i class="fas fa-sign-in-alt"></i> Ingresar</a>
+            @endif
+            
         </nav>
 
         <div id="content-wrapper">
@@ -62,6 +78,10 @@
                                 </ol>
 
                                 @yield("main")
+                                @if(!auth()->check() && Request::route()->getName() != 'login')
+                                    @yield("encuestas")
+                                    <h1 class="text-center">No hay encuestas de propósito general</h1>
+                                @endif
                             
                             
                         </main>
@@ -84,7 +104,7 @@
         
         
 
-
+    @yield("js")
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

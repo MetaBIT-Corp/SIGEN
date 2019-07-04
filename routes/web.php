@@ -14,15 +14,15 @@ use App\Docente;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-//Plantillas y ejemplo.
-
-Route::get('plantilla/', function () {
     return view('layouts.plantilla');
 });
 
+//Plantillas y ejemplo.
+/*
+Route::get('plantilla/', function () {
+    return view('layouts.plantilla');
+});
+*/
 Route::get('plantillafull/', function () {
     return view('layouts.plantilla_llena');
 });
@@ -59,6 +59,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::get('/materia', 'MateriaController@listar');
+
+Route::get('/materia/listado_estudiante', 'ListadoEstudianteController@listar');
 
 
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
