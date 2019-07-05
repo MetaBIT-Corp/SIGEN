@@ -25,4 +25,16 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function pruebaA(){
+        return 'Prueba Admin';
+    }
+
+    public function pruebaD(){
+        return 'Prueba Docente';
+    }
+
+    public function pruebaE(){
+        return 'Prueba Estudiante';
+    }
 }

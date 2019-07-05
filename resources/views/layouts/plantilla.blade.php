@@ -51,7 +51,7 @@
                     </form>
 
                 </div>
-            @else if
+            @else
                 <a href="/login" class="navbar-brand"><i class="fas fa-sign-in-alt"></i> Ingresar</a>
             @endif
             
@@ -80,7 +80,9 @@
                                 @yield("main")
                                 @if(!auth()->check() && Request::route()->getName() != 'login')
                                     @yield("encuestas")
-                                    <h1 class="text-center">No hay encuestas de propósito general</h1>
+                                    <div class="alert alert-info">
+                                        <h1 class="text-center">No hay encuestas de propósito general</h1>
+                                    </div>
                                 @endif
                             
                             

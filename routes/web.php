@@ -67,14 +67,17 @@ Route::get('/materia/listado_estudiante/{id_carga_acadimica}', 'ListadoEstudiant
 
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
 Route::group(['middleware' => 'admin'], function(){
+	Route::get('/pruebaa', 'HomeController@pruebaA');
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente
 Route::group(['middleware' => 'teacher'], function(){
+	Route::get('/pruebad', 'HomeController@pruebaD');
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Estudiante
 Route::group(['middleware' => 'student'], function(){
+	Route::get('/pruebae', 'HomeController@pruebaE');
 });
 
 
