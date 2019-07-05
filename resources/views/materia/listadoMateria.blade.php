@@ -33,7 +33,7 @@
       <td>SI</td>
       @endif
       @if(auth()->user()->is_teacher)
-      <td><a href="{{ route('listado_estudiante',$materia->id_carg_aca) }}"> Listado Alumnos  </a></td>
+      <td><a href="{{ route('listado_estudiante',$materia->id_mat_ci) }}"> Listado Alumnos  </a></td>
       @endif
     </tr>
     @endforeach
