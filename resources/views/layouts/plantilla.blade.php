@@ -30,7 +30,7 @@
             @yield("navbar")
 
             <div class="my-2 my-lg-2">
-                <a class="logo-text" href="#">
+                <a class="logo-text" href="/">
                     <img src="{{asset('img/logo.png')}}" width="40" height="40" class="d-inline-block align-top logo" alt="">
                     SIGEN
                 </a>
@@ -51,7 +51,7 @@
                     </form>
 
                 </div>
-            @else if
+            @else
                 <a href="/login" class="navbar-brand"><i class="fas fa-sign-in-alt"></i> Ingresar</a>
             @endif
             
@@ -67,7 +67,7 @@
                             <ul class="nav flex-column">
                                 @yield("ul_sidebar")
                                 <li class="nav-item first-one">
-                                    <a class="nav-link active" href="#">
+                                    <a class="nav-link active" href="/">
                                         <span data-feather="home"></span>
                                         SIGEN
                                         <span class="arrow-sidebar" data-feather="chevron-right"></span>
@@ -87,7 +87,9 @@
                                 @yield("main")
                                 @if(!auth()->check() && Request::route()->getName() != 'login')
                                     @yield("encuestas")
-                                    <h1 class="text-center">No hay encuestas de propósito general</h1>
+                                    <div class = "alert alert-info">
+                                        <h1 class="text-center">No hay encuestas de propósito general</h1>
+                                    </div>
                                 @endif
                             
                             
