@@ -10,8 +10,6 @@
 @section("main")
     
     @if($estudiante)
-        <h2 style="padding-bottom:30px;">Detalle de Estudiante</h2>
-         
         <div id="wrapper" style="width:800px; margin: 0 auto;">
           <div id="content-wrapper">
             <div class="container-fluid">
@@ -46,13 +44,48 @@
                     </table>
                   </div>
                 </div>
-                <div class="card-footer small text-muted">Actualizado: 04-07-2019 08:50:14</div>
+                <div class="card-footer small text-muted">Actualizado: {{$estudiante->updated_at}}</div>
               </div>
             </div>
             <!-- /.container-fluid -->
           </div>
           <!-- /.content-wrapper -->
         </div>
+        
+    @if($materias_cursando)
+        
+        @foreach($materias_cursando as $materia)
+           
+           <div class="card border-dark bg-light">
+                <div class="card-body">
+                  <h5 class="card-title"><strong>{{ $materia->codigo_mat }}</strong></h5>
+                  <p class="card-text">{{ $materia->nombre_mar }}<br>
+                  </p>
+                </div>
+                <div class="card-footer">
+                     @if($materia->es_electiva)
+                          Es una Materia obligatoria.
+                     @else
+                          Es una materia electiva.
+                     @endif
+                </div>
+            </div>
+            
+        @endforeach
+        
+    @else
+        <div class="alert alert-info alert-dismissible fade show" role="alert" style="width:800px; margin: 0 auto;"> 
+
+            <strong>Información!</strong> Actualmente no esta cursando ninguna materia. 
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> 
+
+                <span aria-hidden="true">&times;</span> 
+
+            </button> 
+
+        </div> 
+    @endif
         
     @else
         <div class="alert alert-warning alert-dismissible fade show" role="alert"> 
