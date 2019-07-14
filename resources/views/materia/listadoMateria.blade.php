@@ -7,16 +7,16 @@
     <li class="breadcrumb-item">Materia</li>
 @endsection
 @section("main")
-@if(count($materias)>0)
-<div class="accordion col-9" id="accordionExample">
+@if(count($ciclos)>0)
+<div class="accordion col-10" id="accordionExample">
 @foreach($materias as $ciclo=>$materias)
-@if($loop->iteration==1)
+@if($ciclos[$loop->iteration-1]->estado==1)
 <!-- Inicio de un Collapse -->
   <div class="card">
   	<!-- Titulo de Collapse -->
     <div class="card-header btn-link" type="button" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
       <h4 class="mb-0">
-          Ciclo {{ $ciclos[$loop->iteration-1]->num_ciclo }} Año: {{ $ciclos[$loop->iteration-1]->anio }}
+          Ciclo {{ $ciclos[$loop->iteration-1]->num_ciclo }} Año: {{ $ciclos[$loop->iteration-1]->anio }}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Estado: Activo
       </h4>
     </div>
 
@@ -113,7 +113,7 @@
 </div>
 
 @else
-<h2 class="h1">No hay datos.</h2>
+<h2 class="h1">No hay ciclos registrados.</h2>
 @endif
 
 @endsection
