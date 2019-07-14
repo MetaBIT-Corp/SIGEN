@@ -60,9 +60,9 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::get('/materia', 'MateriaController@listar')->name('materia');
+Route::get('/materias', 'MateriaController@listar')->name('materias');
 
-Route::get('/materia/listado_estudiante/{id_mat_ci}', 'ListadoEstudianteController@listar')->name('listado_estudiante');
+Route::get('/materias/listado_estudiante/{id_mat_ci}', 'ListadoEstudianteController@listar')->name('listado_estudiante');
 
 
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
