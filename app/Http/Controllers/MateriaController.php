@@ -3,18 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Materia;
+use App\Ciclo;
 use DB;
 
 class MateriaController extends Controller
 {
+	
     public function listar()
     {
         $id = auth()->user()->id;
 
         switch (auth()->user()->role) {
             case 0:
-                $materias = Materia::all();
-                return view("materia.listadoMateria", compact("materias"));
+                $materias=array();
+                $ciclos= Ciclo::all();
+                foreach ($ciclos as $ciclo) {
+                	$materias[$ciclo->id_ciclo]=DB::table('cat_mat_materia')
+                	->join('materia_ciclo','cat_mat_materia.id_cat_mat','=','materia_ciclo.id_cat_mat')
+                	->join('ciclo','ciclo.id_ciclo','=','materia_ciclo.id_ciclo')
+                	->where('ciclo.id_ciclo','=',$ciclo->id_ciclo)
+                	->select('cat_mat_materia.*','materia_ciclo.id_ciclo','ciclo.*')->get();
+                }
+
+                return view("materia.listadoMateria", compact("materias","ciclos"));
                 break;
             case 1:
                 $materias = DB::table('cat_mat_materia')

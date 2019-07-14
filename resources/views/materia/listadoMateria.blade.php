@@ -9,24 +9,38 @@
 @section("main")
 @if(count($materias)>0)
 <div class="accordion col-9" id="accordionExample">
-
+@foreach($materias as $ciclo=>$materias)
+@if($loop->iteration==1)
 <!-- Inicio de un Collapse -->
   <div class="card">
   	<!-- Titulo de Collapse -->
     <div class="card-header btn-link" type="button" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
       <h4 class="mb-0">
-          Ciclo I
+          Ciclo {{ $ciclos[$loop->iteration-1]->num_ciclo }} Año: {{ $ciclos[$loop->iteration-1]->anio }}
       </h4>
     </div>
 
     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
       <div class="card-body">
         <!-- ----------------------------Inicio de Card Views----------------------------------- -->
+@else
+<!-- Inicio de un Collapse -->
+  <div class="card">
+  	<!-- Titulo de Collapse -->
+    <div class="card-header btn-link collapsed" type="button" id="heading{{ $ciclo }}" data-toggle="collapse" data-target="#collapse{{ $ciclo }}" aria-expanded="false" aria-controls="collapse{{ $ciclo }}">
+      <h4 class="mb-0">
+          Ciclo {{ $ciclos[$loop->iteration-1]->num_ciclo }} Año: {{ $ciclos[$loop->iteration-1]->anio }}
+      </h4>
+    </div>
 
-<table class="table col-12">
+    <div id="collapse{{ $ciclo }}" class="collapse" aria-labelledby="heading{{ $ciclo }}" data-parent="#accordionExample">
+      <div class="card-body">
+        <!-- ----------------------------Inicio de Card Views----------------------------------- -->
+@endif
+<table class="col-12">
 <tbody>
 <tr class=" row mb-3">
-@foreach($materias as $materia)
+@forelse($materias as $materia)
 @if($loop->iteration==1||$loop->iteration==2)
 <td class="col-6">
 <div class="card border-dark bg-light">
@@ -84,13 +98,18 @@
 </div>
 </td>
 @endif
-@endforeach
+@empty
+<tr>
+	<td><h2 class="h1">No hay materias en este ciclo.</h2></td>
+</tr>
+@endforelse
 </tbody> 
 </table>
       </div>
     </div>
   </div>
  <!-- Fin de un Collapse -->
+ @endforeach
 </div>
 
 @else
