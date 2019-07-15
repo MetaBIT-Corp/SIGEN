@@ -70,7 +70,7 @@ Route::group(['middleware' => 'admin'], function(){
 //Aqui iran las rutas a las que tiene acceso solo el Docente
 Route::group(['middleware' => 'teacher'], function(){
     
-    Route::get('/materia/estudiante/{id}', 'EstudianteController@show')->name('detalle_estudiante');
+    Route::get('/materia/estudiante/{id}/{id_mat}', 'EstudianteController@show')->name('detalle_estudiante');
 
 });
 

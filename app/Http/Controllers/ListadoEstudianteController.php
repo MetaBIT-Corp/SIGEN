@@ -16,6 +16,6 @@ class ListadoEstudianteController extends Controller
     	->where('materia_ciclo.id_mat_ci','=',$id_mat_ci)
     	->select('estudiante.*')->get();
     	
-    	return view("estudiante/listadoEstudiante",compact("estudiantes"));
+    	return view("estudiante/listadoEstudiante",compact("estudiantes", "id_mat_ci"));
     }
 }
