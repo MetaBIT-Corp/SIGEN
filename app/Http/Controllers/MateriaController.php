@@ -27,7 +27,7 @@ class MateriaController extends Controller
                         $join->on('pdg_dcn_docente.id_pdg_dcn', '=', 'carga_academica.id_pdg_dcn')
                             ->where('pdg_dcn_docente.user_id', '=', $idUser);
                     })
-                    ->select('cat_mat_materia.*', 'carga_academica.id_carg_aca')->get();
+                    ->select('cat_mat_materia.*', 'materia_ciclo.id_mat_ci')->get();
                 return view("materia.listadoMateria", compact("materias"));
                 break;
             case 2:
@@ -42,7 +42,7 @@ class MateriaController extends Controller
                         $join->on('estudiante.id_est', '=', 'detalle_insc_est.id_est')
                             ->where('estudiante.user_id', '=', $idUser);
                     })
-                    ->select('cat_mat_materia.*', 'carga_academica.id_carg_aca')->get();
+                    ->select('cat_mat_materia.*', 'materia_ciclo.id_mat_ci')->get();
                 return view("materia.listadoMateria", compact("materias"));
 
                 break;

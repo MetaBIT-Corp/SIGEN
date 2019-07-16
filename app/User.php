@@ -38,15 +38,15 @@ class User extends Authenticatable
     ];
 
     //accessors
-    public function getIsAdminAttribute(){
+    public function getIsAdminAttribute(){ //is_admin
         return $this->role == 0;
     }
 
-    public function getIsTeacherAttribute(){
+    public function getIsTeacherAttribute(){ //is_teacher
         return $this->role == 1;
     }
 
-    public function getIsStudentAttribute(){
+    public function getIsStudentAttribute(){ //is_student
         return $this->role == 2;
     }
 }

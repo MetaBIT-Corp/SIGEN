@@ -9,6 +9,11 @@
 @endsection
 
 @section("body")
+
+@section("ol_breadcrumb")
+    <li class="breadcrumb-item"><a href="#">Materia</a></li>
+    <li class="breadcrumb-item">Estudiante</li>
+@endsection
 @section("main")
 
 <div id="wrapper">

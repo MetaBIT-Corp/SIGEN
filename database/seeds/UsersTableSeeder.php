@@ -13,25 +13,25 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         User::create([
-    		'name' => 'Admin',
-    		'email' => 'admin@gmail.com',
-    		'password' => bcrypt('sigen2019'),
-    		'role' => 0
-    	]);
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('sigen2019'),
+            'role' => 0
+        ]);
 
-    	User::create([
-    		'name' => 'Docente',
-    		'email' => 'docente@gmail.com',
-    		'password' => bcrypt('sigen2019'),
-    		'role' => 1
-    	]);
+        User::create([
+            'name' => 'Docente',
+            'email' => 'docente@gmail.com',
+            'password' => bcrypt('sigen2019'),
+            'role' => 1
+        ]);
 
-    	User::create([
-    		'name' => 'Estudiante',
-    		'email' => 'estudiante@gmail.com',
-    		'password' => bcrypt('sigen2019'),
-    		'role' => 2
-    	]);
+        User::create([
+            'name' => 'Estudiante',
+            'email' => 'estudiante@gmail.com',
+            'password' => bcrypt('sigen2019'),
+            'role' => 2
+        ]);
 
         //Docentes Para Pruebas
         User::create([

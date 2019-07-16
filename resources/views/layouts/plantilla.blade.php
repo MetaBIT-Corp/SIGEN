@@ -30,7 +30,7 @@
             @yield("navbar")
 
             <div class="my-2 my-lg-2">
-                <a class="logo-text" href="#">
+                <a class="logo-text" href="/">
                     <img src="{{asset('img/logo.png')}}" width="40" height="40" class="d-inline-block align-top logo" alt="">
                     SIGEN
                 </a>
@@ -66,6 +66,13 @@
                         <div class="sidebar-sticky">
                             <ul class="nav flex-column">
                                 @yield("ul_sidebar")
+                                <li class="nav-item first-one">
+                                    <a class="nav-link active" href="/">
+                                        <span data-feather="home"></span>
+                                        SIGEN
+                                        <span class="arrow-sidebar" data-feather="chevron-right"></span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </nav>
