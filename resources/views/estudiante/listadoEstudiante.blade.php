@@ -57,7 +57,7 @@
                   <td>Inactivo</td>
                   @endif
                   <td>{{$estudiante->anio_ingreso}}</td>
-                  <td><a title="Detalle estudiante" href="{{ route('detalle_estudiante',$estudiante->id_est) }}"><img src="{{asset('img/student.ico')}}" width="35" height="35" /></a></td>
+                  <td><a title="Detalle estudiante" href="{{ route('detalle_estudiante',$estudiante->id_est,$id_mat_ci) }}"><img src="{{asset('img/student.ico')}}" width="35" height="35" /></a></td>
                 </tr>
                  @endforeach
                  @else

@@ -15,9 +15,12 @@ class TeacherMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(auth()->user()->role != 1) //No es Docente
-            return redirect('home');
+	if(!auth()->check())
+            return redirect('/login');
 
-        return $next($request);
+    if(auth()->user()->role != 1) //No es Docente
+        return redirect('materias');
+
+    return $next($request);
     }
 }
