@@ -15,6 +15,9 @@ class TeacherMiddleware
      */
     public function handle($request, Closure $next)
     {
+	if(!auth()->check())
+            return redirect('/login');
+
         if(auth()->user()->role != 1) //No es Docente
             return redirect('home');
 

@@ -15,6 +15,9 @@ class StudentMiddleware
      */
     public function handle($request, Closure $next)
     {
+	if(!auth()->check())
+            return redirect('/login');
+
         if(auth()->user()->role != 2) //No es estudiante
             return redirect('home');
 

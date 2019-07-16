@@ -15,7 +15,10 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(auth()->user()->role != 0) //No es administrador
+	if(!auth()->check())
+            return redirect('/login');
+        
+	if(auth()->user()->role != 0) //No es administrador
             return redirect('home');
 
         return $next($request);
