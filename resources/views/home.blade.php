@@ -21,7 +21,6 @@
                     @elseif(auth()->user()->is_student)
                         <h1>Eres estudiante</h1>
                     @endif
-                    
                 </div>
             </div>
         </div>
