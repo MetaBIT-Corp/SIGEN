@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Area extends Model
 {
+    protected $table='area';
+    
     /**
 	 * Metodo para recuperacion de materia a la que pertenece el area.
 	 * @return Objeto materia a la que pertenece el area.
 	 */
-    public fuction materia(){
+    public function materia(){
     	return $this->belongsTo('App\Materia');
     }
 

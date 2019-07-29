@@ -18,7 +18,7 @@ class CreateEncuestasTable extends Migration
             $table->unsignedInteger('id_docente');
             $table->foreign('id_docente')->references('id_pdg_dcn')->on('pdg_dcn_docente');
             $table->string('titulo_encuesta');
-            $table->string('descriptcion_encuesta');
+            $table->string('descripcion_encuesta');
             $table->dateTime('fecha_inicio_encuesta');
             $table->dateTime('fecha_final_encuesta');
             $table->timestamps();

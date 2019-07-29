@@ -15,7 +15,7 @@ class CreatePreguntasTable extends Migration
     {
         Schema::create('pregunta', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_grupo_emp');
+            $table->unsignedInteger('id_grupo_emp')->nullable();//->default(0);
             $table->foreign('id_grupo_emp')->references('id')->on('grupo_emparejamiento');
             $table->string('pregunta');
             $table->timestamps();
