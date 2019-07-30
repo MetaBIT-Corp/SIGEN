@@ -8,4 +8,8 @@ class Estudiante extends Model
 {
     //
     Protected $table="estudiante";
+    
+    protected $fillable = [
+
+    ];
 }

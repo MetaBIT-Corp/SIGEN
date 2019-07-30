@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Clave extends Model
 {
     protected $table='clave';
+    
+    protected $fillable = [
+        'turno_id','numero_clave',
+    ];
 
     /**
      * Metodo que retorna al turno que pertenece la clave
@@ -25,4 +29,5 @@ class Clave extends Model
     public function encuesta(){
     	return $this->belongsTo('App\Encuesta');
     }
+    
 }

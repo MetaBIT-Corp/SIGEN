@@ -33,29 +33,29 @@ class PreguntaTableSeeder extends Seeder
 
     	//Preguntas que perteneces a la modalidad de emparejamiento
         Pregunta::create([
-        	'id_grupo_emp'=>1,
+        	'grupo_emparejamiento_id'=>1,
         	'pregunta'=>'¿Quien es la mujer que creo el signo +?'
         ]);
         Pregunta::create([
-        	'id_grupo_emp'=>1,
+        	'grupo_emparejamiento_id'=>1,
         	'pregunta'=>'¿Quien fue el hombre que creo el numero pi?'
         ]);
         Pregunta::create([
-        	'id_grupo_emp'=>2,
+        	'grupo_emparejamiento_id'=>2,
         	'pregunta'=>'¿Quien intento crear el numero Euler?'
         ]);
         Pregunta::create([
-        	'id_grupo_emp'=>2,
+        	'grupo_emparejamiento_id'=>2,
         	'pregunta'=>'Le dicen Big Arqui'
         ]);
 
         //Preguntas de opcion multiple para encuesta
         Pregunta::create([
-            'id_grupo_emp'=>2,
+            'grupo_emparejamiento_id'=>2,
             'pregunta'=>'¿Que grupo de lab?'
         ]);
         Pregunta::create([
-            'id_grupo_emp'=>2,
+            'grupo_emparejamiento_id'=>2,
             'pregunta'=>'¿Que numero de equipo desea?'
         ]);
 

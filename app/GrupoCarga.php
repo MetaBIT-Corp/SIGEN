@@ -8,4 +8,8 @@ class GrupoCarga extends Model
 {
     //
     Protected $table="grupo_carga";
+    
+    protected $fillable = [
+        	'tipo',
+    ];
 }

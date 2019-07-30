@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Pregunta extends Model
 {
     protected $table='pregunta';
+    protected $fillable = [
+        'grupo_emparejamiento_id','pregunta',
+    ];
 
     /**
      *  Metodo que obtiene todas la opcion/es de una pregunta.

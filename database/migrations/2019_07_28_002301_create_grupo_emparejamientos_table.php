@@ -15,8 +15,8 @@ class CreateGrupoEmparejamientosTable extends Migration
     {
         Schema::create('grupo_emparejamiento', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_area');
-            $table->foreign('id_area')->references('id')->on('area');
+            $table->unsignedInteger('area_id');
+            $table->foreign('area_id')->references('id')->on('area');
             $table->string('descripcion_grupo_emp');
             $table->timestamps();
         });

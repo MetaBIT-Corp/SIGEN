@@ -12,11 +12,11 @@ class GrupoEmparejamientoTableSeeder extends Seeder
     public function run()
     {
         Grupo_Emparejamiento::create([
-        	'id_area'=>3,
+        	'area_id'=>3,
         	'descripcion_grupo_emp'=>'Matematicas Reconocidas'
         ]);
         Grupo_Emparejamiento::create([
-        	'id_area'=>3,
+        	'area_id'=>3,
         	'descripcion_grupo_emp'=>'Matematicos Fracasados'
         ]);
     }
