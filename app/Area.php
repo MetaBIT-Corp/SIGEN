@@ -8,6 +8,10 @@ class Area extends Model
 {
     protected $table='area';
     
+    protected $fillable = [
+        'id_cat_mat','id_pdg_dcn','id_tipo_item','titulo',
+    ];
+    
     /**
 	 * Metodo para recuperacion de materia a la que pertenece el area.
 	 * @return Objeto materia a la que pertenece el area.
