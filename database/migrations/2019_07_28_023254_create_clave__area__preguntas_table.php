@@ -15,10 +15,10 @@ class CreateClaveAreaPreguntasTable extends Migration
     {
         Schema::create('clave_area_pregunta', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_clave_area');
-            $table->foreign('id_clave_area')->references('id')->on('clave_area');
-            $table->unsignedInteger('id_pregunta');
-            $table->foreign('id_pregunta')->references('id')->on('pregunta');
+            $table->unsignedInteger('clave_area_id');
+            $table->foreign('clave_area_id')->references('id')->on('clave_area');
+            $table->unsignedInteger('pregunta_id');
+            $table->foreign('pregunta_id')->references('id')->on('pregunta');
             $table->timestamps();
         });
     }

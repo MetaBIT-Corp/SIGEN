@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?9w5x8v');
-  src:  url('fonts/icomoon.eot?9w5x8v#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?9w5x8v') format('truetype'),
-    url('fonts/icomoon.woff?9w5x8v') format('woff'),
-    url('fonts/icomoon.svg?9w5x8v#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?l3s4hk');
+  src:  url('fonts/icomoon.eot?l3s4hk#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?l3s4hk') format('truetype'),
+    url('fonts/icomoon.woff?l3s4hk') format('woff'),
+    url('fonts/icomoon.svg?l3s4hk#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,6 +24,46 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-grafico:before {
+  content: "\e900";
+}
+.icon-add:before {
+  content: "\e902";
+}
+.icon-edit:before {
+  content: "\e903";
+}
+.icon-admin:before {
+  content: "\e904";
+}
+.icon-delete_user:before {
+  content: "\e905";
+}
+.icon-add_user:before {
+  content: "\e906";
+}
+.icon-user:before {
+  content: "\e907";
+}
+.icon-detail_user:before {
+  content: "\e908";
+}
+.icon-download:before {
+  content: "\e909";
+}
+.icon-print:before {
+  content: "\e90a";
+}
+.icon-pdf:before {
+  content: "\e90b";
+}
+.icon-delete:before {
+  content: "\e90c";
+}
 .icon-list:before {
   content: "\e9bb";
+}
+.icon-excel:before {
+  content: "\e90d";
+  color: #217346;
 }

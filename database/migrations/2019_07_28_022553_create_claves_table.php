@@ -15,10 +15,10 @@ class CreateClavesTable extends Migration
     {
         Schema::create('clave', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_turno')->nullable();
-            $table->foreign('id_turno')->references('id')->on('turno');
-            $table->unsignedInteger('id_encuesta')->nullable();
-            $table->foreign('id_encuesta')->references('id')->on('encuesta');
+            $table->unsignedInteger('turno_id')->nullable();
+            $table->foreign('turno_id')->references('id')->on('turno');
+            $table->unsignedInteger('encuesta_id')->nullable();
+            $table->foreign('encuesta_id')->references('id')->on('encuesta');
             $table->integer('numero_clave');
             $table->timestamps();
         });

@@ -12,47 +12,47 @@ class ClaveAreaPreguntaTableSeeder extends Seeder
     public function run()
     {
         Clave_Area_Pregunta::create([
-        	'id_clave_area'=>1,
-        	'id_pregunta'=>1
+            'clave_area_id'=>1,
+            'pregunta_id'=>1
         ]);
         Clave_Area_Pregunta::create([
-        	'id_clave_area'=>1,
-        	'id_pregunta'=>2
+            'clave_area_id'=>1,
+            'pregunta_id'=>2
         ]);
         Clave_Area_Pregunta::create([
-        	'id_clave_area'=>2,
-        	'id_pregunta'=>3
+            'clave_area_id'=>2,
+            'pregunta_id'=>3
         ]);
         Clave_Area_Pregunta::create([
-        	'id_clave_area'=>3,
-        	'id_pregunta'=>7
+            'clave_area_id'=>3,
+            'pregunta_id'=>7
         ]);
         Clave_Area_Pregunta::create([
-        	'id_clave_area'=>3,
-        	'id_pregunta'=>8
+            'clave_area_id'=>3,
+            'pregunta_id'=>8
         ]);
         Clave_Area_Pregunta::create([
-        	'id_clave_area'=>3,
-        	'id_pregunta'=>9
+            'clave_area_id'=>3,
+            'pregunta_id'=>9
         ]);
         Clave_Area_Pregunta::create([
-        	'id_clave_area'=>4,
-        	'id_pregunta'=>5
+            'clave_area_id'=>4,
+            'pregunta_id'=>5
         ]);
         Clave_Area_Pregunta::create([
-        	'id_clave_area'=>4,
-        	'id_pregunta'=>6
+            'clave_area_id'=>4,
+            'pregunta_id'=>6
         ]);
 
 
         //Clave area pregunta para encuestas
         Clave_Area_Pregunta::create([
-        	'id_clave_area'=>5,
-        	'id_pregunta'=>11
+            'clave_area_id'=>5,
+            'pregunta_id'=>11
         ]);
         Clave_Area_Pregunta::create([
-        	'id_clave_area'=>6,
-        	'id_pregunta'=>12
+            'clave_area_id'=>6,
+            'pregunta_id'=>12
         ]);
     }
 }

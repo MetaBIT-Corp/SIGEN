@@ -13,43 +13,43 @@ class ClaveTableSeeder extends Seeder
     {
     	//Claves de evaluacion de MAT115 con id 1 Turno id 1
         Clave::create([
-        	'id_turno'=>1,
+        	'turno_id'=>1,
         	'numero_clave'=>1,
         ]);
         Clave::create([
-        	'id_turno'=>1,
+        	'turno_id'=>1,
         	'numero_clave'=>2,
         ]);
         Clave::create([
-        	'id_turno'=>2,
+        	'turno_id'=>2,
         	'numero_clave'=>1,
         ]);
         Clave::create([
-        	'id_turno'=>3,
+        	'turno_id'=>3,
         	'numero_clave'=>1,
         ]);
 
         //Clave de evaluaciones de HDP115 con id 3 turno id 
         Clave::create([
-        	'id_turno'=>4,
+        	'turno_id'=>4,
         	'numero_clave'=>1,
         ]);
         Clave::create([
-        	'id_turno'=>5,
+        	'turno_id'=>5,
         	'numero_clave'=>1,
         ]);
 
         //Claves para encuestas
         Clave::create([
-        	'id_encuesta'=>1,
+        	'encuesta_id'=>1,
         	'numero_clave'=>1,
         ]);
         Clave::create([
-        	'id_encuesta'=>2,
+        	'encuesta_id'=>2,
         	'numero_clave'=>1,
         ]);
         Clave::create([
-        	'id_encuesta'=>3,
+        	'encuesta_id'=>3,
         	'numero_clave'=>1,
         ]);
     }

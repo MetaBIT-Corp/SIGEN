@@ -15,10 +15,10 @@ class CreateClaveAreasTable extends Migration
     {
         Schema::create('clave_area', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_area');
-            $table->foreign('id_area')->references('id')->on('area');
-            $table->unsignedInteger('id_clave');
-            $table->foreign('id_clave')->references('id')->on('clave');
+            $table->unsignedInteger('area_id');
+            $table->foreign('area_id')->references('id')->on('area');
+            $table->unsignedInteger('clave_id');
+            $table->foreign('clave_id')->references('id')->on('clave');
             $table->integer('numero_preguntas');
             $table->boolean('aleatorio');
             $table->integer('peso');

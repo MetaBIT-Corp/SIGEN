@@ -15,8 +15,8 @@ class CreateTurnosTable extends Migration
     {
         Schema::create('turno', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_evaluacion');
-            $table->foreign('id_evaluacion')->references('id')->on('evaluacion');
+            $table->unsignedInteger('evaluacion_id');
+            $table->foreign('evaluacion_id')->references('id')->on('evaluacion');
             $table->dateTime('fecha_inicio_turno');
             $table->dateTime('fecha_final_turno');
             $table->boolean('visibilidad');

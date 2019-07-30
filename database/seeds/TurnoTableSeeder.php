@@ -13,14 +13,14 @@ class TurnoTableSeeder extends Seeder
     {
     	//Turnos de evaluacion id 1 de docente Ricardo y materia MAT115
         Turno::create([
-        	'id_evaluacion'=>1,
+        	'evaluacion_id'=>1,
         	'fecha_inicio_turno'=>'2019-07-28 21:52:28',
         	'fecha_final_turno'=>'2019-07-28 22:52:28',
         	'visibilidad'=>true,
         	'contraseña'=>bcrypt('ues')
         ]);
         Turno::create([
-        	'id_evaluacion'=>1,
+        	'evaluacion_id'=>1,
         	'fecha_inicio_turno'=>'2019-07-28 22:59:28',
         	'fecha_final_turno'=>'2019-07-28 23:59:28',
         	'visibilidad'=>true,
@@ -29,7 +29,7 @@ class TurnoTableSeeder extends Seeder
 
         //Turnos de evaluacion id 2 de docente Ricardo y materia MAT115
         Turno::create([
-        	'id_evaluacion'=>2,
+        	'evaluacion_id'=>2,
         	'fecha_inicio_turno'=>'2019-07-28 21:52:28',
         	'fecha_final_turno'=>'2019-07-28 21:52:28',
         	'visibilidad'=>true,
@@ -38,14 +38,14 @@ class TurnoTableSeeder extends Seeder
 
         //Turnos de evaluacion id 3 de de docente Ricardo y materia HDP115
         Turno::create([
-        	'id_evaluacion'=>3,
+        	'evaluacion_id'=>3,
         	'fecha_inicio_turno'=>'2019-07-28 21:52:28',
         	'fecha_final_turno'=>'2019-07-28 21:52:28',
         	'visibilidad'=>true,
         	'contraseña'=>bcrypt('ues')
         ]);
         Turno::create([
-        	'id_evaluacion'=>3,
+        	'evaluacion_id'=>3,
         	'fecha_inicio_turno'=>'2019-07-29 21:52:28',
         	'fecha_final_turno'=>'2019-07-29 22:52:28',
         	'visibilidad'=>true,

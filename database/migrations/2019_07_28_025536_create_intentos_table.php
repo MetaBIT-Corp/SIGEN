@@ -15,10 +15,10 @@ class CreateIntentosTable extends Migration
     {
         Schema::create('intento', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_estudiante');
-            $table->foreign('id_estudiante')->references('id_est')->on('estudiante');
-            $table->unsignedInteger('id_clave');
-            $table->foreign('id_clave')->references('id')->on('clave');
+            $table->unsignedInteger('estudiante_id');
+            $table->foreign('estudiante_id')->references('id_est')->on('estudiante');
+            $table->unsignedInteger('clave_id');
+            $table->foreign('clave_id')->references('id')->on('clave');
             $table->dateTime('fecha_inicio_intento');
             $table->dateTime('fecha_final_intento');
             $table->decimal('nota_intento',2,2);
