@@ -36,7 +36,7 @@ class Area extends Model
 	 * @return Objeto tipo_item del area.
 	 */
     public function tipo_item(){
-    	return $this->belongsTo('App\Tipo_Item','id_tipo_item');
+    	return $this->belongsTo('App\Tipo_Item');
     }
 
 }

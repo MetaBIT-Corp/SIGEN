@@ -30,4 +30,12 @@ class Clave extends Model
     	return $this->belongsTo('App\Encuesta');
     }
     
+    /**
+     * Metodo para obtener todas los registros de la relacion entre area y clave.
+     * @author Ricardo Estupinian
+     * @return Retorna un array de objetos Clave_Area
+     */
+    public function clave_areas(){
+        return $this->hasMAny('App\Clave_Area');
+    }
 }

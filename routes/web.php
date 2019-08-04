@@ -13,6 +13,14 @@ use App\Area;
 |
 */
 
+//Rutas de pruebas
+
+Route::get('intento/', function() {
+	echo "<a href='intento/prueba/2'>Link para iniciar intento</a>";
+});
+
+Route::get('intento/prueba/{id_intento}','IntentoController@iniciarEvaluacion')->name('prueba');
+
 Route::get('/', function () {
     return view('layouts.plantilla');
 });
@@ -53,15 +61,16 @@ Route::get('/insertar', function () {
 		*/
 });
 
+
+
+//Rutas Funcionales
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
 Route::get('/materias', 'MateriaController@listar')->name('materias');
 
 Route::get('/materias/listado_estudiante/{id_mat_ci}', 'ListadoEstudianteController@listar')->name('listado_estudiante');
-
 
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
 Route::group(['middleware' => 'admin'], function(){

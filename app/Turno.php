@@ -20,4 +20,13 @@ class Turno extends Model
     public function claves(){
     	return $this->hasMany('App\Clave');
     }
+
+    /**
+     * Metodo que obtiene la evaluacion a la que pertenece
+     * @author Ricardo Estupinian
+     * @return El objeto evaluacion a la que pertenece
+     */
+    public function evaluacion(){
+        return $this->belongsTo('App\Evaluacion');
+    }
 }

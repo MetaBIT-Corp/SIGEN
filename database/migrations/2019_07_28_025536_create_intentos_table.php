@@ -20,8 +20,8 @@ class CreateIntentosTable extends Migration
             $table->unsignedInteger('clave_id');
             $table->foreign('clave_id')->references('id')->on('clave');
             $table->dateTime('fecha_inicio_intento');
-            $table->dateTime('fecha_final_intento');
-            $table->decimal('nota_intento',2,2);
+            $table->dateTime('fecha_final_intento')->nullable();
+            $table->decimal('nota_intento',2,2)->nullable();
             $table->timestamps();
         });
     }

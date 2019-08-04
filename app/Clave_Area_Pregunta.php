@@ -11,4 +11,13 @@ class Clave_Area_Pregunta extends Model
     protected $fillable = [
         'clave_area_id','pregunta_id',
     ];
+
+    /**
+     * Metodo para obtener un objeto pregunta a partir de clave area pregunta.
+     * @author Ricardo Estupinian
+     * @return Retorna un objeto pregunta
+     */
+    public function pregunta(){
+    	return $this->belongsTo('App\Pregunta');
+    }
 }
