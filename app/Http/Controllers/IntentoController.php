@@ -30,7 +30,7 @@ class IntentoController extends Controller
         //Obtener las preguntas
         $preguntas=$this->obtenerPreguntas($clave_de_intento);
 
-        return dd($preguntas);
+        return view('intento');
     }
 
     public function iniciarEncuesta($id_clave)
@@ -43,7 +43,7 @@ class IntentoController extends Controller
     }
 
     /**
-     * Metodo que devuleve las preguntas segun la clave de la evaluacion o encuesta.
+     * Metodo privado que devuleve las preguntas segun la clave de la evaluacion o encuesta.
      * @author Ricardo Estupinian
      * @param App\Clave $clave clave del turno o de la encuesta
      * @return Array compuesto por el id del tipo de item,pregunta y sus opciones.

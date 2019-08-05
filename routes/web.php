@@ -16,7 +16,7 @@ use App\Area;
 //Rutas de pruebas
 
 Route::get('intento/', function() {
-	echo "<a href='intento/prueba/2'>Link para iniciar intento</a>";
+	echo "<a href='intento/prueba/1'>Link para iniciar intento</a>";
 });
 
 Route::get('intento/prueba/{id_intento}','IntentoController@iniciarEvaluacion')->name('prueba');
