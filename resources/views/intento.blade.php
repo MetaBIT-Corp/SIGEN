@@ -102,7 +102,6 @@
 
     </div>
     <div class="card-footer text-center">
-
         <!--Botones de control para paginacion-->
         {{ $paginacion->links() }}
     </div>
