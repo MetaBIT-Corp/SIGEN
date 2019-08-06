@@ -15,7 +15,9 @@
 @endsection
 @section("main")
 <!--Card que contiene a cada pregunta-->
-<div class="card">
+<!--Se agrego la etiqueta form para persistencia-->
+<form>
+    <div class="card">
     <div class="card-body">
         <!--Aqui iran las preguntas-->
 
@@ -84,9 +86,22 @@
                                 <option selected="">
                                     Seleccione
                                 </option>
+                                @php
+                                    {{
+                                        /*Funcionalidad que mezcla las opciones de un select,
+                                        para que no se muestren de manera ordenada segun respuesta
+                                        de cada pregunta
+
+                                        FUNCIONALIDAD CON DUDA
+                                        
+                                        */
+                                        $nums=range(0,count($valores[$i]['preguntas'])-1);
+                                        shuffle($nums);
+                                    }}
+                                @endphp
                                 @for($m=0;$m<count($valores[$i]['preguntas']);$m++)
-                                <option id="{{ $valores[$i]['preguntas'][$m]->opciones[0]->id }}">
-                                    {{ $valores[$i]['preguntas'][$m]->opciones[0]->opcion }}
+                                <option id="{{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id }}">
+                                    {{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->opcion }}
                                 </option>
                                 @endfor
                             </select>
@@ -106,5 +121,6 @@
         {{ $paginacion->links() }}
     </div>
 </div>
+</form>
 @endsection
 @endsection

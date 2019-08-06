@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 use App\Evaluacion;
 use App\Pregunta;
 use App\Turno;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class IntentoController extends Controller
 {
@@ -20,7 +20,7 @@ class IntentoController extends Controller
 
         //Recuperamos la cantidad de preguntas a mostrar en la paginacion
         $preg_per_page = $evaluacion->preguntas_a_mostrar;
-        //$preg_per_page = 7;
+        //$preg_per_page = 4;
 
         //Recuperar las claves del turno
         $claves = $turno->claves;
@@ -35,13 +35,13 @@ class IntentoController extends Controller
         $preguntas = $this->obtenerPreguntas($clave_de_intento);
 
         //Variable que contiene el array a mostrar en la paginacion
-        $paginacion=$this->paginacion($request,$preg_per_page,$preguntas);
+        $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
 
         //return dd($preguntas);
         return view('intento', compact('paginacion'));
     }
 
-    public function iniciarEncuesta($id_clave,Request $request)
+    public function iniciarEncuesta($id_clave, Request $request)
     {
         //Se obtiene el objeto clave para poder extraer las preguntas de la encuesta
         $clave_de_intento = Clave::find($id_clave)->first();
@@ -50,7 +50,7 @@ class IntentoController extends Controller
         $preguntas = $this->obtenerPreguntas($clave_de_intento);
 
         //Variable que contiene el array a mostrar en la paginacion
-        $paginacion=$this->paginacion($request,1,$preguntas);
+        $paginacion = $this->paginacion($request, 1, $preguntas);
     }
 
     /**
@@ -88,10 +88,10 @@ class IntentoController extends Controller
         Por medio de cada pregunta se pueden obtener las opciones
         }
          */
-        
-        /*Variable que controla que no se vuelvan a recuperar las preguntas de un grupo 
+
+        /*Variable que controla que no se vuelvan a recuperar las preguntas de un grupo
         de emparejamiento*/
-        $ultimo_id_gpo=0;
+        $ultimo_id_gpo = 0;
 
         for ($i = 1; $i <= count($claves_areas_preguntas); $i++) {
             for ($j = 0; $j < count($claves_areas_preguntas[$i]); $j++) {
@@ -99,15 +99,15 @@ class IntentoController extends Controller
                 //Si no pertence a un grupo de emparejamiento crea un array con cierta estructura
                 if ($claves_areas_preguntas[$i][$j]->pregunta->grupo_emparejamiento_id == null) {
                     $preguntas[] = ['tipo_item' => $i, 'pregunta' => $claves_areas_preguntas[$i][$j]->pregunta, 'opciones' => $claves_areas_preguntas[$i][$j]->pregunta->opciones];
-                }else{
-                    if($ultimo_id_gpo!=$claves_areas_preguntas[$i][$j]->pregunta->grupo_emparejamiento_id){
+                } else {
+                    if ($ultimo_id_gpo != $claves_areas_preguntas[$i][$j]->pregunta->grupo_emparejamiento_id) {
 
-                        $ultimo_id_gpo=$claves_areas_preguntas[$i][$j]->pregunta->grupo_emparejamiento_id;
+                        $ultimo_id_gpo = $claves_areas_preguntas[$i][$j]->pregunta->grupo_emparejamiento_id;
 
-                        $preguntas[]=['tipo_item' => $i, 'preguntas' => Pregunta::where('grupo_emparejamiento_id',$ultimo_id_gpo)->get()];
-                        
+                        $preguntas[] = ['tipo_item' => $i, 'preguntas' => Pregunta::where('grupo_emparejamiento_id', $ultimo_id_gpo)->get()];
+
                     }
-                   
+
                 }
             }
         }
@@ -117,12 +117,13 @@ class IntentoController extends Controller
 
     /**
      * Metodo privado encargado de realizar el proceso de paginacion a mostrar en la vista, por medio de este se controla cuantas preguntas se muestran y las paginas que se necesitas por la cantidad de preguntas.
-     * @param Request $request 
-     * @param int $preg_per_page 
-     * @param Collection $array 
+     * @param Request $request
+     * @param int $preg_per_page
+     * @param Collection $array
      * @return LengthAwarePaginator Objeto que permite la realizacion de la paginacion
      */
-    private function paginacion($request,$preg_per_page,$array){
+    private function paginacion($request, $preg_per_page, $array)
+    {
         /*Calcular el desplazamiento segun la variable page, para determina que
         parte del array debe devolverse segun la pagina*/
         if (!empty($request->input('page'))) {
@@ -135,6 +136,10 @@ class IntentoController extends Controller
 
         //Dividir el array segun la pagina en la que se encuentra
         $preg_pagina = array_slice($array, $offset_in_array, $preg_per_page);
+
+        //Mezcla las preguntas a mostrar por pagina, en caso se una por pagina no pasa nada.
+        //DUDA CON ESTA FUNCIONALIDAD PLUS :v
+        shuffle($preg_pagina);
 
         //Devolver las preguntas necesarias segun la paginacion
         $paginacion = new LengthAwarePaginator($preg_pagina, count($array), $preg_per_page);
