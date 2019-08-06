@@ -19,4 +19,13 @@ class Pregunta extends Model
     public function opciones(){
     	return $this->hasMany('App\Opcion');
     }
+
+    /**
+     *  Metodo que obtiene el grupo de emparejamiento al que pertenece la pregunta
+     * @author Ricardo Estupinian
+     * @return Objeto Grupo_Emparejamiento
+     */
+    public function grupo_emp(){
+        return $this->belongsTo('App\Grupo_Emparejamiento','grupo_emparejamiento_id','id');
+    }
 }
