@@ -20,7 +20,6 @@ class Evaluacion extends Model
     public function turnos(){
     	return $this->hasMany('App\Turno');
     }
-
     public function carga_academica(){
         return $this->belongsTo(CargaAcademica::class, 'id_carga', 'id_carg_aca');
     }

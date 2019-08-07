@@ -1,7 +1,7 @@
 <?php
 
 use App\Docente;
-
+use App\Area;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,6 +12,14 @@ use App\Docente;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+//Rutas de pruebas
+
+Route::get('intento/', function() {
+	echo "<a href='intento/prueba/1?page=1'>Link para iniciar intento</a>";
+});
+
+Route::get('intento/prueba/{id_intento}','IntentoController@iniciarEvaluacion')->name('prueba');
 
 Route::get('/', function () {
     return view('layouts.plantilla');
@@ -53,15 +61,16 @@ Route::get('/insertar', function () {
 		*/
 });
 
+
+
+//Rutas Funcionales
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
 Route::get('/materias', 'MateriaController@listar')->name('materias');
 
 Route::get('/materias/listado_estudiante/{id_mat_ci}', 'ListadoEstudianteController@listar')->name('listado_estudiante');
-
 
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
 Route::group(['middleware' => 'admin'], function(){

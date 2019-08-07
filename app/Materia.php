@@ -8,4 +8,8 @@ class Materia extends Model
 {
     //
     Protected $table = "cat_mat_materia";
+    
+    protected $fillable = [
+        'codigo_mat','nombre_mar','es_electiva','maximo_cant_preguntas',
+    ];
 }

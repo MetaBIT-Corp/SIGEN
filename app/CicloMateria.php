@@ -8,4 +8,8 @@ class CicloMateria extends Model
 {
     //
     Protected $table = "materia_ciclo";
+    
+    protected $fillable = [
+        'id_cat_mat','id_ciclo',
+    ];
 }
