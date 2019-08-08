@@ -15,6 +15,9 @@ use App\Area;
 
 //Rutas de pruebas
 
+Route::get('/agregar-p/{id}', 'ClaveAreaController@listar')->name('add-preguntas');
+Route::post('/agregar-p/{id}', 'ClaveAreaController@store');
+
 Route::get('intento/', function() {
 	echo "<a href='intento/prueba/1?page=1'>Link para iniciar intento</a>";
 });
