@@ -9,14 +9,18 @@ use App\Clave_Area_Pregunta;
 
 class ClaveAreaController extends Controller
 {
+	//Funcion para probar historia de usario 33 y 35
     public function listar($id){
 
     	$clave_area = Clave_Area::all();
     	return view('clave_area.agregarPreguntasClaveArea')->with(compact('clave_area'));
     }
 
+    //Funcion para cargar las preguntas de una área mediante AJAX
     public function preguntas_por_area($id){
     	$id_area = Clave_Area::where('id', $id)->first()->area_id;
+
+    	$cap = Clave_Area_Pregunta::where('clave_area_id',$id)->pluck('pregunta_id');
     	
     	$preguntas = DB::table('area')
     					->where('area.id', $id_area)
@@ -25,10 +29,12 @@ class ClaveAreaController extends Controller
     					->select('p.id', 'p.pregunta', 'area.titulo')
     					->get();
 
-    	return $preguntas;
+    	$data = ['p_asignadas'=>$cap, 'preguntas'=>$preguntas];
+    	return $data;
     }
 
-    public function store(Request $request){
+    //Función para asignar a la clave las preguntas seleccionadas del área
+    public function asignar_preguntas(Request $request){
     	$preguntas = $request->input('preguntas');
     	$id_clave_area = $request->input('clave_area');
     	$mensaje = 'Ninguna pregunta fue seleccionada';
@@ -36,6 +42,7 @@ class ClaveAreaController extends Controller
 
     	//Almacenando preguntas en la base de datos
     	if($preguntas){
+    		DB::table('clave_area_pregunta')->where('clave_area_id', $id_clave_area)->delete();
     		foreach ($preguntas as $pregunta) {
 	    		$clave_area_pregunta = new Clave_Area_Pregunta();
 	    		$clave_area_pregunta->clave_area_id = $id_clave_area;

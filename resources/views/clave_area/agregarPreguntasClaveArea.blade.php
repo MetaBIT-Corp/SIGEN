@@ -92,36 +92,5 @@
 @endsection
 
 @section('js')
-
-<script>
-  $('[data-id-clave-area]').click(function(){
-    var id_clave_area = $(this).data('id-clave-area');
-
-    $('#id_clave_area').attr("value", id_clave_area);
-
-    //AJAX
-    $.get('/api/area/'+id_clave_area+'/preguntas', function(data){
-      var html_modal ='';
-
-      if(data.length>0){      
-        for (var i = 0; i < data.length; ++i) {
-         html_modal += i+1+'.  <label><input type="checkbox" id="cbox1" name="preguntas[]" value="'+data[i].id+'"> '+data[i].pregunta+'</label>';
-         $('#modalCenterTitle').html('Seleccione las preguntas del area <em>'+data[0].titulo+'</em> que desea asignar');
-
-         if(i<data.length-1)
-          html_modal += '<hr>'; 
-      }
-      }else{
-        html_modal = '<strong><h3>Esta área no contiene preguntas</h3></strong>'
-      }
-
-      //Asignando el resultado de la consulta al body del modal
-    $('#asignar-preguntas').html(html_modal);
-
-    });
-
-    //Mostrar el modal
-    $('#asignarPreguntasClaveArea').modal('show');
-  });
-</script>
+  <script src="/js/clave_area/cargar_preguntas.js"> </script>
 @endsection
