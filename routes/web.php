@@ -15,6 +15,11 @@ use App\Area;
 
 //Rutas de pruebas
 
+/*----------------------------Rutas de prueba para agregar preguntas a la clave------------------------------------*/
+Route::get('clave/agregar-preguntas/{id}', 'ClaveAreaController@listar');
+Route::post('clave/agregar-preguntas/{id}', 'ClaveAreaController@asignar_preguntas');
+/*-----------------------------------------------------------------------------------------------------------------*/
+
 Route::get('intento/', function() {
 	echo "<a href='intento/prueba/1?page=1'>Link para iniciar intento</a>";
 });

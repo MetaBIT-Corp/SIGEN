@@ -39,4 +39,8 @@ class Area extends Model
     	return $this->belongsTo('App\Tipo_Item');
     }
 
+    //Recupera los grupos de emparejamiento que pertenecen al área
+    public function grupos_emparejamiento(){
+        return $this->hasMany(Grupo_Emparejamiento::class);
+    }
 }

@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 Route::get('/evaluacion/{id}/duracion/','TurnoController@getDuracionEvaluacion');
-
+Route::get('/area/{id}/preguntas', 'ClaveAreaController@preguntas_por_area');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
