@@ -135,4 +135,9 @@ class TurnoController extends Controller
     {
         //
     }
+    
+    public function getDuracionEvaluacion($id_evaluacion)
+    {
+        return Evaluacion::find($id_evaluacion)->duracion;
+    }
 }

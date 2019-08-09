@@ -49,7 +49,7 @@
                         <div class="col-md-8">
                             <div class="form-group">
                                 <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                    <input type="text" name="fecha_inicio_turno" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="mm/dd/yyyy hh:mm tt" value="{{ old('fecha_inicio_turno') }}"/>
+                                    <input id="datetimepicker1input" type="text" name="fecha_inicio_turno" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="mm/dd/yyyy hh:mm tt" value="{{ old('fecha_inicio_turno') }}" data-id_evaluacion="{{ $id }}"/>
                                     <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
@@ -73,7 +73,7 @@
                         <div class="col-md-8">
                             <div class="form-group">
                                 <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                                    <input type="text" name="fecha_final_turno" class="form-control datetimepicker-input" data-target="#datetimepicker2" placeholder="mm/dd/yyyy hh:mm tt" value="{{ old('fecha_final_turno') }}"/>
+                                    <input id="datetimepicker2input" type="text" name="fecha_final_turno" class="form-control datetimepicker-input" data-target="#datetimepicker2" placeholder="mm/dd/yyyy hh:mm tt" value="{{ old('fecha_final_turno') }}" readonly/>
                                     <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
@@ -121,4 +121,32 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script type="text/javascript">
+        
+        var $jq = jQuery.noConflict();
+        $jq(document).ready(function() {
+            
+            $jq('#datetimepicker1input').blur(function(){
+                
+                var id_evaluacion = $(this).data('id_evaluacion');
+                var fecha_hora_inicio = $(this).val();
+                
+                $jq.ajax({
+                    url: '/api/evaluacion/'+id_evaluacion+'/duracion/',
+                    type: 'GET',
+                    success: function(data){ 
+                        console.log(data);
+                        var date = moment(fecha_hora_inicio).add(data,'hours').format('L hh:mm A');
+                        $jq('#datetimepicker2input').val(date);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('status:'+status+', error:'+error);
+                    }
+                });
+                
+            });
+            
+        });
+        
+    </script>
 @endsection
