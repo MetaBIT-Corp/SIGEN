@@ -75,6 +75,12 @@ class TurnoController extends Controller
         
         if(!Carbon::parse($requestData['fecha_final_turno'])->gt(Carbon::parse($requestData['fecha_inicio_turno'])))
             return back()->with('notification-type','danger')->with('notification-message','La fecha/hora de fin debe ser mayor que la fecha/hora de inicio!')->withInput();
+        
+        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $fecha_hora_actual_alert = DateTime::createFromFormat('Y-m-d H:i:s', $fecha_hora_actual)->format('m/d/Y h:i A');
+            
+        if(!Carbon::parse($requestData['fecha_inicio_turno'])->gt(Carbon::parse($fecha_hora_actual)))
+            return back()->with('notification-type','danger')->with('notification-message','La fecha/hora de inicio debe ser mayor que la fecha/hora actual ('.$fecha_hora_actual_alert.')!')->withInput();
 
         $turno = new Turno();
         $turno->fecha_inicio_turno = $requestData['fecha_inicio_turno'];
@@ -82,7 +88,7 @@ class TurnoController extends Controller
         $turno->contraseña = bcrypt($requestData['contraseña']);
         $turno->visibilidad = 0;
 
-        if($requestData['visibilidad'] == 'on')
+        if(isset($requestData['visibilidad']))
             $turno->visibilidad = 1;
         
         $turno->id_evaluacion = $requestData['id_evaluacion'];
