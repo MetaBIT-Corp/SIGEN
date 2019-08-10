@@ -49,7 +49,7 @@
                         <div class="col-md-8">
                             <div class="form-group">
                                 <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                    <input id="datetimepicker1input" type="text" name="fecha_inicio_turno" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="mm/dd/yyyy hh:mm tt" value="{{ old('fecha_inicio_turno') }}" data-id_evaluacion="{{ $id }}"/>
+                                    <input id="datetimepicker1input" type="text" name="fecha_inicio_turno" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="mm/dd/yyyy hh:mm tt" value="{{ old('fecha_inicio_turno') }}" data-evaluacion_id="{{ $id }}"/>
                                     <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
@@ -128,11 +128,11 @@
             
             $jq('#datetimepicker1input').blur(function(){
                 
-                var id_evaluacion = $(this).data('id_evaluacion');
+                var evaluacion_id = $(this).data('evaluacion_id');
                 var fecha_hora_inicio = $(this).val();
                 
                 $jq.ajax({
-                    url: '/api/evaluacion/'+id_evaluacion+'/duracion/',
+                    url: '/api/evaluacion/'+evaluacion_id+'/duracion/',
                     type: 'GET',
                     success: function(data){ 
                         console.log(data);

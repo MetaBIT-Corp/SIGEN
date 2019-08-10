@@ -70,3 +70,13 @@ footer{
 	bottom: 0;
 }
 
+.btn_eliminar{
+    color: #ffffff;
+    background-color: #dc3545;
+}
+
+.btn_editar{
+    color: #ffffff;
+    background-color: #000080;
+}
+

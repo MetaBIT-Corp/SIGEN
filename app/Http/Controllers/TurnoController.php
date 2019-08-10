@@ -16,10 +16,30 @@ class TurnoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
-        return view('turno.index');
+        $evaluacion = Evaluacion::find($id);
+        $turnos = $evaluacion->turnos;
+        $nombre_evaluacion = $evaluacion->nombre_evaluacion;
+        
+        foreach($turnos as $turno){
+            
+            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+            
+             if(!Carbon::parse($turno->fecha_inicio_turno)->gt(Carbon::parse($fecha_hora_actual)))
+                 $turno['acciones'] = false;
+             else
+                 $turno['acciones'] = true;
+                 
+                 
+            $turno->fecha_inicio_turno = DateTime::createFromFormat('Y-m-d H:i:s', $turno->fecha_inicio_turno)->format('m/d/Y h:i A');
+            $turno->fecha_final_turno = DateTime::createFromFormat('Y-m-d H:i:s', $turno->fecha_final_turno)->format('m/d/Y h:i A');
+            
+        }
+        
+        //dd($turnos);
+        
+        return view('turno.index', compact('turnos','nombre_evaluacion'));
     }
 
     /**
@@ -45,7 +65,7 @@ class TurnoController extends Controller
     public function store($id, Request $request)
     {
         $requestData = $request->all();
-        $requestData['id_evaluacion'] = $id;
+        $requestData['evaluacion_id'] = $id;
         
         $rules = [
             'fecha_inicio_turno' => 'required',
@@ -91,7 +111,7 @@ class TurnoController extends Controller
         if(isset($requestData['visibilidad']))
             $turno->visibilidad = 1;
         
-        $turno->id_evaluacion = $requestData['id_evaluacion'];
+        $turno->evaluacion_id = $requestData['evaluacion_id'];
         $turno->save();
         
         return back()->with('notification-type','success')->with('notification-message','El turno se ha registrado con éxito!');
@@ -142,8 +162,8 @@ class TurnoController extends Controller
         //
     }
     
-    public function getDuracionEvaluacion($id_evaluacion)
+    public function getDuracionEvaluacion($evaluacion_id)
     {
-        return Evaluacion::find($id_evaluacion)->duracion;
+        return Evaluacion::find($evaluacion_id)->duracion;
     }
 }
