@@ -12,7 +12,7 @@
     <li class="breadcrumb-item">Listado de turnos</li>
 @endsection
 
-@section("main")    
+@section("main")
     <div id="wrapper">
       <div id="content-wrapper">
         <div class="container-fluid">
@@ -23,7 +23,7 @@
               Listado de Turnos | <b>{{ $nombre_evaluacion }}</b></div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -44,10 +44,10 @@
                                 <td><input type="checkbox" @if($turno->visibilidad) checked @endif disabled></td>
                                 <td>
                                     @if($turno->acciones)
-                                       <button class="btn-sm btn-primary" title="Editar" style="background-color: #000080">
+                                       <button id="btn_editar" class="btn btn-sm" title="Editar">
                                            <span class="icon-edit"></span>
                                        </button>
-                                       <button class="btn-sm btn-danger" title="Eliminar" style="background-color: #dc3545">
+                                       <button id="btn_eliminar" class="btn btn-sm" title="Eliminar">
                                            <span class="icon-delete"></span>
                                        </button> 
                                     @else 

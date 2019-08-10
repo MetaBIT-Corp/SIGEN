@@ -32,8 +32,8 @@ class TurnoController extends Controller
                  $turno['acciones'] = true;
                  
                  
-            $turno->fecha_inicio_turno = DateTime::createFromFormat('Y-m-d H:i:s', $turno->fecha_inicio_turno)->format('m/d/Y h:i A');
-            $turno->fecha_final_turno = DateTime::createFromFormat('Y-m-d H:i:s', $turno->fecha_final_turno)->format('m/d/Y h:i A');
+            $turno->fecha_inicio_turno = DateTime::createFromFormat('Y-m-d H:i:s', $turno->fecha_inicio_turno)->format('d/m/Y h:i A');
+            $turno->fecha_final_turno = DateTime::createFromFormat('Y-m-d H:i:s', $turno->fecha_final_turno)->format('d/m/Y h:i A');
             
         }
         
@@ -90,14 +90,14 @@ class TurnoController extends Controller
                 ->withInput();
         }
         
-        $requestData['fecha_inicio_turno'] = DateTime::createFromFormat('m/d/Y H:i A', $request->input('fecha_inicio_turno'))->format('Y-m-d H:i:s');
-        $requestData['fecha_final_turno'] = DateTime::createFromFormat('m/d/Y H:i A', $request->input('fecha_final_turno'))->format('Y-m-d H:i:s');
+        $requestData['fecha_inicio_turno'] = DateTime::createFromFormat('d/m/Y H:i A', $request->input('fecha_inicio_turno'))->format('Y-m-d H:i:s');
+        $requestData['fecha_final_turno'] = DateTime::createFromFormat('d/m/Y H:i A', $request->input('fecha_final_turno'))->format('Y-m-d H:i:s');
         
         if(!Carbon::parse($requestData['fecha_final_turno'])->gt(Carbon::parse($requestData['fecha_inicio_turno'])))
             return back()->with('notification-type','danger')->with('notification-message','La fecha/hora de fin debe ser mayor que la fecha/hora de inicio!')->withInput();
         
         $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-        $fecha_hora_actual_alert = DateTime::createFromFormat('Y-m-d H:i:s', $fecha_hora_actual)->format('m/d/Y h:i A');
+        $fecha_hora_actual_alert = DateTime::createFromFormat('Y-m-d H:i:s', $fecha_hora_actual)->format('d/m/Y h:i A');
             
         if(!Carbon::parse($requestData['fecha_inicio_turno'])->gt(Carbon::parse($fecha_hora_actual)))
             return back()->with('notification-type','danger')->with('notification-message','La fecha/hora de inicio debe ser mayor que la fecha/hora actual ('.$fecha_hora_actual_alert.')!')->withInput();
@@ -106,12 +106,12 @@ class TurnoController extends Controller
         $turno->fecha_inicio_turno = $requestData['fecha_inicio_turno'];
         $turno->fecha_final_turno = $requestData['fecha_final_turno'];
         $turno->contraseña = bcrypt($requestData['contraseña']);
+        $turno->evaluacion_id = $requestData['evaluacion_id'];
         $turno->visibilidad = 0;
 
         if(isset($requestData['visibilidad']))
             $turno->visibilidad = 1;
         
-        $turno->evaluacion_id = $requestData['evaluacion_id'];
         $turno->save();
         
         return back()->with('notification-type','success')->with('notification-message','El turno se ha registrado con éxito!');

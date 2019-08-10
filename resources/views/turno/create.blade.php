@@ -57,9 +57,10 @@
                             </div>
                         </div>
                         <script type="text/javascript">
-                            $(function () {
-                                $('#datetimepicker1').datetimepicker({
-                                    locale: 'fr'
+                            var $jq = jQuery.noConflict();
+                            $jq(function () {
+                                $jq('#datetimepicker1').datetimepicker({
+                                    format: 'DD/MM/YYYY h:mm A',
                                 });
                             });
                         </script>
@@ -81,9 +82,10 @@
                             </div>
                         </div>
                         <script type="text/javascript">
-                            $(function () {
-                                $('#datetimepicker2').datetimepicker({
-                                    locale: 'fr'
+                            var $jq = jQuery.noConflict();
+                            $jq(function () {
+                                $jq('#datetimepicker1').datetimepicker({
+                                    format: 'DD/MM/YYYY h:mm A',
                                 });
                             });
                         </script>
@@ -128,15 +130,14 @@
             
             $jq('#datetimepicker1input').blur(function(){
                 
-                var evaluacion_id = $(this).data('evaluacion_id');
-                var fecha_hora_inicio = $(this).val();
+                var evaluacion_id = $jq(this).data('evaluacion_id');
+                var fecha_hora_inicio = $jq(this).val();
                 
                 $jq.ajax({
                     url: '/api/evaluacion/'+evaluacion_id+'/duracion/',
                     type: 'GET',
                     success: function(data){ 
-                        console.log(data);
-                        var date = moment(fecha_hora_inicio).add(data,'hours').format('L hh:mm A');
+                        var date = moment(fecha_hora_inicio,'DD/MM/YYYY h:mm A').add(data,'hours').format('DD/MM/YYYY h:mm A');
                         $jq('#datetimepicker2input').val(date);
                     },
                     error: function(xhr, status, error) {
