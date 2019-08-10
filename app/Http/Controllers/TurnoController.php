@@ -21,6 +21,7 @@ class TurnoController extends Controller
         $evaluacion = Evaluacion::find($id);
         $turnos = $evaluacion->turnos;
         $nombre_evaluacion = $evaluacion->nombre_evaluacion;
+        $evaluacion_id = $evaluacion->id;
         
         foreach($turnos as $turno){
             
@@ -39,7 +40,7 @@ class TurnoController extends Controller
         
         //dd($turnos);
         
-        return view('turno.index', compact('turnos','nombre_evaluacion'));
+        return view('turno.index', compact('turnos','nombre_evaluacion','evaluacion_id'));
     }
 
     /**
@@ -134,9 +135,9 @@ class TurnoController extends Controller
      * @param  \App\Turno  $turno
      * @return \Illuminate\Http\Response
      */
-    public function edit(Turno $turno)
+    public function edit( $id )
     {
-        return view('turno.edit', compact('turno'));
+        return view('turno.edit', compact('id'));
     }
 
     /**

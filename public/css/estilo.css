@@ -78,5 +78,18 @@ footer{
 #btn_editar{
     color: #ffffff;
     background-color: #000080;
+}  
+
+#btn_add{
+    background-color: #ffffff;
+    color: #007bff;
+}
+
+#b_add{
+    margin-top: 6px;
+}
+
+.icon-add{
+    font-size:2em;
 }
 

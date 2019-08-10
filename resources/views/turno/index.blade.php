@@ -8,7 +8,7 @@
 @section("body")
 
 @section("ol_breadcrumb")
-    <li class="breadcrumb-item"><a href="#">Evaluación</a></li>
+    <li class="breadcrumb-item"><a href="/evaluacion/{{ $evaluacion_id }}/">Evaluación</a></li>
     <li class="breadcrumb-item">Listado de turnos</li>
 @endsection
 
@@ -22,6 +22,12 @@
               <i class="fas fa-table"></i>
               Listado de Turnos | <b>{{ $nombre_evaluacion }}</b></div>
             <div class="card-body">
+            <div class="row">
+                <a id="btn_add" class="btn btn-sm" href="/evaluacion/{{ $evaluacion_id }}/turnos/create" title="Agregar">
+                    <span class="icon-add"></span>
+                </a>
+                <b id="b_add">Agregar turno</b>
+            </div>
               <div class="table-responsive">
                 <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
                   <thead>
@@ -44,12 +50,12 @@
                                 <td><input type="checkbox" @if($turno->visibilidad) checked @endif disabled></td>
                                 <td>
                                     @if($turno->acciones)
-                                       <button id="btn_editar" class="btn btn-sm" title="Editar">
+                                       <a id="btn_editar" class="btn btn-sm" title="Editar" href="/evaluacion/{{ $evaluacion_id }}/turnos/{{ $turno->id }}/edit">
                                            <span class="icon-edit"></span>
-                                       </button>
-                                       <button id="btn_eliminar" class="btn btn-sm" title="Eliminar">
+                                       </a>
+                                       <a id="btn_eliminar" class="btn btn-sm" title="Eliminar">
                                            <span class="icon-delete"></span>
-                                       </button> 
+                                       </a> 
                                     @else 
                                         No acciones 
                                     @endif

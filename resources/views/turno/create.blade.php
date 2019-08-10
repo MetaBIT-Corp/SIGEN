@@ -5,8 +5,8 @@
 @section("body")
 
 @section("ol_breadcrumb")
-    <li class="breadcrumb-item"><a href="#">Evaluación</a></li>
-    <li class="breadcrumb-item"><a href="listado_estudiante">Listado de turnos</a></li>
+    <li class="breadcrumb-item"><a href="/evaluacion/{{ $id }}/">Evaluación</a></li>
+    <li class="breadcrumb-item"><a href="/evaluacion/{{ $id }}/turnos/">Listado de turnos</a></li>
     <li class="breadcrumb-item">Crear turno</li>
 @endsection
 
@@ -36,7 +36,7 @@
  <div class="offset-1 col-md-10"> 
   <div class="card">
       <div class="card-header">
-        <h3>Crear turno</h3>
+        <h4><b>Crear turno</b></h4>
       </div>
       <div class="card-body">
           <div class="offset-2 col-md-8">
@@ -49,7 +49,7 @@
                         <div class="col-md-8">
                             <div class="form-group">
                                 <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                    <input id="datetimepicker1input" type="text" name="fecha_inicio_turno" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="mm/dd/yyyy hh:mm tt" value="{{ old('fecha_inicio_turno') }}" data-evaluacion_id="{{ $id }}"/>
+                                    <input id="datetimepicker1input" type="text" name="fecha_inicio_turno" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="dd/mm/yyyy hh:mm tt" value="{{ old('fecha_inicio_turno') }}" data-evaluacion_id="{{ $id }}"/>
                                     <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
@@ -74,7 +74,7 @@
                         <div class="col-md-8">
                             <div class="form-group">
                                 <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                                    <input id="datetimepicker2input" type="text" name="fecha_final_turno" class="form-control datetimepicker-input" data-target="#datetimepicker2" placeholder="mm/dd/yyyy hh:mm tt" value="{{ old('fecha_final_turno') }}" readonly/>
+                                    <input id="datetimepicker2input" type="text" name="fecha_final_turno" class="form-control datetimepicker-input" data-target="#datetimepicker2" placeholder="dd/mm/yyyy hh:mm tt" value="{{ old('fecha_final_turno') }}" readonly/>
                                     <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
