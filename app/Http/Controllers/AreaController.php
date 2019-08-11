@@ -17,9 +17,10 @@ class AreaController extends Controller
         if(!Materia::where('id_cat_mat',$id_materia)->first()){
             return redirect('/');
         }
-        $areas=Materia::where('id_cat_mat',$id_materia)->first()->areas;
-        return view('area.index',compact('areas'));
-        
+        $materia=Materia::where('id_cat_mat',$id_materia)->first();
+        $areas=$materia->areas;
+        return view('area.index',compact('areas','materia'));
+
     }
 
     /**

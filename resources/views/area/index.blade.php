@@ -1,8 +1,8 @@
 @extends("../layouts.plantilla")
 @section("css")
-<link href="{{asset('icomoon/style.css')}}" rel="stylesheet">
+<link href="{{asset('icomoon/style.css')}}" rel="stylesheet"/>
 <script type="text/javascript">
-	$(document).ready(function(){
+    $(document).ready(function(){
 		$(".btn-editar").click(function(){
 			$.ajax({
 				url:"{{ route('areas.show',[3,2]) }}",
@@ -14,7 +14,7 @@
 				
 			})
 			.done(function(datos){
-				
+
 			})
 			.fail(function(){
 				console.log("ALV");
@@ -27,49 +27,58 @@
 
 @section("body")
 @section("ol_breadcrumb")
-    <a href="#">
-        Materia \ X \ Areas
+<div class="col-9 mt-2">
+    <a href="{{ route('materias') }}">
+        Materia
     </a>
-    <a class="btn btn-sm" href="#" id="btn_add" title="Agregar">
-        <span class="icon-add">
+    \
+    <a href="#">
+        {{ $materia->nombre_mar }}
+    </a>
+    \
+        Areas
+</div>
+<div class="col-3">
+    <a href="#" class="btn">
+        <span class="icon-add text-primary" href="#">
         </span>
     </a>
-    <b id="b_add">
-        Agregar turno
-    </b>
-    @endsection
+    <strong id="b_add">
+        Agregar Area
+    </strong>
+</div>
+@endsection
 @section("main")
-@forelse($areas as $area)
-    <div id="accordion">
-        <!--Collapse-->
-        <div class="card">
-            <div class="card-header btn collapsed" id="heading{{ $area->id }}">
-                <div class="row text-left text-secondary">
-                    <div aria-controls="collapse{{ $area->id }}" aria-expanded="true" class="col-5 h5 btn-link" data-target="#collapse{{ $area->id }}" data-toggle="collapse">
-                        {{ $loop->iteration }}. {{ $area->titulo }}
-                    </div>
-                    <div class="col-5 h5">
-                        <strong>
-                            Modalidad:
-                        </strong>
-                        {{ $area->tipo_item->nombre_tipo_item }}
-                    </div>
-                    <div class="col-2 h5">
-                        <a type="submit" id="btn_editar" title="Editar" class="btn-editar btn">
-                            <span class="icon-edit">
-                            </span>
-                        </a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a class="btn" id="btn_eliminar" title="Eliminar">
-                            <span class="icon-delete">
-                            </span>
-                        </a>
-                    </div>
+<div id="accordion">
+    @forelse($areas as $area)
+    <!--Collapse-->
+    <div class="card">
+        <div class="card-header btn" id="heading{{ $area->id }}">
+            <div class="row text-left text-secondary">
+                <div aria-controls="collapse{{ $area->id }}" aria-expanded="false" class="col-5 h5 btn-link collapsed" data-target="#collapse{{ $area->id }}" data-toggle="collapse">
+                    {{ $loop->iteration }}. {{ $area->titulo }}
+                </div>
+                <div class="col-5 h5">
+                    <strong>
+                        Modalidad:
+                    </strong>
+                    {{ $area->tipo_item->nombre_tipo_item }}
+                </div>
+                <div class="col-2 h5">
+                    <a class="btn-editar btn" id="btn_editar" title="Editar" type="submit">
+                        <span class="icon-edit">
+                        </span>
+                    </a>
+                    &nbsp;&nbsp;
+                    <a class="btn" id="btn_eliminar" title="Eliminar">
+                        <span class="icon-delete">
+                        </span>
+                    </a>
                 </div>
             </div>
-            <div aria-labelledby="heading{{ $area->id }}" class="collapse" data-parent="#accordion" id="collapse{{ $area->id }}">
-                <div class="card-body">
-                </div>
+        </div>
+        <div aria-labelledby="heading{{ $area->id }}" class="collapse" data-parent="#accordion" id="collapse{{ $area->id }}">
+            <div class="card-body">
             </div>
         </div>
     </div>
@@ -80,5 +89,5 @@
         </h2>
     </div>
     @endforelse
+</div>
 @endsection
-</link>
