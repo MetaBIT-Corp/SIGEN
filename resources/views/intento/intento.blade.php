@@ -1,6 +1,6 @@
 @extends("../layouts.plantilla")
 @section("head")
- @php
+@php
     {{
         $valores=$paginacion->items();
     }}
