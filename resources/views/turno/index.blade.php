@@ -53,7 +53,7 @@
                                        <a id="btn_editar" class="btn btn-sm" title="Editar" href="/evaluacion/{{ $evaluacion_id }}/turnos/{{ $turno->id }}/edit">
                                            <span class="icon-edit"></span>
                                        </a>
-                                       <a id="btn_eliminar" class="btn btn-sm" title="Eliminar">
+                                       <a id="btn_eliminar" class="btn btn-sm" title="Eliminar" onclick="modal('{{ $turno->id }}', '{{ $turno->fecha_inicio_turno }}', '{{ $turno->fecha_final_turno }}')">
                                            <span class="icon-delete"></span>
                                        </a> 
                                     @else 
@@ -78,6 +78,36 @@
       </div>
       <!-- /.content-wrapper -->
     </div>
+    <div id="modal_delete" class="modal" tabindex="-1" role="dialog"> 
+      <div class="modal-dialog" role="document"> 
+        <div class="modal-content"> 
+          <div class="modal-header"> 
+            <h5 class="modal-title">Alerta!</h5> 
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+              <span aria-hidden="true">&times;</span> 
+            </button> 
+          </div> 
+          <div class="modal-body"> 
+            <p id="p_mensaje_body"></p> 
+          </div> 
+          <div class="modal-footer"> 
+            <form id="delete_form" action="/turno/" method="get">
+                <button type="submit" class="btn btn-danger">Confirmar</button> 
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>    
+            </form>
+          </div> 
+        </div> 
+      </div> 
+    </div> 
+@endsection
 @endsection
 
+@section('js')
+<script type="text/javascript">
+    function modal(id, fecha_inicio_turno, fecha_final_turno){
+        document.getElementById('delete_form').action += id+'/delete';
+        document.getElementById('p_mensaje_body').innerHTML = "¿Está seguro que desea eliminar el turno de <b>"+fecha_inicio_turno+"</b> a <b>"+fecha_final_turno+"</b>?";
+        $("#modal_delete").modal();
+    }
+</script>
 @endsection

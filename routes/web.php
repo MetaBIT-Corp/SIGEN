@@ -85,7 +85,10 @@ Route::group(['middleware' => 'admin'], function(){
 Route::group(['middleware' => 'teacher'], function(){
     Route::get('/materia/estudiante/{id}/{id_mat}', 'EstudianteController@show')->name('detalle_estudiante');
     Route::get('/evaluacion/{id}', 'EvaluacionController@show')->name('detalle_evaluacion');
+    
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
+
+    Route::get('/turno/{id}/delete', 'TurnoController@destroy');
 
     Route::resource('/materia/{id}/areas','AreaController');
 });
