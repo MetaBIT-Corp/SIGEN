@@ -85,7 +85,7 @@
                     </nav>
                     <div class="col-md-10 position-relative" style="padding: 0">
                         @yield("main_footer")
-                        <main role="main" class="ml-md-0 pt-2 px-5">
+                        <main role="main" class="ml-md-0 pt-2 px-5 mb-5 pb-3">
 
                                 <ol class="breadcrumb">
                                     @yield("ol_breadcrumb")
