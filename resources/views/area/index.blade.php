@@ -91,7 +91,7 @@
         Areas
 </div>
 <div class="col-3">
-    <a class="btn" href="#">
+    <a class="btn" href="/materia/{{ $materia->id_cat_mat }}/areas/create">
         <span class="icon-add text-primary" href="#">
         </span>
     </a>
@@ -123,7 +123,7 @@
                         <span class="icon-edit">
                         </span>
                     </a>
-                    <a class="btn-eliminar btn" id="btn_eliminar" name="{{ $area->id }}" data-target="#modal1" data-toggle="modal" title="Eliminar" id="btn_eliminar">
+                    <a class="btn-eliminar btn" data-target="#modal1" data-toggle="modal" id="btn_eliminar" name="{{ $area->id }}" title="Eliminar">
                         <span class="icon-delete">
                         </span>
                     </a>
@@ -160,7 +160,7 @@
             <form id="form-edit" method="POST">
                 @csrf
                 <div class="modal-body">
-                    <div class="alert alert-danger" id="validacion" role="alert" hidden>
+                    <div class="alert alert-danger" hidden="" id="validacion" role="alert">
                         Campo requerido para continuar.
                     </div>
                     <div class="form-group row">
@@ -183,7 +183,6 @@
         </div>
     </div>
 </div>
-
 <!-- Modal2-->
 <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="modal1" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -202,10 +201,10 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group row">
-                         <label class="col-12 col-form-label" for="inputPassword">
+                        <label class="col-12 col-form-label" for="inputPassword">
                             ¿Esta seguro que desea eliminar el area seleccionada?
                         </label>
-                        <input hidden id="id_area_eli" name="id_area" type="number"/>
+                        <input hidden="" id="id_area_eli" name="id_area" type="number"/>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -57,7 +57,7 @@
          <button type="submit" class="btn btn-primary">Guardar</button>                 
      </div>
      <div class="form-group offset-1">
-         <button type="button" class="btn btn-secondary">Cancelar</button>                           
+         <button type="button" class="btn btn-secondary" onclick="location.href='/evaluacion/{{ $turno->evaluacion_id }}/turnos'">Cancelar</button>                           
      </div>
   </div>
 </form>

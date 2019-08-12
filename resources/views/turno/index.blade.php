@@ -91,7 +91,7 @@
             <p id="p_mensaje_body"></p> 
           </div> 
           <div class="modal-footer"> 
-            <form id="delete_form" action="/turno/" method="get">
+            <form id="delete_form" action="" method="get">
                 <button type="submit" class="btn btn-danger">Confirmar</button> 
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>    
             </form>
@@ -105,7 +105,7 @@
 @section('js')
 <script type="text/javascript">
     function modal(id, fecha_inicio_turno, fecha_final_turno){
-        document.getElementById('delete_form').action += id+'/delete';
+        document.getElementById('delete_form').action = '/turno/' + id + '/delete';
         document.getElementById('p_mensaje_body').innerHTML = "¿Está seguro que desea eliminar el turno de <b>"+fecha_inicio_turno+"</b> a <b>"+fecha_final_turno+"</b>?";
         $("#modal_delete").modal();
     }
