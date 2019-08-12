@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Materia;
+use App\Area;
 
 class AreaController extends Controller
 {
@@ -12,15 +14,18 @@ class AreaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id_materia)
+    public function index($id_materia, Request $request)
     {
         if(!Materia::where('id_cat_mat',$id_materia)->first()){
             return redirect('/');
         }
         $materia=Materia::where('id_cat_mat',$id_materia)->first();
         $areas=$materia->areas;
-        return view('area.index',compact('areas','materia'));
-
+        
+        if($request->is("ajax")){
+            return $areas;
+        }
+        return response()->view('area.index', compact('areas','materia'))->header('Content-Type','html');
     }
 
     /**
@@ -52,7 +57,7 @@ class AreaController extends Controller
      */
     public function show($id)
     {
-        return redirect()->action('AreaController@index',[$id]);
+        return redirect()->action('AreaController@areas',[$id]);
     }
 
     /**
@@ -73,9 +78,13 @@ class AreaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $data=$request->all();
+        $area=Area::where('id',(int)$data["id_area"])->first();
+        $area->titulo=$data["titulo"];
+        $area->save();
+        
     }
 
     /**
@@ -87,5 +96,9 @@ class AreaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function areas($id_materia){
+
     }
 }

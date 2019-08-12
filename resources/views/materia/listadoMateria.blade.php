@@ -96,7 +96,7 @@
 <!-- Inicio de un Collapse -->
   <div class="card">
   	<!-- Titulo de Collapse -->
-    <div class="card-header btn-link" type="button" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+    <div class="card-header btn text-primary text-left" type="button" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
       <h4 class="mb-0">
           Ciclo {{ $ciclos[$loop->iteration-1]->num_ciclo }} Año: {{ $ciclos[$loop->iteration-1]->anio }}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Estado: Activo
       </h4>
@@ -109,7 +109,7 @@
 <!-- Inicio de un Collapse -->
   <div class="card">
   	<!-- Titulo de Collapse -->
-    <div class="card-header btn-link collapsed" type="button" id="heading{{ $ciclo }}" data-toggle="collapse" data-target="#collapse{{ $ciclo }}" aria-expanded="false" aria-controls="collapse{{ $ciclo }}">
+    <div class="card-header btn text-primary text-left collapsed" type="button" id="heading{{ $ciclo }}" data-toggle="collapse" data-target="#collapse{{ $ciclo }}" aria-expanded="false" aria-controls="collapse{{ $ciclo }}">
       <h4 class="mb-0">
           Ciclo {{ $ciclos[$loop->iteration-1]->num_ciclo }} Año: {{ $ciclos[$loop->iteration-1]->anio }}
       </h4>

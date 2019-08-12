@@ -90,7 +90,9 @@ Route::group(['middleware' => 'teacher'], function(){
 
     Route::get('/turno/{id}/delete', 'TurnoController@destroy');
 
-    Route::resource('/materia/{id}/areas','AreaController');
+    Route::post('/materia/{id}/areas','AreaController@index');
+    Route::get('/materia/{id}/areas','AreaController@index');
+    Route::post('/areas/edit','AreaController@update')->name("area_update");
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Estudiante
