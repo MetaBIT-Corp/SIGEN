@@ -12,4 +12,5 @@ class Docente extends Model
     protected $fillable = [
         
     ];
+
 }

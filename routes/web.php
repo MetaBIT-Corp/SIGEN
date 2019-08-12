@@ -77,6 +77,8 @@ Route::get('/materias', 'MateriaController@listar')->name('materias');
 
 Route::get('/materias/listado_estudiante/{id_mat_ci}', 'ListadoEstudianteController@listar')->name('listado_estudiante');
 
+Route::get('docentes-ciclo/{id_mat_ci}', 'DocenteController@docentes_materia_ciclo')->name('docentes_materia_ciclo');
+
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
 Route::group(['middleware' => 'admin'], function(){
 });
