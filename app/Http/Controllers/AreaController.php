@@ -5,15 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Materia;
-<<<<<<< HEAD
-use App\Area;
-=======
+
 use App\Tipo_Item;
 use App\Area;
 use App\Docente;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
->>>>>>> 5da0d1af7bf9f256fe2b9366590e9786c2b17b72
 
 class AreaController extends Controller
 {

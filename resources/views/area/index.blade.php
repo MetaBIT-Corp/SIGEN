@@ -91,7 +91,7 @@
         Areas
 </div>
 <div class="col-3">
-    <a class="btn" href="/materia/{{ $materia->id_cat_mat }}/areas/create">
+    <a class="btn" href="/materia/{{ $areas[0]->materia->id_cat_mat }}/areas/create">
         <span class="icon-add text-primary" href="#">
         </span>
     </a>
