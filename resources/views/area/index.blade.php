@@ -3,16 +3,8 @@
 <link href="{{asset('icomoon/style.css')}}" rel="stylesheet"/>
 <script type="text/javascript">
     $(document).ready(function(){
-         $.ajax({
-        })
-        .done()
-        .fail();
-
-    });
-</script>
-<script type="text/javascript">
-    $(document).ready(function(){
-       
+        
+        //Funcion que asigna el nuevo valor y el id de la pregunta a sus respectivos inputs
         $(".btn-editar").click(function(){
             var id_area=$(this).attr("name");
             $("#id_area").val(""+id_area);
@@ -21,21 +13,67 @@
             var valor=$("#input_titulo").val($.trim(titulo[1]));
         });
 
-        $("#form-edit").click(function(){
-            $.ajax({
-                url:"{{ route('area_update') }}",
-                type:"POST",
-                data:$("#form-edit").serialize(),
-                dataType:"json"
-            })
-            .done(function(datos){
-                console.log(datos);
-            })
-            .fail(function(xhr,status,e){
-                console.log(e);
-            });
+        $(".btn-eliminar").click(function(){
+            var id_area=$(this).attr("name");
+            $("#id_area_eli").val(""+id_area);
+            var titulo=$("#"+id_area).text();
+            titulo=titulo.split(".");
+            var valor=$("#input_titulo").val($.trim(titulo[1]));
         });
-    });
+
+        //Peticion asincrona donde se envian los datos
+        $("#modificar").click(function(){
+            if($("#input_titulo").val().length>0){
+                $.ajax({
+                    url:"{{ route('area_update') }}",
+                    type:"POST",
+                    data:$("#form-edit").serialize(),
+                    dataType:"html"
+                })
+                .done(function(datos){
+                    $("#salir").click();
+                    $("#accordion").html(datos);
+                    $(".btn-editar").click(function(){
+                        var id_area=$(this).attr("name");
+                        $("#id_area").val(""+id_area);
+                        var titulo=$("#"+id_area).text();
+                        titulo=titulo.split(".");
+                        var valor=$("#input_titulo").val($.trim(titulo[1]));
+                    });
+                })
+                .fail(function(xhr,status,e){
+                    console.log(e);
+                });
+            }else{
+                $("#validacion").removeAttr("hidden");
+            }
+        });
+
+            //Peticion para eliminar
+        $("#eliminar").click(function(){
+                $.ajax({
+                    url:"{{ route('area_delete') }}",
+                    type:"POST",
+                    data:$("#form-elim").serialize(),
+                    dataType:"html"
+                })
+                .done(function(datos){
+                    $("#salir_eli").click();
+                    $("#accordion").html(datos);
+                    $(".btn-eliminar").click(function(){
+                        var id_area=$(this).attr("name");
+                        $("#id_area_eli").val(""+id_area);
+                        var titulo=$("#"+id_area).text();
+                        titulo=titulo.split(".");
+                        var valor=$("#input_titulo").val($.trim(titulo[1]));
+                    });
+                })
+                .fail(function(xhr,status,e){
+                    console.log(e);
+                });
+
+        });
+});
 </script>
 @endsection
 
@@ -47,7 +85,7 @@
     </a>
     \
     <a href="#">
-        {{ $materia->nombre_mar }}
+        {{ $areas[0]->materia->nombre_mar }}
     </a>
     \
         Areas
@@ -85,7 +123,7 @@
                         <span class="icon-edit">
                         </span>
                     </a>
-                    <a class="btn" id="btn_eliminar" title="Eliminar">
+                    <a class="btn-eliminar btn" id="btn_eliminar" name="{{ $area->id }}" data-target="#modal1" data-toggle="modal" title="Eliminar" id="btn_eliminar">
                         <span class="icon-delete">
                         </span>
                     </a>
@@ -122,21 +160,59 @@
             <form id="form-edit" method="POST">
                 @csrf
                 <div class="modal-body">
+                    <div class="alert alert-danger" id="validacion" role="alert" hidden>
+                        Campo requerido para continuar.
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label" for="inputPassword">
                             Titulo de Area
                         </label>
                         <div class="col-sm-8">
-                            <input id="id_area" type="number" name="id_area" hidden />
+                            <input hidden="" id="id_area" name="id_area" type="number"/>
                             <input class="form-control" id="input_titulo" name="titulo" placeholder="Titulo" required="" type="text"/>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                    <button class="btn btn-secondary" data-dismiss="modal" id="salir" type="button">
                         Salir
                     </button>
-                    <input class="btn btn-primary" id="modificar" type="submit" value="Modificar"/>
+                    <input class="btn btn-primary" id="modificar" type="button" value="Modificar"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal2-->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="modal1" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Eliminar Area
+                </h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">
+                        ×
+                    </span>
+                </button>
+            </div>
+            <form id="form-elim" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group row">
+                         <label class="col-12 col-form-label" for="inputPassword">
+                            ¿Esta seguro que desea eliminar el area seleccionada?
+                        </label>
+                        <input hidden id="id_area_eli" name="id_area" type="number"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-dismiss="modal" id="salir_eli" type="button">
+                        Salir
+                    </button>
+                    <input class="btn btn-danger" id="eliminar" type="button" value="Eliminar"/>
                 </div>
             </form>
         </div>

@@ -19,13 +19,14 @@ class AreaController extends Controller
         if(!Materia::where('id_cat_mat',$id_materia)->first()){
             return redirect('/');
         }
+
         $materia=Materia::where('id_cat_mat',$id_materia)->first();
         $areas=$materia->areas;
-        
-        if($request->is("ajax")){
-            return $areas;
+        if($request->isMethod("POST")){
+            return view('area.response', compact('areas'));
         }
-        return response()->view('area.index', compact('areas','materia'))->header('Content-Type','html');
+
+        return view('area.index', compact('areas'));
     }
 
     /**
@@ -84,7 +85,9 @@ class AreaController extends Controller
         $area=Area::where('id',(int)$data["id_area"])->first();
         $area->titulo=$data["titulo"];
         $area->save();
-        
+
+        $id_mat=$area->materia->id_cat_mat;  
+        return redirect()->action('AreaController@respuesta',[$id_mat]); 
     }
 
     /**
@@ -93,12 +96,19 @@ class AreaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $data=$request->all();
+        $area=Area::where('id',(int)$data["id_area"])->first();
+        $id_mat=$area->materia->id_cat_mat;  
+        $area->delete();
+
+        return redirect()->action('AreaController@respuesta',[$id_mat]); 
     }
 
-    public function areas($id_materia){
-
+    public function respuesta($id_materia){
+        $materia=Materia::where('id_cat_mat',$id_materia)->first();
+        $areas=$materia->areas;
+        return view('area.response', compact('areas'));
     }
 }
