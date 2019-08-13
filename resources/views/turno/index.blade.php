@@ -53,9 +53,11 @@
                                        <a id="btn_editar" class="btn btn-sm" title="Editar" href="/evaluacion/{{ $evaluacion_id }}/turnos/{{ $turno->id }}/edit">
                                            <span class="icon-edit"></span>
                                        </a>
+                                      
                                        <a id="btn_eliminar" class="btn btn-sm" title="Eliminar" onclick="modal('{{ $turno->id }}', '{{ $turno->fecha_inicio_turno }}', '{{ $turno->fecha_final_turno }}')">
                                            <span class="icon-delete"></span>
-                                       </a> 
+                                       </a>
+                                        
                                     @else 
                                         No acciones 
                                     @endif
@@ -71,7 +73,7 @@
                 </table>
               </div>
             </div>
-            <div class="card-footer small text-muted"><b>*No acciones:</b> El turno ya no esta disponible para hacer cambios, esto se debe a que el turno ya fue llevado a cabo.</div>
+            <div class="card-footer small text-muted"><b>*No acciones:</b> El turno ya no esta disponible para hacer cambios, esto se debe a que el turno ya fue o se está  llevando a cabo.</div>
           </div>
         </div>
         <!-- /.container-fluid -->

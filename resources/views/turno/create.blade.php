@@ -14,7 +14,7 @@
             <div class="col-md-8">
                 <div class="form-group">
                     <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                        <input id="datetimepicker1input" type="text" name="fecha_inicio_turno" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="dd/mm/yyyy hh:mm tt" value="{{ old('fecha_inicio_turno') }}" data-evaluacion_id="{{ $id }}"/>
+                        <input id="datetimepicker1input" type="text" name="fecha_inicio_turno" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="dd/mm/yyyy hh:mm A" value="{{ old('fecha_inicio_turno') }}" data-evaluacion_id="{{ $id }}"/>
                         <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
@@ -28,10 +28,10 @@
     <label for="exampleInputEmail1">Fecha + Hora de fin:</label>
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="form-group">
                     <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                        <input id="datetimepicker2input" type="text" name="fecha_final_turno" class="form-control datetimepicker-input" data-target="#datetimepicker2" placeholder="dd/mm/yyyy hh:mm tt" value="{{ old('fecha_final_turno') }}" readonly/>
+                        <input id="datetimepicker2input" type="text" name="fecha_final_turno" class="form-control datetimepicker-input col-md-8" data-target="#datetimepicker2" placeholder="dd/mm/yyyy hh:mm A" value="{{ old('fecha_final_turno') }}"/>
                         <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
