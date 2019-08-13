@@ -1,35 +1,14 @@
 @extends("../layouts.plantilla")
 @section("css")
 <link href="{{asset('icomoon/style.css')}}" rel="stylesheet"/>
-<script type="text/javascript">
-    $(document).ready(function(){
-		$(".btn-editar").click(function(){
-			$.ajax({
-				url:"{{ route('areas.show',[3,2]) }}",
-				type:"GET",
-				data:{
-					"valio":1
-				},
-				dataType:"html"
-				
-			})
-			.done(function(datos){
-
-			})
-			.fail(function(){
-				console.log("ALV");
-			});
-		});
-
-	});
-</script>
+<script type="text/javascript" src="{{ asset('js/area/listar_area.js') }}"></script>
 @endsection
 
 @section("body")
 @section("ol_breadcrumb")
 <div class="col-9 mt-2">
     <a href="{{ route('materias') }}">
-        Materia
+        Materias
     </a>
     \
     <a href="#">
@@ -39,7 +18,7 @@
         Areas
 </div>
 <div class="col-3">
-    <a href="/materia/{{ $materia->id_cat_mat }}/areas/create" class="btn">
+    <a class="btn" href="/materia/{{ $materia->id_cat_mat }}/areas/create">
         <span class="icon-add text-primary" href="#">
         </span>
     </a>
@@ -50,44 +29,82 @@
 @endsection
 @section("main")
 <div id="accordion">
-    @forelse($areas as $area)
-    <!--Collapse-->
-    <div class="card">
-        <div class="card-header btn" id="heading{{ $area->id }}">
-            <div class="row text-left text-secondary">
-                <div aria-controls="collapse{{ $area->id }}" aria-expanded="false" class="col-5 h5 btn-link collapsed" data-target="#collapse{{ $area->id }}" data-toggle="collapse">
-                    {{ $loop->iteration }}. {{ $area->titulo }}
-                </div>
-                <div class="col-5 h5">
-                    <strong>
-                        Modalidad:
-                    </strong>
-                    {{ $area->tipo_item->nombre_tipo_item }}
-                </div>
-                <div class="col-2 h5">
-                    <a class="btn-editar btn" id="btn_editar" title="Editar" type="submit">
-                        <span class="icon-edit">
-                        </span>
-                    </a>
-                    &nbsp;&nbsp;
-                    <a class="btn" id="btn_eliminar" title="Eliminar">
-                        <span class="icon-delete">
-                        </span>
-                    </a>
-                </div>
+
+@include('area.response')
+
+</div>
+<!-- Modal -->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="modal" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Editar Area
+                </h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">
+                        ×
+                    </span>
+                </button>
             </div>
-        </div>
-        <div aria-labelledby="heading{{ $area->id }}" class="collapse" data-parent="#accordion" id="collapse{{ $area->id }}">
-            <div class="card-body">
-            </div>
+            <form id="form-edit" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="alert alert-danger" hidden="" id="validacion" role="alert">
+                        Campo requerido para continuar.
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" for="inputPassword">
+                            Titulo de Area
+                        </label>
+                        <div class="col-sm-8">
+                            <input hidden="" id="id_area" name="id_area" type="number"/>
+                            <input class="form-control" id="input_titulo" name="titulo" placeholder="Titulo" required="" type="text"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-dismiss="modal" id="salir" type="button">
+                        Salir
+                    </button>
+                    <input class="btn btn-primary" id="modificar" type="button" value="Modificar"/>
+                </div>
+            </form>
         </div>
     </div>
-    @empty
-    <div class="alert alert-info">
-        <h2 class="h1 text-center">
-            No hay areas.
-        </h2>
+</div>
+<!-- Modal2-->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="modal1" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Eliminar Area
+                </h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">
+                        ×
+                    </span>
+                </button>
+            </div>
+            <form id="form-elim" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label class="col-12 col-form-label" for="inputPassword">
+                            ¿Esta seguro que desea eliminar el area seleccionada?
+                        </label>
+                        <input hidden="" id="id_area_eli" name="id_area" type="number"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-dismiss="modal" id="salir_eli" type="button">
+                        Salir
+                    </button>
+                    <input class="btn btn-danger" id="eliminar" type="button" value="Eliminar"/>
+                </div>
+            </form>
+        </div>
     </div>
-    @endforelse
 </div>
 @endsection

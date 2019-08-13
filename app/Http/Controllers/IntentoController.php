@@ -97,7 +97,7 @@ class IntentoController extends Controller
             for ($j = 0; $j < count($claves_areas_preguntas[$i]); $j++) {
 
                 //Si no pertence a un grupo de emparejamiento crea un array con cierta estructura
-                if ($claves_areas_preguntas[$i][$j]->pregunta->grupo_emparejamiento_id == null) {
+                if ($i!=3) {
                     $preguntas[] = ['tipo_item' => $i, 'pregunta' => $claves_areas_preguntas[$i][$j]->pregunta, 'opciones' => $claves_areas_preguntas[$i][$j]->pregunta->opciones];
                 } else {
                     if ($ultimo_id_gpo != $claves_areas_preguntas[$i][$j]->pregunta->grupo_emparejamiento_id) {

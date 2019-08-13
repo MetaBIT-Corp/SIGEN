@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Materia;
+
 use App\Tipo_Item;
 use App\Area;
 use App\Docente;
@@ -17,15 +19,17 @@ class AreaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id_materia)
+    public function index($id_materia, Request $request)
     {
         if(!Materia::where('id_cat_mat',$id_materia)->first()){
             return redirect('/');
         }
+
         $materia=Materia::where('id_cat_mat',$id_materia)->first();
         $areas=$materia->areas;
-        return view('area.index',compact('areas','materia'));
+        $success=false;
 
+        return view('area.index', compact('areas','materia','success'));
     }
 
     /**
@@ -89,7 +93,7 @@ class AreaController extends Controller
      */
     public function show($id)
     {
-        return redirect()->action('AreaController@index',[$id]);
+        return redirect()->action('AreaController@areas',[$id]);
     }
 
     /**
@@ -110,9 +114,15 @@ class AreaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $data=$request->all();
+        $area=Area::where('id',(int)$data["id_area"])->first();
+        $area->titulo=$data["titulo"];
+        $area->save();
+
+        $id_mat=$area->materia->id_cat_mat;  
+        return redirect()->action('AreaController@respuesta',[$id_mat]); 
     }
 
     /**
@@ -121,8 +131,20 @@ class AreaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $data=$request->all();
+        $area=Area::where('id',(int)$data["id_area"])->first();
+        $id_mat=$area->materia->id_cat_mat;  
+        $area->delete();
+
+        return redirect()->action('AreaController@respuesta',[$id_mat]); 
+    }
+
+    public function respuesta($id_materia){
+        $materia=Materia::where('id_cat_mat',$id_materia)->first();
+        $areas=$materia->areas;
+        $success=true;
+        return view('area.response', compact('areas','success'));
     }
 }
