@@ -27,11 +27,9 @@ class AreaController extends Controller
 
         $materia=Materia::where('id_cat_mat',$id_materia)->first();
         $areas=$materia->areas;
-        if($request->isMethod("POST")){
-            return view('area.response', compact('areas'));
-        }
+        $success=false;
 
-        return view('area.index', compact('areas'));
+        return view('area.index', compact('areas','materia','success'));
     }
 
     /**
@@ -146,6 +144,7 @@ class AreaController extends Controller
     public function respuesta($id_materia){
         $materia=Materia::where('id_cat_mat',$id_materia)->first();
         $areas=$materia->areas;
-        return view('area.response', compact('areas'));
+        $success=true;
+        return view('area.response', compact('areas','success'));
     }
 }
