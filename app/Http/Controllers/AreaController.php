@@ -24,10 +24,9 @@ class AreaController extends Controller
         if(!Materia::where('id_cat_mat',$id_materia)->first()){
             return redirect('/');
         }
-
         $materia=Materia::where('id_cat_mat',$id_materia)->first();
-        $areas=$materia->areas;
         $success=false;
+        $areas=$materia->areas;
 
         return view('area.index', compact('areas','materia','success'));
     }
@@ -141,10 +140,19 @@ class AreaController extends Controller
         return redirect()->action('AreaController@respuesta',[$id_mat]); 
     }
 
-    public function respuesta($id_materia){
+    public function respuesta($id_materia=null, Request $request){
+        $success=false;
+        if($request->isMethod("POST")&&!empty($request->find)&&!empty($request->id_mat)){
+            $materia=Materia::where('id_cat_mat',$request->id_mat)->first();
+            $areas=$materia->areas()->where('titulo','LIKE',$request->find.'%')->get();
+            return view('area.response', compact('areas','success'));
+        }
+        if($id_materia==0){
+            $success=false;
+            $id_materia=$request->id_mat;
+        }
         $materia=Materia::where('id_cat_mat',$id_materia)->first();
         $areas=$materia->areas;
-        $success=true;
         return view('area.response', compact('areas','success'));
     }
 }
