@@ -3,6 +3,7 @@
 @section("css")
     <link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
     <link rel="stylesheet" href="{{asset('css/estilo.css')}}">
+    <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" type="text/css" rel="stylesheet"> 
 @endsection
 
 @section("body")
@@ -53,11 +54,11 @@
                                        <a id="btn_editar" class="btn btn-sm" title="Editar" href="/evaluacion/{{ $evaluacion_id }}/turnos/{{ $turno->id }}/edit">
                                            <span class="icon-edit"></span>
                                        </a>
-                                      
-                                       <a id="btn_eliminar" class="btn btn-sm" title="Eliminar" onclick="modal('{{ $turno->id }}', '{{ $turno->fecha_inicio_turno }}', '{{ $turno->fecha_final_turno }}')">
-                                           <span class="icon-delete"></span>
-                                       </a>
-                                        
+                                          @if($turno->accion_delete)
+                                               <a id="btn_eliminar" class="btn btn-sm" title="Eliminar" onclick="modal('{{ $turno->id }}', '{{ $evaluacion_id }}','{{ $turno->fecha_inicio_turno }}', '{{ $turno->fecha_final_turno }}')">
+                                                   <span class="icon-delete"></span>
+                                               </a>
+                                          @endif
                                     @else 
                                         No acciones 
                                     @endif
@@ -93,7 +94,9 @@
             <p id="p_mensaje_body"></p> 
           </div> 
           <div class="modal-footer"> 
-            <form id="delete_form" action="" method="get">
+            <form id="delete_form" method="post">
+                @csrf
+                @method('delete')
                 <button type="submit" class="btn btn-danger">Confirmar</button> 
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>    
             </form>
@@ -105,11 +108,10 @@
 @endsection
 
 @section('js')
-<script type="text/javascript">
-    function modal(id, fecha_inicio_turno, fecha_final_turno){
-        document.getElementById('delete_form').action = '/turno/' + id + '/delete';
-        document.getElementById('p_mensaje_body').innerHTML = "¿Está seguro que desea eliminar el turno de <b>"+fecha_inicio_turno+"</b> a <b>"+fecha_final_turno+"</b>?";
-        $("#modal_delete").modal();
-    }
-</script>
+<script type="text/javascript" src="{{asset('js/turno/index/main.js')}}"></script>
+
+    <!-- Page level plugin JavaScript-->
+    <script type="text/javascript" src="{{asset('vendor/datatables/jquery.dataTables.js' )}}"></script>
+    <script type="text/javascript" src="{{asset('vendor/datatables/dataTables.bootstrap4.js' )}}"></script>
+    <script type="text/javascript" src="{{asset('js/demo/datatables-demo.js')}}"></script>
 @endsection
