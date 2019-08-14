@@ -35,6 +35,18 @@ class ClaveController extends Controller
     	return $data;
     }
 
+    //Funcion para cargar las preguntas asignadas a una clave
+    public function preguntasAgregadas($id){
+
+        $preguntas_asginadas = DB::table('clave_area_pregunta as cap')
+                                    ->where('cap.clave_area_id', $id)
+                                    ->join('pregunta as p', 'p.id', '=', 'cap.pregunta_id')
+                                    ->select('p.pregunta')
+                                    ->get();
+
+        return $preguntas_asginadas;
+    }
+
     //Función para asignar a la clave las preguntas seleccionadas del área
     public function asignarPreguntas(Request $request){
     	$preguntas = $request->input('preguntas');

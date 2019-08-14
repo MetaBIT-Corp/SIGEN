@@ -37,7 +37,7 @@
 
         <div class="d-flex justify-content-between align-items-center">
           <h5>Número de clave: {{ $clave->numero_clave }}</h5>
-          <a class="icon-add btn float-rigth" href="#" title="Agregar Area"></a>
+          <a class="icon-add btn float-rigth" href="#" title="Agregar Área"></a>
         </div>
 
       </div>
@@ -76,7 +76,7 @@
                 @if(!$clave_area->aleatorio)
                   <a class="icon-add btn" href="#" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></a>
                 @endif
-                <a class="icon-list btn" href="#" title="Preguntas agregadas"></a>
+                <a class="icon-list btn" href="#" title="Preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></a>
               </div>
           </div>
           </td>
@@ -93,7 +93,7 @@
 </div>
 @endforeach
 
-  <!-- Modal -->
+  <!-- Modal agregar preguntas-->
 <div class="modal fade" id="asignarPreguntasClaveArea" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
@@ -118,9 +118,31 @@
   </div>
 </div>
 
+  <!-- Modal listar preguntas-->
+<div class="modal fade" id="listarPreguntasClaveArea" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="listarModalCenterTitle">Preguntas asignadas</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body" id="listar-preguntas">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal">Aceptar</button>
+        </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 @endsection
 
 @section('js')
-  <script src="/js/clave_area/cargar_preguntas.js"> </script>
+  <script src="/js/clave/cargarPreguntas.js"> </script>
+
+  <script src="/js/clave/listarPreguntas.js"> </script>
 @endsection

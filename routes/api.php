@@ -17,7 +17,10 @@ Route::post('/respuesta/{id}','AreaController@respuesta');
 Route::post('/area/edit','AreaController@update')->name("area_update");
 Route::post('/area/delete','AreaController@destroy')->name("area_delete");
 Route::get('/evaluacion/{id}/duracion/','TurnoController@getDuracionEvaluacion');
+
+//Clave
 Route::get('/area/{id}/preguntas', 'ClaveController@preguntasPorArea');
+Route::get('/preguntas-agregadas/{id}', 'ClaveController@preguntasAgregadas');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
