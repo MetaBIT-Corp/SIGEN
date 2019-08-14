@@ -6,14 +6,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Clave_Area;
 use App\Clave_Area_Pregunta;
+use App\Clave;
 
-class ClaveAreaController extends Controller
+
+class ClaveController extends Controller
 {
-	//Funcion para probar historia de usario 33 y 35
-    public function listar($id){
 
-    	$clave_area = Clave_Area::all();
-    	return view('clave_area.agregarPreguntasClaveArea')->with(compact('clave_area'));
+    public function listarClaves($id_turno){
+    	$claves = Clave::all();
+
+    	return view('clave.listarClaves')->with(compact('claves'));
     }
 
     //Funcion para cargar las preguntas de una área mediante AJAX
