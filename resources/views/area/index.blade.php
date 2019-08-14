@@ -11,16 +11,16 @@
     <a href="{{ route('materias') }}">
         Materias
     </a>
-    \
+    /
     <a href="#">
         {{ $materia->nombre_mar }}
     </a>
-    \
+    /
         Areas
 </div>
 <div class="col-3">
     <a class="btn" href="/materia/{{ $materia->id_cat_mat }}/areas/create">
-        <span class="icon-add text-primary" href="#">
+        <span class="icon-add text-primary">
         </span>
     </a>
     <strong id="b_add">

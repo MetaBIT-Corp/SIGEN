@@ -15,7 +15,7 @@
             <div class="col-md-8">
                 <div class="form-group">
                     <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                        <input id="datetimepicker1input" type="text" name="fecha_inicio_turno" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="dd/mm/yyyy hh:mm tt" value="{{ old('fecha_inicio_turno',$turno->fecha_inicio_turno) }}" data-evaluacion_id="{{ $turno->evaluacion_id }}"/>
+                        <input id="datetimepicker1input" type="text" name="fecha_inicio_turno" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="dd/mm/yyyy hh:mm tt" value="{{ old('fecha_inicio_turno',$turno->fecha_inicio_turno) }}" data-evaluacion_id="{{ $turno->evaluacion_id }}" @if($turno->iniciado) readonly @endif/>
                         <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
@@ -60,6 +60,19 @@
          <button type="button" class="btn btn-secondary" onclick="location.href='/evaluacion/{{ $turno->evaluacion_id }}/turnos'">Cancelar</button>                           
      </div>
   </div>
+  <input type="hidden" name="iniciado" value="{{ $turno->iniciado }}">
 </form>
 @endsection
+     
+@section("extra_js")
+   
+   @if($turno->iniciado) 
+       <script type="text/javascript" src="{{ asset('js/turno/edit/main.js') }}"></script>
+   @else 
+       <script type="text/javascript" src="{{ asset('js/turno/main.js') }}"></script>
+   @endif
+    
+@endsection
+    
+     
       
