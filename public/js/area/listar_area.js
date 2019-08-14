@@ -24,6 +24,7 @@ $(document).ready(function() {
     botones();
     //Peticion asincrona donde se envian los datos
     $("#modificar").click(function() {
+        $(this).attr("disabled",true);
         if ($("#input_titulo").val().length > 0) {
             $.ajax({
                 url: "/api/area/edit",
@@ -33,6 +34,7 @@ $(document).ready(function() {
             }).done(function(datos) {
                 $("#salir").click();
                 $("#accordion").html(datos);
+                $("#modificar").removeAttr("disabled");
                 botones();
             }).fail(function(xhr, status, e) {
                 console.log(e);
@@ -43,6 +45,7 @@ $(document).ready(function() {
     });
     //Peticion para eliminar
     $("#eliminar").click(function() {
+        $(this).attr("disabled",true);
         $.ajax({
             url: "/api/area/delete",
             type: "POST",
@@ -51,9 +54,31 @@ $(document).ready(function() {
         }).done(function(datos) {
             $("#salir_eli").click();
             $("#accordion").html(datos);
+            $("#eliminar").removeAttr("disabled");
             botones();
         }).fail(function(xhr, status, e) {
             console.log(e);
         });
+    });
+    //Buscador
+    var type_method="";
+    $("#find").keyup(function() {
+        if ($("#find").val().length>0) {
+            type_method="POST";
+        }else{
+            type_method="GET";
+        }
+
+        $.ajax({
+                url: '/api/respuesta/0',
+                type: type_method,
+                data: $("#form-find").serialize(),
+                dataType: "html",
+            }).done(function(datos) {
+                $("#accordion").html(datos);
+                botones();
+            }).fail(function(xhr, status, e) {
+                console.log(e);
+            });
     });
 });

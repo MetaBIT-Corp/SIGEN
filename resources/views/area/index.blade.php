@@ -1,7 +1,8 @@
 @extends("../layouts.plantilla")
 @section("css")
 <link href="{{asset('icomoon/style.css')}}" rel="stylesheet"/>
-<script type="text/javascript" src="{{ asset('js/area/listar_area.js') }}"></script>
+<script src="{{ asset('js/area/listar_area.js') }}" type="text/javascript">
+</script>
 @endsection
 
 @section("body")
@@ -28,10 +29,15 @@
 </div>
 @endsection
 @section("main")
+<form class="form-group" id="form-find">
+    @csrf
+    <div class="form-group mb-4 mt-2 col-6 mx-auto">
+        <input type="number" name="id_mat" value="{{ $materia->id_cat_mat }}" hidden/>
+        <input class="form-control" id="find" name="find" placeholder="Buscar Area" type="text"/>
+    </div>
+</form>
 <div id="accordion">
-
-@include('area.response')
-
+    @include('area.response')
 </div>
 <!-- Modal -->
 <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="modal" role="dialog" tabindex="-1">
