@@ -18,6 +18,7 @@ use App\Area;
 /*----------------------------Rutas de prueba para agregar preguntas a la clave------------------------------------*/
 Route::get('turno/claves/{id_turno}', 'ClaveController@listarClaves');
 Route::post('turno/claves/{id_turno}', 'ClaveController@asignarPreguntas');
+Route::post('clave-area/editar/', 'ClaveController@editarClaveArea')->name('editar_clave_area');
 /*-----------------------------------------------------------------------------------------------------------------*/
 
 Route::get('intento/', function() {

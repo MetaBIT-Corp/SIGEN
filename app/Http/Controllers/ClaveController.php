@@ -12,6 +12,7 @@ use App\Clave;
 class ClaveController extends Controller
 {
 
+    //Funcion para listar las claves asignadas a un turno
     public function listarClaves($id_turno){
     	$claves = Clave::where('id', $id_turno)->get();
 
@@ -70,6 +71,36 @@ class ClaveController extends Controller
     	
 
     	return back()->with($notificacion, $mensaje);
+    }
+
+    //Funcion para editar datos de la área asignada a la clave
+    public function editarClaveArea(Request $request){
+        $id_clave_area = $request->input('id_clave_area');
+        $clave_area = Clave_Area::find($id_clave_area);
+
+        $rules = [
+            'numero_preguntas' => 'required|numeric|min:1|max:20',
+            'peso' => 'min:0|max:100|numeric|required'
+        ];
+
+        $messages = [
+            'numero_preguntas.min' => 'Debe tomar al menos una pregunta del área',
+            'numero_preguntas.max' => 'No se puede asignar mas de 20 preguntas de una área a la clave',
+            'numero_preguntas.required' => 'Debe ingresar el número de preguntas a tomar del área',
+            'peso.min' => 'El peso del área no puede ser negativo',
+            'peso.max' => 'No se puede asignar un peso mayor a 100%',
+            'peso.required' => 'Debe ingresar el peso que tendrá área'
+        ];
+
+        $this->validate($request, $rules, $messages);
+
+        $clave_area->numero_preguntas = $request->input('numero_preguntas');
+        $clave_area->peso = $request->input('peso');
+
+        $clave_area->save();
+
+        return back()->with('exito', 'Los datos fueron modificafos con éxito');
+
     }
 
 }
