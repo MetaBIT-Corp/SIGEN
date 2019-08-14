@@ -13,13 +13,13 @@ class ClaveController extends Controller
 {
 
     public function listarClaves($id_turno){
-    	$claves = Clave::all();
+    	$claves = Clave::where('id', $id_turno)->get();
 
     	return view('clave.listarClaves')->with(compact('claves'));
     }
 
     //Funcion para cargar las preguntas de una área mediante AJAX
-    public function preguntas_por_area($id){
+    public function preguntasPorArea($id){
     	$id_area = Clave_Area::where('id', $id)->first()->area_id;
 
     	$cap = Clave_Area_Pregunta::where('clave_area_id',$id)->pluck('pregunta_id');
@@ -36,7 +36,7 @@ class ClaveController extends Controller
     }
 
     //Función para asignar a la clave las preguntas seleccionadas del área
-    public function asignar_preguntas(Request $request){
+    public function asignarPreguntas(Request $request){
     	$preguntas = $request->input('preguntas');
     	$id_clave_area = $request->input('clave_area');
     	$mensaje = 'Ninguna pregunta fue seleccionada';
