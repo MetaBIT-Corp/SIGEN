@@ -16,9 +16,10 @@ use App\Area;
 //Rutas de pruebas
 
 /*----------------------------Rutas de prueba para agregar preguntas a la clave------------------------------------*/
-Route::get('turno/claves/{id_turno}', 'ClaveController@listarClaves');
-Route::post('turno/claves/{id_turno}', 'ClaveController@asignarPreguntas');
+Route::get('turno/{id_turno}/claves', 'ClaveController@listarClaves');
+Route::post('turno/{id_turno}/claves', 'ClaveController@asignarPreguntas');
 Route::post('clave-area/editar/', 'ClaveController@editarClaveArea')->name('editar_clave_area');
+Route::post('clave-area/eliminar/', 'ClaveController@eliminarClaveArea')->name('eliminar_clave_area');
 /*-----------------------------------------------------------------------------------------------------------------*/
 
 Route::get('intento/', function() {
@@ -92,6 +93,7 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
 
     Route::resource('materia/{id}/areas','AreaController');
+    Route::post('/materia/{id}/areas/store','AreaController@store');
     Route::post('/materia/{id}/areas','AreaController@index');
     Route::get('/materia/{id}/areas','AreaController@index');
     

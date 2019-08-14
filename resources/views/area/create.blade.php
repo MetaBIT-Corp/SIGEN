@@ -11,7 +11,7 @@ Crear Área
 
 
 @section("formulario")
-<form action="/materia/{{ $id_materia }}/areas" method="post">
+<form action="/materia/{{ $id_materia }}/areas/store" method="post">
    @csrf
     <div class="form-group">
         <label for="select_tipo_item">Tipo de item</label>

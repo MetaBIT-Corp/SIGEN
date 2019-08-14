@@ -50,6 +50,7 @@ class ClaveController extends Controller
 
     //Función para asignar a la clave las preguntas seleccionadas del área
     public function asignarPreguntas(Request $request){
+
     	$preguntas = $request->input('preguntas');
     	$id_clave_area = $request->input('clave_area');
     	$mensaje = 'Ninguna pregunta fue seleccionada';
@@ -79,17 +80,19 @@ class ClaveController extends Controller
         $clave_area = Clave_Area::find($id_clave_area);
 
         $rules = [
-            'numero_preguntas' => 'required|numeric|min:1|max:20',
-            'peso' => 'min:0|max:100|numeric|required'
+            'numero_preguntas' => 'required|integer|min:1|max:20',
+            'peso' => 'integer|min:0|max:100|required'
         ];
 
         $messages = [
             'numero_preguntas.min' => 'Debe tomar al menos una pregunta del área',
             'numero_preguntas.max' => 'No se puede asignar mas de 20 preguntas de una área a la clave',
             'numero_preguntas.required' => 'Debe ingresar el número de preguntas a tomar del área',
+            'numero_preguntas.integer' => 'La cantidad de preguntas debe ser un dato entero',
             'peso.min' => 'El peso del área no puede ser negativo',
             'peso.max' => 'No se puede asignar un peso mayor a 100%',
-            'peso.required' => 'Debe ingresar el peso que tendrá área'
+            'peso.required' => 'Debe ingresar el peso que tendrá área',
+            'peso.integer' => 'El peso debe ser un dato entero'
         ];
 
         $this->validate($request, $rules, $messages);
@@ -101,6 +104,15 @@ class ClaveController extends Controller
 
         return back()->with('exito', 'Los datos fueron modificafos con éxito');
 
+    }
+
+    //Funcíón para eliminar la área que se le ha asignado a la clave
+    public function eliminarClaveArea(Request $request){
+        $id_clave_area = $request->input('id_clave_area');
+        $clave_area = Clave_Area::find($id_clave_area);
+
+        $clave_area->delete();
+        return back()->with('exito', 'El área ha sido eliminada de la clave');
     }
 
 }

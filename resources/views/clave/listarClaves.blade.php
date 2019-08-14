@@ -62,7 +62,7 @@
           <td class="col-6 mt-3">
           <div class="card border-dark bg-light">
               <div class="card-body">
-                <input type="hidden" value="{{ $clave_area->id}}" id="id_clave_area">
+                <input type="hidden" value="{{ $clave_area->id}}" id="id_clave_area_edit">
                 <table class="table table-sm table-borderless">
                   <tr>
                       <th scope="row">Cantidad de preguntas: </th>
@@ -117,7 +117,7 @@
       </div>
       <form action="" method="POST">
         {{ csrf_field() }}
-        <input type="hidden" name="clave_area" value="" id="id_clave_area">
+        <input type="hidden" name="clave_area" value="" id="id_clave_area_add">
         <div class="modal-body" id="asignar-preguntas">
           
         </div>
@@ -174,7 +174,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
           <button type="submit" class="btn btn-primary">Guardar cambios</button>
         </div>
       </form>
@@ -196,10 +196,11 @@
           <h3><strong>¿Desea eliminar esta área de la clave?</strong></h3>
         </div>
         <div class="modal-footer">
-          <form action="POST">
+          <form action="{{ route('eliminar_clave_area')}}" method="POST">
             {{ csrf_field() }}
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Eliminar</button>
-            }
+            <input type="hidden" value="" id="id_ca_eliminar" name="id_clave_area">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-danger">Eliminar</button>
           </form>
         </div>
     </div>
@@ -211,25 +212,5 @@
 
 @section('js')
   <script src="/js/clave/cargarPreguntas.js"> </script>
-  <script src="/js/clave/listarPreguntas.js"> </script>
-
-  <script>
-    $('[data-editar-ca]').click(function(){
-      var cantidad_preguntas = $(this).parent().prev().find('#id_cantidad').text();
-      var peso = $(this).parent().prev().find('#id_peso').text();
-      var id_clave_area = $(this).parent().prev().find('#id_clave_area').val();
-
-      $('#cantidad_preguntas_id').attr('value', cantidad_preguntas);
-      $('#peso_ca_id').attr('value', peso);
-      $('#id_ca').attr('value', id_clave_area);
-
-      $('#editarClaveArea').modal('show');
-    });
-  </script>
-
-  <script>
-    $('[data-eliminar-ca]').click(function(){
-      $('#eliminarClaveArea').modal('show');
-    });
-  </script>
+  <script src="/js/clave/operacionesClaveArea.js"> </script>
 @endsection

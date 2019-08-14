@@ -1,7 +1,38 @@
-$('[data-id-clave-area]').click(function(){
+$(function(){
+  $('[data-preguntas]').on('click', listarPregntas);
+  $('[data-id-clave-area]').on('click', cargarPreguntas);
+});
+
+function listarPregntas(){
+  var id_clave_area = $(this).data('preguntas');
+
+  //AJAX
+  $.get('/api/preguntas-agregadas/'+id_clave_area, function(data){
+    html_preguntas = '';
+
+    if(data.length > 0 ){
+      for (var i = 0; i < data.length; i++) {
+        html_preguntas += '<strong>'+(i+1)+'. '+data[i].pregunta+'</strong>';
+
+        if(i<data.length-1) html_preguntas += '<hr>';
+      }
+
+      $('#listar-preguntas').html(html_preguntas);
+
+    }else{
+      html_preguntas = '<strong><h3>Esta clave no contiene preguntas</h3></strong>';
+      $('#listar-preguntas').html(html_preguntas);
+    }
+
+  });
+
+  $('#listarPreguntasClaveArea').modal('show');
+}
+
+function cargarPreguntas(){
   var id_clave_area = $(this).data('id-clave-area');
 
-  $('#id_clave_area').attr("value", id_clave_area);
+  $('#id_clave_area_add').attr("value", id_clave_area);
 
   //AJAX
   $.get('/api/area/'+id_clave_area+'/preguntas', function(data){
@@ -53,4 +84,4 @@ $('[data-id-clave-area]').click(function(){
 
   //Mostrar el modal
   $('#asignarPreguntasClaveArea').modal('show');
-});
+}

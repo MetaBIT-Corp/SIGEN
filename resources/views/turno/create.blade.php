@@ -60,4 +60,8 @@
   </div>
 </form>
 @endsection
+     
+@section("extra_js")
+    <script type="text/javascript" src="{{ asset('js/turno/main.js') }}"></script>
+@endsection
       
