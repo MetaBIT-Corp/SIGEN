@@ -1,5 +1,5 @@
 @if($success)
-<div class="alert alert-success text-center" role="alert">
+<div class="alert alert-success text-center" role="alert" id="alerta">
     <strong>
         La accion se ejecuto exitosamente.
     </strong>
