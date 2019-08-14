@@ -90,8 +90,6 @@ Route::group(['middleware' => 'teacher'], function(){
     
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
 
-    Route::get('/turno/{id}/delete', 'TurnoController@destroy');
-
     Route::resource('materia/{id}/areas','AreaController');
     Route::post('/materia/{id}/areas','AreaController@index');
     Route::get('/materia/{id}/areas','AreaController@index');

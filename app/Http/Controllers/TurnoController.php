@@ -27,15 +27,15 @@ class TurnoController extends Controller
             
             $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
             
-             if(!Carbon::parse($turno->fecha_inicio_turno)->gt(Carbon::parse($fecha_hora_actual)))
+             if(!Carbon::parse($turno->fecha_final_turno)->gt(Carbon::parse($fecha_hora_actual)))
                  $turno['acciones'] = false;
              else
                  $turno['acciones'] = true;
             
-            /*if(!Carbon::parse($turno->fecha_inicio_turno)->gt(Carbon::parse($fecha_hora_actual)))
+            if(!Carbon::parse($turno->fecha_inicio_turno)->gt(Carbon::parse($fecha_hora_actual)))
                  $turno['accion_delete'] = false;
              else
-                 $turno['accion_delete'] = true;*/
+                 $turno['accion_delete'] = true;
                  
                  
             $turno->fecha_inicio_turno = DateTime::createFromFormat('Y-m-d H:i:s', $turno->fecha_inicio_turno)->format('d/m/Y h:i A');
@@ -230,7 +230,7 @@ class TurnoController extends Controller
      * @param  \App\Turno  $turno
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($evaluacion_id, $id)
     {
         Turno::find($id)->delete();
         return back();
