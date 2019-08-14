@@ -17,7 +17,7 @@ $(document).ready(function() {
             var valor = $("#input_titulo").val($.trim(titulo[1]));
         });
         setTimeout(function() {
-            $(".alert").alert('close');
+            $("#alerta").alert('close');
         }, 3000);
     }
     //Llamada al metodo construido anteriormente

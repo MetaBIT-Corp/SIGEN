@@ -16,8 +16,8 @@ use App\Area;
 //Rutas de pruebas
 
 /*----------------------------Rutas de prueba para agregar preguntas a la clave------------------------------------*/
-Route::get('clave/agregar-preguntas/{id}', 'ClaveAreaController@listar');
-Route::post('clave/agregar-preguntas/{id}', 'ClaveAreaController@asignar_preguntas');
+Route::get('turno/claves/{id_turno}', 'ClaveController@listarClaves');
+Route::post('turno/claves/{id_turno}', 'ClaveController@asignarPreguntas');
 /*-----------------------------------------------------------------------------------------------------------------*/
 
 Route::get('intento/', function() {

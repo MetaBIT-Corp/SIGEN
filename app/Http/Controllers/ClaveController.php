@@ -6,18 +6,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Clave_Area;
 use App\Clave_Area_Pregunta;
+use App\Clave;
 
-class ClaveAreaController extends Controller
+
+class ClaveController extends Controller
 {
-	//Funcion para probar historia de usario 33 y 35
-    public function listar($id){
 
-    	$clave_area = Clave_Area::all();
-    	return view('clave_area.agregarPreguntasClaveArea')->with(compact('clave_area'));
+    public function listarClaves($id_turno){
+    	$claves = Clave::where('id', $id_turno)->get();
+
+    	return view('clave.listarClaves')->with(compact('claves'));
     }
 
     //Funcion para cargar las preguntas de una área mediante AJAX
-    public function preguntas_por_area($id){
+    public function preguntasPorArea($id){
     	$id_area = Clave_Area::where('id', $id)->first()->area_id;
 
     	$cap = Clave_Area_Pregunta::where('clave_area_id',$id)->pluck('pregunta_id');
@@ -34,7 +36,7 @@ class ClaveAreaController extends Controller
     }
 
     //Función para asignar a la clave las preguntas seleccionadas del área
-    public function asignar_preguntas(Request $request){
+    public function asignarPreguntas(Request $request){
     	$preguntas = $request->input('preguntas');
     	$id_clave_area = $request->input('clave_area');
     	$mensaje = 'Ninguna pregunta fue seleccionada';

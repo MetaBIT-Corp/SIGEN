@@ -12,6 +12,8 @@ class Clave_Area extends Model
         'area_id','clave_id','numero_preguntas','aleatorio','peso',
     ];
 
+    //Relaciones
+
     /**
      * Metodo para obtener el area que pertenece a X clave, a partir de un objeto Clave_Area.
      * @author Ricardo Estupinian
@@ -28,5 +30,15 @@ class Clave_Area extends Model
      */
     public function claves_areas_preguntas(){
     	return $this->hasMany('App\Clave_Area_Pregunta','clave_area_id');
+    }
+
+
+    //Accessors
+
+    public function getEsAleatorioAttribute(){
+        if($this->aleatorio==1)
+            return 'Sí';
+        else
+            return 'No';
     }
 }
