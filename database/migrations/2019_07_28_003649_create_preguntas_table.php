@@ -18,6 +18,7 @@ class CreatePreguntasTable extends Migration
             $table->unsignedInteger('grupo_emparejamiento_id')->nullable();//->default(0);
             $table->foreign('grupo_emparejamiento_id')->references('id')->on('grupo_emparejamiento');
             $table->string('pregunta');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
