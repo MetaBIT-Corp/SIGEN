@@ -17,4 +17,8 @@ class CargaAcademica extends Model
     public function docente(){
     	return $this->belongsTo(Docente::class, 'id_pdg_dcn', 'id_pdg_dcn');
     }
+
+    public function materiaCiclo(){
+    	return $this->belongsTo(CicloMateria::class, 'id_mat_ci', 'id_mat_ci');
+    }
 }
