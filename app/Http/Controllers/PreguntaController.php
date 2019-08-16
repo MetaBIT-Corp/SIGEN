@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Pregunta;
+use App\Area;
+use App\Grupo_Emparejamiento;
 class PreguntaController extends Controller
 {
     /**
@@ -23,7 +25,8 @@ class PreguntaController extends Controller
      */
     public function create($id_area)
     {
-        $area=Area::find($id_area)->tipo_item->id;
+        $area=Area::find($id_area);
+        return view('pregunta.create',compact('area'));
     }
 
     /**
@@ -34,10 +37,20 @@ class PreguntaController extends Controller
      */
     public function store(Request $request)
     {
-        
-
-        $pregunta=Pregunta new();
-        $pregunta->
+        //Falta Validacion de Datos
+        if(empty($request->gpo_emp)){
+            $gpo=new Grupo_Emparejamiento();
+            $gpo->area_id=$request->area_id;
+            $gpo->descripcion_grupo_emp="";
+            $gpo->save();
+        }else{
+            $gpo=Grupo_Emparejamiento::find((int)$request->gpo_emp);
+        }
+        $pregunta=new Pregunta();
+        $pregunta->grupo_emparejamiento_id=$gpo->id;
+        $pregunta->pregunta=$request->pregunta;
+        $pregunta->save();
+        return redirect()->action('PreguntaController@create',[$gpo->area->id])->with('success','Se agrego correctamente');
     }
 
     /**
@@ -57,7 +70,7 @@ class PreguntaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id_area)
     {
         //
     }
@@ -69,7 +82,7 @@ class PreguntaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
     }
@@ -80,8 +93,11 @@ class PreguntaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        //Falta 
+        $pregunta=Pregunta::find((int)$request->pregunta_id);
+        $pregunta->delete();
+        $gpo=$pregunta->grupo_emp;
     }
 }

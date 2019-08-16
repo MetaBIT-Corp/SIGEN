@@ -16,7 +16,7 @@ class AreaController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     * @author Ricardo Estupinian
      * @return \Illuminate\Http\Response
      */
     public function index($id_materia, Request $request)
@@ -86,7 +86,8 @@ class AreaController extends Controller
     
     /**
      * Update the specified resource in storage.
-     *
+     * 
+     * @author Ricardo Estupinian
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -128,6 +129,8 @@ class AreaController extends Controller
         if($id_materia==0){
             $success=false;
             $id_materia=$request->id_mat;
+        }else{
+            $success=true;
         }
         $materia=Materia::where('id_cat_mat',$id_materia)->first();
         $areas=$materia->areas;

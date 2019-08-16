@@ -22,11 +22,11 @@
                 {{ $area->tipo_item->nombre_tipo_item }}
             </div>
             <div class="col-2 h5">
-                <a class="btn-editar btn" data-target="#modal" data-toggle="modal" id="btn_editar" name="{{ $area->id }}" title="Editar">
+                <a class="btn-editar btn" data-target="#modal" data-toggle="modal" id="btn_editar" name="{{ $area->id }}" title="Editar Area">
                     <span class="icon-edit">
                     </span>
                 </a>
-                <a class="btn-eliminar btn" data-target="#modal1" data-toggle="modal" id="btn_eliminar" name="{{ $area->id }}" title="Eliminar">
+                <a class="btn-eliminar btn ml-2" data-target="#modal1" data-toggle="modal" id="btn_eliminar" name="{{ $area->id }}" title="Eliminar Area">
                     <span class="icon-delete">
                     </span>
                 </a>
