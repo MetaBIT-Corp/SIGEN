@@ -7,14 +7,11 @@
 @section("ol_breadcrumb")
 <li class="breadcrumb-item">
     <a href="{{ route('get_area',[$area->materia->id_cat_mat]) }}">
-        Areas
+        Area: {{ $area->titulo }}
     </a>
 </li>
 <li class="breadcrumb-item">
-    {{ $area->titulo }}
-</li>
-<li class="breadcrumb-item">
-    Crear Pregunta
+    Editar Pregunta
 </li>
 @endsection
 
@@ -51,15 +48,16 @@
         </div>
         <div class="card-body">
             <div class="offset-2 col-md-8">
-                <form action="{{ route('pregunta.store',[$area->id]) }}" method="POST">
+                <form action="{{ route('pregunta.update',[$area->id,$pregunta->id]) }}" method="POST">
                     @csrf
+                    @method('PATCH')
                     <div class="form-group row">
-                        <!--<input class="form-control" hidden="" name="area_id" type="number" value="{{ $area->id }}">-->
+                        <input class="form-control" hidden="" name="pregunta_id" type="number" value="{{ $pregunta->id }}">
                             <label class="col-sm-4 col-form-label" for="pregunta">
                                 Pregunta
                             </label>
                             <div class="col-8">
-                                <input class="form-control" id="pregunta" name="pregunta" placeholder="Pregunta" type="text" value="{{ old('pregunta') }}">
+                                <input class="form-control" id="pregunta" name="pregunta" placeholder="Pregunta" type="text" value="{{ $pregunta->pregunta }}" value="{{ old('pregunta') }}">
                                 </input>
                             </div>
                         </input>
@@ -75,7 +73,7 @@
                                     Seleccione Grupo
                                 </option>
                                 @forelse($area->grupos_emparejamiento as $gpo)
-                                <option value="{{ $gpo->id }}" @if(old('gpo_emp')==$gpo->id) selected @endif>
+                                <option value="{{ $gpo->id }}" @if(old('gpo_emp')==$gpo->id) selected @elseif($pregunta->grupo_emp->id==$gpo->id) selected @else @endif>
                                     {{ $gpo->descripcion_grupo_emp }}
                                 </option>
                                 @empty
