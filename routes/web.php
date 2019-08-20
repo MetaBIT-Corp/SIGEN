@@ -38,13 +38,6 @@ Route::get('plantilla/', function () {
     return view('layouts.plantilla');
 });
 */
-Route::get('plantillafull/', function () {
-    return view('layouts.plantilla_llena');
-});
-
-Route::get('/ejemplo/{nombre}', function ($nombre) {
-    return view('layouts.ejemplo',['nombre'=>$nombre]);
-});
 
 Route::get('/insertar', function () {
 
@@ -104,4 +97,8 @@ Route::group(['middleware' => 'teacher'], function(){
 Route::group(['middleware' => 'student'], function(){
 });
 
-
+/*Rutas para Gestión de Opciones (Sin Grupo Emparejamiento)*/
+Route::get('pregunta/{pregunta_id}/opcion/','OpcionController@index');
+Route::post('pregunta/{pregunta_id}/opcion/store','OpcionController@store')->name('agregar-opcion');
+Route::post('pregunta/{pregunta_id}/opcion/update','OpcionController@update')->name('actualizar-opcion');
+Route::post('pregunta/{pregunta_id}/opcion/delete','OpcionController@destroy')->name('eliminar-opcion');

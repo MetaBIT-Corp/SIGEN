@@ -92,12 +92,12 @@
                                 </ol>
 
                                 @yield("main")
-                                @if(!auth()->check() && Request::route()->getName() != 'login')
+                                <!-- @if(!auth()->check() && Request::route()->getName() != 'login')
                                     @yield("encuestas")
                                     <div class="alert alert-info">
                                         <h1 class="text-center">No hay encuestas de propósito general</h1>
                                     </div>
-                                @endif
+                                @endif -->
                             
                             
                         </main>
