@@ -33,5 +33,9 @@ class GrupoEmparejamientoTableSeeder extends Seeder
             'area_id'=>9,
             'descripcion_grupo_emp'=>'Grupo Emparejamiento de Pruebas Respuesta Corta'
         ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>10,
+            'descripcion_grupo_emp'=>'Grupo Emparejamiento de Prueba'
+        ]);
     }
 }

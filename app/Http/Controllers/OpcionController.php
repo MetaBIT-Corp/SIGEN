@@ -51,12 +51,12 @@ class OpcionController extends Controller
 
             /*Tipo Item: Verdadero/Falso*/
             case 2:
-                return view('opcion.index_vf',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion]);                
+                return view('opcion.index_vf',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion]);
             break;
 
             /*Tipo Item: Grupo Emparejamiento*/
             case 3:
-                # code...            
+                return view('opcion.index_ge',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion]);
             break;
 
             /*Tipo Item: Respuesta Corta*/
@@ -248,8 +248,10 @@ class OpcionController extends Controller
             /*Tipo Item: Grupo de Emparejamiento*/
             case 3:
 
-                //
+                Opcion::where('id',$request->id)->update(["opcion"=>$request->opcion]);
 
+                return back();
+                
             break;
             
             /*Tipo Item: Respuesta Corta*/

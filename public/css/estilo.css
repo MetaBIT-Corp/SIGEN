@@ -97,6 +97,9 @@ footer{
     margin-left:15px;
 }
 
+#trForm:hover{
+	background-color: #fff;
+}
 #trBtn:hover{
 	background-color: #fff;
 }

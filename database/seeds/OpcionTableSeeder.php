@@ -190,5 +190,29 @@ class OpcionTableSeeder extends Seeder
             'opcion'=>'verdadero',
             'correcta'=>true
         ]);
+
+        /*Opciones para Emparejamiento*/
+        Opcion::create([
+            'pregunta_id'=>16,
+            'opcion'=>'Acuático',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>17,
+            'opcion'=>'Aéreo',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>18,
+            'opcion'=>'Terrestre',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>19,
+            'opcion'=>'Subacuático',
+            'correcta'=>true
+        ]);
+
+
     }
 }

@@ -71,5 +71,11 @@ class AreaTableSeeder extends Seeder
             'tipo_item_id'=>4,
             'titulo'=>'Área de prueba de Respuesta Corta'
         ]);
+        Area::create([
+            'id_cat_mat'=>1,
+            'id_pdg_dcn'=>1,
+            'tipo_item_id'=>3,
+            'titulo'=>'Área de prueba de Grupo de Emparejamiento'
+        ]);
     }
 }
