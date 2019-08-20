@@ -139,6 +139,7 @@
     <div class="card-footer">
       <a class="icon-list btn" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}"></a>
       <a href="{{ route('docentes_materia_ciclo',$materia->id_mat_ci) }}">ver</a>
+      <a href="{{ route('listado_evaluacion') }}">Evaluaciones</a>
     </div>
 </div>
 </td>

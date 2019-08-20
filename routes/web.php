@@ -74,6 +74,12 @@ Route::get('/materias/listado_estudiante/{id_mat_ci}', 'ListadoEstudianteControl
 
 Route::get('docentes-ciclo/{id_mat_ci}', 'DocenteController@docentes_materia_ciclo')->name('docentes_materia_ciclo');
 
+Route::get('materia/listado-evaluacion','EvaluacionController@listado')->name('listado_evaluacion');
+
+ Route::get('/listado-encuesta','EncuestaController@listado')->name('listado_encuesta');
+
+    
+
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
 Route::group(['middleware' => 'admin'], function(){
 });
@@ -85,10 +91,25 @@ Route::group(['middleware' => 'teacher'], function(){
     
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
 
-    //Route::resource('materia/{id}/areas','AreaController');
+    Route::resource('materia/{id}/areas','AreaController');
+
+    //URL's para Area
     Route::post('/materia/{id}/areas/store','AreaController@store');
-    Route::post('/materia/{id}/areas','AreaController@index');
-    Route::get('/materia/{id}/areas','AreaController@index');
+    Route::post('/materia/{id}/areas','AreaController@index')->name('post_area');
+    Route::get('/materia/{id_area}/areas','AreaController@index')->name('get_area');
+
+    //URL's para Pregunta
+    Route::resource('/area/{id}/pregunta','PreguntaController');
+
+     //URL's para crear evaluacion
+    Route::get('materia/evaluacion','EvaluacionController@getCreate')->name('create_evaluacion');
+    Route::post('materia/evaluacion','EvaluacionController@postCreate')->name('create_evaluacion');
+
+    //URL's para crear encuesta
+    Route::get('/encuesta','EncuestaController@getCreate')->name('create_encuesta');
+    Route::post('/encuesta','EncuestaController@postCreate')->name('create_encuesta');
+
+   
     
     
 });

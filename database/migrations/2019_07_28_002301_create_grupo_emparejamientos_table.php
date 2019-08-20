@@ -17,7 +17,7 @@ class CreateGrupoEmparejamientosTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('area_id');
             $table->foreign('area_id')->references('id')->on('area');
-            $table->string('descripcion_grupo_emp');
+            $table->string('descripcion_grupo_emp')->nullable();
             $table->timestamps();
         });
     }

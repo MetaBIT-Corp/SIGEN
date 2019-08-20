@@ -8,15 +8,15 @@
 @section("body")
 @section("ol_breadcrumb")
 <div class="col-9 mt-2">
-    <a href="{{ route('materias') }}">
+    <a class="mr-2" href="{{ route('materias') }}">
         Materias
     </a>
     /
-    <a href="#">
+    <a class="ml-2 mr-2" href="#">
         {{ $materia->nombre_mar }}
     </a>
     /
-        Areas
+        Áreas
 </div>
 <div class="col-3">
     <a class="btn" href="/materia/{{ $materia->id_cat_mat }}/areas/create">
@@ -32,11 +32,11 @@
 <form class="form-group" id="form-find">
     @csrf
     <div class="form-group mb-4 mt-2 col-6 mx-auto">
-        <input type="number" name="id_mat" value="{{ $materia->id_cat_mat }}" hidden/>
+        <input hidden="" name="id_mat" type="number" value="{{ $materia->id_cat_mat }}"/>
         <input class="form-control" id="find" name="find" placeholder="Buscar Area" type="text"/>
     </div>
 </form>
-<div id="accordion">
+<div class="mb-3" id="accordion">
     @include('area.response')
 </div>
 <!-- Modal -->
