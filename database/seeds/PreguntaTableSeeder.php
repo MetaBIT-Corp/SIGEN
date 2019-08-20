@@ -59,6 +59,20 @@ class PreguntaTableSeeder extends Seeder
             'pregunta'=>'¿Que numero de equipo desea?'
         ]);
 
+        /*Preguntas de Prueba (René)*/
+        Pregunta::create([
+            'grupo_emparejamiento_id'=>3,
+            'pregunta'=>'¿Soy una pregunta de Prueba para Opción Múltiple?'
+        ]);
+        Pregunta::create([
+            'grupo_emparejamiento_id'=>4,
+            'pregunta'=>'¿Soy una pregunta de prueba para Verdadero/Falso?'
+        ]);
+        Pregunta::create([
+            'grupo_emparejamiento_id'=>5,
+            'pregunta'=>'¿Soy una pregunta de Prueba para Respuestas Cortas?'
+        ]);
+
 
     }
 }

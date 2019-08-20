@@ -51,5 +51,25 @@ class AreaTableSeeder extends Seeder
             'tipo_item_id'=>1,
             'titulo'=>'Numero de equipos'
         ]);
+
+        /*Areas de Prueba (René).789*/
+        Area::create([
+            'id_cat_mat'=>1,
+            'id_pdg_dcn'=>1,
+            'tipo_item_id'=>1,
+            'titulo'=>'Área de prueba de Opción Múltiple'
+        ]);
+        Area::create([
+            'id_cat_mat'=>1,
+            'id_pdg_dcn'=>1,
+            'tipo_item_id'=>2,
+            'titulo'=>'Área de prueba de Verdadero/Falso'
+        ]);
+        Area::create([
+            'id_cat_mat'=>1,
+            'id_pdg_dcn'=>1,
+            'tipo_item_id'=>4,
+            'titulo'=>'Área de prueba de Respuesta Corta'
+        ]);
     }
 }

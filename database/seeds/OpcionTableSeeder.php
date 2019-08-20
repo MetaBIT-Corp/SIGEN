@@ -137,5 +137,58 @@ class OpcionTableSeeder extends Seeder
             'opcion'=>'VEINTE',
             'correcta'=>true
         ]);
+
+        /*Opciones de Prueba (René).*/
+
+        /*Opciones para Opción Múltiple.*/
+        Opcion::create([
+            'pregunta_id'=>13,
+            'opcion'=>'Si',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>13,
+            'opcion'=>'No',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>13,
+            'opcion'=>'Quizá',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>13,
+            'opcion'=>'Definitivamente Talvez',
+            'correcta'=>false
+        ]);
+
+        /*Opciones para Verdadero/Falso.*/
+        Opcion::create([
+            'pregunta_id'=>14,
+            'opcion'=>'Verdadero',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>14,
+            'opcion'=>'Falso',
+            'correcta'=>false
+        ]);
+
+        /*Opciones para Respuesta Corta*/
+        Opcion::create([
+            'pregunta_id'=>15,
+            'opcion'=>'Si',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>15,
+            'opcion'=>'Verdadero',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>15,
+            'opcion'=>'verdadero',
+            'correcta'=>true
+        ]);
     }
 }
