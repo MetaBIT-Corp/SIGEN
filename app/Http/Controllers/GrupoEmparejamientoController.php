@@ -53,7 +53,22 @@ class GrupoEmparejamientoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $pregunta = new Pregunta;
+
+        $pregunta->pregunta = $request->pregunta;
+        $pregunta->grupo_emparejamiento_id = $request->idGrupo;
+
+        $pregunta->save();
+
+        $opcion = new Opcion;
+
+        $opcion->pregunta_id = $pregunta->id;
+        $opcion->opcion = $request->opcion;
+        $opcion->correcta = 1;
+
+        $opcion->save();
+
+        return back();
     }
 
     /**
@@ -98,8 +113,15 @@ class GrupoEmparejamientoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $opcion=Opcion::find($request->idOpcion);
+        $opcion->delete();
+
+        $pregunta=Pregunta::find($request->idPregunta);
+        $pregunta->delete();
+
+        return back();
+
     }
 }
