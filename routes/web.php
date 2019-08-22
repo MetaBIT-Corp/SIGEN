@@ -123,3 +123,6 @@ Route::get('pregunta/{pregunta_id}/opcion/','OpcionController@index');
 Route::post('pregunta/{pregunta_id}/opcion/store','OpcionController@store')->name('agregar-opcion');
 Route::post('pregunta/{pregunta_id}/opcion/update','OpcionController@update')->name('actualizar-opcion');
 Route::post('pregunta/{pregunta_id}/opcion/delete','OpcionController@destroy')->name('eliminar-opcion');
+
+Route::get('grupo/{grupo_id}/preguntas/','GrupoEmparejamientoController@index');
+Route::post('grupo/{grupo_id}/preguntas/','GrupoEmparejamientoController@update')->name('editar-pregunta-grupo');
