@@ -111,6 +111,8 @@ class ClaveController extends Controller
         $id_clave_area = $request->input('id_clave_area');
         $clave_area = Clave_Area::find($id_clave_area);
 
+        DB::table('clave_area_pregunta')->where('clave_area_id', $id_clave_area)->delete();
+
         $clave_area->delete();
         return back()->with('exito', 'El área ha sido eliminada de la clave');
     }
