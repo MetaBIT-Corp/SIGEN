@@ -21,6 +21,7 @@ class AreaController extends Controller
      */
     public function index($id_materia, Request $request)
     {
+        $error="";
         if(!Materia::where('id_cat_mat',$id_materia)->first()){
             return redirect('/');
         }
@@ -28,7 +29,7 @@ class AreaController extends Controller
         $success=false;
         $areas=$materia->areas;
 
-        return view('area.index', compact('areas','materia','success'));
+        return view('area.index', compact('areas','materia','success','error'));
     }
 
     /**
@@ -113,10 +114,15 @@ class AreaController extends Controller
     {
         $data=$request->all();
         $area=Area::where('id',(int)$data["id_area"])->first();
-        $id_mat=$area->materia->id_cat_mat;  
-        $area->delete();
+        $id_mat=$area->materia->id_cat_mat;
 
-        return redirect()->action('AreaController@respuesta',[$id_mat]); 
+        if(count($area->claves_areas)!=0){
+            $error='El area no puede ser eliminada porque esta siendo utilizada en una evaluacion.';
+        }else{
+            $error="";
+            $area->delete();
+        }
+        return redirect()->action('AreaController@respuesta',[$id_mat,'error'=>$error]); 
     }
 
     public function respuesta($id_materia=null, Request $request){
@@ -124,7 +130,7 @@ class AreaController extends Controller
         if($request->isMethod("POST")&&!empty($request->find)&&!empty($request->id_mat)){
             $materia=Materia::where('id_cat_mat',$request->id_mat)->first();
             $areas=$materia->areas()->where('titulo','LIKE',$request->find.'%')->get();
-            return view('area.response', compact('areas','success'));
+            return view('area.response', compact('areas','success','error'));
         }
         if($id_materia==0){
             $success=false;
@@ -134,6 +140,7 @@ class AreaController extends Controller
         }
         $materia=Materia::where('id_cat_mat',$id_materia)->first();
         $areas=$materia->areas;
-        return view('area.response', compact('areas','success'));
+        $error=$request->error;
+        return view('area.response', compact('areas','success','error'));
     }
 }

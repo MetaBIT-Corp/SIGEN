@@ -42,6 +42,15 @@ class Area extends Model
     	return $this->belongsTo('App\Tipo_Item');
     }
 
+    /**
+     * Metodo para recuperacion de todos los objetos Clave_Area asociado con un area determinada
+     * @author Ricardo Estupinian
+     * @return [App\Clave_Area]
+     */
+    public function claves_areas(){
+        return $this->hasMany('App\Clave_Area');
+    }
+
     //Recupera los grupos de emparejamiento que pertenecen al área
     public function grupos_emparejamiento(){
         return $this->hasMany(Grupo_Emparejamiento::class);

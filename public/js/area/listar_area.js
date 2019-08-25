@@ -16,9 +16,13 @@ $(document).ready(function() {
             titulo = titulo.split(".");
             var valor = $("#input_titulo").val($.trim(titulo[1]));
         });
+        //Tiempo para cerrar el alert
         setTimeout(function() {
-            $("#alerta").alert('close');
-        }, 3000);
+            $(".mess").alert('close');
+        }, 4000);
+
+        //Para mover al inicio de la pagina el control
+        $('html, body').animate({scrollTop:0}, 'slow');
     }
     //Llamada al metodo construido anteriormente
     botones();
