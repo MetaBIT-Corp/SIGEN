@@ -16,6 +16,7 @@
 @endsection
 @section("main")
 
+<!-- /#wrapper -->
 <div id="wrapper">
   <div id="content-wrapper">
     <div class="container-fluid">
@@ -71,7 +72,6 @@
   </div>
   <!-- /.content-wrapper -->
 </div>
-<!-- /#wrapper -->
 
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">
