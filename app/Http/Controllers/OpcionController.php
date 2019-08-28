@@ -46,7 +46,7 @@ class OpcionController extends Controller
 
             /*Tipo Item: Opción Múltiple*/
             case 1:
-                return view('opcion.index_om',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion]);
+                return view('opcion.index_o',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion]);
             break;
 
             /*Tipo Item: Verdadero/Falso*/
@@ -115,19 +115,41 @@ class OpcionController extends Controller
             /*Tipo Item: Opción Múltiple*/
             case 1:
 
-                /*Creación de nueva instancia de Opcion*/
-                $opcion = new Opcion;
+                // /*Creación de nueva instancia de Opcion*/
+                // $opcion = new Opcion;
 
-                /*
-                *Asignación de parámetros a los atributos de nueva instancia.
-                *Valores obtenidos desde la Request enviada por formulario POST.
-                */
-                $opcion->pregunta_id=$request->pregunta_id;
-                $opcion->opcion=$request->opcion;
-                $opcion->correcta=(int)($request->correcta);
+                // /*
+                // *Asignación de parámetros a los atributos de nueva instancia.
+                // *Valores obtenidos desde la Request enviada por formulario POST.
+                // */
+                // $opcion->pregunta_id=$request->pregunta_id;
+                // $opcion->opcion=$request->opcion;
+                // $opcion->correcta=(int)($request->correcta);
 
-                /*Almacenando la nueva instancia como registro en Base de Datos*/
-                $opcion->save();
+                // /*Almacenando la nueva instancia como registro en Base de Datos*/
+                // $opcion->save();
+
+
+                $indice = $request->indice;
+                $pregunta_id = $request->pregunta_id;
+
+                for ($i=0; $i < $indice ; $i++) {
+                    $this->validate($request,['contador'=>'required|numeric|gte:3','opcion'.$i=>'required']);
+                }
+
+                for ($i=0; $i < $indice ; $i++) {
+
+                    $opcion = $request->input('opcion'.$i);
+                    
+                    if ($request->has('correcta'.$i)) {
+                        $correcta = 1;                    
+                    }else{
+                        $correcta = 0;                    
+                    }
+
+                    $this->store_om($pregunta_id,$opcion,$correcta);
+                    
+            }
 
             break;
 
@@ -162,6 +184,23 @@ class OpcionController extends Controller
 
         return back();
 
+    }
+
+    public function store_om($pregunta_id,$texto,$correcta){
+        /*Creación de nueva instancia de Opcion*/
+
+                $opcion = new Opcion;
+
+                /*
+                *Asignación de parámetros a los atributos de nueva instancia.
+                *Valores obtenidos desde la Request enviada por formulario POST.
+                */
+                $opcion->pregunta_id=$pregunta_id;
+                $opcion->opcion=$texto;
+                $opcion->correcta=(int)($correcta);
+
+                /*Almacenando la nueva instancia como registro en Base de Datos*/
+                $opcion->save();
     }
 
     /**
