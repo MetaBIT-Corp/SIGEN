@@ -8,6 +8,8 @@ use App\Grupo_Emparejamiento;
 use App\Pregunta;
 use App\Opcion;
 
+use Illuminate\Support\Facades\Validator;
+
 class OpcionController extends Controller
 {
     /**
@@ -140,7 +142,7 @@ class OpcionController extends Controller
                 for ($i=0; $i < $indice ; $i++) {
 
                     $opcion = $request->input('opcion'.$i);
-                    
+
                     if ($request->has('correcta'.$i)) {
                         $correcta = 1;                    
                     }else{

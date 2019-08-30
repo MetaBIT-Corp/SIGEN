@@ -8,77 +8,91 @@
 
 <form action="{{ route('agregar-opcion',$pregunta->id)}}" method="POST">
 
-<table class="table table-hover" style="text-align: center;">
-	<thead>
-		<tr><th colspan="4" style="text-align: right; color: rgb(100,180,10);">Pregunta de Opción Múltiple</th></tr>
-		<tr><th colspan="4" style="text-align: left; font-size: 1.3em;">Opciones de Pregunta</th></tr>
-		<tr class="table-primary">
-			<th scope="col">N°</th>
-			<th scope="col">Opción</th>
-			<th scope="col">Correcta</th>
-			<th scope="col">Opciones</th>
-		</tr>
-	</thead>
-	<tbody id="tabla1">
+	<table class="table table-hover" style="text-align: center;">
 
-		
+		<thead>
+			<tr><th colspan="4" style="text-align: right; color: rgb(100,180,10);">Pregunta de Opción Múltiple</th></tr>
+			<tr><th colspan="4" style="text-align: left; font-size: 1.3em;">Opciones de Pregunta</th></tr>
+			<tr class="table-primary">
+				<th scope="col">N°</th>
+				<th scope="col">Opción</th>
+				<th scope="col">Correcta</th>
+				<th scope="col">Opciones</th>
+			</tr>
+		</thead>
+
+		<tbody id="tabla1">
 
 			<?php foreach ($opciones as $opcion): ?>
+
 				<tr>
+
 					<th scope="row"><?php echo $contador; ?></th>
 					<td  style="text-align: left;">{{$opcion->opcion}}</td>
+
 					<?php if($opcion->correcta==1): ?>
+						
 						<td><input type="radio" disabled="" checked=""></td>
+					
 					<?php else: ?>
+
 						<td><input type="radio" disabled=""></td>
+					
 					<?php endif ?>
+					
 					<td>
 						
 						<a href="#" class="mr-2" style="color: rgb(70,115,200);" data-id="{{$opcion->id}}" data-opcion="{{$opcion->opcion}}" data-correcta="{{$opcion->correcta}}" data-tipo="{{$tipo_opcion}}" data-toggle="modal" data-target="#editModal"><i class="fas fa-pencil-alt"></i></a>
 						
-						<a href="" class="ml-2" style="color: rgb(200,10,50);" data-id="{{$opcion->id}}" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash-alt"></i></a>
+						<a href="#" class="ml-2 btnDel" data-id="{{$opcion->id}}" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash-alt"></i></a>
 
 					</td>
+
 				</tr>
+
 				<?php $contador++ ?>
+
 			<?php endforeach; ?>
 
-			
+		</tbody>
 
+	</table>
 
-		
+	<div class="form-group" style="display:none;">
 
-	</tbody>
-	
-</table>
+		<label class="col-form-label" for="indice">Indice:</label>
+		<input type="text" class="form-control" name="indice" value="0" id="indice">
+		<label class="col-form-label" for="contador">Contador:</label>
+		<input type="text" class="form-control" name="contador" value="{{$contador-1}}" id="contador">
+		<label class="col-form-label" for="pregunta_id">Pregunta_ID:</label>
+		<input type="text" class="form-control" name="pregunta_id" placeholder="ID de Pregunta" id="pregunta_id" value="{{$pregunta->id}}">
 
-<div class="form-group" style="display:;">
-				<label class="col-form-label" for="indice">Indice:</label>
-				<input type="text" class="form-control" name="indice" value="0" id="indice">
-				<label class="col-form-label" for="contador">Contador:</label>
-				<input type="text" class="form-control" name="contador" value="{{$contador-1}}" id="contador">
-				<label class="col-form-label" for="pregunta_id">Pregunta_ID:</label>
-				<input type="text" class="form-control" name="pregunta_id" placeholder="ID de Pregunta" id="pregunta_id" value="{{$pregunta->id}}">
-			</div>
+	</div>
 
-			{{ csrf_field() }}
+	{{ csrf_field() }}
 
-			<div class="d-flex justify-content-end m-3">
-				<button type="button" class="btn btn-info btn mt-3" onclick="agregarFila()">
-					<i class="fas fa-plus-circle"></i> Agregar Opción
-				</button>
-			</div>
-			<div class="d-flex justify-content-end m-3">
-				<button type="submit" class="btn btn-success btn mt-3" >
-					<i class="fas fa-arrow-right"></i> Enviar Opciones
-				</button>
-			</div>
+	<div class="d-flex justify-content-end m-3">
+	</div>
 
-			@if(count($errors)>0)
-				@foreach ($errors->all() as $error)
-					{{$error}}
-				@endforeach
-			@endif
+	<div class="d-flex justify-content-end m-3">
+		<button type="button" class="btn btn-info btn mt-3" id="btnAgregarFila" name="btnAgregarFila">
+			<i class="fas fa-plus-circle"></i> Agregar Opción
+		</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button type="submit" class="btn btn-success btn mt-3" >
+			<i class="fas fa-arrow-right"></i> Enviar Opciones
+		</button>
+	</div>
+	<div class="d-flex justify-content-begin m-3" >
+		<br><br><br><p id="infoP">*Las preguntas de Opción Múltiple no pueden tener menos de tres opciones</p>
+	</div>
+
+	@if(count($errors)>0)
+		@foreach ($errors->all() as $error)
+			<ul>
+				<li>{{$error}}</li>
+			</ul>
+		@endforeach
+	@endif
 
 </form>
 
@@ -210,91 +224,8 @@
 
 <!-- Fin de modal para eliminación de opcion -->
 
-
-
-
 @endsection
 
 @section('js')
-
-	<script>
-        $('#editModal').on('show.bs.modal', function(event){
-
-            var link = $(event.relatedTarget)
-
-            var opcion = link.data('opcion')
-            var tipo_opcion = link.data('tipo')
-            var correcta = link.data('correcta')
-            var id = link.data('id')
-
-            var modal = $(this)
-
-            console.log(correcta)
-
-            if (correcta==1) {
-            	modal.find(".modal-body #correctaSiEdit").prop('checked',true);
-            }else{
-            	modal.find(".modal-body #correctaNoEdit").prop('checked',true);
-            }
-
-            modal.find('.modal-body #opcion').val(opcion)
-            modal.find('.modal-body #tipo_opcion').val(tipo_opcion)
-            modal.find('.modal-body #id').val(id)
-
-        })
-
-        $('#deleteModal').on('show.bs.modal', function(event){
-
-            var link = $(event.relatedTarget)
-
-            var id = link.data('id')
-
-            var modal = $(this)
-
-            console.log(id)
-
-            modal.find('.modal-footer #id').val(id)
-
-        })
-
-        function agregarFila(){
-
-        	var inputI = document.getElementById("indice");
-        	var contador = document.getElementById("contador");
-        	var indice = inputI.value;
-
-        	var tabla = document.getElementById("tabla1");
-        	var fila = tabla.insertRow(-1);
-        	var celda1 = document.createElement('th');
-
-        	fila.appendChild(celda1);
-        	var celda2 = fila.insertCell(1);
-        	var celda3 = fila.insertCell(2);
-        	var celda4 = fila.insertCell(3);
-
-        	celda1.innerHTML = fila.rowIndex-2;
-        	celda1.setAttribute('scope','row');
-
-        	var input = document.createElement("input");
-        	input.type = "text";
-        	input.name = "opcion" + indice;
-        	input.id = "opcion" + indice;
-        	input.setAttribute('class','form-control');
-        	celda2.appendChild(input);
-
-        	var radio = document.createElement("input");
-        	radio.type = "radio";
-        	radio.name = "correcta" + indice;
-        	radio.id = "correcta" + indice;
-        	radio.setAttribute('class','custom-control-label');
-        	celda3.appendChild(radio);
-
-        	indice++;
-
-        	
-        	inputI.setAttribute('value',indice);
-        	contador.setAttribute('value',fila.rowIndex-2);
-        }
-
-    </script>
+	<script src="{{asset('js/opcion/opcion.js')}}"> </script>
 @endsection
