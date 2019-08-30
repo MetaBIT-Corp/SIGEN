@@ -1,10 +1,7 @@
 @extends("../layouts.plantilla")
 
 @section("css")
-  <link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
-  <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" type="text/css" rel="stylesheet"> 
-  <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.css')}}">
-  <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
+<link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
 @endsection
 
 @section("body")
@@ -42,85 +39,71 @@
   </div>
 @endif
 
-<!-- /#wrapper -->
-<div id="wrapper">
-  <div id="content-wrapper">
-    <div class="container-fluid">
-      <!-- DataTables Example -->
-      <div class="card mb-3">
-        <div class="card-header">
-          <div class="row">
-            <div class="col-11">
-              <i class="fas fa-table"></i>
-              Listado de Docentes | Materia
-            </div>
-            <div class="col-1">
-              <a href="#" class="icon-add btn" title="Agregar Área"></a>
-            </div>
-          </div>
+@foreach($claves as $clave)
+<div class="accordion col-11" id="accordionExample">
+  <div class="card">
+      <!-- Titulo de Collapse -->
+      <div class="card-header btn text-primary text-left" type="button" id="heading{{ $clave->id }}" data-toggle="collapse" data-target="#collapse{{ $clave->id }}" aria-expanded="true" aria-controls="collapse{{ $clave->id }}">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h5>Número de clave: {{ $clave->numero_clave }}</h5>
+          <a class="icon-add btn float-rigth" href="#" title="Agregar Área"></a>
         </div>
+
+      </div>
+
+      <div id="collapse{{ $clave->id }}" class="collapse" aria-labelledby="heading{{ $clave->id }}" data-parent="#accordionExample">
         <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Modalidad</th>
-                  <th>Cantidad de preguntas</th>
-                  <th>Peso</th>
-                  <th>Opciones</th>
-                </tr>
-              </thead>
-              <tfoot>
-                <tr>
-                  <th>#</th>
-                  <th>Modalidad</th>
-                  <th>Cantidad de preguntas</th>
-                  <th>Peso</th>
-                  <th>Opciones</th>
-                </tr>
-              </tfoot>
-              <tbody>
-                @if(count($claves[0]->clave_areas) > 0 )
-                @foreach($claves[0]->clave_areas as $clave_area)
-                <tr>
-                  <input type="hidden" value="{{ $clave_area->id}}" id="id_clave_area_edit">
-                  <td>{{ $loop->iteration }}</td>
-                  <td>
-                    @if($clave_area->aleatorio)
-                      <i class="icon-dice" title="Aleatorio">&nbsp;&nbsp;</i> 
-                    @else
-                      <i class="icon-list" title="Manual">&nbsp;&nbsp;</i> 
-                    @endif
-                    {{ $clave_area->area->tipo_item->nombre_tipo_item }}
-                  </td>
-                  <td id="id_cantidad" class="text-center">{{ $clave_area->numero_preguntas }}</td>
-                  <td id="id_peso">{{ $clave_area->peso }}</td>
-                  <td>
-                    <a class="icon-delete btn btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></a>
-                      <a class="icon-edit btn btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></a>
-                    @if(!$clave_area->aleatorio)
-                      <a class="icon-information-solid btn  btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></a>
-                      <a class="icon-add-solid btn btn-info" href="#" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></a>
-                    @endif
-                  </td>
-                </tr>
-                 @endforeach
-                 @else
+          @if(count($clave->clave_areas) > 0 )
+          <table class="col-12">
+          <tbody>
+          <tr class=" row mb-3">
+          @foreach($clave->clave_areas as $clave_area)
+          <td class="col-6 mt-3">
+          <div class="card border-dark bg-light">
+              <div class="card-body">
+                <input type="hidden" value="{{ $clave_area->id}}" id="id_clave_area_edit">
+                <table class="table table-sm table-borderless">
                   <tr>
-                    <td colspan="5">No se encuentran resultados disponibles</td>
-                </tr>
-                 @endif
-              </tbody>
-            </table>
+                      <th scope="row">Cantidad de preguntas: </th>
+                      <td id="id_cantidad">{{ $clave_area->numero_preguntas }}</td>
+                  </tr>
+                  <tr>
+                      <th scope="row">Peso: </th>
+                      <td id="id_peso">{{ $clave_area->peso }}</td>
+                  </tr>
+                  <tr>
+                      <th scope="row">Aleatorio: </th>
+                      <td>{{ $clave_area->es_aleatorio }}</td>
+                  </tr>
+                  <tr>
+                      <th scope="row">Modalidad: </th>
+                      <td>{{ $clave_area->area->tipo_item->nombre_tipo_item }}</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="card-footer">
+                @if(!$clave_area->aleatorio)
+                  <a class="icon-add btn" href="#" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></a>
+                @endif
+                <a class="icon-list btn" href="#" title="Preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></a>
+                <a class="icon-edit btn" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}"></a>
+                <a class="icon-delete btn" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></a>
+              </div>
           </div>
+          </td>
+          @endforeach
+          </tr>
+          </tbody>
+          </table>
+          @else
+            <h3 class="text-center"><strong>Esta clave aún no tiene áreas asignadas</strong></h3>
+          @endif
         </div>
       </div>
-    </div>
-    <!-- /.container-fluid -->
   </div>
-  <!-- /.content-wrapper -->
 </div>
+@endforeach
 
   <!-- Modal agregar preguntas-->
 <div class="modal fade" id="asignarPreguntasClaveArea" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -169,7 +152,7 @@
 
 <!-- Modal editar Asignación de área a clave-->
 <div class="modal fade" id="editarClaveArea" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="editarModalCenterTitle">Editar asignación de área a clave</h5>
@@ -182,7 +165,7 @@
         <div class="modal-body" id="editar-preguntas">
           <input type="hidden" value="" id="id_ca" name="id_clave_area">
           <div class="form-group">
-            <label for="cantidad_preguntas_id" id="msj_cant_preg">Cantidad de preguntas</label>
+            <label for="cantidad_preguntas_id">Cantidad de preguntas</label>
             <input type="number"  min="1" class="form-control" id="cantidad_preguntas_id" name="numero_preguntas">
           </div>
           <div class="form-group">
@@ -201,7 +184,7 @@
 
 <!-- Modal elimanr Asignación de área a clave-->
 <div class="modal fade" id="eliminarClaveArea" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="eliminarModalCenterTitle">Eliminar área</h5>
@@ -230,17 +213,4 @@
 @section('js')
   <script src="/js/clave/cargarPreguntas.js"> </script>
   <script src="/js/clave/operacionesClaveArea.js"> </script>
-
-  <script type="text/javascript" src="{{asset('js/sb-admin.js')}}"></script>
-  <script type="text/javascript" src="{{asset('js/sb-admin.min.js')}}"></script>
-  <!-- Bootstrap core JavaScript-->
-  <script type="text/javascript" src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js' )}}"></script>
-
-  <!-- Core plugin JavaScript-->
-  <script type="text/javascript" src="{{asset('vendor/jquery-easing/jquery.easing.min.js' )}}"></script>
-
-  <!-- Page level plugin JavaScript-->
-  <script type="text/javascript" src="{{asset('vendor/datatables/jquery.dataTables.js' )}}"></script>
-  <script type="text/javascript" src="{{asset('vendor/datatables/dataTables.bootstrap4.js' )}}"></script>
-  <script type="text/javascript" src="{{asset('js/demo/datatables-demo.js')}}"></script>
 @endsection
