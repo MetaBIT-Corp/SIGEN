@@ -97,11 +97,11 @@
                   <td id="id_cantidad" class="text-center">{{ $clave_area->numero_preguntas }}</td>
                   <td id="id_peso">{{ $clave_area->peso }}</td>
                   <td>
-                      <a class="icon-information-solid btn  btn-info" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></a>
-                      <a class="icon-edit btn btn-success" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></a>
-                      <a class="icon-delete btn btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></a>
+                    <a class="icon-delete btn btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></a>
+                      <a class="icon-edit btn btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></a>
                     @if(!$clave_area->aleatorio)
-                      <a class="icon-add-solid btn btn-primary" href="#" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></a>
+                      <a class="icon-information-solid btn  btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></a>
+                      <a class="icon-add-solid btn btn-info" href="#" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></a>
                     @endif
                   </td>
                 </tr>
