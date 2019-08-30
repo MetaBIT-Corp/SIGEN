@@ -52,5 +52,12 @@ class ClaveTableSeeder extends Seeder
         	'encuesta_id'=>3,
         	'numero_clave'=>1,
         ]);
+
+        /*Clave de Prueba (René).*/
+        Clave::create([
+            'turno_id'=>6,
+            'numero_clave'=>1,
+        ]);
+
     }
 }
