@@ -37,6 +37,13 @@ class OpcionController extends Controller
         /*Obteniendo ID de tipo_item a partir del Área.*/
         $tipo_opcion = $area->tipo_item_id;
 
+        $opcionCorrecta = Opcion::where("correcta",1)->where("pregunta_id",$pregunta_id)->count();
+
+        if($opcionCorrecta==0 && $opciones->count()>0){
+            $opciones[0]->correcta=1;
+            $opciones[0]->save();
+        }
+
         /*
         *Switch para redireccionar a la Vista adecuada para cada tipo de Opción
         *Cada vista necesitará recibir como parametros:
@@ -48,6 +55,7 @@ class OpcionController extends Controller
 
             /*Tipo Item: Opción Múltiple*/
             case 1:
+                // echo $opcionCorrecta;
                 return view('opcion.index_om',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion]);
             break;
 
@@ -117,21 +125,6 @@ class OpcionController extends Controller
             /*Tipo Item: Opción Múltiple*/
             case 1:
 
-                // /*Creación de nueva instancia de Opcion*/
-                // $opcion = new Opcion;
-
-                // /*
-                // *Asignación de parámetros a los atributos de nueva instancia.
-                // *Valores obtenidos desde la Request enviada por formulario POST.
-                // */
-                // $opcion->pregunta_id=$request->pregunta_id;
-                // $opcion->opcion=$request->opcion;
-                // $opcion->correcta=(int)($request->correcta);
-
-                // /*Almacenando la nueva instancia como registro en Base de Datos*/
-                // $opcion->save();
-
-
                 $indice = $request->indice;
                 $pregunta_id = $request->pregunta_id;
 
@@ -150,8 +143,7 @@ class OpcionController extends Controller
                     }
 
                     $this->store_om($pregunta_id,$opcion,$correcta);
-                    
-            }
+                }
 
             break;
 
@@ -354,6 +346,8 @@ class OpcionController extends Controller
 
             $opcion->save();
 
+        }else{
+            $opcionEliminada->delete();
         }
 
         return back();

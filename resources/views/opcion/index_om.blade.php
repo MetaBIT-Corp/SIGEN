@@ -61,7 +61,7 @@
 
 	</table>
 
-	<div class="form-group" style="display:;">
+	<div class="form-group" style="display:none;">
 
 		<label class="col-form-label" for="indice">Indice:</label>
 		<input type="text" class="form-control" name="indice" value="0" id="indice">
