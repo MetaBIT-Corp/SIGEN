@@ -48,7 +48,7 @@ class OpcionController extends Controller
 
             /*Tipo Item: Opción Múltiple*/
             case 1:
-                return view('opcion.index_o',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion]);
+                return view('opcion.index_om',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion]);
             break;
 
             /*Tipo Item: Verdadero/Falso*/
@@ -189,20 +189,32 @@ class OpcionController extends Controller
     }
 
     public function store_om($pregunta_id,$texto,$correcta){
+        
         /*Creación de nueva instancia de Opcion*/
+        $opcionNueva = new Opcion;
 
-                $opcion = new Opcion;
+        $opciones = Opcion::where('pregunta_id',$pregunta_id)->get();
 
-                /*
-                *Asignación de parámetros a los atributos de nueva instancia.
-                *Valores obtenidos desde la Request enviada por formulario POST.
-                */
-                $opcion->pregunta_id=$pregunta_id;
-                $opcion->opcion=$texto;
-                $opcion->correcta=(int)($correcta);
+        if((int)($correcta)==1){
 
-                /*Almacenando la nueva instancia como registro en Base de Datos*/
+            foreach ($opciones as $opcion) {
+
+                $opcion->correcta=0;
                 $opcion->save();
+            }
+        }
+
+        /*
+        *Asignación de parámetros a los atributos de nueva instancia.
+        *Valores obtenidos desde la Request enviada por formulario POST.
+        */
+        $opcionNueva->pregunta_id=$pregunta_id;
+        $opcionNueva->opcion=$texto;
+        $opcionNueva->correcta=(int)($correcta);
+
+        /*Almacenando la nueva instancia como registro en Base de Datos*/
+        $opcionNueva->save();
+
     }
 
     /**
@@ -255,6 +267,16 @@ class OpcionController extends Controller
 
             /*Tipo Item: Opción Múltiple*/
             case 1:
+
+                $opciones = Opcion::where('pregunta_id',$request->pregunta_id)->get();
+
+                if((int)($request->correctaEdit)==1){
+
+                    foreach ($opciones as $opcion) {
+                        Opcion::where("id",$opcion->id)->update(["correcta"=>0]);
+                    }
+
+                }
 
                 Opcion::where("id",$request->id)->update(["opcion"=>$request->opcion,"correcta"=>(int)($request->correctaEdit)]);
 
@@ -320,9 +342,19 @@ class OpcionController extends Controller
         *la opción seleccionada por el usuario.
         */
 
-        $opcion=Opcion::find($request->id);
+        $opcionEliminada=Opcion::find($request->id);
 
-        $opcion->delete();
+        if($opcionEliminada->correcta == 1){
+
+            $opcionEliminada->delete();
+
+            $opcion = Opcion::where("pregunta_id",$request->pregunta_id)->first();
+
+            $opcion->correcta =1;
+
+            $opcion->save();
+
+        }
 
         return back();
 

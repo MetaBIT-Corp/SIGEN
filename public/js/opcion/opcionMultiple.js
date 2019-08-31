@@ -56,10 +56,8 @@ $(document).ready(function() {
             }
 
         }
-
-
-
-    })
+        
+    });
 
     $('#btnAgregarFila').on('click',function(event){
 
