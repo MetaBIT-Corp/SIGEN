@@ -5,11 +5,23 @@ $(function(){
 
 
 function editarClaveArea(){
-  var cantidad_preguntas = $(this).parent().prev().find('#id_cantidad').text();
-  var peso = $(this).parent().prev().find('#id_peso').text();
-  var id_clave_area = $(this).parent().prev().find('#id_clave_area_edit').val();
+  var cantidad_preguntas = $(this).parent().parent().find('#id_cantidad').text();
+  var peso = $(this).parent().parent().find('#id_peso').text();
+  var aleatorio = $(this).data('aleatorio');
+  var id_clave_area = $(this).parent().siblings('input').val();
+
+  //alert(cantidad_preguntas);
 
   $('#cantidad_preguntas_id').attr('value', cantidad_preguntas);
+
+  if(aleatorio==1){
+    $('#msj_cant_preg').show();
+    $('#cantidad_preguntas_id').show();
+  }else{
+    $('#cantidad_preguntas_id').hide();
+    $('#msj_cant_preg').hide();
+  }
+
   $('#peso_ca_id').attr('value', peso);
   $('#id_ca').attr('value', id_clave_area);
 
@@ -17,7 +29,7 @@ function editarClaveArea(){
 }
 
 function eliminarClaveArea(){
-	var id_clave_area = $(this).parent().prev().find('#id_clave_area_edit').val();
+	var id_clave_area = $(this).parent().siblings('input').val();
 
 	$('#id_ca_eliminar').attr('value', id_clave_area);
 	$('#eliminarClaveArea').modal('show');

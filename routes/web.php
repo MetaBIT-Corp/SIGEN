@@ -17,7 +17,8 @@ use App\Area;
 
 /*----------------------------Rutas de prueba para agregar preguntas a la clave------------------------------------*/
 Route::get('turno/{id_turno}/claves', 'ClaveController@listarClaves');
-Route::post('turno/{id_turno}/claves', 'ClaveController@asignarPreguntas');
+#Route::post('turno/{id_turno}/claves', 'ClaveController@asignarPreguntas')->name('agregar_clave_area');
+Route::post('turno/claves', 'ClaveController@asignarPreguntas')->name('agregar_clave_area');
 Route::post('clave-area/editar/', 'ClaveController@editarClaveArea')->name('editar_clave_area');
 Route::post('clave-area/eliminar/', 'ClaveController@eliminarClaveArea')->name('eliminar_clave_area');
 /*-----------------------------------------------------------------------------------------------------------------*/
@@ -72,7 +73,7 @@ Route::get('/materias', 'MateriaController@listar')->name('materias');
 
 Route::get('/materias/listado_estudiante/{id_mat_ci}', 'ListadoEstudianteController@listar')->name('listado_estudiante');
 
-Route::get('docentes-ciclo/{id_mat_ci}', 'DocenteController@docentes_materia_ciclo')->name('docentes_materia_ciclo');
+Route::get('docentes-ciclo/{id_mat_ci}', 'DocenteController@docentes_materia_ciclo')->name('docentes_materia_ciclo')->middleware('signed');
 
 Route::get('materia/listado-evaluacion','EvaluacionController@listado')->name('listado_evaluacion');
 
@@ -123,3 +124,9 @@ Route::get('pregunta/{pregunta_id}/opcion/','OpcionController@index');
 Route::post('pregunta/{pregunta_id}/opcion/store','OpcionController@store')->name('agregar-opcion');
 Route::post('pregunta/{pregunta_id}/opcion/update','OpcionController@update')->name('actualizar-opcion');
 Route::post('pregunta/{pregunta_id}/opcion/delete','OpcionController@destroy')->name('eliminar-opcion');
+
+/*Rutas para Gestión Grupo Emparejamiento*/
+Route::get('grupo/{grupo_id}/preguntas/','GrupoEmparejamientoController@index');
+Route::post('grupo/{grupo_id}/preguntas/store','GrupoEmparejamientoController@store')->name('crear-pregunta-grupo');
+Route::post('grupo/{grupo_id}/preguntas/update','GrupoEmparejamientoController@update')->name('editar-pregunta-grupo');
+Route::post('grupo/{grupo_id}/preguntas/delete','GrupoEmparejamientoController@destroy')->name('eliminar-pregunta-grupo');

@@ -35,5 +35,11 @@ class MateriaCicloTableSeeder extends Seeder
         	'id_cat_mat'=>6,
         	'id_ciclo'=>3
         ]);
+
+        /*MateriaCiclo de Prueba (René).*/
+        CicloMateria::create([
+            'id_cat_mat'=>7,
+            'id_ciclo'=>4
+        ]);
     }
 }

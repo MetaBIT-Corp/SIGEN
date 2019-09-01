@@ -19,8 +19,8 @@ class IntentoController extends Controller
         $evaluacion = $turno->evaluacion;
 
         //Recuperamos la cantidad de preguntas a mostrar en la paginacion
-        $preg_per_page = $evaluacion->preguntas_a_mostrar;
-        //$preg_per_page = 4;
+        //$preg_per_page = $evaluacion->preguntas_a_mostrar;
+        $preg_per_page = 4;
 
         //Recuperar las claves del turno
         $claves = $turno->claves;
