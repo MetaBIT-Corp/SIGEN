@@ -1,12 +1,13 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?logy5p');
-  src:  url('fonts/icomoon.eot?logy5p#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?logy5p') format('truetype'),
-    url('fonts/icomoon.woff?logy5p') format('woff'),
-    url('fonts/icomoon.svg?logy5p#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?cj8pfw');
+  src:  url('fonts/icomoon.eot?cj8pfw#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?cj8pfw') format('truetype'),
+    url('fonts/icomoon.woff?cj8pfw') format('woff'),
+    url('fonts/icomoon.svg?cj8pfw#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: block;
 }
 
 [class^="icon-"], [class*=" icon-"] {
@@ -24,6 +25,19 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-excel:before {
+  content: "\e90d";
+  color: #217346;
+}
+.icon-grafico:before {
+  content: "\e900";
+}
+.icon-add-solid:before {
+  content: "\e90e";
+}
+.icon-information-solid:before {
+  content: "\e901";
+}
 .icon-dice:before {
   content: "\e90f";
 }
@@ -60,19 +74,9 @@
 .icon-list:before {
   content: "\e9bb";
 }
-.icon-add-solid:before {
-  content: "\e90e";
-}
-.icon-information-solid:before {
-  content: "\e901";
-}
-.icon-grafico:before {
-  content: "\e900";
-}
 .icon-add:before {
   content: "\e902";
 }
-.icon-excel:before {
-  content: "\e90d";
-  color: #217346;
+.icon-calendar-plus-o:before {
+  content: "\e910";
 }

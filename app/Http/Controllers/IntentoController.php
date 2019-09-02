@@ -153,6 +153,7 @@ class IntentoController extends Controller
 
         $respuesta->id_pregunta = $request->pregunta_id;
         $respuesta->id_opcion = $request->opcion_id;
+        $respuesta->id_intento = $request->intento_id;
         $respuesta->texto_respuesta = $request->texto_respuesta;
 
         $respuesta->save();
