@@ -17,13 +17,13 @@ class EvaluacionController extends Controller
 
     }
 
-    public function getCreate(){
+    public function getCreate($id){
 
     	return view('evaluacion.createEvaluacion');
 
     }
 
-    public function postCreate(Request $request){
+    public function postCreate($id,Request $request){
         dd($request->all());
             
         return back();

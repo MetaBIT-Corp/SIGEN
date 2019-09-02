@@ -9,6 +9,7 @@ use App\CicloMateria;
 use App\CargaAcademica;
 use App\Ciclo;
 use App\Materia;
+use DB;
 
 class EstudianteController extends Controller
 {
@@ -22,9 +23,21 @@ class EstudianteController extends Controller
 	$this->middleware('auth');
      }
 
-    public function index()
+    public function index($id)
     {
-        //
+        
+        $estudiantes=DB::table('estudiante')
+        ->join('detalle_insc_est','estudiante.id_est','=','detalle_insc_est.id_est')
+        ->join('carga_academica','carga_academica.id_carg_aca','=','detalle_insc_est.id_carg_aca')
+        ->join('materia_ciclo','materia_ciclo.id_mat_ci','=','carga_academica.id_mat_ci')
+        ->where('materia_ciclo.id_mat_ci','=',$id)
+        ->select('estudiante.*')->get();
+
+        $id_mat_ci = $id;
+        $materia = Materia::where('id_cat_mat',CicloMateria::where('id_mat_ci',$id)->first()->id_cat_mat)->first();
+        
+        return view("estudiante/listadoEstudiante",compact("estudiantes", "id_mat_ci","materia"));
+    
     }
 
     /**
