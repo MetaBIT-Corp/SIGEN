@@ -1,0 +1,5 @@
+
+(/usr/lib/firefox-esr/firefox-esr:6688): dconf-WARNING **: Unable to open /var/lib/snapd/desktop/dconf/profile/user: Permiso denegado
+
+(file-roller:7316): Gtk-WARNING **: Allocating size to GtkScrolledWindow 0x55949ed3a420 without calling gtk_widget_get_preferred_width/height(). How does the code know the size to allocate?
+ATTENTION: default value of option force_s3tc_enable overridden by environment.
