@@ -91,12 +91,13 @@ Route::group(['middleware' => 'teacher'], function(){
     
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
 
-    Route::resource('materia/{id}/areas','AreaController');
+   
 
     //URL's para Area
-    Route::post('/materia/{id}/areas/store','AreaController@store');
+    Route::resource('materia/{id}/areas','AreaController');
+    /*Route::post('/materia/{id}/areas/store','AreaController@store');
     Route::post('/materia/{id}/areas','AreaController@index')->name('post_area');
-    Route::get('/materia/{id_area}/areas','AreaController@index')->name('get_area');
+    Route::get('/materia/{id_area}/areas','AreaController@index')->name('get_area');*/
 
     //URL's para Pregunta
     Route::resource('/area/{id}/pregunta','PreguntaController');

@@ -11,7 +11,7 @@ Crear Área
 
 
 @section("formulario")
-<form action="/materia/{{ $id_materia }}/areas/store" method="post">
+<form action="/materia/{{ $id_materia }}/areas" method="post">
    @csrf
     <div class="form-group">
         <label for="select_tipo_item">Tipo de item</label>
@@ -35,7 +35,7 @@ Crear Área
              <button type="submit" class="btn btn-primary">Guardar</button>                 
          </div>
          <div class="form-group offset-1">
-             <button type="button" class="btn btn-secondary" onclick="location.href='.'">Cancelar</button>                           
+             <button type="button" class="btn btn-secondary" onclick="location.href='{{ route('areas.index',[$id_materia]) }}'">Cancelar</button>                           
          </div>
       </div>
 </form>

@@ -14,8 +14,6 @@ use Illuminate\Http\Request;
 */
 Route::get('/respuesta/{id}','AreaController@respuesta');
 Route::post('/respuesta/{id}','AreaController@respuesta');
-Route::post('/area/edit','AreaController@update')->name("area_update");
-Route::post('/area/delete','AreaController@destroy')->name("area_delete");
 Route::get('/evaluacion/{id}/duracion/','TurnoController@getDuracionEvaluacion');
 
 //Clave
