@@ -102,15 +102,15 @@ Route::group(['middleware' => 'teacher'], function(){
 
 
     //URL's para Area
-    Route::resource('materia/{id}/areas','AreaController');
+    //Route::resource('materia/{id}/areas','AreaController');
     /*Route::post('/materia/{id}/areas/store','AreaController@store');
     Route::post('/materia/{id}/areas','AreaController@index')->name('post_area');
 
     Route::get('/materia/{id_area}/areas','AreaController@index')->name('get_area');*/
 
     //Route::get('/materia/{id_area}/areas','AreaController@index')->name('get_area');
-    //Route::get('/materia/{id}/areas/create','AreaController@index')->name('crear_area')->middleware('signed');
-    //Route::resource('materia/{id}/areas','AreaController')->except(['create']);
+    Route::get('/materia/{id}/areas/create','AreaController@create')->name('crear_area')->middleware('signed');
+    Route::resource('materia/{id}/areas','AreaController')->except(['create']);
 
     
     //URL's para Pregunta
