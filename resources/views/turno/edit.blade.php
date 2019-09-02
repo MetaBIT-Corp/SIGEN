@@ -57,7 +57,7 @@
          <button type="submit" class="btn btn-primary">Guardar</button>                 
      </div>
      <div class="form-group offset-1">
-         <button type="button" class="btn btn-secondary" onclick="location.href='/evaluacion/{{ $turno->evaluacion_id }}/turnos'">Cancelar</button>                           
+        <a class="btn btn-secondary" href="{{ URL::signedRoute('listado_turnos', ['id' => $turno->evaluacion_id]) }}">Cancelar</a> 
      </div>
   </div>
   <input type="hidden" name="iniciado" value="{{ $turno->iniciado }}">

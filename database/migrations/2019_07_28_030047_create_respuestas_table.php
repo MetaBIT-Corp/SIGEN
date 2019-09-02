@@ -15,11 +15,16 @@ class CreateRespuestasTable extends Migration
     {
         Schema::create('respuesta', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('texto_respuesta')->nullable();
+
+            //Relaciones a otros modelos
             $table->unsignedInteger('id_pregunta');
             $table->foreign('id_pregunta')->references('id')->on('pregunta');
             $table->unsignedInteger('id_opcion')->nullable();
             $table->foreign('id_opcion')->references('id')->on('opcion');
-            $table->string('texto_respuesta')->nullable();
+            $table->unsignedInteger('id_intento')->nullable();
+            $table->foreign('id_intento')->references('id')->on('intento');
+
             $table->timestamps();
         });
     }

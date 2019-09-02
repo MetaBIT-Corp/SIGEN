@@ -19,7 +19,7 @@
         Áreas
 </div>
 <div class="col-3">
-    <a class="btn" href="/materia/{{ $materia->id_cat_mat }}/areas/create">
+    <a class="btn" href="{{ URL::signedRoute('crear_area', ['id_materia' => $materia->id_cat_mat]) }}">
         <span class="icon-add text-primary">
         </span>
     </a>

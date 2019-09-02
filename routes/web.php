@@ -91,15 +91,20 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::get('/materia/estudiante/{id}/{id_mat}', 'EstudianteController@show')->name('detalle_estudiante');
     Route::get('/evaluacion/{id}', 'EvaluacionController@show')->name('detalle_evaluacion');
     
-    Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
-
-    Route::resource('materia/{id}/areas','AreaController');
+    //URL's para Turno
+    Route::get('/evaluacion/{id}/turnos', 'TurnoController@index')->name('listado_turnos')->middleware('signed');
+    Route::get('/evaluacion/{id}/turnos/create', 'TurnoController@create')->name('crear_turno')->middleware('signed');
+    Route::get('/evaluacion/{id}/turnos/{turno_id}/edit', 'TurnoController@edit')->name('editar_turno')->middleware('signed');
+    Route::resource('/evaluacion/{id}/turnos', 'TurnoController')->except(['index','create','edit']); 
 
     //URL's para Area
     Route::post('/materia/{id}/areas/store','AreaController@store');
     Route::post('/materia/{id}/areas','AreaController@index')->name('post_area');
     Route::get('/materia/{id_area}/areas','AreaController@index')->name('get_area');
+    Route::get('/materia/{id}/areas/create','AreaController@index')->name('crear_area')->middleware('signed');
+    Route::resource('materia/{id}/areas','AreaController')->except(['create']);
 
+    
     //URL's para Pregunta
     Route::resource('/area/{id}/pregunta','PreguntaController');
 

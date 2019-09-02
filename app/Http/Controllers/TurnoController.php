@@ -56,7 +56,6 @@ class TurnoController extends Controller
      */
     public function create($id)
     {
-        
         if(!Evaluacion::find($id))
             return redirect('/home');
         
