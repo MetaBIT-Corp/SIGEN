@@ -10,8 +10,11 @@ function editarClaveArea(){
   var aleatorio = $(this).data('aleatorio');
   var id_clave_area = $(this).parent().siblings('input').val();
 
+  //alert(cantidad_preguntas);
+
+  $('#cantidad_preguntas_id').attr('value', cantidad_preguntas);
+
   if(aleatorio==1){
-    $('#cantidad_preguntas_id').attr('value', cantidad_preguntas);
     $('#msj_cant_preg').show();
     $('#cantidad_preguntas_id').show();
   }else{

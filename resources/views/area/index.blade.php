@@ -2,7 +2,6 @@
 @section("css")
 <link href="{{asset('icomoon/style.css')}}" rel="stylesheet"/>
 <script type="text/javascript" src="{{ asset('js/area/area.js') }}"></script>
-</script>
 <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     @endsection
 
@@ -41,7 +40,7 @@
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
-</div>
+
     <!--DATA TABLE-->
     <div class="container mt-3 mb-3">
         <table class="table table-striped table-bordered" id="areas" style="width:100%">

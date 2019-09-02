@@ -48,5 +48,13 @@ class MateriaTableSeeder extends Seeder
     		'es_electiva'=>0,
     		'maximo_cant_preguntas'=>10
     	]);
+
+        /*Materia de Prueba (René).*/
+        Materia::create([
+            'codigo_mat'=>'PRU115',
+            'nombre_mar'=>'PruebaMat I',
+            'es_electiva'=>1,
+            'maximo_cant_preguntas'=>10
+        ]);
     }
 }

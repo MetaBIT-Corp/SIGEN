@@ -51,5 +51,14 @@ class TurnoTableSeeder extends Seeder
         	'visibilidad'=>true,
         	'contraseña'=>bcrypt('ues')
         ]);
+
+        /*Turno de Prueba (René).*/
+        Turno::create([
+            'evaluacion_id'=>4,
+            'fecha_inicio_turno'=>'2019-10-02 00:00:00',
+            'fecha_final_turno'=>'2019-10-16 00:00:00',
+            'visibilidad'=>true,
+            'contraseña'=>bcrypt('ues')
+        ]);
     }
 }

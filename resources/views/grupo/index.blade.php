@@ -58,7 +58,7 @@
 
 				<form action="{{ route('crear-pregunta-grupo',$grupo->id)}}" method="POST">
 
-					<div class="form-group" style="display:;">
+					<div class="form-group" style="display:none;">
 						<label class="col-form-label" for="idGrupo">Grupo ID:</label>
 						<input type="text" class="form-control" name="idGrupo" placeholder="ID de Pregunta" id="idGrupo" value="{{$grupo->id}}">
 					</div>
@@ -145,7 +145,7 @@
 			</div>
 			<div class="modal-footer">
 				<form action="{{ route('eliminar-pregunta-grupo',$grupo->id)}}" method="POST">
-					<div class="form-group" style="display:;">
+					<div class="form-group" style="display:none;">
 						<label class="col-form-label" for="idPregunta">Pregunta ID:</label>
 						<input type="text" class="form-control" name="idPregunta" placeholder="ID de Opción" id="idPregunta">
 						<label class="col-form-label" for="idOpcion">Opcion ID:</label>

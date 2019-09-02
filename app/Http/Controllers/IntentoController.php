@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Evaluacion;
 use App\Pregunta;
 use App\Turno;
+use App\Respuesta;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -19,8 +20,8 @@ class IntentoController extends Controller
         $evaluacion = $turno->evaluacion;
 
         //Recuperamos la cantidad de preguntas a mostrar en la paginacion
-        $preg_per_page = $evaluacion->preguntas_a_mostrar;
-        //$preg_per_page = 4;
+        //$preg_per_page = $evaluacion->preguntas_a_mostrar;
+        $preg_per_page = 4;
 
         //Recuperar las claves del turno
         $claves = $turno->claves;
@@ -145,5 +146,18 @@ class IntentoController extends Controller
         $paginacion = new LengthAwarePaginator($preg_pagina, count($array), $preg_per_page);
         $paginacion->setPath('');
         return $paginacion;
+    }
+
+    public function finalizarIntento(Request $request){
+        $respuesta = new Respuesta();
+
+        $respuesta->id_pregunta = $request->pregunta_id;
+        $respuesta->id_opcion = $request->opcion_id;
+        $respuesta->id_intento = $request->intento_id;
+        $respuesta->texto_respuesta = $request->texto_respuesta;
+
+        $respuesta->save();
+
+        return back();
     }
 }

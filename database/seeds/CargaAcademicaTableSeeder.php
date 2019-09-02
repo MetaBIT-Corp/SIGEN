@@ -31,5 +31,12 @@ class CargaAcademicaTableSeeder extends Seeder
         	'id_grup_carg'=>1,
         	'id_pdg_dcn'=>3
         ]);
+
+        /*CargaAcedemica de Prueba (René).*/
+        CargaAcademica::create([
+            'id_mat_ci'=>7,
+            'id_grup_carg'=>1,
+            'id_pdg_dcn'=>3
+        ]);
     }
 }

@@ -20,6 +20,12 @@ Route::get('/evaluacion/{id}/duracion/','TurnoController@getDuracionEvaluacion')
 Route::get('/area/{id}/preguntas', 'ClaveController@preguntasPorArea');
 Route::get('/preguntas-agregadas/{id}', 'ClaveController@preguntasAgregadas');
 
+//Consultar encuestas desde la app móvil
+Route::get('/encuestas-disponibles', 'EncuestaController@encuestasDisponibles');
+
+//Enviar respuestas desde la app móvil
+Route::post('finalizar-intento/', 'IntentoController@finalizarIntento');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

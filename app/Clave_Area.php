@@ -35,10 +35,20 @@ class Clave_Area extends Model
 
     //Accessors
 
+    //El atributo calcula mostrará el mensaje en base al campo aleatorio
     public function getEsAleatorioAttribute(){
         if($this->aleatorio==1)
             return 'Sí';
         else
             return 'No';
+    }
+
+    /*El campo calculado mostrará la cantidad de preguntas agregadas si es modalidad manual en caso 
+    contrario mostrará la cantidad especificada en el objeto*/
+    public function getCantidadPreguntasAttribute(){
+        if($this->aleatorio)
+            return $this->numero_preguntas;
+        else
+            return count($this->claves_areas_preguntas);
     }
 }

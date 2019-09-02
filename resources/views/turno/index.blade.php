@@ -24,7 +24,7 @@
               Listado de Turnos | <b>{{ $nombre_evaluacion }}</b></div>
             <div class="card-body">
             <div class="row">
-                <a id="btn_add" class="btn btn-sm" href="/evaluacion/{{ $evaluacion_id }}/turnos/create" title="Agregar">
+                <a id="btn_add" class="btn btn-sm" href="{{ URL::signedRoute('crear_turno', ['id' => $evaluacion_id]) }}" title="Agregar">
                     <span class="icon-add"></span>
                 </a>
                 <b id="b_add">Agregar turno</b>
@@ -51,7 +51,7 @@
                                 <td><input type="checkbox" @if($turno->visibilidad) checked @endif disabled></td>
                                 <td>
                                     @if($turno->acciones)
-                                       <a id="btn_editar" class="btn btn-sm" title="Editar" href="/evaluacion/{{ $evaluacion_id }}/turnos/{{ $turno->id }}/edit">
+                                       <a id="btn_editar" class="btn btn-sm" title="Editar" href="{{ URL::signedRoute('editar_turno', ['id' => $evaluacion_id, 'turno_id' =>$turno->id ]) }}">
                                            <span class="icon-edit"></span>
                                        </a>
                                           @if($turno->accion_delete)

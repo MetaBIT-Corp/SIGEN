@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Turno;
 use App\Evaluacion;
+use App\Clave;
 use Illuminate\Http\Request;
 use DateTime;
 use Carbon\Carbon;
@@ -55,7 +56,6 @@ class TurnoController extends Controller
      */
     public function create($id)
     {
-        
         if(!Evaluacion::find($id))
             return redirect('/home');
         
@@ -148,6 +148,11 @@ class TurnoController extends Controller
      */
     public function edit( $id, $turno_id )
     {
+        //Obteniendo la clave del turno
+        $claves = Clave::where('id', $turno_id)->get();
+
+        //dd(count($claves[0]->clave_areas[0]->claves_areas_preguntas));
+
         $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
         
         $turno = Turno::find($turno_id);
@@ -160,7 +165,7 @@ class TurnoController extends Controller
         $turno->fecha_inicio_turno = DateTime::createFromFormat('Y-m-d H:i:s', $turno->fecha_inicio_turno)->format('d/m/Y h:i A');
         $turno->fecha_final_turno = DateTime::createFromFormat('Y-m-d H:i:s', $turno->fecha_final_turno)->format('d/m/Y h:i A');
         
-        return view('turno.edit', compact('turno', 'id'));
+        return view('turno.edit', compact('turno', 'id', 'claves'));
     }
 
     /**

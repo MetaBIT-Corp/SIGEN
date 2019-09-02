@@ -39,5 +39,15 @@ class EvaluacionTableSeeder extends Seeder
         	'preguntas_a_mostrar'=>3
         ]);
 
+        /*Evaluación de Prueba (René).*/
+        Evaluacion::create([
+            'id_carga'=>5,
+            'duracion'=>100,
+            'intentos'=>2,
+            'nombre_evaluacion'=>'Evaluación de Prueba.',
+            'descripcion_evaluacion'=>'Evaluación de Prueba para la Creación de Turnos y Claves',
+            'preguntas_a_mostrar'=>5
+        ]);
+        
     }
 }
