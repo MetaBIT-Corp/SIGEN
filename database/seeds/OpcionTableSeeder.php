@@ -62,9 +62,19 @@ class OpcionTableSeeder extends Seeder
         	'correcta'=>false
         ]);
         Opcion::create([
+            'pregunta_id'=>3,
+            'opcion'=>'Verdadero',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>4,
+            'opcion'=>'Verdadero',
+            'correcta'=>true
+        ]);
+        Opcion::create([
         	'pregunta_id'=>4,
-        	'opcion'=>'Verdadero',
-        	'correcta'=>true
+        	'opcion'=>'Falso',
+        	'correcta'=>false
         ]);
 
         //Pregunta id 5 y 6 texto corto
