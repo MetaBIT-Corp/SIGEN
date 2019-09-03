@@ -1,10 +1,10 @@
 @extends("../layouts.plantilla")
 @section("css")
 <link href="{{asset('icomoon/style.css')}}" rel="stylesheet"/>
-<script type="text/javascript" src="{{ asset('js/area/area.js') }}"></script>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
-<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-    @endsection
+
+<!--Css para Datatable-->
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet"/>
+@endsection
 
 @section("body")
 @section("ol_breadcrumb")
@@ -47,7 +47,7 @@
         <table class="table table-striped table-bordered" id="areas" style="width:100%">
             <thead>
                 <tr>
-                    <th>
+                    <th class="text-center">
                         #
                     </th>
                     <th>
@@ -56,7 +56,7 @@
                     <th>
                         Modalidad
                     </th>
-                    <th>
+                    <th class="text-center">
                         Acciones
                     </th>
                 </tr>
@@ -140,14 +140,14 @@
             </div>
         </div>
     </div>
-    @endsection
-    <!--Scripts para datatables con Laravel-->
-    @section("js")
-    <script src="https://code.jquery.com/jquery-3.3.1.js">
-    </script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js">
-    </script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js">
-    </script>
-    @endsection
-</link>
+@endsection
+<!--Scripts para datatables con Laravel-->
+@section("js")
+<script type="text/javascript" src="{{ asset('js/area/area.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js">
+</script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js">
+</script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js">
+</script>
+@endsection

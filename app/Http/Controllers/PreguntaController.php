@@ -14,9 +14,31 @@ class PreguntaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id_area, Request $request)
     {
-        //
+        $area=Area::find($id_area);
+        $gpos=$area->grupos_emparejamiento;
+        if($request->ajax()){
+            if($request->id_gpo==1){
+                return dataTables()
+                    ->of($gpos)
+                    ->addColumn('actions','pregunta/actions')
+                    ->rawColumns(['actions'])
+                    ->toJson();
+            }else{
+                $pregunta=[];
+                foreach ($gpos as $gpo) {
+                    $pregunta[]=$gpo->preguntas[0];
+                }
+                return dataTables()
+                    ->of($pregunta)
+                    ->addColumn('actions','pregunta/actions')
+                    ->rawColumns(['actions'])
+                    ->toJson();
+            }
+        }
+
+        return view('pregunta.index',compact('area'));
     }
 
     /**

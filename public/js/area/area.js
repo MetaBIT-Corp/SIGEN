@@ -28,7 +28,12 @@ $(document).ready(function() {
                 "zeroRecords": "Lo sentimos, no hay coincidencias.",
                 "infoEmpty": "",
                 "infoFiltered": "",
-            }
+            },
+            //Centrar datos dentro de una columna target=3
+            columnDefs: [{
+                'className': 'text-center',
+                'targets': 3
+            }, ]
         });
 
         function exito(datos) {

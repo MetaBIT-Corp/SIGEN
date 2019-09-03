@@ -6,7 +6,7 @@
 
 @section("ol_breadcrumb")
 <li class="breadcrumb-item">
-    <a href="{{ route('get_area',[$area->materia->id_cat_mat]) }}">
+    <a href="{{ route('areas.index',[$area->materia->id_cat_mat]) }}">
         Areas
     </a>
 </li>
@@ -99,7 +99,7 @@
                             </button>
                         </div>
                         <div class="form-group offset-1">
-                            <button class="btn btn-secondary mt-3" onclick="location.href='{{ route('get_area',[$area->materia->id_cat_mat]) }}'" type="button">
+                            <button class="btn btn-secondary mt-3" onclick="location.href='{{ route('areas.index',[$area->materia->id_cat_mat]) }}'" type="button">
                                 Cancelar
                             </button>
                         </div>
