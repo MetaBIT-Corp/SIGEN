@@ -9,20 +9,36 @@
 
 @section("ol_breadcrumb")
 <li class="breadcrumb-item">
-    <a href="{{ route('areas.index',[$area->materia->id_cat_mat]) }}">
-        Areas
+	<a href="{{ route('areas.index',[$area->materia->id_cat_mat]) }}">
+        Áreas
     </a>
 </li>
 <li class="breadcrumb-item">
-    {{ $area->titulo }}
+	<a>
+        {{ $area->titulo }}
+    </a>
 </li>
 <li class="breadcrumb-item">
-    @if(Request::get('id_gpo')==1)
-    Listado de grupos emparejamiento
+	@if(Request::get('id_gpo')==1)
+    	Listado de grupos emparejamiento
     @else
-    Listado de preguntas
+    	Listado de preguntas
     @endif
 </li>
+ <div class="col-5 text-right">
+    <a class="btn" href="">
+        <span class="icon-add text-primary">
+        </span>
+    </a>
+    <strong>
+    @if(Request::get('id_gpo')==1)
+    	Agregar Grupo
+    @else
+    	Agregar Pregunta
+    @endif
+	</strong>
+</div>
+
 @endsection
 @section('main')
 <!--DATA TABLE-->
