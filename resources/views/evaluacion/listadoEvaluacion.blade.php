@@ -77,26 +77,35 @@
    @if(auth()->user()->role==2)
     @if($evaluaciones)
 		<div class="list-group">
-      @foreach($evaluaciones as $evaluacion)
-		  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-		    <div class="d-flex w-100 justify-content-between">
-		      <h5 class="mb-1">
-            {{$evaluacion->nombre_evaluacion}}
-          </h5>
-		      <small class="text-muted">Intentos diponibles: {{$evaluacion->intentos}}</small>
-		    </div>
-		    <p class="mb-1">{{$evaluacion->descripcion_evaluacion}}</p>
-		    <small class="text-muted">Duración: {{$evaluacion->duracion}}.</small>
-        <br>
-        <small class="text-muted">Intentos: {{$evaluacion->intentos}}.</small>
-        <br>
-        <button type="button" class="btn btn-info">Acceder</button>
-		  </a>
-       
+      @forelse($evaluaciones as $evaluacion)
+      <div class="row">
+        @forelse($evaluacion->turnos as $turno) <!-- recorrecomos los turnos por evaluacion -->
+          @if($turno->visibilidad == 1)
+            <div class="col-md-6">
+      		  <span class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+      		    <div class="d-flex w-100 justify-content-between">
+      		      <h5 class="mb-1">
+                  {{$evaluacion->nombre_evaluacion}} | Turno {{$loop->iteration}}
+                </h5>
+      		      <small class="text-muted">Intentos diponibles: {{$evaluacion->intentos}}</small>
+      		    </div>
+      		    <p class="mb-1">{{$evaluacion->descripcion_evaluacion}}</p>
+      		    <small class="text-muted">Duración: {{$evaluacion->duracion}}.</small>
+              <br>
+              <small class="text-muted">Intentos: {{$evaluacion->intentos}}.</small>
+              <br>
+              <button type="button" class="btn btn-info mt-1">Acceder</button>
+      		  </span>
 
-
-      <br>
-      @endforeach
+            </div>
+          @endif
+        @empty
+          <h2>No se encuentran resultados</h2>
+        @endforelse
+        </div>
+        @empty
+          <h2>No se encuentran resultados</h2>
+      @endforelse
 
 		</div>
     @endif

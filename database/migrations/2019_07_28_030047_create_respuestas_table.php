@@ -22,7 +22,7 @@ class CreateRespuestasTable extends Migration
             $table->foreign('id_pregunta')->references('id')->on('pregunta');
             $table->unsignedInteger('id_opcion')->nullable();
             $table->foreign('id_opcion')->references('id')->on('opcion');
-            $table->unsignedInteger('id_intento')->nullable();
+            $table->unsignedInteger('id_intento');
             $table->foreign('id_intento')->references('id')->on('intento');
 
             $table->timestamps();
