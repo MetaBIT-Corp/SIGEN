@@ -16,8 +16,8 @@ class CreateGrupoEmparejamientosTable extends Migration
         Schema::create('grupo_emparejamiento', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('area_id');
-            $table->foreign('area_id')->references('id')->on('area');
-            $table->string('descripcion_grupo_emp')->nullable();
+            $table->foreign('area_id')->references('id')->on('area')->onDelete('cascade');
+            $table->string('descripcion_grupo_emp')->default('Empareje las respuestas correctamente');
             $table->timestamps();
         });
     }

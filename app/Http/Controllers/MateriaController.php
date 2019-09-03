@@ -51,7 +51,7 @@ class MateriaController extends Controller
                         })
                         ->join('ciclo', 'ciclo.id_ciclo', '=', 'materia_ciclo.id_ciclo')
                         ->where('ciclo.id_ciclo', '=', $ciclo->id_ciclo)
-                        ->select('cat_mat_materia.*', 'materia_ciclo.*')->get();
+                        ->select('cat_mat_materia.*', 'materia_ciclo.*','carga_academica.id_carg_aca')->get();
                 }
                 return view("materia.listadoMateria", compact("materias", "ciclos"));
                 break;
@@ -69,7 +69,7 @@ class MateriaController extends Controller
                     })
                     ->join('ciclo', 'ciclo.id_ciclo', '=', 'materia_ciclo.id_ciclo')
                     ->where('ciclo.estado', '=', 1)
-                    ->select('cat_mat_materia.*', 'materia_ciclo.id_mat_ci')->get();
+                    ->select('cat_mat_materia.*', 'materia_ciclo.id_mat_ci','carga_academica.id_carg_aca')->get();
 
                 return view("materia.listadoMateria", compact("materias", "ciclo"));
                 break;

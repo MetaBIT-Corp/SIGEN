@@ -4,7 +4,7 @@
 
 @section("ol_breadcrumb")
     <li class="breadcrumb-item"><a href="/materia/{{ $id_materia }}/">Materia</a></li>
-    <li class="breadcrumb-item"><a href="/materia/{{ $id_materia }}/areas/">Listado de áreas</a></li>
+    <li class="breadcrumb-item"><a href="/materia/{{ $id_materia }}/areas">Listado de áreas</a></li>
     <li class="breadcrumb-item">@yield("nombre_vista")</li>
 @endsection
 

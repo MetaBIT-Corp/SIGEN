@@ -14,8 +14,6 @@ use Illuminate\Http\Request;
 */
 Route::get('/respuesta/{id}','AreaController@respuesta');
 Route::post('/respuesta/{id}','AreaController@respuesta');
-Route::post('/area/edit','AreaController@update')->name("area_update");
-Route::post('/area/delete','AreaController@destroy')->name("area_delete");
 Route::get('/evaluacion/{id}/duracion/','TurnoController@getDuracionEvaluacion');
 
 //Obtener evaluación
@@ -24,6 +22,12 @@ Route::get('/evaluacion/turno/{turno_id}/obtener/{estudiante_id}','TurnoControll
 //Clave
 Route::get('/area/{id}/preguntas', 'ClaveController@preguntasPorArea');
 Route::get('/preguntas-agregadas/{id}', 'ClaveController@preguntasAgregadas');
+
+//Consultar encuestas desde la app móvil
+Route::get('/encuestas-disponibles', 'EncuestaController@encuestasDisponibles');
+
+//Enviar respuestas desde la app móvil
+Route::post('finalizar-intento/', 'IntentoController@finalizarIntento');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

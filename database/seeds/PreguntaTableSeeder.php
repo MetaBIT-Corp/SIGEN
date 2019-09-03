@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Pregunta;
+use App\Grupo_Emparejamiento;
 class PreguntaTableSeeder extends Seeder
 {
     /**
@@ -12,24 +13,59 @@ class PreguntaTableSeeder extends Seeder
     public function run()
     {
     	//Preguntas variadas
+        Grupo_Emparejamiento::create([
+            'area_id'=>1
+        ]);
     	Pregunta::create([
+            'grupo_emparejamiento_id'=>7,
         	'pregunta'=>'Es el resultado de 5+5:'//Opcion Multiple
         ]);
+
+
+        Grupo_Emparejamiento::create([
+            'area_id'=>1
+        ]);
         Pregunta::create([
+            'grupo_emparejamiento_id'=>8,
         	'pregunta'=>'5*100 es:'//Opcion Multiple
         ]);
+
+
+        Grupo_Emparejamiento::create([
+            'area_id'=>2
+        ]);
         Pregunta::create([
+            'grupo_emparejamiento_id'=>9,
         	'pregunta'=>'Pi es 4.56897235'//Falso/Verdadero
         ]);
+
+
+        Grupo_Emparejamiento::create([
+            'area_id'=>2
+        ]);
         Pregunta::create([
+            'grupo_emparejamiento_id'=>10,
         	'pregunta'=>'La derivada de una constante es cero'//Falso/Verdadero
         ]);
+
+
+        Grupo_Emparejamiento::create([
+            'area_id'=>4
+        ]);
          Pregunta::create([
+            'grupo_emparejamiento_id'=>11,
             'pregunta'=>'¿Como se le llama a esa notacion de la derivada D\'?'//Texto Corto
         ]);
-          Pregunta::create([
+
+        Grupo_Emparejamiento::create([
+            'area_id'=>4
+        ]);
+
+        Pregunta::create([
+            'grupo_emparejamiento_id'=>12,
             'pregunta'=>'Escriba cuanto es 2+2:'//Texto Corto
         ]);
+
 
     	//Preguntas que perteneces a la modalidad de emparejamiento
         Pregunta::create([
@@ -41,15 +77,15 @@ class PreguntaTableSeeder extends Seeder
         	'pregunta'=>'¿Quien fue el hombre que creo el numero pi?'
         ]);
         Pregunta::create([
-        	'grupo_emparejamiento_id'=>2,
+        	'grupo_emparejamiento_id'=>1,
         	'pregunta'=>'¿Quien intento crear el numero Euler?'
         ]);
         Pregunta::create([
-        	'grupo_emparejamiento_id'=>2,
+        	'grupo_emparejamiento_id'=>1,
         	'pregunta'=>'Le dicen Big Arqui'
         ]);
 
-        //Preguntas de opcion multiple para encuesta
+        //Preguntas de Emparejamiento para encuesta
         Pregunta::create([
             'grupo_emparejamiento_id'=>2,
             'pregunta'=>'¿Que grupo de lab?'
