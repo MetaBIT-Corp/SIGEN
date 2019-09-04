@@ -72,25 +72,25 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/materias', 'MateriaController@listar')->name('materias');
 
 Route::get('/materias/listado_estudiante/{id}', 'EstudianteController@index')->name('listado_estudiante'); 
-//se envia como parametro o el id de materia ciclo si es admin, o carga academica si es docente
+//se envia como parametro o el id de materia ciclo 
+Route::get('/materia/estudiante/{id}/{id_mat}', 'EstudianteController@show')->name('detalle_estudiante');
 
 Route::get('docentes-ciclo/{id_mat_ci}', 'DocenteController@docentes_materia_ciclo')->name('docentes_materia_ciclo')->middleware('signed');
 
- Route::get('materia/listado-evaluacion/{id}','EvaluacionController@listado')->name('listado_evaluacion');
+Route::get('materia/listado-evaluacion/{id}','EvaluacionController@listado')->name('listado_evaluacion');
 
- Route::get('/listado-encuesta','EncuestaController@listado')->name('listado_encuesta');
+Route::get('/encuestas','EncuestaController@listado_publico')->name('encuestas'); 
 
     
 
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
 Route::group(['middleware' => 'admin'], function(){
+
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente
 Route::group(['middleware' => 'teacher'], function(){
-    Route::get('/materia/estudiante/{id}/{id_mat}', 'EstudianteController@show')->name('detalle_estudiante');
-    Route::get('/evaluacion/{id}', 'EvaluacionController@show')->name('detalle_evaluacion')->middleware('signed');
-    
+    Route::get('/evaluacion/{id}', 'EvaluacionController@show')->name('detalle_evaluacion');
 
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
 
@@ -124,6 +124,13 @@ Route::group(['middleware' => 'teacher'], function(){
 //Aqui iran las rutas a las que tiene acceso solo el Estudiante
 Route::group(['middleware' => 'student'], function(){
 });
+
+//Aqui iran las rutas a las que tiene acceso solamente el docente y el admin
+Route::group(['middleware' => 'admin_teacher'], function(){
+    Route::get('/listado-encuesta','EncuestaController@listado')->name('listado_encuesta');
+});
+
+
 
 /*Rutas para Gestión de Opciones (Sin Grupo Emparejamiento)*/
 Route::get('pregunta/{pregunta_id}/opcion/','OpcionController@index');

@@ -35,7 +35,19 @@
       </p>
     </div>
     <div class="card-footer">
-      <small class="text-muted">Acciones</small>
+
+      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}">
+          <span class="icon-users"></span>
+      </a>
+      
+      <a class="btn btn-option btn-sm" title="Docentes" href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">
+        <span class="icon-admin"></span>
+      </a>
+
+      <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">
+        <span class="icon-file-text"></span>
+      </a>
+
     </div>
 </div>
 </td>
@@ -54,7 +66,18 @@
       </p>
     </div>
     <div class="card-footer">
-      <small class="text-muted">Acciones</small>
+      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}">
+          <span class="icon-users"></span>
+      </a>
+
+      <a class="btn btn-option btn-sm" title="Docentes" href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">
+        <span class="icon-admin"></span>
+      </a>
+
+      <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">
+        <span class="icon-file-text"></span>
+      </a>
+
     </div>
 </div>
 </td>
@@ -74,7 +97,18 @@
       </p>
     </div>
     <div class="card-footer">
-      <small class="text-muted">Acciones</small>
+
+      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}">
+          <span class="icon-users"></span>
+      </a>
+
+      <a class="btn btn-option btn-sm" title="Docentes" href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">
+        <span class="icon-admin"></span>
+      </a>
+
+      <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">
+        <span class="icon-file-text"></span>
+      </a>
     </div>
 </div>
 </td>
@@ -137,14 +171,23 @@
       </p>
     </div>
     <div class="card-footer">
+
+      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}">
+          <span class="icon-users"></span>
+      </a>
+
+      <a class="btn btn-option btn-sm" title="Docentes" href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">
+        <span class="icon-admin"></span>
+      </a>
+
       @if(auth()->user()->role == 0)
-      <a class="icon-list btn" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}"></a>
-      <a href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">ver</a>
-      <a href="{{ route('listado_evaluacion', $materia->id_mat_ci ) }}">Evaluaciones</a>
+        <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_mat_ci )}}">
+          <span class="icon-file-text"></span>
+        </a>
       @elseif(auth()->user()->role == 1)
-      <a class="icon-list btn" href="{{ route('listado_estudiante',$materia->id_carg_aca) }}"></a>
-      <a href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">ver</a>
-      <a href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">Evaluaciones</a>
+        <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">
+          <span class="icon-file-text"></span>
+        </a>
       @endif
 
     </div>
@@ -165,15 +208,22 @@
       </p>
     </div>
     <div class="card-footer">
+      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}">
+          <span class="icon-users"></span>
+      </a>
+
+      <a class="btn btn-option btn-sm" title="Docentes" href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">
+        <span class="icon-admin"></span>
+      </a>
 
       @if(auth()->user()->role == 0)
-      <a class="icon-list btn" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}"></a>
-      <a href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">ver</a>
-      <a href="{{ route('listado_evaluacion', $materia->id_mat_ci ) }}">Evaluaciones</a>
+        <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_mat_ci )}}">
+          <span class="icon-file-text"></span>
+        </a>
       @elseif(auth()->user()->role == 1)
-      <a class="icon-list btn" href="{{ route('listado_estudiante',$materia->id_carg_aca) }}"></a>
-      <a href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">ver</a>
-      <a href="{{ route('listado_evaluacion', $materia->id_carg_aca ) }}">Evaluaciones</a>
+        <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">
+          <span class="icon-file-text"></span>
+        </a>
       @endif
 
     </div>
@@ -195,8 +245,23 @@
       </p>
     </div>
     <div class="card-footer">
-      <a class="icon-list btn" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}"></a>
-      <a href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">ver</a>
+      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}">
+        <span class="icon-users"></span>
+      </a>
+
+      <a class="btn btn-option btn-sm" title="Docentes" href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">
+        <span class="icon-admin"></span>
+      </a>
+      
+      @if(auth()->user()->role == 0)
+        <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_mat_ci )}}">
+          <span class="icon-file-text"></span>
+        </a>
+      @elseif(auth()->user()->role == 1)
+        <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">
+          <span class="icon-file-text"></span>
+        </a>
+      @endif
     </div>
 </div>
 </td>

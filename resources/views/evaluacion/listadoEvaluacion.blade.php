@@ -26,6 +26,12 @@
           <i class="fas fa-table"></i>
           Evaluaciones | Materia</div>
         <div class="card-body">
+          @if(auth()->user()->role==1) 
+          <a class="btn btn-sm mb-3" href="#" title="Agregar">
+                <span class="icon-add-solid "></span>
+                <b>Nueva Evaluación</b>
+          </a>
+          @endif
           @if(auth()->user()->role==1 | auth()->user()->role==0)
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -56,7 +62,10 @@
                  
                   <td>{{$evaluacion->nombre_evaluacion}}</td>
                   <td>{{$evaluacion->descripcion_evaluacion}}</td>
-                  <td><span class="badge badge-success">Pública</span></td>
+                  <td>
+                    <span class="badge badge-success">Pública</span>
+                    <span class="icon-eye"></span>
+                  </td>
                   <td>{{$evaluacion->duracion}}</td>
                   <td>{{$evaluacion->intentos}}</td>
                   <td>
@@ -65,6 +74,21 @@
                        </a>
                        <a class="btn btn-sm btn-secondary" title="Detalle de evaluación" href="{{ URL::signedRoute('detalle_evaluacion', ['id' => $evaluacion->id]) }}">
                            <span class="icon-information-solid"></span>
+
+                       <a class="btn btn-option btn-sm" title="Publicar Evaluación" href="#">
+                        <span class="icon-upload"></span>
+                       </a>
+
+                       <a class="btn btn-option btn-sm" title="Editar Evaluación" href="#">
+                        <span class="icon-edit"></span>
+                       </a>
+
+                       <a class="btn btn-danger btn-sm" title="Deshabilitar Evaluación" href="#">
+                        <span class="icon-minus-circle"></span>
+                       </a>
+
+                       <a class="btn btn-info btn-sm" title="Estadísticas" href="#">
+                        <span class="icon-grafico"></span>
                        </a>
                   </td>
                   
@@ -79,40 +103,41 @@
 		<!--Estudiante-->
    @if(auth()->user()->role==2)
     @if($evaluaciones)
-		<div class="list-group">
-      @forelse($evaluaciones as $evaluacion)
-      <div class="row">
-        @forelse($evaluacion->turnos as $turno) <!-- recorrecomos los turnos por evaluacion -->
-          @if($turno->visibilidad == 1)
-            <div class="col-md-6">
-      		  <span class="list-group-item list-group-item-action flex-column align-items-start mb-3">
-      		    <div class="d-flex w-100 justify-content-between">
-      		      <h5 class="mb-1">
-                  {{$evaluacion->nombre_evaluacion}} | Turno {{$loop->iteration}}
-                </h5>
-      		      <small class="text-muted">Intentos diponibles: {{$evaluacion->intentos}}</small>
-      		    </div>
-      		    <p class="mb-1">{{$evaluacion->descripcion_evaluacion}}</p>
-      		    <small class="text-muted">Duración: {{$evaluacion->duracion}}.</small>
-              <br>
-              <small class="text-muted">Intentos: {{$evaluacion->intentos}}.</small>
-              <br>
-              <button type="button" class="btn btn-info mt-1">Acceder</button>
-      		  </span>
-
-            </div>
+  		<div class="list-group">
+        @forelse($evaluaciones as $evaluacion)
+          @if($evaluacion->turnos)
+            <div class="row">
+              @foreach($evaluacion->turnos as $turno) <!-- recorrecomos los turnos por evaluacion -->
+                @if($turno->visibilidad == 1)
+                  <div class="col-md-6">
+              		  <span class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+              		    <div class="d-flex w-100 justify-content-between">
+              		      <h5 class="mb-1">
+                          {{$evaluacion->nombre_evaluacion}} | Turno {{$loop->iteration}}
+                        </h5>
+              		      <small class="text-muted">Intentos diponibles: {{$evaluacion->intentos}}</small>
+              		    </div>
+              		    <p class="mb-1">{{$evaluacion->descripcion_evaluacion}}</p>
+              		    <small class="text-muted">Duración: {{$evaluacion->duracion}}.</small>
+                      <br>
+                      <small class="text-muted">Intentos: {{$evaluacion->intentos}}.</small>
+                      <br>
+                      <button type="button" class="btn btn-info mt-1">Acceder</button>
+              		  </span>
+                  </div>
+                @endif
+             
+              @endforeach
+              </div>
+          @else
+            <h5 class="mb-1">No se encuentran evaluaciones disponibles</h5>
           @endif
         @empty
-          <h2>No se encuentran resultados</h2>
+          <h5 class="mb-1">No se encuentran evaluaciones disponibles</h5>
         @endforelse
-        </div>
-        @empty
-          <h2>No se encuentran resultados</h2>
-      @endforelse
-
-		</div>
+  		</div>
     @endif
-    @endif
+  @endif
 
 		<!--Estudiante-->
 
