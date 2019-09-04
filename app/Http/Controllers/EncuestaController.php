@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Encuesta;
+use App\Docente;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -20,10 +21,27 @@ class EncuestaController extends Controller
     	return view('encuesta.createEncuesta');
 
     }
-
+    //Función que lista las encuestas creadas de un docente
+    //a este listado solo pueden acceder los docentes y el administrador 
     public function listado(){
-    	$encuestas = Encuesta::all();
+        
+        if(auth()->user()->IsAdmin){
+            $encuestas = Encuesta::all();
+        }
+        elseif(auth()->user()->IsTeacher){
+            $docente= Docente::where('user_id',auth()->user()->id)->first();
+            if($docente){
+                $encuestas = Encuesta::where('id_docente',$docente->id_pdg_dcn)->get();
+            }else{
+                $encuestas=array();
+            }
+        }
     	return view('encuesta.listadoEncuesta')->with(compact('encuestas'));
+    }
+
+    public function listado_publico(){
+        $encuestas = Encuesta::all();
+        return view('encuesta.Encuestas')->with(compact('encuestas'));
 
     }
 

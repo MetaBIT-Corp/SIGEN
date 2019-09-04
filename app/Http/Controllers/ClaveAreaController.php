@@ -10,6 +10,8 @@ use App\Evaluacion;
 use App\CargaAcademica;
 use App\CicloMateria;
 use App\Clave_Area;
+use App\Grupo_Emparejamiento;
+use Illuminate\Support\Facades\DB;
 
 class ClaveAreaController extends Controller
 {
@@ -108,5 +110,17 @@ class ClaveAreaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function listarPreguntas($clave_area_id){
+        
+        $preguntas = DB::table('clave_area as ca')
+                            ->where('ca.id', $clave_area_id)
+                            ->join('grupo_emparejamiento as grupo', 'grupo.area_id', '=', 'ca.area_id')
+                            ->join('pregunta as p', 'grupo.id', '=', 'p.grupo_emparejamiento_id')
+                            ->select('p.pregunta', 'p.created_at')
+                            ->get();
+
+        return view('claveArea.preguntasDelArea')->with(compact('preguntas'));
     }
 }

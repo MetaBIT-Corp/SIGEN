@@ -21,6 +21,7 @@ class CreateTurnosTable extends Migration
             $table->dateTime('fecha_final_turno');
             $table->boolean('visibilidad');
             $table->string('contraseña');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

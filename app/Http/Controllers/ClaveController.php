@@ -7,33 +7,28 @@ use Illuminate\Support\Facades\DB;
 use App\Clave_Area;
 use App\Clave_Area_Pregunta;
 use App\Clave;
+use App\Pregunta;
 
 
 class ClaveController extends Controller
 {
 
-    //Funcion para listar las claves asignadas a un turno
-    public function listarClaves($id_turno){
-    	$claves = Clave::where('id', $id_turno)->get();
-
-    	return view('clave.listarClaves')->with(compact('claves'));
-    }
-
     //Funcion para cargar las preguntas de una área mediante AJAX
     public function preguntasPorArea($id){
-    	$id_area = Clave_Area::where('id', $id)->first()->area_id;
+    	$clave_area = Clave_Area::where('id', $id)->first();
 
-    	$cap = Clave_Area_Pregunta::where('clave_area_id',$id)->pluck('pregunta_id');
-    	
-    	$preguntas = DB::table('area')
-    					->where('area.id', $id_area)
-    					->join('grupo_emparejamiento as grupo', 'area.id', '=', 'grupo.area_id')
-    					->join('pregunta as p', 'grupo.id', '=', 'p.grupo_emparejamiento_id')
-    					->select('p.id', 'p.pregunta', 'area.titulo')
-    					->get();
+        $cap = Clave_Area_Pregunta::where('clave_area_id',$id)->pluck('pregunta_id');
+    
+        $preguntas = DB::table('area')
+                        ->where('area.id', $clave_area->area_id)
+                        ->join('grupo_emparejamiento as grupo', 'area.id', '=', 'grupo.area_id')
+                        ->join('pregunta as p', 'grupo.id', '=', 'p.grupo_emparejamiento_id')
+                        ->select('p.id', 'p.pregunta', 'area.titulo')
+                        ->get();
 
     	$data = ['p_asignadas'=>$cap, 'preguntas'=>$preguntas];
     	return $data;
+
     }
 
     //Funcion para cargar las preguntas asignadas a una clave
@@ -51,24 +46,46 @@ class ClaveController extends Controller
     //Función para asignar a la clave las preguntas seleccionadas del área
     public function asignarPreguntas(Request $request){
 
-    	$preguntas = $request->input('preguntas');
+        $preguntasEmp = $request->input('preguntasEmp');
+        $preguntas = $request->input('preguntas');
     	$id_clave_area = $request->input('clave_area');
+        $modalidad = $request->input('modalidad');
     	$mensaje = 'Ninguna pregunta fue seleccionada';
     	$notificacion = 'error';
 
     	//Almacenando preguntas en la base de datos
-    	if($preguntas){
-    		DB::table('clave_area_pregunta')->where('clave_area_id', $id_clave_area)->delete();
-    		foreach ($preguntas as $pregunta) {
-	    		$clave_area_pregunta = new Clave_Area_Pregunta();
-	    		$clave_area_pregunta->clave_area_id = $id_clave_area;
-	    		$clave_area_pregunta->pregunta_id = $pregunta;
+    	if($modalidad){
+            if($preguntasEmp){
+                DB::table('clave_area_pregunta')->where('clave_area_id', $id_clave_area)->delete();
 
-	    		$clave_area_pregunta->save();
-    		}
-    		$mensaje = 'Preguntas agregadas exitosamente.';
-    		$notificacion = 'exito';
-    	}
+                foreach ($preguntasEmp as $preguntaEmp) {
+                    $preguntas = Pregunta::where('grupo_emparejamiento_id',$preguntaEmp)->get();
+
+                    foreach ($preguntas as $pregunta) {
+                        $clave_area_pregunta = new Clave_Area_Pregunta();
+                        $clave_area_pregunta->clave_area_id = $id_clave_area;
+                        $clave_area_pregunta->pregunta_id = $pregunta->id;
+
+                        $clave_area_pregunta->save();
+                    }
+                }
+                $mensaje = 'Preguntas agregadas exitosamente.';
+                $notificacion = 'exito';
+            }
+        }else{
+            if($preguntas){
+                DB::table('clave_area_pregunta')->where('clave_area_id', $id_clave_area)->delete();
+                foreach ($preguntas as $pregunta) {
+                    $clave_area_pregunta = new Clave_Area_Pregunta();
+                    $clave_area_pregunta->clave_area_id = $id_clave_area;
+                    $clave_area_pregunta->pregunta_id = $pregunta;
+
+                    $clave_area_pregunta->save();
+                }
+                $mensaje = 'Preguntas agregadas exitosamente.';
+                $notificacion = 'exito';
+            }
+        }
     	
 
     	return back()->with($notificacion, $mensaje);
@@ -110,11 +127,62 @@ class ClaveController extends Controller
     public function eliminarClaveArea(Request $request){
         $id_clave_area = $request->input('id_clave_area');
         $clave_area = Clave_Area::find($id_clave_area);
+        $notificacion = 'exito';
+        $mensaje = 'El área ha sido eliminada de la clave';
 
-        DB::table('clave_area_pregunta')->where('clave_area_id', $id_clave_area)->delete();
+        //Verificar si el objeto ya está siendo utilizado
+        $preguntas_utilizadas = DB::table('clave_area_pregunta as ca')
+                            ->where('clave_area_id', $id_clave_area)
+                            ->join('respuesta as r', 'r.id_pregunta', '=', 'ca.pregunta_id')
+                            ->get();
 
-        $clave_area->delete();
-        return back()->with('exito', 'El área ha sido eliminada de la clave');
+        if(count($preguntas_utilizadas)){
+            $notificacion = 'error';
+            $mensaje = 'El área no puede eliminarse porque ya está siendo utilziada';
+        }else{
+            DB::table('clave_area_pregunta')->where('clave_area_id', $id_clave_area)->delete();
+            $clave_area->delete();
+        }
+
+        return back()->with($notificacion, $mensaje);
+    }
+
+    //Funcion para cargar las preguntas de una área de emparejamiento mediante AJAX
+    public function preguntasPorAreaEmp($id){
+        $clave_area = Clave_Area::where('id', $id)->first();
+
+        $cap = DB::table('clave_area_pregunta as cap')
+                    ->where('clave_area_id', $id)
+                    ->join('pregunta as p', 'p.id', '=', 'cap.pregunta_id')
+                    ->join('grupo_emparejamiento as grupo', 'grupo.id', '=', 'p.grupo_emparejamiento_id')
+                    ->select('grupo.id')
+                    ->get();
+
+        $preguntas = DB::table('area')
+                        ->where('area.id', $clave_area->area_id)
+                        ->where('area.tipo_item_id', 3)
+                        ->join('grupo_emparejamiento as grupo', 'area.id', '=', 'grupo.area_id')
+                        ->select('grupo.id', 'grupo.descripcion_grupo_emp', 'area.titulo')
+                        ->get();
+
+        $data = ['p_asignadas'=>$cap, 'preguntas'=>$preguntas];
+        return $data;
+
+    }
+
+    //Funcion para cargar las preguntas de una area de emparejamiento asignadas a una clave
+    public function preguntasAgregadasEmp($id){
+
+        $area = Clave_Area::find($id);
+        $preguntas_asginadas = DB::table('clave_area_pregunta as cap')
+                                    ->where('cap.clave_area_id', $id)
+                                    ->join('pregunta as p', 'p.id', '=', 'cap.pregunta_id')
+                                    ->join('grupo_emparejamiento as grupo', 'grupo.id', '=', 'p.grupo_emparejamiento_id')
+                                    ->select('grupo.descripcion_grupo_emp')
+                                    ->distinct()
+                                    ->get();
+
+        return $preguntas_asginadas;
     }
 
 }

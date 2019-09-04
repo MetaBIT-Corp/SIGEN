@@ -1,4 +1,8 @@
 <div>
+	<a class="btn btn-success mr-2 ml-2" title="Listado preguntas" @if($tipo_item=='Emparejamiento')href="{{ URL::signedRoute('pregunta.index', ['id_area' => $id_area ,'id_gpo'=>true]) }}"@else href="{{ URL::signedRoute('pregunta.index', ['id_area' => $id_area ,'id_gpo'=>false]) }}"@endif>
+        <span class="icon-list">
+        </span>
+    </a>
     <a class="btn-editar btn" data-target="#modal" data-toggle="modal" id="btn_editar" data-name="{{ $id_area }}" title="Editar Area" href="javascript:void()">
         <span class="icon-edit">
         </span>

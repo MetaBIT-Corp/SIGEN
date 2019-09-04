@@ -159,5 +159,22 @@ class IntentoController extends Controller
         $respuesta->save();
 
         return back();
+
+        //$respuests = json_decode($request->respuestas, true);
+        /*$respuests = $request->respuestas;
+
+        foreach ($respuests as $respuesta) {
+            $respuesta = new Respuesta();
+
+            $respuesta->id_pregunta = $respuesta->id_pregunta;
+            $respuesta->id_opcion = $respuesta->id_opcion;
+            $respuesta->id_intento = $respuesta->id_intento;
+            $respuesta->texto_respuesta = $respuesta->texto_respuesta;
+
+            $respuesta->save();
+
+            
+        }
+        return back();*/
     }
 }

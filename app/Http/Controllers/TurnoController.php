@@ -8,6 +8,14 @@ use App\Clave;
 use App\Area;
 use App\CargaAcademica;
 use App\CicloMateria;
+use App\Estudiante;
+use App\Clave_Area;
+use App\Intento;
+use App\Area;
+use App\Pregunta;
+use App\Clave_Area_Pregunta;
+use App\Opcion;
+use App\Grupo_Emparejamiento;
 use Illuminate\Http\Request;
 use DateTime;
 use Carbon\Carbon;
@@ -160,9 +168,7 @@ class TurnoController extends Controller
     public function edit( $id, $turno_id )
     {
         //Obteniendo la clave del turno
-        $claves = Clave::where('turno_id', $turno_id)->get();
-
-
+        $claves = Clave::where('turno_id', $turno_id)->get();   /*Consulta ahora se hace por turno_id*/
 
         //dd(count($claves[0]->clave_areas[0]->claves_areas_preguntas));
 
@@ -281,4 +287,89 @@ class TurnoController extends Controller
     {
         return Evaluacion::find($evaluacion_id)->duracion;
     }
+    
+    public function getEvaluacion($turno_id, $estudiante_id){
+        
+        //Array asociativo que se enviara como respuesta
+        $evaluacion = array();
+        $clave_area_preguntas_arr = array();
+        
+        //Obtenemos la clave que corresponde al turno que el estudiante a indicado que desea descargar
+        $clave = Clave::where('turno_id', $turno_id)->first();
+        $evaluacion['clave'] = $clave;
+            
+        //Obtenemos al estudiante
+        $estudiante = Estudiante::where('id_est',$estudiante_id)->first();
+        
+        //Creamos el intento, para luego ser enviado a la aplicación móvil
+        $intento = new Intento();
+        $intento->estudiante_id = $estudiante->id_est;
+        $intento->clave_id = $clave->id;
+        $intento->fecha_inicio_intento = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $intento->save();
+        $evaluacion['intento'] = $intento;
+        
+        //Obtenemos las clave_area, esto significa obtener las areas que corresponden a la clave
+        $clave_areas = Clave_Area::where('clave_id', $clave->id)->get();
+        $evaluacion['clave_areas'] = $clave_areas;
+        
+        //Vamos a recorrer los objetos clave_areas para obtener los objetos relacionados con cada uno de ellos
+        $areas_arr = array();
+        $grupos_emp_arr = array();
+        $preguntas_arr = array();
+        $opciones_arr = array();
+        
+        foreach($clave_areas as $clave_area){
+            
+            //Procederemos a obtener cada objeto Área
+            $areas_arr[] = Area::find($clave_area->area_id);
+            
+            //Es la clave_area manual?
+            if(! $clave_area->aleatorio ){
+                
+                //si es manual obtenemos las relaciones con las preguntas asignadas de este modo
+                $clave_area_preguntas = Clave_Area_Pregunta::where('clave_area_id', $clave_area->id)->get();
+                
+                //Ahora vamos a recupurar todas las preguntas y las agregaremos a un array
+                foreach($clave_area_preguntas as $clave_area_pregunta){
+                    //Agregamos el objeto clave_area_pregunta al array
+                    $clave_area_preguntas_arr[] = $clave_area_pregunta;
+                        
+                    $pregunta = Pregunta::find($clave_area_pregunta->pregunta_id);
+                    $preguntas_arr[] = $pregunta;
+                    
+                    //Obtenemos el grupo de emparejamiento al que pertenece la pregunta
+                    $grupos_emp_arr[] = Grupo_Emparejamiento::find($pregunta->grupo_emparejamiento_id);
+                    
+                    //Procederemos a obtener las opciones correspondientes de cada pregunta
+                    $pregunta_opciones = Opcion::where('pregunta_id', $pregunta->id)->get();
+                    
+                    //Ahora cada opcion la vamos a agregar al array de opciones
+                    foreach($pregunta_opciones as $pregunta_opcion){
+                        
+                        $opciones_arr[] = $pregunta_opcion;
+                    
+                    }
+                
+                }
+                
+            }else{
+              
+                //Clave_area aleatoria
+            
+            }
+                 
+            
+        }
+        
+        $evaluacion['areas'] = $areas_arr;
+        $evaluacion['clave_area_preguntas'] = $clave_area_preguntas_arr;
+        $evaluacion['grupos_emp'] = $grupos_emp_arr;
+        $evaluacion['preguntas'] = $preguntas_arr;
+        $evaluacion['opciones'] = $opciones_arr;
+        
+        dd($evaluacion);   
+        
+    }
+    
 }

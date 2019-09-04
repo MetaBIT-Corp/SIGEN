@@ -118,7 +118,7 @@
                     @if($clave_area->aleatorio)
                       <i class="icon-dice" title="Aleatorio">&nbsp;&nbsp;</i> 
                     @else
-                      <i class="icon-list" title="Manual">&nbsp;&nbsp;</i> 
+                      <i class="icon-hand-paper-o" title="Manual">&nbsp;&nbsp;</i> 
                     @endif
                     {{ $clave_area->area->tipo_item->nombre_tipo_item }}
                   </td>
@@ -126,11 +126,18 @@
                   <td id="id_cantidad" class="text-center">{{ $clave_area->cantidad_preguntas }}</td>
                   <td id="id_peso">{{ $clave_area->peso }}</td>
                   <td>
-                    <button class="icon-delete btn btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></button>
-                      <button class="icon-edit btn btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></button>
-                    @if(!$clave_area->aleatorio)
-                      <button class="icon-information-solid btn  btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
-                      <button class="icon-add-solid btn btn-info" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></button>
+                    <button class="icon-delete btn btn-sm btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></button>
+                    <button class="icon-edit btn btn-sm btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></button>
+                    @if($clave_area->aleatorio)
+                      <a href="{{ URL::signedRoute('preguntas_por_area', ['id' => $clave_area->id]) }}" class="icon-list btn btn-sm btn-success" title="Ver preguntas de esta área"></a>
+                    @else
+                      @if($clave_area->area->tipo_item_id==3)
+                        <button class="icon-information-solid btn btn-sm btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas-emp="{{ $clave_area->id }}"></button>
+                        <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area-emp="{{ $clave_area->id }}"></button>
+                      @else
+                        <button class="icon-information-solid btn btn-sm btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
+                        <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></button>
+                      @endif
                     @endif
                   </td>
                 </tr>
@@ -166,6 +173,7 @@
       <form action="{{ route('agregar_clave_area') }}" method="POST">
         {{ csrf_field() }}
         <input type="hidden" name="clave_area" value="" id="id_clave_area_add">
+        <input type="hidden" name="modalidad" value="" id="id_clave_area_add_emp">
         <div class="modal-body" id="asignar-preguntas">
           
         </div>

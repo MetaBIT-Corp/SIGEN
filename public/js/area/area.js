@@ -28,7 +28,12 @@ $(document).ready(function() {
                 "zeroRecords": "Lo sentimos, no hay coincidencias.",
                 "infoEmpty": "",
                 "infoFiltered": "",
-            }
+            },
+            //Centrar datos dentro de una columna target=3
+            columnDefs: [{
+                'className': 'text-center',
+                'targets': 3
+            }, ]
         });
 
         function exito(datos) {
@@ -59,6 +64,8 @@ $(document).ready(function() {
                 console.log("Error");
             });
         });
+
+        //Peticion para modificar
         $("#modificar").click(function() {
             if ($("#input_titulo").val().length > 0) {
                 $(this).attr("disabled", true);
@@ -81,6 +88,7 @@ $(document).ready(function() {
                 $("#modificar").removeAttr("disabled");
             }
         });
+        
         //Peticion para eliminar
         $("#eliminar").click(function() {
             $(this).attr("disabled", true);

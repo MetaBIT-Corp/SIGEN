@@ -6,6 +6,8 @@
 	 <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" type="text/css" rel="stylesheet"> 
 	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.css')}}">
 	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
+   <link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
+
 @endsection
 
 @section("body")
@@ -23,7 +25,7 @@
       <div class="card mb-3">
         <div class="card-header">
           <i class="fas fa-table"></i>
-          Listado de Estudiantes | Materia</div>
+          Listado de Estudiantes | {{$materia->nombre_mar}}</div>
         <div class="card-body">
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -57,7 +59,11 @@
                   <td>Inactivo</td>
                   @endif
                   <td>{{$estudiante->anio_ingreso}}</td>
-                  <td><a title="Detalle estudiante" href="{{ route('detalle_estudiante',[$estudiante->id_est,$id_mat_ci]) }}"><img src="{{asset('img/student.ico')}}" width="35" height="35" /></a></td>
+                  <td>
+                    <a title="Detalle estudiante" href="{{ route('detalle_estudiante',[$estudiante->id_est,$id_mat_ci]) }}" class="btn btn-sm btn-option">
+                      <span class="icon-student"></span>
+                    </a>
+                  </td>
                 </tr>
                  @endforeach
                  @else
@@ -69,7 +75,9 @@
             </table>
           </div>
         </div>
-        <div class="card-footer small text-muted">Actualizado: fecha</div>
+        <div class="card-footer small text-muted">
+          
+        </div>
       </div>
     </div>
     <!-- /.container-fluid -->
