@@ -114,9 +114,10 @@ class PreguntaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id_gpo,$id_preg)
     {
-        //
+        $pregunta=Pregunta::find($id_preg);
+        return response()->json($pregunta);
     }
 
     /**
@@ -125,12 +126,12 @@ class PreguntaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id_area,$id_preg)
+    public function edit($id_gpo,$id_preg)
     {
-        if(!Area::where('id',$id_area)->first()){
+        if(!($gpo=Grupo_Emparejamiento::where('id',$id_gpo)->first())){
             return redirect('/');
         }
-        $area=Area::find($id_area);
+        $area=$gpo->area;
         $pregunta=Pregunta::where('id',$id_preg)->first();
         return view('pregunta.update',compact('area','pregunta'));
     }
@@ -142,25 +143,25 @@ class PreguntaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id_area,$id_preg, Request $request)
+    public function update($id_gpo,$id_preg, Request $request)
     {
-        $rule_preg_id='required|exists:pregunta,id';
         $rule_pregunta='required';
         $rule_gpo='required|exists:grupo_emparejamiento,id';
         $message_pregunta='El campo pregunta es requerido.';
         $message_gpo='Seleccione un grupo de emparejamiento valido.';
         $message_mod='No modifique la pagina web, por favor.';
+        
 
         if(!$request->has('gpo_emp')){
-            $rules = ['pregunta_id'=>$rule_preg_id,'pregunta' => $rule_pregunta];
+            $rules = ['pregunta' => $rule_pregunta];
             $messages = ['pregunta_id.exists'=> $message_mod, 'pregunta.required' => $message_pregunta];
-            $validator = Validator::make(['preguta'=>$request->pregunta], $rules, $messages)->validate();
+            $validator = Validator::make(['pregunta'=>$request->pregunta], $rules, $messages);
 
             if ($validator->fails()) {
                 return back()->withErrors($validator)->withInput();
             }
 
-            $pregunta=Pregunta::where('id',$request->pregunta_id);
+            $pregunta=Pregunta::where('id',(int)$request->pregunta_id)->first();
             $pregunta->pregunta=$request->pregunta;
             $pregunta->save();
 
@@ -183,12 +184,14 @@ class PreguntaController extends Controller
             }
 
             $pregunta=Pregunta::where('id',(int)$request->pregunta_id)->first();
+            
             $pregunta->pregunta=$request->pregunta;
             $pregunta->grupo_emparejamiento_id=(int)$request->gpo_emp;
             $pregunta->save();
         }
-        
-        return redirect()->action('PreguntaController@edit',[$id_area,$pregunta->id])->with('success','Se agrego correctamente');
+        $gpo=Grupo_Emparejamiento::where('id',$id_gpo)->first();
+        $area=$gpo->area;
+        return back()->with('success','Se agrego correctamente')->with('area');
     }
 
     /**
@@ -199,9 +202,16 @@ class PreguntaController extends Controller
      */
     public function destroy(Request $request)
     {
-        //Falta 
-        $pregunta=Pregunta::find((int)$request->pregunta_id);
-        $pregunta->delete();
+        $pregunta=Pregunta::find((int)$request->id);
         $gpo=$pregunta->grupo_emp;
+        $gpo->delete();
+        /* Se usara
+        if($area->claves_areas()->count()!=0){
+            $message=['error'=>'El area no puede ser eliminada porque esta siendo utilizada en una evaluacion.','type'=>1];
+        }else{
+            $message=$message=['success'=>'El area fue eliminada exitosamente.','type'=>2];
+            $area->delete();
+        }*/
+        return response()->json(['success'=>'La pregunta fue eliminada','type'=>2]);
     }
 }
