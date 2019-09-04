@@ -20,6 +20,7 @@ Route::get('/evaluacion/{id}/duracion/','TurnoController@getDuracionEvaluacion')
 
 //Clave
 Route::get('/area/{id}/preguntas', 'ClaveController@preguntasPorArea');
+Route::get('/area-emparejamiento/{id}/preguntas', 'ClaveController@preguntasPorAreaEmp');
 Route::get('/preguntas-agregadas/{id}', 'ClaveController@preguntasAgregadas');
 
 //Consultar encuestas desde la app móvil

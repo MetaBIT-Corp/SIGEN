@@ -16,11 +16,11 @@ use App\Area;
 //Rutas de pruebas
 
 /*----------------------------Rutas de prueba para agregar preguntas a la clave------------------------------------*/
-Route::get('turno/{id_turno}/claves', 'ClaveController@listarClaves');
 #Route::post('turno/{id_turno}/claves', 'ClaveController@asignarPreguntas')->name('agregar_clave_area');
 Route::post('turno/claves', 'ClaveController@asignarPreguntas')->name('agregar_clave_area');
 Route::post('clave-area/editar/', 'ClaveController@editarClaveArea')->name('editar_clave_area');
 Route::post('clave-area/eliminar/', 'ClaveController@eliminarClaveArea')->name('eliminar_clave_area');
+Route::get('clave-area/{clave_area_id}/preguntas','ClaveAreaController@listarPreguntas')->name('preguntas_por_area')->middleware('signed');
 /*-----------------------------------------------------------------------------------------------------------------*/
 
 Route::get('intento/', function() {
@@ -88,7 +88,7 @@ Route::group(['middleware' => 'admin'], function(){
 //Aqui iran las rutas a las que tiene acceso solo el Docente
 Route::group(['middleware' => 'teacher'], function(){
     Route::get('/materia/estudiante/{id}/{id_mat}', 'EstudianteController@show')->name('detalle_estudiante');
-    Route::get('/evaluacion/{id}', 'EvaluacionController@show')->name('detalle_evaluacion');
+    Route::get('/evaluacion/{id}', 'EvaluacionController@show')->name('detalle_evaluacion')->middleware('signed');
     
     //URL's para Turno
     Route::get('/evaluacion/{id}/turnos', 'TurnoController@index')->name('listado_turnos')->middleware('signed');
