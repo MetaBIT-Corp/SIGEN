@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Turno;
 use App\Evaluacion;
 use App\Clave;
-use App\Area;
 use App\CargaAcademica;
 use App\CicloMateria;
 use App\Estudiante;
