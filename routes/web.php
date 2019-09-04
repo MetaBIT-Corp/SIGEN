@@ -79,7 +79,7 @@ Route::get('docentes-ciclo/{id_mat_ci}', 'DocenteController@docentes_materia_cic
 
 Route::get('materia/listado-evaluacion/{id}','EvaluacionController@listado')->name('listado_evaluacion');
 
- 
+Route::get('/encuestas','EncuestaController@listado_publico')->name('encuestas'); 
 
     
 

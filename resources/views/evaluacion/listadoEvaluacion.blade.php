@@ -26,6 +26,12 @@
           <i class="fas fa-table"></i>
           Evaluaciones | Materia</div>
         <div class="card-body">
+          @if(auth()->user()->role==1) 
+          <a class="btn btn-sm mb-3" href="#" title="Agregar">
+                <span class="icon-add-solid "></span>
+                <b>Nueva Evaluación</b>
+          </a>
+          @endif
           @if(auth()->user()->role==1 | auth()->user()->role==0)
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -56,7 +62,10 @@
                  
                   <td>{{$evaluacion->nombre_evaluacion}}</td>
                   <td>{{$evaluacion->descripcion_evaluacion}}</td>
-                  <td><span class="badge badge-success">Pública</span></td>
+                  <td>
+                    <span class="badge badge-success">Pública</span>
+                    <span class="icon-eye"></span>
+                  </td>
                   <td>{{$evaluacion->duracion}}</td>
                   <td>{{$evaluacion->intentos}}</td>
                   <td>
