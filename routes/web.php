@@ -141,7 +141,7 @@ Route::post('pregunta/{pregunta_id}/opcion/update','OpcionController@update')->n
 Route::post('pregunta/{pregunta_id}/opcion/delete','OpcionController@destroy')->name('eliminar-opcion');
 
 /*Rutas para Gestión Grupo Emparejamiento*/
-Route::get('grupo/{grupo_id}/preguntas/','GrupoEmparejamientoController@index');
+Route::get('grupo/{grupo_id}/preguntas/','GrupoEmparejamientoController@index')->name('list-preguntas');
 Route::post('grupo/{grupo_id}/preguntas/store','GrupoEmparejamientoController@store')->name('crear-pregunta-grupo');
 Route::post('grupo/{grupo_id}/preguntas/update','GrupoEmparejamientoController@update')->name('editar-pregunta-grupo');
 Route::post('grupo/{grupo_id}/preguntas/delete','GrupoEmparejamientoController@destroy')->name('eliminar-pregunta-grupo');

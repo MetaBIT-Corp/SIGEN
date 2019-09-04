@@ -16,6 +16,9 @@ Route::get('/respuesta/{id}','AreaController@respuesta');
 Route::post('/respuesta/{id}','AreaController@respuesta');
 Route::get('/evaluacion/{id}/duracion/','TurnoController@getDuracionEvaluacion');
 
+//Obtener evaluación
+Route::get('/evaluacion/turno/{turno_id}/obtener/{estudiante_id}','TurnoController@getEvaluacion');
+
 //Clave
 Route::get('/area/{id}/preguntas', 'ClaveController@preguntasPorArea');
 Route::get('/preguntas-agregadas/{id}', 'ClaveController@preguntasAgregadas');

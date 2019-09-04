@@ -64,6 +64,8 @@ $(document).ready(function() {
                 console.log("Error");
             });
         });
+
+        //Peticion para modificar
         $("#modificar").click(function() {
             if ($("#input_titulo").val().length > 0) {
                 $(this).attr("disabled", true);
@@ -86,6 +88,7 @@ $(document).ready(function() {
                 $("#modificar").removeAttr("disabled");
             }
         });
+        
         //Peticion para eliminar
         $("#eliminar").click(function() {
             $(this).attr("disabled", true);
