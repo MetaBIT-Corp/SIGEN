@@ -6,7 +6,7 @@
 
 @section("ol_breadcrumb")
 <li class="breadcrumb-item">
-    <a href="{{ route('get_area',[$area->materia->id_cat_mat]) }}">
+    <a href="{{ URL::signedRoute('pregunta.index', ['id_area' => $area->id ,'id_gpo'=>false]) }}">
         Area: {{ $area->titulo }}
     </a>
 </li>
@@ -48,19 +48,19 @@
         </div>
         <div class="card-body">
             <div class="offset-2 col-md-8">
-                <form action="{{ route('pregunta.update',[$area->id,$pregunta->id]) }}" method="POST">
+                <form action="{{ URL::signedRoute('pregunta.update',[$area->id,$pregunta->id]) }}" method="POST">
                     @csrf
                     @method('PATCH')
                     <div class="form-group row">
                         <input class="form-control" hidden="" name="pregunta_id" type="number" value="{{ $pregunta->id }}">
+                        </input>
                             <label class="col-sm-4 col-form-label" for="pregunta">
                                 Pregunta
                             </label>
                             <div class="col-8">
-                                <input class="form-control" id="pregunta" name="pregunta" placeholder="Pregunta" type="text" value="{{ $pregunta->pregunta }}" value="{{ old('pregunta') }}">
+                                <input class="form-control" id="pregunta" name="pregunta" placeholder="Pregunta" type="text" value="{{ $pregunta->pregunta }}">
                                 </input>
                             </div>
-                        </input>
                     </div>
                     @if($area->tipo_item->id==3)
                     <div class="form-group row">
@@ -97,7 +97,7 @@
                             </button>
                         </div>
                         <div class="form-group offset-1">
-                            <button class="btn btn-secondary mt-3" onclick="location.href='{{ route('get_area',[$area->materia->id_cat_mat]) }}'" type="button">
+                            <button class="btn btn-secondary mt-3" onclick="location.href='{{ URL::signedRoute('pregunta.index', ['id_area' => $area->id ,'id_gpo'=>false]) }}'" type="button">
                                 Cancelar
                             </button>
                         </div>
