@@ -20,10 +20,23 @@ class EncuestaController extends Controller
     	return view('encuesta.createEncuesta');
 
     }
-
+    //Función que lista las encuestas creadas de un docente
+    //a este listado solo pueden acceder los docentes y el administrador 
     public function listado(){
-    	$encuestas = Encuesta::all();
+        if(auth()->user()->IsAdmin){
+            $encuestas = Encuesta::all();
+        }
+        elseif(auth()->user()->IsTeacher){
+            $encuestas = Encuesta::all();
+        }
     	return view('encuesta.listadoEncuesta')->with(compact('encuestas'));
+
+    }
+
+    public function listado_publico(){
+
+        $encuestas = Encuesta::all();
+        return view('encuesta.listadoEncuesta')->with(compact('encuestas'));
 
     }
 

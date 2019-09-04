@@ -32,7 +32,7 @@
                   <th>Título</th>
                   <th>Descripción</th>
                   <th>Estado</th>
-                  <th>Duración</th>
+                  <th>Periodo Disponible</th>
                   <th>Intentos</th>
                   <th>Acciones</th>
                 </tr>
@@ -42,7 +42,7 @@
                   <th>Título</th>
                   <th>Descripción</th>
                   <th>Estado</th>
-                  <th>Duración</th>
+                  <th>Periodo Disponible</th>
                   <th>Intentos</th>
                   <th>Acciones</th>
                 </tr>
@@ -55,7 +55,11 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td><a title="Detalle estudiante" href=""><img src="{{asset('img/student.ico')}}" width="35" height="35" /></a></td>
+                  <td>
+                    <a title="" href="">
+                      <span></span>
+                    </a>
+                  </td>
                 </tr>
               </tbody>
             </table>
