@@ -14,14 +14,16 @@ use Illuminate\Http\Request;
 */
 Route::get('/respuesta/{id}','AreaController@respuesta');
 Route::post('/respuesta/{id}','AreaController@respuesta');
-Route::post('/area/edit','AreaController@update')->name("area_update");
-Route::post('/area/delete','AreaController@destroy')->name("area_delete");
 Route::get('/evaluacion/{id}/duracion/','TurnoController@getDuracionEvaluacion');
+
+//Obtener evaluación
+Route::get('/evaluacion/turno/{turno_id}/obtener/{estudiante_id}','TurnoController@getEvaluacion');
 
 //Clave
 Route::get('/area/{id}/preguntas', 'ClaveController@preguntasPorArea');
 Route::get('/area-emparejamiento/{id}/preguntas', 'ClaveController@preguntasPorAreaEmp');
 Route::get('/preguntas-agregadas/{id}', 'ClaveController@preguntasAgregadas');
+Route::get('/preguntas-agregadas-emp/{id}', 'ClaveController@preguntasAgregadasEmp');
 
 //Consultar encuestas desde la app móvil
 Route::get('/encuestas-disponibles', 'EncuestaController@encuestasDisponibles');

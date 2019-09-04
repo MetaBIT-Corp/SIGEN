@@ -1,5 +1,6 @@
 $(function(){
   $('[data-preguntas]').on('click', listarPregntas);
+  $('[data-preguntas-emp]').on('click', listarPregntasEmparejamiento);
   $('[data-id-clave-area]').on('click', cargarPreguntas);
   $('[data-id-clave-area-emp]').on('click', cargarPreguntasEmparejamiento);
 });
@@ -29,9 +30,35 @@ function listarPregntas(){
   $('#listarPreguntasClaveArea').modal('show');
 }
 
+function listarPregntasEmparejamiento(){
+  var id_clave_area = $(this).data('preguntas-emp');
+
+  //AJAX
+  $.get('/api/preguntas-agregadas-emp/'+id_clave_area, function(data){
+    html_preguntas = '';
+
+    if(data.length > 0 ){
+      for (var i = 0; i < data.length; i++) {
+        html_preguntas += '<strong>'+(i+1)+'. '+data[i].descripcion_grupo_emp+'</strong>';
+
+        if(i<data.length-1) html_preguntas += '<hr>';
+      }
+
+      $('#listar-preguntas').html(html_preguntas);
+
+    }else{
+      html_preguntas = '<strong><h3>Esta clave no contiene preguntas</h3></strong>';
+      $('#listar-preguntas').html(html_preguntas);
+    }
+
+  });
+
+  $('#listarPreguntasClaveArea').modal('show');
+}
+
 function cargarPreguntas(){
   var id_clave_area = $(this).data('id-clave-area');
-  
+
   $('#id_clave_area_add').attr("value", id_clave_area);
   $('#id_clave_area_add_emp').removeAttr("value");
 

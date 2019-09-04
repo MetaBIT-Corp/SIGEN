@@ -126,10 +126,11 @@
                     @if($clave_area->aleatorio)
                       <a href="{{ URL::signedRoute('preguntas_por_area', ['id' => $clave_area->id]) }}" class="icon-list btn btn-sm btn-success" title="Ver preguntas de esta área"></a>
                     @else
-                      <button class="icon-information-solid btn btn-sm btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
                       @if($clave_area->area->tipo_item_id==3)
+                        <button class="icon-information-solid btn btn-sm btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas-emp="{{ $clave_area->id }}"></button>
                         <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area-emp="{{ $clave_area->id }}"></button>
                       @else
+                        <button class="icon-information-solid btn btn-sm btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
                         <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></button>
                       @endif
                     @endif

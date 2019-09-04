@@ -157,4 +157,19 @@ class ClaveController extends Controller
 
     }
 
+    //Funcion para cargar las preguntas de una area de emparejamiento asignadas a una clave
+    public function preguntasAgregadasEmp($id){
+
+        $area = Clave_Area::find($id);
+        $preguntas_asginadas = DB::table('clave_area_pregunta as cap')
+                                    ->where('cap.clave_area_id', $id)
+                                    ->join('pregunta as p', 'p.id', '=', 'cap.pregunta_id')
+                                    ->join('grupo_emparejamiento as grupo', 'grupo.id', '=', 'p.grupo_emparejamiento_id')
+                                    ->select('grupo.descripcion_grupo_emp')
+                                    ->distinct()
+                                    ->get();
+
+        return $preguntas_asginadas;
+    }
+
 }

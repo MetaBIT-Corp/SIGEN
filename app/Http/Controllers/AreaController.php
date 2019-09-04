@@ -9,6 +9,7 @@ use App\Materia;
 use App\Tipo_Item;
 use App\Area;
 use App\Docente;
+use App\Clave_Area;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,15 +22,34 @@ class AreaController extends Controller
      */
     public function index($id_materia, Request $request)
     {
-        $error="";
+        
         if(!Materia::where('id_cat_mat',$id_materia)->first()){
             return redirect('/');
         }
         $materia=Materia::where('id_cat_mat',$id_materia)->first();
-        $success=false;
-        $areas=$materia->areas;
 
-        return view('area.index', compact('areas','materia','success','error'));
+        if($request->ajax()){
+            $areas=$materia->areas;
+            $a=[];
+            if(count($areas)>0){
+                //Construccion de array perzonalizado para mostrar en Data Table
+                for($i=0;$i<count($areas);$i++){
+                    $a[]=[
+                        "id_area"=>$areas[$i]->id,
+                        "id"=>$i+1,
+                        "titulo"=>$areas[$i]->titulo,
+                        "tipo_item"=>$areas[$i]->tipo_item->nombre_tipo_item,
+                    ];
+                }
+            }
+            return dataTables()
+                    ->of($a)
+                    ->addColumn('actions','area/actions')
+                    ->rawColumns(['actions'])
+                    ->toJson();
+        }
+
+        return view('area.index', compact('materia'));
     }
 
     /**
@@ -84,6 +104,18 @@ class AreaController extends Controller
         
         return back()->with('notification-type','success')->with('notification-message','El área se ha registrado con éxito!');
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id_mat,$id)
+    {
+        $area=Area::find($id);
+        return response()->json($area);
+    }
     
     /**
      * Update the specified resource in storage.
@@ -100,8 +132,8 @@ class AreaController extends Controller
         $area->titulo=$data["titulo"];
         $area->save();
 
-        $id_mat=$area->materia->id_cat_mat;  
-        return redirect()->action('AreaController@respuesta',[$id_mat]); 
+        $id_mat=$area->materia->id_cat_mat;
+        return response()->json(['success'=>'El area fue modificada exitosamente']);
     }
 
     /**
@@ -114,33 +146,12 @@ class AreaController extends Controller
     {
         $data=$request->all();
         $area=Area::where('id',(int)$data["id_area"])->first();
-        $id_mat=$area->materia->id_cat_mat;
-
-        if(count($area->claves_areas)!=0){
-            $error='El area no puede ser eliminada porque esta siendo utilizada en una evaluacion.';
+        if($area->claves_areas()->count()!=0){
+            $message=['error'=>'El area no puede ser eliminada porque esta siendo utilizada en una evaluacion.','type'=>1];
         }else{
-            $error="";
+            $message=$message=['success'=>'El area fue eliminada exitosamente.','type'=>2];
             $area->delete();
         }
-        return redirect()->action('AreaController@respuesta',[$id_mat,'error'=>$error]); 
-    }
-
-    public function respuesta($id_materia=null, Request $request){
-        $success=false;
-        if($request->isMethod("POST")&&!empty($request->find)&&!empty($request->id_mat)){
-            $materia=Materia::where('id_cat_mat',$request->id_mat)->first();
-            $areas=$materia->areas()->where('titulo','LIKE',$request->find.'%')->get();
-            return view('area.response', compact('areas','success','error'));
-        }
-        if($id_materia==0){
-            $success=false;
-            $id_materia=$request->id_mat;
-        }else{
-            $success=true;
-        }
-        $materia=Materia::where('id_cat_mat',$id_materia)->first();
-        $areas=$materia->areas;
-        $error=$request->error;
-        return view('area.response', compact('areas','success','error'));
+        return response()->json($message);
     }
 }

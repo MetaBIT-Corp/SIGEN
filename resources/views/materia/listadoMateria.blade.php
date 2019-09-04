@@ -137,9 +137,16 @@
       </p>
     </div>
     <div class="card-footer">
+      @if(auth()->user()->role == 0)
       <a class="icon-list btn" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}"></a>
       <a href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">ver</a>
-      <a href="{{ route('listado_evaluacion') }}">Evaluaciones</a>
+      <a href="{{ route('listado_evaluacion', $materia->id_mat_ci ) }}">Evaluaciones</a>
+      @elseif(auth()->user()->role == 1)
+      <a class="icon-list btn" href="{{ route('listado_estudiante',$materia->id_carg_aca) }}"></a>
+      <a href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">ver</a>
+      <a href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">Evaluaciones</a>
+      @endif
+
     </div>
 </div>
 </td>
@@ -158,8 +165,17 @@
       </p>
     </div>
     <div class="card-footer">
+
+      @if(auth()->user()->role == 0)
       <a class="icon-list btn" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}"></a>
       <a href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">ver</a>
+      <a href="{{ route('listado_evaluacion', $materia->id_mat_ci ) }}">Evaluaciones</a>
+      @elseif(auth()->user()->role == 1)
+      <a class="icon-list btn" href="{{ route('listado_estudiante',$materia->id_carg_aca) }}"></a>
+      <a href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">ver</a>
+      <a href="{{ route('listado_evaluacion', $materia->id_carg_aca ) }}">Evaluaciones</a>
+      @endif
+
     </div>
 </div>
 </td>

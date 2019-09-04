@@ -14,7 +14,7 @@ class Grupo_Emparejamiento extends Model
 
     
     public function preguntas(){
-    	return $this->hasMany(Pregunta::class, 'id', 'grupo_emparejamiento_id');
+    	return $this->hasMany(Pregunta::class,'grupo_emparejamiento_id');
     }
 
     /**
