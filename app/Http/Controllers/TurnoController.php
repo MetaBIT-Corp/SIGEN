@@ -346,7 +346,7 @@ class TurnoController extends Controller
         $evaluacion['preguntas'] = $preguntas_arr;
         $evaluacion['opciones'] = $opciones_arr;
         
-        dd($evaluacion);   
+        return $evaluacion;   
         
     }
     
