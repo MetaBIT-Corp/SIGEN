@@ -73,15 +73,20 @@
       <div class="card mb-3">
         <div class="card-header">
           <div class="row">
-            <div class="col-11">
+            <div class="col-8">
               <i class="fas fa-table"></i>
               Listado de Docentes | Materia
             </div>
-            <div class="col-1">
-              <a href="#" class="icon-add btn" title="Agregar Área"></a>
+            <div class="col-4" style="text-align: right;">
+              <strong class="mb-3">Agregar Area</strong>
+              <button class="btn" data-id-turno="{{$turno->id}}" data-id-clave="{{$claves[0]->id}}" data-toggle="modal" data-target="#areasModal" onclick="$('#areasModal').modal();" title="Asignar Área a Turno">
+                <span class="icon-add text-primary">
+                </span>
+              </button>
             </div>
           </div>
         </div>
+        
         <div class="card-body">
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -145,6 +150,8 @@
   </div>
   <!-- /.content-wrapper -->
 </div>
+
+@include('turno.areasclave')
 
 <!-- Modal agregar preguntas-->
 <div class="modal fade" id="asignarPreguntasClaveArea" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -252,6 +259,7 @@
 @section("extra_js")
   <script src="/js/clave/cargarPreguntas.js"> </script>
   <script src="/js/clave/operacionesClaveArea.js"> </script>
+  <script type="text/javascript" src="{{ asset('js/turno/areaclave.js') }}"></script>
    
    @if($turno->iniciado) 
        <script type="text/javascript" src="{{ asset('js/turno/edit/main.js') }}"></script>
@@ -259,7 +267,4 @@
        <script type="text/javascript" src="{{ asset('js/turno/main.js') }}"></script>
    @endif
     
-@endsection
-    
-     
-      
+@endsection    

@@ -144,3 +144,6 @@ Route::get('grupo/{grupo_id}/preguntas/','GrupoEmparejamientoController@index');
 Route::post('grupo/{grupo_id}/preguntas/store','GrupoEmparejamientoController@store')->name('crear-pregunta-grupo');
 Route::post('grupo/{grupo_id}/preguntas/update','GrupoEmparejamientoController@update')->name('editar-pregunta-grupo');
 Route::post('grupo/{grupo_id}/preguntas/delete','GrupoEmparejamientoController@destroy')->name('eliminar-pregunta-grupo');
+
+/*Rutas para Asignación de Áreas a Clave/Turno*/
+Route::post('turno/{turno_id}/claves/store','ClaveAreaController@store')->name('asignar-area-clave');
