@@ -127,11 +127,24 @@ class ClaveController extends Controller
     public function eliminarClaveArea(Request $request){
         $id_clave_area = $request->input('id_clave_area');
         $clave_area = Clave_Area::find($id_clave_area);
+        $notificacion = 'exito';
+        $mensaje = 'El área ha sido eliminada de la clave';
 
-        DB::table('clave_area_pregunta')->where('clave_area_id', $id_clave_area)->delete();
+        //Verificar si el objeto ya está siendo utilizado
+        $preguntas_utilizadas = DB::table('clave_area_pregunta as ca')
+                            ->where('clave_area_id', $id_clave_area)
+                            ->join('respuesta as r', 'r.id_pregunta', '=', 'ca.pregunta_id')
+                            ->get();
 
-        $clave_area->delete();
-        return back()->with('exito', 'El área ha sido eliminada de la clave');
+        if(count($preguntas_utilizadas)){
+            $notificacion = 'error';
+            $mensaje = 'El área no puede eliminarse porque ya está siendo utilziada';
+        }else{
+            DB::table('clave_area_pregunta')->where('clave_area_id', $id_clave_area)->delete();
+            $clave_area->delete();
+        }
+
+        return back()->with($notificacion, $mensaje);
     }
 
     //Funcion para cargar las preguntas de una área de emparejamiento mediante AJAX
