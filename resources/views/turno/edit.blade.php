@@ -77,12 +77,12 @@
               <i class="fas fa-table"></i>
               Listado de Docentes | Materia
             </div>
-            <div class="col-1">
-              <a href="#" class="icon-add btn" title="Agregar Área"></a>
-            </div>
           </div>
         </div>
         <div class="card-body">
+          <a id="btn_add" class="btn btn-sm icon-add" href="#" title="Agregar">
+          </a>
+          <b>Agregar turno</b>
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
