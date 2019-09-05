@@ -108,7 +108,8 @@ Route::group(['middleware' => 'teacher'], function(){
 
     
     //URL's para Pregunta
-    Route::resource('/area/{id}/pregunta','PreguntaController');
+    Route::resource('/area/{id}/pregunta','PreguntaController')->except(['update']);
+    Route::post('/area/{id}/pregunta/{pregunta}','PreguntaController@update');
 
      //URL's para crear evaluacion
     Route::get('materia/evaluacion/{id}','EvaluacionController@getCreate')->name('gc_evaluacion');
@@ -118,6 +119,7 @@ Route::group(['middleware' => 'teacher'], function(){
     //URL's para crear encuesta
     Route::get('/encuesta','EncuestaController@getCreate')->name('gc_encuesta');
     Route::post('/encuesta','EncuestaController@postCreate')->name('pc_encuesta');   
+    Route::post('/eliminar-encuesta','EncuestaController@eliminarEncuesta')->name('eliminar_encuesta');   
     
 });
 

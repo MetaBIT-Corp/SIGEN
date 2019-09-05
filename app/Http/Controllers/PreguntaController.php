@@ -68,44 +68,25 @@ class PreguntaController extends Controller
         $message_pregunta='El campo pregunta es requerido.';
         $message_gpo='Seleccione un grupo de emparejamiento valido.';
 
-        if(!$request->has('gpo_emp')){
-            $rules = ['pregunta' => $rule_pregunta];
-            $messages = ['pregunta.required' => $message_pregunta];
-            $validator = Validator::make(['preguta'=>$request->pregunta], $rules, $messages)->validate();
+        $rules = ['pregunta' => $rule_pregunta];
+        $messages = ['pregunta.required' => $message_pregunta];
+        $validator = Validator::make(['pregunta'=>$request->pregunta], $rules, $messages);
 
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
-            }
-
-            $gpo=new Grupo_Emparejamiento();
-            $gpo->area_id=$request->area_id;
-            $gpo->descripcion_grupo_emp="";
-            $gpo->save();
-
-        }else{
-            $rules = [
-                'pregunta' => $rule_pregunta,
-                'gpo_emp' => $rule_gpo
-            ];
-            $messages=[
-                'pregunta.required'=>$message_pregunta,
-                'gpo_emp.exists'=>$message_gpo,
-                'gpo_emp.required'=>'No modifique la pagina web, por favor.'
-            ];
-
-            $validator = Validator::make($request->all(), $rules, $messages);
-
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
-            }
-
-            $gpo=Grupo_Emparejamiento::find((int)$request->gpo_emp);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
         }
+
+        $gpo=new Grupo_Emparejamiento();
+        $gpo->area_id=$request->pregunta_id;//En este caso el pregunta_id trae el valor del area
+        $gpo->descripcion_grupo_emp="";
+        $gpo->save();
+
+        
         $pregunta=new Pregunta();
         $pregunta->grupo_emparejamiento_id=$gpo->id;
         $pregunta->pregunta=$request->pregunta;
         $pregunta->save();
-        return redirect()->action('PreguntaController@create',[$gpo->area->id])->with('success','Se agrego correctamente');
+        return response()->json(['success'=>'Se ha creado la pregunta exitosamente.']);
     }
 
     /**
@@ -143,7 +124,7 @@ class PreguntaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id_gpo,$id_preg, Request $request)
+    public function update($id_gpo, Request $request)
     {
         $rule_pregunta='required';
         $rule_gpo='required|exists:grupo_emparejamiento,id';
@@ -151,47 +132,21 @@ class PreguntaController extends Controller
         $message_gpo='Seleccione un grupo de emparejamiento valido.';
         $message_mod='No modifique la pagina web, por favor.';
         
+        $rules = ['pregunta' => $rule_pregunta];
+        $messages = ['pregunta_id.exists'=> $message_mod, 'pregunta.required' => $message_pregunta];
+        $validator = Validator::make(['pregunta'=>$request->pregunta], $rules, $messages);
 
-        if(!$request->has('gpo_emp')){
-            $rules = ['pregunta' => $rule_pregunta];
-            $messages = ['pregunta_id.exists'=> $message_mod, 'pregunta.required' => $message_pregunta];
-            $validator = Validator::make(['pregunta'=>$request->pregunta], $rules, $messages);
-
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
-            }
-
-            $pregunta=Pregunta::where('id',(int)$request->pregunta_id)->first();
-            $pregunta->pregunta=$request->pregunta;
-            $pregunta->save();
-
-
-        }else{
-            $rules = [
-                'pregunta' => $rule_pregunta,
-                'gpo_emp' => $rule_gpo
-            ];
-            $messages=[
-                'pregunta.required'=>$message_pregunta,
-                'gpo_emp.exists'=>$message_gpo,
-                'gpo_emp.required'=>$message_mod
-            ];
-
-            $validator = Validator::make($request->all(), $rules, $messages);
-
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
-            }
-
-            $pregunta=Pregunta::where('id',(int)$request->pregunta_id)->first();
-            
-            $pregunta->pregunta=$request->pregunta;
-            $pregunta->grupo_emparejamiento_id=(int)$request->gpo_emp;
-            $pregunta->save();
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
         }
+
+        $pregunta=Pregunta::where('id',(int)$request->pregunta_id)->first();
+        $pregunta->pregunta=$request->pregunta;
+        $pregunta->save();
+
         $gpo=Grupo_Emparejamiento::where('id',$id_gpo)->first();
         $area=$gpo->area;
-        return back()->with('success','Se agrego correctamente')->with('area');
+        return response()->json(['success'=>'La pregunta se modifico exitosamente.']);
     }
 
     /**

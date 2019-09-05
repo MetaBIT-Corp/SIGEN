@@ -26,7 +26,7 @@
     @endif
 </li>
  <div class="col-5 text-right">
-    <a class="btn" href="">
+    <a class="btn" href="javascript:void(0)" data-target="#modal" data-toggle="modal" id="add_pregunta">
         <span class="icon-add text-primary">
         </span>
     </a>
@@ -76,7 +76,49 @@
             </thead>
         </table>
     </div>
-<!-- Modal-->
+<!-- Modal -->
+    <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="modal" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="title-modal">
+                        Ejemplo
+                    </h5>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">
+                            ×
+                        </span>
+                    </button>
+                </div>
+
+                <form id="form-edit" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="alert alert-danger" hidden="" id="validacion" role="alert">
+                            Campo requerido para continuar.
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label" for="inputPassword">
+                                Pregunta
+                            </label>
+                            <div class="col-sm-8">
+                                <input type="hidden" id="pregunta_id" name="pregunta_id"/>
+                                <input class="form-control" id="pregunta" name="pregunta" placeholder="Titulo" required="" type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal" id="salir" type="button"
+                        onclick="$('#validacion').attr('hidden',true);">
+                            Salir
+                        </button>
+                        <input class="btn btn-primary" id="modificar" type="button" value="Modificar" data-type=""/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<!-- Modal2-->
 <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="modal1" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -187,6 +229,18 @@
             });
         }).draw();
 
+        function exito(datos) {
+            $("#message-success").removeAttr("hidden");
+            $("#text-success").text(datos.success);
+            setTimeout(function() {
+                $("#message-success").attr('hidden', true);
+            }, 4000);
+            //Para mover al inicio de la pagina el control
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'slow');
+        }
+
         var id_preg ="";
         var id_gpo="";
         $('body').on('click', '.btn-eliminar', function() {
@@ -230,6 +284,69 @@
             });
         });
 
+         $('body').on('click', '#add_pregunta', function() {
+            $("#modificar").val('Crear');
+            $("#modificar").attr('data-type','create');
+            $("#title-modal").html("Crear Pregunta");
+            $("#pregunta_id").val("{{ $area->id }}");
+            $("#pregunta").val("");
+        });
+
+        $('body').on('click', '.btn-editar', function() {
+            id_preg = $(this).data('id');
+            id_gpo=$(this).data('gpo');
+            $.get('/area/'+ id_gpo+'/pregunta/'+id_preg).done(function(data) {
+                $("#title-modal").html("Editar Pregunta");
+                $("#pregunta_id").val(data.id);
+                $("#pregunta").val(data.pregunta);
+                $("#modificar").attr('data-type','update');
+                $('#modificar').val('Modificar');
+            }).fail(function() {
+                console.log("Error");
+            });
+        });
+        //Peticion para modificar
+        $("#modificar").click(function() {
+            if ($("#pregunta").val().length > 0) {
+                $(this).attr("disabled", true);
+                if($(this).data('type')==='update'){
+                    $.ajax({
+                        url: '/area/'+ id_gpo+'/pregunta/'+id_preg,
+                        type: "POST",
+                        data: $("#form-edit").serialize(),
+                        dataType: "json"
+                    }).done(function(datos) {
+                        $("#salir").click();
+                        $("#modificar").removeAttr("disabled");
+                        $("#modificar").attr('data-type','create');
+                        table.draw();
+                        //Mostrando mensaje de exito
+                        exito(datos);
+                    }).fail(function(xhr, status, e) {
+                        console.log(e);
+                    });
+                }else{
+                    $.ajax({
+                        url: '/area/1/pregunta/',
+                        type: "POST",
+                        data: $("#form-edit").serialize(),
+                        dataType: "json"
+                    }).done(function(datos) {
+                        $("#salir").click();
+                        $("#modificar").removeAttr("disabled");
+                        $("#modificar").attr('data-type','update');
+                        table.draw();
+                        //Mostrando mensaje de exito
+                        exito(datos);
+                    }).fail(function(xhr, status, e) {
+                        console.log(e);
+                    });
+                }
+            } else {
+                $("#validacion").removeAttr("hidden");
+                $("#modificar").removeAttr("disabled");
+            }
+        });
     });
 });
 </script>

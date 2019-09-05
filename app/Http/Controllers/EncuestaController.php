@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Encuesta;
 use App\Docente;
 use Carbon\Carbon;
+use App\Intento;
+use App\Clave;
 use Illuminate\Support\Facades\DB;
 
 class EncuestaController extends Controller
@@ -43,6 +45,30 @@ class EncuestaController extends Controller
         $encuestas = Encuesta::all();
         return view('encuesta.Encuestas')->with(compact('encuestas'));
 
+    }
+
+    public function eliminarEncuesta(Request $request){
+        $id_encuesta = $request->input('id_encuesta');
+
+        if($id_encuesta){
+            $intento = Intento::where('encuesta_id', $id_encuesta)->get();
+            $clave = Clave::where('encuesta_id', $id_encuesta)->get();
+            $encuesta = Encuesta::find($id_encuesta);
+
+            $notificaicon = 'exito';
+            $mensaje = 'La encuesta fue eliminada con éxito';
+
+            if(count($intento) || count($clave)){
+                $notificaicon = 'error';
+                $mensaje = 'Esta encuesta no se puede eliminar porque ya fue asignada';                
+
+            }
+            else{
+                $encuesta->delete();
+            }   
+        }
+
+        return back()->with($notificaicon, $mensaje);
     }
 
     //Funcion rotorna las encuestas de propósito general que se encuentra disponibles en formato JSON  
