@@ -186,15 +186,13 @@ class TurnoController extends Controller
         // Parte de René
 
         $clave = Clave::where('turno_id',$turno_id)->first();
-
         $evaluacion = Evaluacion::where('id',$turno->evaluacion_id)->first();
         $carga = CargaAcademica::where('id_carg_aca',$evaluacion->id_carga)->first();
         $materiac = CicloMateria::where('id_mat_ci',$carga->id_mat_ci)->first();
         $areas = Area::where("id_cat_mat",$materiac->id_mat_ci)->get();
+        $id_areas = Clave_Area::where('clave_id',$clave->id)->pluck('area_id')->toArray();
 
-        // dd($clave);
-        
-        return view('turno.edit', compact('turno', 'id', 'claves', 'clave','evaluacion','carga','materiac','areas'));
+        return view('turno.edit', compact('turno', 'id', 'claves', 'clave','evaluacion','carga','materiac','areas','id_areas'));
     }
 
     /**

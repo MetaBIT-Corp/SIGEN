@@ -78,7 +78,7 @@
               Listado de Docentes | Materia
             </div>
             <div class="col-4" style="text-align: right;">
-              <strong class="mb-3">Agregar Area</strong>
+              <strong class="mb-3">Asignar Área</strong>
               <button class="btn" data-id-turno="{{$turno->id}}" data-id-clave="{{$claves[0]->id}}" data-toggle="modal" data-target="#areasModal" onclick="$('#areasModal').modal();" title="Asignar Área a Turno">
                 <span class="icon-add text-primary">
                 </span>
@@ -122,8 +122,12 @@
                     @endif
                     {{ $clave_area->area->tipo_item->nombre_tipo_item }}
                   </td>
-                <!--El atributo cantidad_preguntas es un campo calculado en el modelo Clave_Area apartado de accessors-->
-                  <td id="id_cantidad" class="text-center">{{ $clave_area->cantidad_preguntas }}</td>
+                  <!--El atributo cantidad_preguntas es un campo calculado en el modelo Clave_Area apartado de accessors-->
+                  @if($clave_area->cantidad_preguntas!=0)
+                    <td id="id_cantidad" class="text-center">{{ $clave_area->cantidad_preguntas }}</td>
+                  @else
+                    <td id="id_cantidad" class="text-center">-</td>
+                  @endif
                   <td id="id_peso">{{ $clave_area->peso }}</td>
                   <td>
                     <button class="icon-delete btn btn-sm btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></button>

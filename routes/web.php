@@ -133,7 +133,7 @@ Route::group(['middleware' => 'admin_teacher'], function(){
 
 
 /*Rutas para Gestión de Opciones (Sin Grupo Emparejamiento)*/
-Route::get('pregunta/{pregunta_id}/opcion/','OpcionController@index');
+Route::get('pregunta/{pregunta_id}/opcion/','OpcionController@index')->name('index-opcion');
 Route::post('pregunta/{pregunta_id}/opcion/store','OpcionController@store')->name('agregar-opcion');
 Route::post('pregunta/{pregunta_id}/opcion/update','OpcionController@update')->name('actualizar-opcion');
 Route::post('pregunta/{pregunta_id}/opcion/delete','OpcionController@destroy')->name('eliminar-opcion');

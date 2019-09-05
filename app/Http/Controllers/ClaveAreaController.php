@@ -57,9 +57,14 @@ class ClaveAreaController extends Controller
 
         $clave_area->area_id = $request->area_id;
         $clave_area->clave_id = $request->clave_id;
-        $clave_area->numero_preguntas = $request->cantidad;
+        $clave_area->peso = (int)($request->peso);        
         $clave_area->aleatorio = (int)($request->aleatorio);
-        $clave_area->peso = (int)($request->peso);
+
+        if ($clave_area->aleatorio == 1) {
+            $clave_area->numero_preguntas = $request->cantidad;
+        }else{
+            $clave_area->numero_preguntas = 0;
+        }
 
         $clave_area->save();
 

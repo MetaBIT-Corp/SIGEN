@@ -1,10 +1,11 @@
 <!-- Modal para la visualización de las Áreas predefinidas en la Materia-->
 
 	<div class="modal" id="areasModal">
-		<div class="modal-dialog" role="document" style="max-width: 50% !important;">
-			<div class="modal-content">
+		<div class="modal-dialog" role="document" style="max-width: 60% !important;">
+			
+			<div class="modal-content">				
 				
-				<div class="modal-header">
+				<div class="modal-header border-bottom-0">
 
 					<h5 class="modal-title">Asignar Áreas a Turno</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -13,7 +14,7 @@
 
 				</div>
 
-				<div class="modal-body">
+				<div class="modal-body p-0">
 
 					<div class="form-group" style="display:none;">
 						<label class="col-form-label" for="turno_id">Turno ID:</label>
@@ -22,42 +23,82 @@
 						<input type="text" class="form-control" name="clave_id" placeholder="ID de Pregunta" id="clave_id">
 					</div>
 
-					<div class="form-group">
-						<table class="table table-hover">
-							<thead>
-								<tr class="d-flex border-top-0">
-									<th class="col-1 border-right">N°</th>
-									<th class="col-8 border-right">Área</th>
-									<th class="col-3">Acción</th>
-								</tr>
-							</thead>
-							<tbody>
+					<table class="table table-hover border-top-0">
 
-								@forelse ($areas as $area)
-									<tr class="d-flex">
-										<th class="col-sm-1">
-											{{ $loop->iteration }}
-										</th>
-										<td class="col-sm-8">
-											{{ $area->titulo }}
-										</td>
+						<thead class="text-left ">
+							<tr class="d-flex border-top-0">
+								<th class="col-1 border-bottom-0">N°</th>
+								<th class="col-5 border-bottom-0">Área</th>
+								<th class="col-3 border-bottom-0">Tipo</th>
+								<th class="col-3 border-bottom-0">Acción</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+							@forelse ($areas as $area)
+								<tr class="d-flex">
+									<th class="col-sm-1 text-center">
+										{{ $loop->iteration }}
+									</th>
+
+									<td class="col-sm-5">
+										{{ $area->titulo }}
+									</td>
+									
+									@switch( $area->tipo_item_id )
+										@case(1)
+											<td class="col-sm-3">
+												Opción Múltiple
+											</td>
+										@break
+										@case(2)
+											<td class="col-sm-3">
+												Verdadero/Falso
+											</td>
+										@break
+										@case(3)
+											<td class="col-sm-3">
+												Emparejamiento
+											</td>
+										@break
+										@case(4)
+											<td class="col-sm-3">
+												Respuesta Corta
+											</td>
+										@break
+									@endswitch
+									@if(in_array($area->id, $id_areas))
 										<td class="col-sm-3 text-center">
-											<button type="button" class="btn btn-success" data-id-turno="{{$turno->id}}" data-id-clave="{{$claves[0]->id}}" data-id-area="{{$area->id}}" data-toggle="modal" data-target="#asignarModal" data-dismiss="modal" onclick="$('#asignarModal').modal();">Asignar</button>
+											<button type="button" class="btn btn-secondary" disabled="" >Asignado</button>
 										</td>
-									</tr>
-								@empty
-									<tr><td><h3>No se han definido áreas para la materia.</h3></td></tr>
-								@endforelse
+									@else
+										<td class="col-sm-3 text-center">
+											<button type="button" class="btn btn-info" data-id-turno="{{$turno->id}}" data-id-clave="{{$claves[0]->id}}" data-id-area="{{$area->id}}" data-toggle="modal" data-target="#asignarModal" data-dismiss="modal" onclick="$('#asignarModal').modal();">&nbsp;Asignar&nbsp;</button>
+										</td>
+									@endif
+								</tr>
+							@empty
+								<tr><td><h3>No se han definido áreas para la materia.</h3></td></tr>
+							@endforelse
 
-							</tbody>
-						</table>
-					</div>
+							<tr class="d-flex" id="trBtn">
+								<td class="col-sm-1"></td>
+								<td class="col-sm-5"></td>
+								<td class="col-sm-3"></td>
+								<td class="col-sm-3 text-center">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">&nbsp;&nbsp;Cerrar&nbsp;&nbsp;</button>
+								</td>
+							</tr>
 
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+						</tbody>
+
+					</table>
 
 				</div>
 
 			</div>
+
 		</div>
 	</div>
 
@@ -67,6 +108,7 @@
 
 	<div class="modal" id="asignarModal">
 		<div class="modal-dialog" role="document" style="max-width: 50% !important;">
+			
 			<div class="modal-content">
 				
 				<div class="modal-header">
@@ -133,3 +175,5 @@
 			</div>
 		</div>
 	</div>
+
+<!-- Fin de Modal para la asignación de Áreas predefinidas al Turno-->
