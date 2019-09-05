@@ -72,6 +72,7 @@
                       <a class="btn btn-sm btn-option" title="Listado de turnos" href="{{ URL::signedRoute('listado_turnos', ['id' => $evaluacion->id]) }}">
                            <span class="icon-calendar-plus-o"></span>
                        </a>
+                       
                        <a class="btn btn-sm btn-secondary" title="Detalle de evaluación" href="{{ URL::signedRoute('detalle_evaluacion', ['id' => $evaluacion->id]) }}">
                            <span class="icon-information-solid"></span>
 

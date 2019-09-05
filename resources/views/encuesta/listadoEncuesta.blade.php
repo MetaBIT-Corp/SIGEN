@@ -17,6 +17,25 @@
     <li class="breadcrumb-item"><a href="#">Encuestas</a></li>
 @endsection
 @section("main")
+
+<!--Mostrará mensaje de éxito en caso que la petición en clave-area se haya realizado correctamente-->
+@if (session('exito'))
+  <div class="alert alert-success">
+    <ul>
+      <h4 class="text-center">{{session('exito')}}</h4>
+    </ul>
+  </div>
+@endif
+
+<!--Mostrará mensaje de eror en caso que la petición en clave-area no se haya realizado correctamente-->
+@if (session('error'))
+  <div class="alert alert-danger">
+    <ul>
+      <h4 class="text-center">{{session('error')}}</h4>
+    </ul>
+  </div>
+@endif
+
   <div id="wrapper">
   <div id="content-wrapper">
     <div class="container-fluid">
@@ -96,6 +115,15 @@
                       <a title="Estadísticas" href="" class="btn btn-sm btn-option">
                         <span class="icon-grafico"></span>
                       </a>
+
+                      <a title="Estadísticas" href="" class="btn btn-sm btn-option">
+                        <span class="icon-grafico"></span>
+                      </a>
+
+                      <button class="btn btn-sm btn-danger" href="#" title="Eliminar Área" 
+                          data-eliminar-encuesta="{{ $encuesta->id }}">
+                          <span class="icon-delete"></span>
+                      </button>
                     </td>
                   </tr>
                   
@@ -141,6 +169,31 @@
 </div>
 <!-- /#wrapper -->
 
+<!-- Modal elimanr una encuesta que no haya sido respondida-->
+<div class="modal fade" id="eliminarEncuesta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eliminarModalCenterTitle">Eliminar Encuesta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body" id="elimanr-encuesta">
+          <h3><strong>¿Desea eliminar esta Encuesta?</strong></h3>
+        </div>
+        <div class="modal-footer">
+          <form action="{{ route('eliminar_encuesta')}}" method="POST">
+            {{ csrf_field() }}
+            <input type="hidden" value="" id="id_encuesta" name="id_encuesta">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 @section('js')
@@ -156,6 +209,17 @@
     <script type="text/javascript" src="{{asset('vendor/datatables/jquery.dataTables.js' )}}"></script>
     <script type="text/javascript" src="{{asset('vendor/datatables/dataTables.bootstrap4.js' )}}"></script>
   	<script type="text/javascript" src="{{asset('js/demo/datatables-demo.js')}}"></script>
+
+    <script>
+      $('[data-eliminar-encuesta]').on('click', function(){
+          var id_encuesta = $(this).data('eliminar-encuesta');
+
+          $('#id_encuesta').attr('value', $(this).data('eliminar-encuesta'));
+          $('#eliminarEncuesta').modal('show');
+      });
+    </script>
+
+
 @endsection
 @endsection
 
