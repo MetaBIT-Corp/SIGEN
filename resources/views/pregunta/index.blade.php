@@ -25,19 +25,28 @@
     	Listado de preguntas
     @endif
 </li>
+@if(Request::get('id_gpo')==0)
  <div class="col-5 text-right">
     <a class="btn" href="javascript:void(0)" data-target="#modal" data-toggle="modal" id="add_pregunta">
         <span class="icon-add text-primary">
         </span>
     </a>
     <strong>
-    @if(Request::get('id_gpo')==1)
-    	Agregar Grupo
-    @else
-    	Agregar Pregunta
-    @endif
-	</strong>
+        Agregar Pregunta
+    </strong>
 </div>
+    @else
+<div class="col-5 text-right">
+    <a class="btn" href="" id="add_gpo">
+        <span class="icon-add text-primary">
+        </span>
+    </a>
+    <strong>
+        Agregar Grupo
+    </strong>
+</div>
+@endif
+
 
 @endsection
 @section('main')

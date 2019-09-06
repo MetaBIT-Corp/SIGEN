@@ -8,7 +8,7 @@
         <span class="icon-edit">
         </span>
     </a>
-    <a class="btn-eliminar btn ml-2" id="btn_eliminar" data-name="" title="Eliminar Area" href="">
+    <a class="btn-eliminar btn ml-2" id="btn_eliminar" data-name="" title="Eliminar Grupo Emparejamiento" href="">
         <span class="icon-delete">
         </span>
     </a>

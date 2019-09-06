@@ -158,15 +158,13 @@ class PreguntaController extends Controller
     public function destroy(Request $request)
     {
         $pregunta=Pregunta::find((int)$request->id);
-        $gpo=$pregunta->grupo_emp;
-        $gpo->delete();
-        /* Se usara
-        if($area->claves_areas()->count()!=0){
-            $message=['error'=>'El area no puede ser eliminada porque esta siendo utilizada en una evaluacion.','type'=>1];
+        if($pregunta->clave_area_preg_est()->count()!=0){
+            $message=['error'=>'La pregunta no puede ser eliminada porque esta siendo utilizada en una evaluacion.','type'=>1];
         }else{
-            $message=$message=['success'=>'El area fue eliminada exitosamente.','type'=>2];
-            $area->delete();
-        }*/
-        return response()->json(['success'=>'La pregunta fue eliminada','type'=>2]);
+            $message=$message=['success'=>'La pregunta fue eliminada exitosamente.','type'=>2];
+            $gpo=$pregunta->grupo_emp;
+            $gpo->delete();
+        }
+        return response()->json($message);
     }
 }
