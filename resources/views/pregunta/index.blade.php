@@ -112,7 +112,7 @@
                         onclick="$('#validacion').attr('hidden',true);">
                             Salir
                         </button>
-                        <input class="btn btn-primary" id="modificar" type="button" value="Modificar" data-type=""/>
+                        <input class="btn btn-primary" id="modificar" type="button" value="Modificar"/>
                     </div>
                 </form>
             </div>
@@ -243,6 +243,8 @@
 
         var id_preg ="";
         var id_gpo="";
+
+        //Evento para eliminar
         $('body').on('click', '.btn-eliminar', function() {
             id_preg = $(this).data('id');
             id_gpo=$(this).data('gpo');
@@ -284,22 +286,24 @@
             });
         });
 
+        //Evento para crear una pregunta
          $('body').on('click', '#add_pregunta', function() {
+            $('#form-edit').trigger("reset");
             $("#modificar").val('Crear');
-            $("#modificar").attr('data-type','create');
             $("#title-modal").html("Crear Pregunta");
             $("#pregunta_id").val("{{ $area->id }}");
             $("#pregunta").val("");
         });
 
+        //Evento para crear una edicion de la pregunta
         $('body').on('click', '.btn-editar', function() {
+            $('#form-edit').trigger("reset");
             id_preg = $(this).data('id');
             id_gpo=$(this).data('gpo');
             $.get('/area/'+ id_gpo+'/pregunta/'+id_preg).done(function(data) {
                 $("#title-modal").html("Editar Pregunta");
                 $("#pregunta_id").val(data.id);
                 $("#pregunta").val(data.pregunta);
-                $("#modificar").attr('data-type','update');
                 $('#modificar').val('Modificar');
             }).fail(function() {
                 console.log("Error");
@@ -309,7 +313,7 @@
         $("#modificar").click(function() {
             if ($("#pregunta").val().length > 0) {
                 $(this).attr("disabled", true);
-                if($(this).data('type')==='update'){
+                if($(this).val()=="Modificar"){
                     $.ajax({
                         url: '/area/'+ id_gpo+'/pregunta/'+id_preg,
                         type: "POST",
