@@ -1,6 +1,6 @@
 <div>
     @if(Request::get('id_gpo')==1)
-    <a class="btn btn-success mr-2 ml-2" title="Listado preguntas" href="{{ URL::signedRoute('list-preguntas',[$id]) }}">
+    <a class="btn btn-success mr-2 ml-2" title="Listado preguntas" href="{{ URL::signedRoute('list-preguntas',[$id,0]) }}">
         <span class="icon-list">
         </span>
     </a>
@@ -8,14 +8,14 @@
         <span class="icon-edit">
         </span>
     </a>
-    <a class="btn-eliminar btn ml-2" id="btn_eliminar" data-name="" title="Eliminar Area" href="">
+    <a class="btn-eliminar btn ml-2" id="btn_eliminar" data-name="" title="Eliminar Grupo Emparejamiento" href="">
         <span class="icon-delete">
         </span>
     </a>
 
     @else
 
-    <a class="btn btn-warning mr-2 ml-2" title="Agregar Opciones" href="">
+    <a class="btn btn-warning mr-2 ml-2" title="Agregar Opciones" href="{{ URL::signedRoute('index-opcion',[$id]) }}">
         <span class="icon-add-solid">
         </span>
     </a>
@@ -23,7 +23,7 @@
         <span class="icon-information-solid">
         </span>
     </a>
-    <a class="btn-editar btn" id="btn_editar" title="Editar Pregunta" href="{{ URL::signedRoute('pregunta.edit',[$grupo_emparejamiento_id,$id]) }}">
+    <a class="btn-editar btn" id="btn_editar" title="Editar Pregunta" href="javascript:void(0)" data-id="{{ $id }}" data-gpo="{{ $grupo_emparejamiento_id }}" data-target="#modal" data-toggle="modal">
         <span class="icon-edit">
         </span>
     </a>

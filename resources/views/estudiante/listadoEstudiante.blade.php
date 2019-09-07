@@ -60,8 +60,8 @@
                   @endif
                   <td>{{$estudiante->anio_ingreso}}</td>
                   <td>
-                    <a title="Detalle estudiante" href="{{ route('detalle_estudiante',[$estudiante->id_est,$id_mat_ci]) }}" class="btn btn-sm btn-default">
-                      <span class="icon-list btn"></span>
+                    <a title="Detalle estudiante" href="{{ route('detalle_estudiante',[$estudiante->id_est,$id_mat_ci]) }}" class="btn btn-sm btn-option">
+                      <span class="icon-student"></span>
                     </a>
                   </td>
                 </tr>

@@ -94,7 +94,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" data-dismiss="modal" id="salir" type="button">
+                        <button class="btn btn-secondary" data-dismiss="modal" id="salir" type="button" onclick="$('#validacion').attr('hidden',true);">
                             Salir
                         </button>
                         <input class="btn btn-primary" id="modificar" type="button" value="Modificar"/>

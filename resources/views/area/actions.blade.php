@@ -1,5 +1,5 @@
 <div>
-	<a class="btn btn-success mr-2 ml-2" title="Listado preguntas" @if($tipo_item=='Emparejamiento')href="{{ URL::signedRoute('pregunta.index', ['id_area' => $id_area ,'id_gpo'=>true]) }}"@else href="{{ URL::signedRoute('pregunta.index', ['id_area' => $id_area ,'id_gpo'=>false]) }}"@endif>
+	<a class="btn btn-success mr-2 ml-2" @if($tipo_item=='Emparejamiento')href="{{ URL::signedRoute('pregunta.index', ['id_area' => $id_area ,'id_gpo'=>true]) }}" title="Listado Grupo Emparejamiento"@else href="{{ URL::signedRoute('pregunta.index', ['id_area' => $id_area ,'id_gpo'=>false]) }}" title="Listado preguntas"@endif>
         <span class="icon-list">
         </span>
     </a>

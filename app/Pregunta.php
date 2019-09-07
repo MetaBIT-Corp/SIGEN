@@ -31,4 +31,8 @@ class Pregunta extends Model
     public function grupo_emp(){
         return $this->belongsTo('App\Grupo_Emparejamiento','grupo_emparejamiento_id','id');
     }
+
+    public function clave_area_preg_est(){
+        return $this->hasMany('App\Clave_Area_Pregunta_Estudiante','pregunta_id','id');
+    }
 }

@@ -73,15 +73,20 @@
       <div class="card mb-3">
         <div class="card-header">
           <div class="row">
-            <div class="col-11">
+            <div class="col-8">
               <i class="fas fa-table"></i>
               Listado de Docentes | Materia
             </div>
-            <div class="col-1">
-              <a href="#" class="icon-add btn" title="Agregar Área"></a>
+            <div class="col-4" style="text-align: right;">
+              <strong class="mb-3">Asignar Área</strong>
+              <button class="btn" data-id-turno="{{$turno->id}}" data-id-clave="{{$claves[0]->id}}" data-toggle="modal" data-target="#areasModal" onclick="$('#areasModal').modal();" title="Asignar Área a Turno">
+                <span class="icon-add text-primary">
+                </span>
+              </button>
             </div>
           </div>
         </div>
+        
         <div class="card-body">
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -113,19 +118,30 @@
                     @if($clave_area->aleatorio)
                       <i class="icon-dice" title="Aleatorio">&nbsp;&nbsp;</i> 
                     @else
-                      <i class="icon-list" title="Manual">&nbsp;&nbsp;</i> 
+                      <i class="icon-hand-paper-o" title="Manual">&nbsp;&nbsp;</i> 
                     @endif
                     {{ $clave_area->area->tipo_item->nombre_tipo_item }}
                   </td>
-                <!--El atributo cantidad_preguntas es un campo calculado en el modelo Clave_Area apartado de accessors-->
-                  <td id="id_cantidad" class="text-center">{{ $clave_area->cantidad_preguntas }}</td>
+                  <!--El atributo cantidad_preguntas es un campo calculado en el modelo Clave_Area apartado de accessors-->
+                  @if($clave_area->cantidad_preguntas!=0)
+                    <td id="id_cantidad" class="text-center">{{ $clave_area->cantidad_preguntas }}</td>
+                  @else
+                    <td id="id_cantidad" class="text-center">-</td>
+                  @endif
                   <td id="id_peso">{{ $clave_area->peso }}</td>
                   <td>
-                    <button class="icon-delete btn btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></button>
-                      <button class="icon-edit btn btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></button>
-                    @if(!$clave_area->aleatorio)
-                      <button class="icon-information-solid btn  btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
-                      <button class="icon-add-solid btn btn-info" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></button>
+                    <button class="icon-delete btn btn-sm btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></button>
+                    <button class="icon-edit btn btn-sm btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></button>
+                    @if($clave_area->aleatorio)
+                      <a href="{{ URL::signedRoute('preguntas_por_area', ['id' => $clave_area->id]) }}" class="icon-list btn btn-sm btn-success" title="Ver preguntas de esta área"></a>
+                    @else
+                      @if($clave_area->area->tipo_item_id==3)
+                        <button class="icon-information-solid btn btn-sm btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas-emp="{{ $clave_area->id }}"></button>
+                        <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area-emp="{{ $clave_area->id }}"></button>
+                      @else
+                        <button class="icon-information-solid btn btn-sm btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
+                        <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></button>
+                      @endif
                     @endif
                   </td>
                 </tr>
@@ -146,6 +162,8 @@
   <!-- /.content-wrapper -->
 </div>
 
+@include('turno.areasclave')
+
 <!-- Modal agregar preguntas-->
 <div class="modal fade" id="asignarPreguntasClaveArea" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
@@ -159,6 +177,7 @@
       <form action="{{ route('agregar_clave_area') }}" method="POST">
         {{ csrf_field() }}
         <input type="hidden" name="clave_area" value="" id="id_clave_area_add">
+        <input type="hidden" name="modalidad" value="" id="id_clave_area_add_emp">
         <div class="modal-body" id="asignar-preguntas">
           
         </div>
@@ -252,6 +271,7 @@
 @section("extra_js")
   <script src="/js/clave/cargarPreguntas.js"> </script>
   <script src="/js/clave/operacionesClaveArea.js"> </script>
+  <script type="text/javascript" src="{{ asset('js/turno/areaclave.js') }}"></script>
    
    @if($turno->iniciado) 
        <script type="text/javascript" src="{{ asset('js/turno/edit/main.js') }}"></script>
@@ -259,7 +279,4 @@
        <script type="text/javascript" src="{{ asset('js/turno/main.js') }}"></script>
    @endif
     
-@endsection
-    
-     
-      
+@endsection    

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Turno;
 use App\Evaluacion;
 use App\Clave;
+use App\CargaAcademica;
+use App\CicloMateria;
 use App\Estudiante;
 use App\Clave_Area;
 use App\Intento;
@@ -17,6 +19,7 @@ use Illuminate\Http\Request;
 use DateTime;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+
     
 class TurnoController extends Controller
 {
@@ -133,6 +136,13 @@ class TurnoController extends Controller
             $turno->visibilidad = 1;
         
         $turno->save();
+
+        $clave = new Clave();
+
+        $clave->turno_id = $turno->id;
+        $clave->numero_clave = 1;
+
+        $clave->save();
         
         return back()->with('notification-type','success')->with('notification-message','El turno se ha registrado con éxito!');
     }
@@ -157,7 +167,7 @@ class TurnoController extends Controller
     public function edit( $id, $turno_id )
     {
         //Obteniendo la clave del turno
-        $claves = Clave::where('id', $turno_id)->get();
+        $claves = Clave::where('turno_id', $turno_id)->get();   /*Consulta ahora se hace por turno_id*/
 
         //dd(count($claves[0]->clave_areas[0]->claves_areas_preguntas));
 
@@ -172,8 +182,17 @@ class TurnoController extends Controller
         
         $turno->fecha_inicio_turno = DateTime::createFromFormat('Y-m-d H:i:s', $turno->fecha_inicio_turno)->format('d/m/Y h:i A');
         $turno->fecha_final_turno = DateTime::createFromFormat('Y-m-d H:i:s', $turno->fecha_final_turno)->format('d/m/Y h:i A');
-        
-        return view('turno.edit', compact('turno', 'id', 'claves'));
+
+        // Parte de René
+
+        $clave = Clave::where('turno_id',$turno_id)->first();
+        $evaluacion = Evaluacion::where('id',$turno->evaluacion_id)->first();
+        $carga = CargaAcademica::where('id_carg_aca',$evaluacion->id_carga)->first();
+        $materiac = CicloMateria::where('id_mat_ci',$carga->id_mat_ci)->first();
+        $areas = Area::where("id_cat_mat",$materiac->id_mat_ci)->get();
+        $id_areas = Clave_Area::where('clave_id',$clave->id)->pluck('area_id')->toArray();
+
+        return view('turno.edit', compact('turno', 'id', 'claves', 'clave','evaluacion','carga','materiac','areas','id_areas'));
     }
 
     /**

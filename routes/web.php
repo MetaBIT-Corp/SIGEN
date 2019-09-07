@@ -16,11 +16,11 @@ use App\Area;
 //Rutas de pruebas
 
 /*----------------------------Rutas de prueba para agregar preguntas a la clave------------------------------------*/
-Route::get('turno/{id_turno}/claves', 'ClaveController@listarClaves');
 #Route::post('turno/{id_turno}/claves', 'ClaveController@asignarPreguntas')->name('agregar_clave_area');
 Route::post('turno/claves', 'ClaveController@asignarPreguntas')->name('agregar_clave_area');
 Route::post('clave-area/editar/', 'ClaveController@editarClaveArea')->name('editar_clave_area');
 Route::post('clave-area/eliminar/', 'ClaveController@eliminarClaveArea')->name('eliminar_clave_area');
+Route::get('clave-area/{clave_area_id}/preguntas','ClaveAreaController@listarPreguntas')->name('preguntas_por_area')->middleware('signed');
 /*-----------------------------------------------------------------------------------------------------------------*/
 
 Route::get('intento/', function() {
@@ -72,25 +72,25 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/materias', 'MateriaController@listar')->name('materias');
 
 Route::get('/materias/listado_estudiante/{id}', 'EstudianteController@index')->name('listado_estudiante'); 
-//se envia como parametro o el id de materia ciclo si es admin, o carga academica si es docente
+//se envia como parametro o el id de materia ciclo 
+Route::get('/materia/estudiante/{id}/{id_mat}', 'EstudianteController@show')->name('detalle_estudiante');
 
 Route::get('docentes-ciclo/{id_mat_ci}', 'DocenteController@docentes_materia_ciclo')->name('docentes_materia_ciclo')->middleware('signed');
 
- Route::get('materia/listado-evaluacion/{id}','EvaluacionController@listado')->name('listado_evaluacion');
+Route::get('materia/listado-evaluacion/{id}','EvaluacionController@listado')->name('listado_evaluacion');
 
- Route::get('/listado-encuesta','EncuestaController@listado')->name('listado_encuesta');
+Route::get('/encuestas','EncuestaController@listado_publico')->name('encuestas'); 
 
     
 
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
 Route::group(['middleware' => 'admin'], function(){
+
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente
 Route::group(['middleware' => 'teacher'], function(){
-    Route::get('/materia/estudiante/{id}/{id_mat}', 'EstudianteController@show')->name('detalle_estudiante');
     Route::get('/evaluacion/{id}', 'EvaluacionController@show')->name('detalle_evaluacion');
-    
 
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
 
@@ -108,7 +108,8 @@ Route::group(['middleware' => 'teacher'], function(){
 
     
     //URL's para Pregunta
-    Route::resource('/area/{id}/pregunta','PreguntaController');
+    Route::resource('/area/{id}/pregunta','PreguntaController')->except(['update']);
+    Route::post('/area/{id}/pregunta/{pregunta}','PreguntaController@update');
 
      //URL's para crear evaluacion
     Route::get('materia/evaluacion/{id}','EvaluacionController@getCreate')->name('gc_evaluacion');
@@ -118,6 +119,7 @@ Route::group(['middleware' => 'teacher'], function(){
     //URL's para crear encuesta
     Route::get('/encuesta','EncuestaController@getCreate')->name('gc_encuesta');
     Route::post('/encuesta','EncuestaController@postCreate')->name('pc_encuesta');   
+    Route::post('/eliminar-encuesta','EncuestaController@eliminarEncuesta')->name('eliminar_encuesta');   
     
 });
 
@@ -125,8 +127,15 @@ Route::group(['middleware' => 'teacher'], function(){
 Route::group(['middleware' => 'student'], function(){
 });
 
+//Aqui iran las rutas a las que tiene acceso solamente el docente y el admin
+Route::group(['middleware' => 'admin_teacher'], function(){
+    Route::get('/listado-encuesta','EncuestaController@listado')->name('listado_encuesta');
+});
+
+
+
 /*Rutas para Gestión de Opciones (Sin Grupo Emparejamiento)*/
-Route::get('pregunta/{pregunta_id}/opcion/','OpcionController@index');
+Route::get('pregunta/{pregunta_id}/opcion/','OpcionController@index')->name('index-opcion');
 Route::post('pregunta/{pregunta_id}/opcion/store','OpcionController@store')->name('agregar-opcion');
 Route::post('pregunta/{pregunta_id}/opcion/update','OpcionController@update')->name('actualizar-opcion');
 Route::post('pregunta/{pregunta_id}/opcion/delete','OpcionController@destroy')->name('eliminar-opcion');
@@ -136,3 +145,6 @@ Route::get('grupo/{grupo_id}/preguntas/','GrupoEmparejamientoController@index')-
 Route::post('grupo/{grupo_id}/preguntas/store','GrupoEmparejamientoController@store')->name('crear-pregunta-grupo');
 Route::post('grupo/{grupo_id}/preguntas/update','GrupoEmparejamientoController@update')->name('editar-pregunta-grupo');
 Route::post('grupo/{grupo_id}/preguntas/delete','GrupoEmparejamientoController@destroy')->name('eliminar-pregunta-grupo');
+
+/*Rutas para Asignación de Áreas a Clave/Turno*/
+Route::post('turno/{turno_id}/claves/store','ClaveAreaController@store')->name('asignar-area-clave');

@@ -4,6 +4,9 @@
 	 <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" type="text/css" rel="stylesheet"> 
 	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.css')}}">
 	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
+   <link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
+
+
 @endsection
 @endsection
 
@@ -11,20 +14,47 @@
 @section("body")
 
 @section("ol_breadcrumb")
-    <li class="breadcrumb-item"><a href="#">Materia</a></li>
-    <li class="breadcrumb-item">Evaluación</li>
+    <li class="breadcrumb-item"><a href="#">Encuestas</a></li>
 @endsection
 @section("main")
+
+<!--Mostrará mensaje de éxito en caso que la petición en clave-area se haya realizado correctamente-->
+@if (session('exito'))
+  <div class="alert alert-success">
+    <ul>
+      <h4 class="text-center">{{session('exito')}}</h4>
+    </ul>
+  </div>
+@endif
+
+<!--Mostrará mensaje de eror en caso que la petición en clave-area no se haya realizado correctamente-->
+@if (session('error'))
+  <div class="alert alert-danger">
+    <ul>
+      <h4 class="text-center">{{session('error')}}</h4>
+    </ul>
+  </div>
+@endif
+
   <div id="wrapper">
   <div id="content-wrapper">
     <div class="container-fluid">
+
       <!-- DataTables Example -->
       <div class="card mb-3">
         <div class="card-header">
           <i class="fas fa-table"></i>
           Encuestas </div>
         <div class="card-body">
-          @if(auth()->user()->role==1 | auth()->user()->role==0)
+
+            @if(auth()->user()->role==1) 
+            <a class="btn btn-sm mb-3" href="#" title="Agregar">
+                <span class="icon-add-solid "></span>
+                <b>Nueva Encuesta</b>
+            </a>
+            @endif
+          
+          @if($encuestas)
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
@@ -32,9 +62,13 @@
                   <th>Título</th>
                   <th>Descripción</th>
                   <th>Estado</th>
-                  <th>Duración</th>
-                  <th>Intentos</th>
+                  <th>Periodo Disponible</th>
+                  @if(auth()->user()->IsAdmin)
+                  <th>Autor</th>
+                  @endif
+                  @if(auth()->user()->role==1)
                   <th>Acciones</th>
+                  @endif
                 </tr>
               </thead>
               <tfoot>
@@ -42,52 +76,89 @@
                   <th>Título</th>
                   <th>Descripción</th>
                   <th>Estado</th>
-                  <th>Duración</th>
-                  <th>Intentos</th>
+                  <th>Periodo Disponible</th>
+                  @if(auth()->user()->IsAdmin)
+                  <th>Autor</th>
+                  @endif
+                  @if(auth()->user()->role==1)
                   <th>Acciones</th>
+                  @endif
                 </tr>
               </tfoot>
               <tbody>
-                
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td><a title="Detalle estudiante" href=""><img src="{{asset('img/student.ico')}}" width="35" height="35" /></a></td>
-                </tr>
+                @foreach($encuestas as $encuesta)
+                @if(auth()->user()->role==1)
+                  
+                  <tr>
+                    <td>{{$encuesta->titulo_encuesta}}</td>
+                    <td>{{$encuesta->descripcion_encuesta}}</td>
+                    <td>
+                      <span class="badge badge-success ">Pública</span>
+                      <span class="icon-eye"></span>
+                    </td>
+                    <td>
+                      <b>Desde:</b> {{$encuesta->fecha_inicio_encuesta}} <br> 
+                      <b>Hasta:</b> {{$encuesta->fecha_final_encuesta}}
+                    </td>
+                    <td>
+                      <a title="" href="Editar" class="btn btn-sm btn-option">
+                        <span class="icon-edit"></span>
+                      </a>
+                      <a title="Deshabilitar" href="" class="btn btn-sm btn-danger">
+                        <span class="icon-minus-circle"></span>
+                      </a>
+                      
+                      <a title="Añadir áreas" href="" class="btn btn-sm btn-option">
+                        <span class="icon-add-solid"></span>
+                      </a>
+
+                      <a title="Estadísticas" href="" class="btn btn-sm btn-option">
+                        <span class="icon-grafico"></span>
+                      </a>
+
+                      <a title="Estadísticas" href="" class="btn btn-sm btn-option">
+                        <span class="icon-grafico"></span>
+                      </a>
+
+                      <button class="btn btn-sm btn-danger" href="#" title="Eliminar Área" 
+                          data-eliminar-encuesta="{{ $encuesta->id }}">
+                          <span class="icon-delete"></span>
+                      </button>
+                    </td>
+                  </tr>
+                  
+                @elseif(auth()->user()->role==0)
+                  
+                  <tr>
+                      <td>{{$encuesta->titulo_encuesta}}</td>
+                      <td>{{$encuesta->descripcion_encuesta}}</td>
+                      <td><span class="badge badge-success">Pública</span></td>
+                      <td>
+                        <b>Desde:</b> {{$encuesta->fecha_inicio_encuesta}} <br> 
+                        <b>Hasta:</b> {{$encuesta->fecha_final_encuesta}}</td>
+                      <td></td>
+                      <!--
+                      <td>
+                        <a title="" href="">
+                          <span></span>
+                        </a>
+                      </td>
+                      -->
+                  </tr>
+                 
+                @endif
+                @endforeach
               </tbody>
             </table>
           </div>
-          @endif
+       
 
 
-          <!--Estudiante-->
-     @if(auth()->user()->role==2)
-		<div class="list-group">
-		  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-		    <div class="d-flex w-100 justify-content-between">
-		      <h5 class="mb-1">List group item heading</h5>
-		      <small>3 days ago</small>
-		    </div>
-		    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-		    <small>Donec id elit non mi porta.</small>
-		  </a>
-		  <br>
-		  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-		    <div class="d-flex w-100 justify-content-between">
-		      <h5 class="mb-1">List group item heading</h5>
-		      <small class="text-muted">3 days ago</small>
-		    </div>
-		    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-		    <small class="text-muted">Donec id elit non mi porta.</small>
-		  </a>
-		</div>
-    @endif
-		
-		<!--Estudiante-->
-
+        @else
+          <div class="alert alert-warning" role="alert">
+            No se encontraron resultados          
+          </div>
+        @endif
         </div>
         <div class="card-footer small text-muted"></div>
       </div>
@@ -98,7 +169,30 @@
 </div>
 <!-- /#wrapper -->
 
-
+<!-- Modal elimanr una encuesta que no haya sido respondida-->
+<div class="modal fade" id="eliminarEncuesta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eliminarModalCenterTitle">Eliminar Encuesta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body" id="elimanr-encuesta">
+          <h3><strong>¿Desea eliminar esta Encuesta?</strong></h3>
+        </div>
+        <div class="modal-footer">
+          <form action="{{ route('eliminar_encuesta')}}" method="POST">
+            {{ csrf_field() }}
+            <input type="hidden" value="" id="id_encuesta" name="id_encuesta">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
 
 @endsection
 
@@ -115,9 +209,19 @@
     <script type="text/javascript" src="{{asset('vendor/datatables/jquery.dataTables.js' )}}"></script>
     <script type="text/javascript" src="{{asset('vendor/datatables/dataTables.bootstrap4.js' )}}"></script>
   	<script type="text/javascript" src="{{asset('js/demo/datatables-demo.js')}}"></script>
+
+    <script>
+      $('[data-eliminar-encuesta]').on('click', function(){
+          var id_encuesta = $(this).data('eliminar-encuesta');
+
+          $('#id_encuesta').attr('value', $(this).data('eliminar-encuesta'));
+          $('#eliminarEncuesta').modal('show');
+      });
+    </script>
+
+
 @endsection
 @endsection
 
 
-@section("footer")
-@endsection
+
