@@ -15,8 +15,10 @@ class CreateIntentosTable extends Migration
     {
         Schema::create('intento', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('estudiante_id');
+            $table->unsignedInteger('estudiante_id')->nullable();
             $table->foreign('estudiante_id')->references('id_est')->on('estudiante');
+            $table->unsignedInteger('encuestado_id')->nullable();
+            $table->foreign('encuestado_id')->references('id')->on('encuestado');
             $table->unsignedInteger('clave_id');
             $table->foreign('clave_id')->references('id')->on('clave');
             $table->unsignedInteger('encuesta_id')->nullable();
