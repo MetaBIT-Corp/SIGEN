@@ -14,7 +14,7 @@
 @section("body")
 
 @section("ol_breadcrumb")
-    <li class="breadcrumb-item"><a href="#">Encuestas</a></li>
+    <li class="breadcrumb-item"><a href="#">Listado Encuestas</a></li>
 @endsection
 @section("main")
 
