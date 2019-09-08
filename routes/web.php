@@ -21,6 +21,7 @@ Route::post('turno/claves', 'ClaveController@asignarPreguntas')->name('agregar_c
 Route::post('clave-area/editar/', 'ClaveController@editarClaveArea')->name('editar_clave_area');
 Route::post('clave-area/eliminar/', 'ClaveController@eliminarClaveArea')->name('eliminar_clave_area');
 Route::get('clave-area/{clave_area_id}/preguntas','ClaveAreaController@listarPreguntas')->name('preguntas_por_area')->middleware('signed');
+Route::get('intento/{intento_id}/respuestas','IntentoController@calcularNota');
 /*-----------------------------------------------------------------------------------------------------------------*/
 
 Route::get('intento/', function() {

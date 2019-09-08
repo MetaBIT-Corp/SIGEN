@@ -8,7 +8,10 @@ use App\Turno;
 use App\Respuesta;
 use App\Estudiante;
 use App\Grupo_Emparejamiento;
+use App\Intento;
+use App\Clave_Area_Pregunta_Estudiante;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class IntentoController extends Controller
@@ -84,7 +87,7 @@ class IntentoController extends Controller
          */
         if($tipo==0){
             foreach ($claves_areas as $clave_area) {
-                $claves_areas_preguntas[$clave_area->area->tipo_item->id] = $clave_area->claves_areas_preguntas_est()->where('estudiante_id',$estudiante)->get();
+                $claves_areas_preguntas[$clave_area->area->tipo_item->id] = $clave_area->claves_areas_preguntas_estudiante()->where('estudiante_id',$estudiante)->get();
             }
         }else{
             foreach ($claves_areas as $clave_area) {
@@ -180,22 +183,42 @@ class IntentoController extends Controller
         $respuesta->save();
 
         return back();
+    }
 
-        //$respuests = json_decode($request->respuestas, true);
-        /*$respuests = $request->respuestas;
+    //Función para calcular la nota del intento
+    public function calcularNota($intento_id){
+        $intento = Intento::find($intento_id); //Obtener el intento
+        $estudiante_id = $intento->estudiante->id_est; //Obtener al estudiante que realizó el intento
+        $nota = 0.0;
 
-        foreach ($respuests as $respuesta) {
-            $respuesta = new Respuesta();
+        foreach($intento->respuestas as $respuesta){
 
-            $respuesta->id_pregunta = $respuesta->id_pregunta;
-            $respuesta->id_opcion = $respuesta->id_opcion;
-            $respuesta->id_intento = $respuesta->id_intento;
-            $respuesta->texto_respuesta = $respuesta->texto_respuesta;
+            //Si la respuesta que seleccionó en la pregunta es correcta
+            if($respuesta->opcion->correcta==1){
 
-            $respuesta->save();
+                //Obtener la pregunta a la que pertenece la respuesta
+                $pregunta_id = $respuesta->pregunta->id;
+                //Consulta para obtener el objeto clave_area_pregunta_estudiante al que pertenece la pregunta
+                $cape = Clave_Area_Pregunta_Estudiante::where('estudiante_id', $estudiante_id)
+                                                        ->where('pregunta_id', $pregunta_id)
+                                                        ->first();
+                
+                //Obtener la clave_aera a la que pertenece la pregunta
+                $clave_area = $cape->clave_area;
 
-            
+                //Obtener el peso de la pregunta
+                $peso = $clave_area->peso;
+                
+                //Cuenta la cantidad de preguntas que tiene el objeto clave_are
+                $cantidad_preguntas = count($clave_area->clave_area_preguntas_estudiante);
+
+                //Calcula la ponderación de la pregunta
+                $nota += ($peso/$cantidad_preguntas)/10;
+            }
         }
-        return back();*/
+        
+        dd($nota);
+
+        
     }
 }
