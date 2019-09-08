@@ -15,8 +15,8 @@
 
     @else
 
-    <a class="btn btn-warning mr-2 ml-2" title="Agregar Opciones" href="{{ URL::signedRoute('index-opcion',[$id]) }}">
-        <span class="icon-add-solid">
+    <a class="btn bg-primary text-white mr-2 ml-2" title="Agregar Opciones" href="{{ URL::signedRoute('index-opcion',[$id]) }}">
+        <span class="icon-options">
         </span>
     </a>
     <a class="btn btn-success mr-2 ml-2" title="Informacion Opciones" href="">

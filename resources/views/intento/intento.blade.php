@@ -20,19 +20,21 @@
     <div class="card">
     <div class="card-body">
         <!--Aqui iran las preguntas-->
-
         @for($i=0;$i<count($valores);$i++)
         @if($valores[$i]['tipo_item']!=3)
         <div class="card bg-light mt-2 mb-2">
             <div class="card-header" name='{{ $valores[$i]['pregunta']->id }}'>
                 <strong><h4>{{ $i+1}}.&nbsp&nbsp{{ $valores[$i]['pregunta']->pregunta }}</h4></strong> 
             </div>
-            <div class="card-body">
-
-                <!--Preguntas de opcion multiple-->
-                @if($valores[$i]['tipo_item']==1)
-
-                @for($j=0;$j<count($valores[$i]['opciones']);$j++)
+        <!--Respuesta Corta-->
+        @if($valores[$i]['tipo_item']==4)
+            <input aria-describedby="emailHelp" class="form-control" id="exampleInputEmail1" placeholder="Ingrese respuesta" type="text">
+                </input>
+            </div>
+        @else
+        <div class="card-body">
+            <!--Preguntas de opcion multiple-->
+            @for($j=0;$j<count($valores[$i]['opciones']);$j++)
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" id="{{ $valores[$i]['opciones'][$j]->id}}" name="{{ $valores[$i]['pregunta']->pregunta }}" type="radio">
                         <label class="custom-control-label" for="{{ $valores[$i]['opciones'][$j]->id}}">
@@ -40,38 +42,17 @@
                         </label>
                     </input>
                 </div>
-                @endfor
-            </div>
-            @elseif($valores[$i]['tipo_item']==2)
-            <div class="custom-control custom-radio">
-                    <input class="custom-control-input" id="{{ $valores[$i]['opciones'][0]->id}}-V" name="{{ $valores[$i]['pregunta']->pregunta }}" type="radio">
-                        <label class="custom-control-label" for="{{ $valores[$i]['opciones'][0]->id}}-V">
-                             <h5>Verdadero</h5>
-                        </label>
-                    </input>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input class="custom-control-input" id="{{ $valores[$i]['opciones'][0]->id}}-F" name="customRadio" type="radio">
-                        <label class="custom-control-label" for="{{ $valores[$i]['opciones'][0]->id}}-F">
-                             <h5>Falso</h5>
-                        </label>
-                    </input>
-                </div>
-            </div>
-
-        @elseif($valores[$i]['tipo_item']==4)
-            <input aria-describedby="emailHelp" class="form-control" id="exampleInputEmail1" placeholder="Ingrese respuesta" type="text">
-                </input>
-            </div>
+            @endfor
+        </div>
         @endif
         </div>
         @endif
 
-        
+        <!--Preguntas de Emparejamiento-->
         @if($valores[$i]['tipo_item']==3)
         <div class="card bg-light mt-2">
             <div class="card-header">
-                <h4>{{ $i+1 }}.&nbsp&nbspEmpareje las respuestas correctamente </h4>
+                {{ $valores[$i]['descripcion_gpo'] }}
             </div>
             <div class="card-body">
                 <table class="table">
@@ -83,7 +64,7 @@
                         </td>
                         <td>
                             <select class="custom-select col-12" id="{{ $valores[$i]['preguntas'][$r]->id }}">
-                                <option selected="">
+                                <option selected="" value="-1">
                                     Seleccione
                                 </option>
                                 @php
@@ -100,7 +81,7 @@
                                     }}
                                 @endphp
                                 @for($m=0;$m<count($valores[$i]['preguntas']);$m++)
-                                <option id="{{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id }}">
+                                <option value="{{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id }}">
                                     {{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->opcion }}
                                 </option>
                                 @endfor
@@ -116,9 +97,10 @@
         @endfor
 
     </div>
-    <div class="card-footer text-center">
+    <div class="card-footer">
         <!--Botones de control para paginacion-->
-        {{ $paginacion->links() }}
+        <div class="offset-10">{{ $paginacion->links('vendor.pagination.simple-bootstrap-4') }}</div>
+        
     </div>
 </div>
 </form>

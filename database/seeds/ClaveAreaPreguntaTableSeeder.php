@@ -45,7 +45,7 @@ class ClaveAreaPreguntaTableSeeder extends Seeder
             'pregunta_id'=>6
         ]);
 
-        //Estudiante JOSE
+        //Estudiante jose@gmail.com
         Clave_Area_Pregunta_Estudiante::create([
             'estudiante_id'=>1,
             'clave_area_id'=>1,
@@ -68,7 +68,7 @@ class ClaveAreaPreguntaTableSeeder extends Seeder
         ]);
         Clave_Area_Pregunta_Estudiante::create([
             'estudiante_id'=>1,
-            'clave_area_id'=>3,
+            'clave_area_id'=>2,
             'pregunta_id'=>3
         ]);
 

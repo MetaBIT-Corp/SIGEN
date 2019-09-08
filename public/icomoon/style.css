@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?iz74gr');
-  src:  url('fonts/icomoon.eot?iz74gr#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?iz74gr') format('truetype'),
-    url('fonts/icomoon.woff?iz74gr') format('woff'),
-    url('fonts/icomoon.svg?iz74gr#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?vac2y2');
+  src:  url('fonts/icomoon.eot?vac2y2#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?vac2y2') format('truetype'),
+    url('fonts/icomoon.woff?vac2y2') format('woff'),
+    url('fonts/icomoon.svg?vac2y2#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,51 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-options:before {
+  content: "\e912";
+}
+.icon-dice:before {
+  content: "\e90f";
+}
+.icon-edit:before {
+  content: "\e903";
+}
+.icon-admin:before {
+  content: "\e904";
+}
+.icon-delete_user:before {
+  content: "\e905";
+}
+.icon-add_user:before {
+  content: "\e906";
+}
+.icon-user:before {
+  content: "\e907";
+}
+.icon-detail_user:before {
+  content: "\e908";
+}
+.icon-download:before {
+  content: "\e909";
+}
+.icon-print:before {
+  content: "\e90a";
+}
+.icon-pdf:before {
+  content: "\e90b";
+}
+.icon-delete:before {
+  content: "\e90c";
+}
+.icon-list:before {
+  content: "\e9bb";
+}
+.icon-file-text:before {
+  content: "\e922";
+}
+.icon-users:before {
+  content: "\e972";
+}
 .icon-hand-paper-o:before {
   content: "\e911";
 }
@@ -82,46 +127,4 @@
 }
 .icon-information-solid:before {
   content: "\e901";
-}
-.icon-dice:before {
-  content: "\e90f";
-}
-.icon-edit:before {
-  content: "\e903";
-}
-.icon-admin:before {
-  content: "\e904";
-}
-.icon-delete_user:before {
-  content: "\e905";
-}
-.icon-add_user:before {
-  content: "\e906";
-}
-.icon-user:before {
-  content: "\e907";
-}
-.icon-detail_user:before {
-  content: "\e908";
-}
-.icon-download:before {
-  content: "\e909";
-}
-.icon-print:before {
-  content: "\e90a";
-}
-.icon-pdf:before {
-  content: "\e90b";
-}
-.icon-delete:before {
-  content: "\e90c";
-}
-.icon-list:before {
-  content: "\e9bb";
-}
-.icon-file-text:before {
-  content: "\e922";
-}
-.icon-users:before {
-  content: "\e972";
 }
