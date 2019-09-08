@@ -21,6 +21,7 @@ class CreateEncuestasTable extends Migration
             $table->string('descripcion_encuesta');
             $table->dateTime('fecha_inicio_encuesta');
             $table->dateTime('fecha_final_encuesta');
+            $table->boolean('visible');
             $table->timestamps();
         });
     }

@@ -32,6 +32,6 @@ class CreateClaveAreaPreguntaEstudiantesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clave__area__pregunta__estudiantes');
+        Schema::dropIfExists('clave_area_pregunta_estudiantes');
     }
 }
