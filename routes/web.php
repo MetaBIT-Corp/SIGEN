@@ -91,6 +91,7 @@ Route::group(['middleware' => 'admin'], function(){
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente
 Route::group(['middleware' => 'teacher'], function(){
+
     Route::get('/evaluacion/{id}', 'EvaluacionController@show')->name('detalle_evaluacion');
 
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
@@ -113,8 +114,10 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::post('/area/{id}/pregunta/{pregunta}','PreguntaController@update');
 
      //URL's para crear evaluacion
-    Route::get('materia/evaluacion/{id}','EvaluacionController@getCreate')->name('gc_evaluacion');
-    Route::post('materia/evaluacion/{id}','EvaluacionController@postCreate')->name('pc_evaluacion');
+    Route::get('materia/evaluacion/{id}/nuevo','EvaluacionController@getCreate')->name('gc_evaluacion');
+    Route::post('materia/evaluacion/{id}/nuevo','EvaluacionController@postCreate')->name('pc_evaluacion');
+    Route::get('materia/evaluacion/{id_eva}/editar','EvaluacionController@getUpdate')->name('gu_evaluacion');
+    Route::post('materia/evaluacion/{id_eva}/editar','EvaluacionController@postUpdate')->name('pu_evaluacion');
 
 
     //URL's para crear encuesta

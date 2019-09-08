@@ -60,7 +60,7 @@
               <thead>
                 <tr>
                   <th>Título</th>
-                  <th>Descripción</th>
+                  
                   <th>Estado</th>
                   <th>Periodo Disponible</th>
                   @if(auth()->user()->IsAdmin)
@@ -74,7 +74,7 @@
               <tfoot>
                 <tr>
                   <th>Título</th>
-                  <th>Descripción</th>
+                  
                   <th>Estado</th>
                   <th>Periodo Disponible</th>
                   @if(auth()->user()->IsAdmin)
@@ -91,7 +91,7 @@
                   
                   <tr>
                     <td>{{$encuesta->titulo_encuesta}}</td>
-                    <td>{{$encuesta->descripcion_encuesta}}</td>
+                 
                     <td>
                       <span class="badge badge-success ">Pública</span>
                       <span class="icon-eye"></span>
@@ -101,28 +101,24 @@
                       <b>Hasta:</b> {{$encuesta->fecha_final_encuesta}}
                     </td>
                     <td>
-                      <a title="" href="Editar" class="btn btn-sm btn-option">
+                      <a title="" href="Editar" class="btn btn-sm btn-option mb-1">
                         <span class="icon-edit"></span>
                       </a>
-                      <a title="Deshabilitar" href="" class="btn btn-sm btn-danger">
+                      <a title="Deshabilitar" href="" class="btn btn-sm btn-danger mb-1">
                         <span class="icon-minus-circle"></span>
                       </a>
                       
-                      <a title="Añadir áreas" href="" class="btn btn-sm btn-option">
+                      <a title="Añadir áreas" href="" class="btn btn-sm btn-option mb-1">
                         <span class="icon-add-solid"></span>
                       </a>
 
-                      <a title="Estadísticas" href="" class="btn btn-sm btn-option">
-                        <span class="icon-grafico"></span>
-                      </a>
-
-                      <a title="Estadísticas" href="" class="btn btn-sm btn-option">
-                        <span class="icon-grafico"></span>
-                      </a>
-
-                      <button class="btn btn-sm btn-danger" href="#" title="Eliminar Área" 
+                      <a class="btn btn-sm btn-danger mb-1" href="#" title="Eliminar Área" 
                           data-eliminar-encuesta="{{ $encuesta->id }}">
                           <span class="icon-delete"></span>
+                      </a>
+
+                      <button title="Estadísticas" href="" class="btn btn-sm btn-option mb-1">
+                        <span class="icon-grafico"></span>
                       </button>
                     </td>
                   </tr>

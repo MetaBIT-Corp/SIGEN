@@ -16,6 +16,13 @@
     <li class="breadcrumb-item"><a href="#">Materia</a></li>
     <li class="breadcrumb-item">Evaluación</li>
 @endsection
+<!-- Notificacion  -->
+            @if (session('notification'))
+                  <div class="alert alert-success">
+                        {{session('notification')}}
+                  </div>
+            @endif
+            <!-- Notificacion -->
 @section("main")
   <div id="wrapper">
   <div id="content-wrapper">
@@ -27,7 +34,7 @@
           Evaluaciones | Materia</div>
         <div class="card-body">
           @if(auth()->user()->role==1) 
-          <a class="btn btn-sm mb-3" href="#" title="Agregar">
+          <a class="btn btn-sm mb-3" href="{{route('gc_evaluacion', $id_carga)}}" title="Agregar">
                 <span class="icon-add-solid "></span>
                 <b>Nueva Evaluación</b>
           </a>
@@ -38,9 +45,9 @@
               <thead>
                 <tr>
                   <th>Título</th>
-                  <th>Descripción</th>
+                  
                   <th>Estado</th>
-                  <th>Duración</th>
+                  <th>Duración (min)</th>
                   <th>Intentos</th>
                   <th>Acciones</th>
                 </tr>
@@ -48,9 +55,9 @@
               <tfoot>
                 <tr>
                   <th>Título</th>
-                  <th>Descripción</th>
+                  
                   <th>Estado</th>
-                  <th>Duración</th>
+                  <th>Duración (min)</th>
                   <th>Intentos</th>
                   <th>Acciones</th>
                 </tr>
@@ -61,7 +68,7 @@
                 <tr>
                  
                   <td>{{$evaluacion->nombre_evaluacion}}</td>
-                  <td>{{$evaluacion->descripcion_evaluacion}}</td>
+                
                   <td>
                     <span class="badge badge-success">Pública</span>
                     <span class="icon-eye"></span>
@@ -69,26 +76,31 @@
                   <td>{{$evaluacion->duracion}}</td>
                   <td>{{$evaluacion->intentos}}</td>
                   <td>
-                      <a class="btn btn-sm btn-option" title="Listado de turnos" href="{{ URL::signedRoute('listado_turnos', ['id' => $evaluacion->id]) }}">
-                           <span class="icon-calendar-plus-o"></span>
-                       </a>
-                       
-                       <a class="btn btn-sm btn-secondary" title="Detalle de evaluación" href="{{ URL::signedRoute('detalle_evaluacion', ['id' => $evaluacion->id]) }}">
+                      <a class="btn btn-sm btn-secondary mb-1" title="Detalle de evaluación" href="{{ URL::signedRoute('detalle_evaluacion', ['id' => $evaluacion->id]) }}">
                            <span class="icon-information-solid"></span>
+                      </a>
 
-                       <a class="btn btn-option btn-sm" title="Publicar Evaluación" href="#">
-                        <span class="icon-upload"></span>
-                       </a>
+                      
 
-                       <a class="btn btn-option btn-sm" title="Editar Evaluación" href="#">
+                       <a class="btn btn-option btn-sm mb-1" title="Editar Evaluación" href="{{route('gu_evaluacion',$evaluacion->id)}}">
                         <span class="icon-edit"></span>
                        </a>
 
-                       <a class="btn btn-danger btn-sm" title="Deshabilitar Evaluación" href="#">
+                       <a class="btn btn-danger btn-sm mb-1" title="Deshabilitar Evaluación" href="#">
                         <span class="icon-minus-circle"></span>
                        </a>
+                       
+                       <a class="btn btn-sm btn-option mb-1" title="Listado de turnos" href="{{ URL::signedRoute('listado_turnos', ['id' => $evaluacion->id]) }}">
+                           <span class="icon-calendar-plus-o"></span>
+                       </a>
 
-                       <a class="btn btn-info btn-sm" title="Estadísticas" href="#">
+                       <a class="btn btn-option btn-sm mb-1" title="Publicar Evaluación" href="#">
+                        <span class="icon-upload"></span>
+                       </a>
+
+                       
+
+                       <a class="btn btn-info btn-sm mb-1" title="Estadísticas" href="#">
                         <span class="icon-grafico"></span>
                        </a>
                   </td>
