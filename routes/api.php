@@ -18,6 +18,7 @@ Route::get('/evaluacion/{id}/duracion/','TurnoController@getDuracionEvaluacion')
 
 //Obtener evaluación
 Route::get('/evaluacion/turno/{turno_id}/obtener/{estudiante_id}','TurnoController@getEvaluacion');
+Route::get('/encuesta/{encuesta_id}/{mac}','TurnoController@getEncuesta');
 
 //Clave
 Route::get('/area/{id}/preguntas', 'ClaveController@preguntasPorArea');

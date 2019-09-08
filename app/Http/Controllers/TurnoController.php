@@ -11,6 +11,8 @@ use App\Estudiante;
 use App\Clave_Area;
 use App\Intento;
 use App\Area;
+use App\Encuesta;
+use App\Encuestado;
 use App\Pregunta;
 use App\Clave_Area_Pregunta;
 use App\Clave_Area_Pregunta_Estudiante;
@@ -374,6 +376,8 @@ class TurnoController extends Controller
             
         }
         
+        //Agregamos los Arrays que obtuvimos de los bucles anteriores al Array que se enviara como respuesta 
+        
         $evaluacion['clave_areas'] = $clave_areas_arr;
         $evaluacion['areas'] = $areas_arr;
         $evaluacion['clave_area_preguntas'] = $clave_area_preguntas_arr;
@@ -383,6 +387,120 @@ class TurnoController extends Controller
         
         return $evaluacion;   
         
+    }
+    
+    public function getEncuesta($encuesta_id, $mac){
+        $encuesta_arr = array();
+        //Primero obtenemos el objeto de Encuesta
+        $encuesta = Encuesta::find($encuesta_id);
+        $encuesta_arr['encuesta'] = $encuesta;
+        
+        //Buscamos si esta dirección MAC ya se encuentra registrada
+        $encuestados = Encuestado::where('MAC',$mac)->get();
+        $encuestado = null;
+    
+        if($encuestados->count())
+            //En caso que la consulta anterior retorne objetos de Encuestado, obtenemos el primero
+            $encuestado = $encuestados[0];
+        else{
+            //Si no hay ninguno registrado con esta MAC lo creamos
+            $encuestado = new Encuestado();
+            $encuestado->MAC = $mac;
+            $encuestado->save();
+        }
+        //Ahora almacenamos en el Array al Encuestado
+        $encuesta_arr['encuestado'] = $encuestado;
+        
+        //Procederemos a obtener la Clave, la cual se relaciona con la Encuesta directamente
+        //Se asume por el momento que una Encuesta solamente poseera una Clave
+        $clave = Clave::where('encuesta_id', $encuesta->id)->first();
+        $encuesta_arr['clave'] = $clave;
+        
+        //Procederemos a crear el Intento
+        $intento = new Intento(); 
+        $intento->estudiante_id = null;
+        $intento->encuestado_id = $encuestado->id;
+        $intento->clave_id = $clave->id;
+        //$intento->encuesta_id = $encuesta->id;
+        $intento->fecha_inicio_intento = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $intento->save();
+        
+        $encuesta_arr['intento'] = $intento;
+        
+        //Creamos Arrays que se enviaran
+        $clave_areas_arr = array();
+        $areas_arr = array();
+        $grupos_emp_arr = array();
+        $preguntas_arr = array();
+        $opciones_arr = array();
+        $clave_area_preguntas_arr = array();
+        
+        //Procederemos ahora a obtener las Clave_Areas
+        $clave_areas = Clave_Area::where('clave_id', $clave->id)->get();
+        
+        foreach($clave_areas as $clave_area){
+            $clave_areas_arr[] = $clave_area;
+            
+            //Procederemos a obtener cada objeto Área
+            $areas_arr[] = Area::find($clave_area->area_id);
+            
+            //Procedemos a obtener las preguntas que se le han asignado al estudiante para esta clave_area que se esta recorriendo
+            $clave_area_preguntas = Clave_Area_Pregunta::where('clave_area_id',$clave_area->id)->get();
+            
+            foreach($clave_area_preguntas as $clave_area_pregunta){
+                //Almacenamos esta relacion ya que se necesita esta en la BD del móvil clave_area_pregunta
+                $clave_area_preguntas_arr[] = $clave_area_pregunta;
+                
+                //Buscamos la Pregunta, ya que es necesario agregarla al Array correspondiente
+                $pregunta = Pregunta::find($clave_area_pregunta->pregunta_id);
+                
+                //Almacenamos el objeto Pregunta en un array
+                $preguntas_arr[] = $pregunta;
+                
+                //Procederemos a obtener las opciones de la pregunta
+                $opciones = Opcion::where('pregunta_id', $pregunta->id)->get();
+                
+                //Vamos a recorrer este array de opciones para almacenar uno por uno en el Array opciones_arr
+                foreach($opciones as $opcion){
+                    $opciones_arr[] = $opcion;
+                }
+                
+                //Procederemos a obtener el Grupo_Emparejamiento de la Pregunta
+                $gpo_emp = Grupo_Emparejamiento::find($pregunta->grupo_emparejamiento_id);
+                
+                //Debemos validar que este Grupo_Emparejamiento no este repetido en el Array grupos_emp_arr, ya que varias preguntas pueden apuntar a uno, y solo necesitamos un objeto
+                if($grupos_emp_arr == [])
+                    $grupos_emp_arr[] = $gpo_emp; //Si esta vacio, lo agregamos
+                else{
+                    //Si hay objetos, hay que recorrerlo y verificar que no se repita
+                    $repetido = false;
+                    foreach($grupos_emp_arr as $grupo_emp){
+                        
+                        if($gpo_emp->id == $grupo_emp->id){
+                            $repetido = true;
+                            break; //Esto indica que esta repetido, en este caso ya no es necesario seguir buscando, por lo que rompemos el bucle
+                        }
+                        
+                            
+                    }
+                    
+                    if(! $repetido)
+                        $grupos_emp_arr[] = $gpo_emp; //Si no esta repetido lo agregamos
+                }
+                
+            }
+        }
+        
+        //Agregamos los Arrays que obtuvimos de los bucles anteriores al Array que se enviara como respuesta 
+        
+        $encuesta_arr['clave_areas'] = $clave_areas_arr;
+        $encuesta_arr['areas'] = $areas_arr;
+        $encuesta_arr['grupos_emp'] = $grupos_emp_arr;
+        $encuesta_arr['preguntas'] = $preguntas_arr;
+        $encuesta_arr['opciones'] = $opciones_arr;
+        $encuesta_arr['clave_area_preguntas'] = $clave_area_preguntas_arr;
+        
+        return $encuesta_arr;
     }
     
 }
