@@ -32,6 +32,11 @@ class Clave_Area extends Model
     	return $this->hasMany('App\Clave_Area_Pregunta','clave_area_id');
     }
 
+    //Obtiene la cantidad de preguntas de la clave_area
+    public function clave_area_preguntas_estudiante(){
+        return $this->hasMany(Clave_Area_Pregunta_Estudiante::class, 'clave_area_id', 'id');
+    }
+
 
     //Accessors
 
