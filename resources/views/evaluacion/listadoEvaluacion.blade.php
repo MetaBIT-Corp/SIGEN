@@ -14,7 +14,7 @@
 
 @section("ol_breadcrumb")
     <li class="breadcrumb-item"><a href="#">Materia</a></li>
-    <li class="breadcrumb-item">Evaluación</li>
+    <li class="breadcrumb-item">Evaluaciones</li>
 @endsection
 <!-- Notificacion  -->
             @if (session('notification'))
