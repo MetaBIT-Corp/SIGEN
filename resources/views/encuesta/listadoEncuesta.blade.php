@@ -41,13 +41,14 @@
     <div class="container-fluid">
 
       <!-- DataTables Example -->
+
       <div class="card mb-3">
         <div class="card-header">
           <i class="fas fa-table"></i>
           Encuestas </div>
         <div class="card-body">
 
-            @if(auth()->user()->role==1) 
+            @if(auth()->user()->IsTeacher) 
             <a class="btn btn-sm mb-3" href="#" title="Agregar">
                 <span class="icon-add-solid "></span>
                 <b>Nueva Encuesta</b>
@@ -60,38 +61,32 @@
               <thead>
                 <tr>
                   <th>Título</th>
-                  
                   <th>Estado</th>
                   <th>Periodo Disponible</th>
                   @if(auth()->user()->IsAdmin)
                   <th>Autor</th>
                   @endif
-                  @if(auth()->user()->role==1)
                   <th>Acciones</th>
-                  @endif
+                  
                 </tr>
               </thead>
               <tfoot>
                 <tr>
                   <th>Título</th>
-                  
                   <th>Estado</th>
                   <th>Periodo Disponible</th>
                   @if(auth()->user()->IsAdmin)
                   <th>Autor</th>
                   @endif
-                  @if(auth()->user()->role==1)
+                  @if(auth()->user()->IsTeacher)
                   <th>Acciones</th>
                   @endif
                 </tr>
               </tfoot>
               <tbody>
                 @foreach($encuestas as $encuesta)
-                @if(auth()->user()->role==1)
-                  
                   <tr>
                     <td>{{$encuesta->titulo_encuesta}}</td>
-                 
                     <td>
                       <span class="badge badge-success ">Pública</span>
                       <span class="icon-eye"></span>
@@ -100,15 +95,21 @@
                       <b>Desde:</b> {{$encuesta->fecha_inicio_encuesta}} <br> 
                       <b>Hasta:</b> {{$encuesta->fecha_final_encuesta}}
                     </td>
+                    @if(auth()->user()->IsAdmin)
                     <td>
-                      <a title="" href="Editar" class="btn btn-sm btn-option mb-1">
+                      
+                    </td>
+                    @endif
+                    <td>
+                    @if(auth()->user()->IsTeacher)
+                      <a title="Editar" href="#" class="btn btn-sm btn-option mb-1">
                         <span class="icon-edit"></span>
                       </a>
-                      <a title="Deshabilitar" href="" class="btn btn-sm btn-danger mb-1">
+                      <a title="Deshabilitar" href="#" class="btn btn-sm btn-danger mb-1">
                         <span class="icon-minus-circle"></span>
                       </a>
                       
-                      <a title="Añadir áreas" href="" class="btn btn-sm btn-option mb-1">
+                      <a title="Añadir áreas" href="#" class="btn btn-sm btn-option mb-1">
                         <span class="icon-add-solid"></span>
                       </a>
 
@@ -117,32 +118,16 @@
                           <span class="icon-delete"></span>
                       </a>
 
+                      <a class="btn btn-sm btn-option mb-1" href="#" title="Publicar Encuesta">
+                          <span class="icon-upload"></span>
+                      </a>
+                      @endif
                       <button title="Estadísticas" href="" class="btn btn-sm btn-option mb-1">
                         <span class="icon-grafico"></span>
                       </button>
+
                     </td>
                   </tr>
-                  
-                @elseif(auth()->user()->role==0)
-                  
-                  <tr>
-                      <td>{{$encuesta->titulo_encuesta}}</td>
-                      <td>{{$encuesta->descripcion_encuesta}}</td>
-                      <td><span class="badge badge-success">Pública</span></td>
-                      <td>
-                        <b>Desde:</b> {{$encuesta->fecha_inicio_encuesta}} <br> 
-                        <b>Hasta:</b> {{$encuesta->fecha_final_encuesta}}</td>
-                      <td></td>
-                      <!--
-                      <td>
-                        <a title="" href="">
-                          <span></span>
-                        </a>
-                      </td>
-                      -->
-                  </tr>
-                 
-                @endif
                 @endforeach
               </tbody>
             </table>

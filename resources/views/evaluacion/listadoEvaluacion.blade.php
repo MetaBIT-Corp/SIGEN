@@ -45,7 +45,6 @@
               <thead>
                 <tr>
                   <th>Título</th>
-                  
                   <th>Estado</th>
                   <th>Duración (min)</th>
                   <th>Intentos</th>
@@ -55,7 +54,6 @@
               <tfoot>
                 <tr>
                   <th>Título</th>
-                  
                   <th>Estado</th>
                   <th>Duración (min)</th>
                   <th>Intentos</th>
@@ -79,9 +77,8 @@
                       <a class="btn btn-sm btn-secondary mb-1" title="Detalle de evaluación" href="{{ URL::signedRoute('detalle_evaluacion', ['id' => $evaluacion->id]) }}">
                            <span class="icon-information-solid"></span>
                       </a>
-
-                      
-
+                        
+                        @if(auth()->user()->IsTeacher)
                        <a class="btn btn-option btn-sm mb-1" title="Editar Evaluación" href="{{route('gu_evaluacion',$evaluacion->id)}}">
                         <span class="icon-edit"></span>
                        </a>
@@ -89,16 +86,15 @@
                        <a class="btn btn-danger btn-sm mb-1" title="Deshabilitar Evaluación" href="#">
                         <span class="icon-minus-circle"></span>
                        </a>
-                       
-                       <a class="btn btn-sm btn-option mb-1" title="Listado de turnos" href="{{ URL::signedRoute('listado_turnos', ['id' => $evaluacion->id]) }}">
-                           <span class="icon-calendar-plus-o"></span>
-                       </a>
 
                        <a class="btn btn-option btn-sm mb-1" title="Publicar Evaluación" href="#">
                         <span class="icon-upload"></span>
                        </a>
-
+                       @endif
                        
+                       <a class="btn btn-sm btn-option mb-1" title="Listado de turnos" href="{{ URL::signedRoute('listado_turnos', ['id' => $evaluacion->id]) }}">
+                           <span class="icon-calendar-plus-o"></span>
+                       </a>
 
                        <a class="btn btn-info btn-sm mb-1" title="Estadísticas" href="#">
                         <span class="icon-grafico"></span>
