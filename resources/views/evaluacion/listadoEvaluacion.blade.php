@@ -45,18 +45,18 @@
               <thead>
                 <tr>
                   <th>Título</th>
-                  <th>Estado</th>
                   <th>Duración (min)</th>
                   <th>Intentos</th>
+                  <th>Paginación</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
                   <th>Título</th>
-                  <th>Estado</th>
                   <th>Duración (min)</th>
                   <th>Intentos</th>
+                  <th>Paginación</th>
                   <th>Acciones</th>
                 </tr>
               </tfoot>
@@ -66,13 +66,9 @@
                 <tr>
                  
                   <td>{{$evaluacion->nombre_evaluacion}}</td>
-                
-                  <td>
-                    <span class="badge badge-success">Pública</span>
-                    <span class="icon-eye"></span>
-                  </td>
                   <td>{{$evaluacion->duracion}}</td>
                   <td>{{$evaluacion->intentos}}</td>
+                  <td>{{$evaluacion->preguntas_a_mostrar}}</td>
                   <td>
                       <a class="btn btn-sm btn-secondary mb-1" title="Detalle de evaluación" href="{{ URL::signedRoute('detalle_evaluacion', ['id' => $evaluacion->id]) }}">
                            <span class="icon-information-solid"></span>

@@ -49,7 +49,7 @@
         <div class="card-body">
 
             @if(auth()->user()->IsTeacher) 
-            <a class="btn btn-sm mb-3" href="#" title="Agregar">
+            <a class="btn btn-sm mb-3" href="{{route('gc_encuesta')}}" title="Agregar">
                 <span class="icon-add-solid "></span>
                 <b>Nueva Encuesta</b>
             </a>
@@ -88,8 +88,13 @@
                   <tr>
                     <td>{{$encuesta->titulo_encuesta}}</td>
                     <td>
+                      @if($encuesta->visible==1)
                       <span class="badge badge-success ">Pública</span>
                       <span class="icon-eye"></span>
+                      @else
+                      <span class="badge badge-warning ">No visible</span>
+                      <span class="icon-eye-slash"></span>
+                      @endif
                     </td>
                     <td>
                       <b>Desde:</b> {{$encuesta->fecha_inicio_encuesta}} <br> 
@@ -132,9 +137,6 @@
               </tbody>
             </table>
           </div>
-       
-
-
         @else
           <div class="alert alert-warning" role="alert">
             No se encontraron resultados          
