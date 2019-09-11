@@ -122,7 +122,9 @@ Route::group(['middleware' => 'teacher'], function(){
 
     //URL's para crear encuesta
     Route::get('/encuesta','EncuestaController@getCreate')->name('gc_encuesta');
-    Route::post('/encuesta','EncuestaController@postCreate')->name('pc_encuesta');   
+    Route::post('/encuesta','EncuestaController@postCreate')->name('pc_encuesta');
+    Route::get('/encuesta/{id}/editar','EncuestaController@getUpdate')->name('gu_encuesta');
+    Route::post('/encuesta/{id}/editar','EncuestaController@postUpdate')->name('pu_encuesta');    
     Route::post('/eliminar-encuesta','EncuestaController@eliminarEncuesta')->name('eliminar_encuesta');   
     
 });
