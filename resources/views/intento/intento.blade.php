@@ -16,7 +16,7 @@
 @section("main")
 <!--Card que contiene a cada pregunta-->
 <!--Se agrego la etiqueta form para persistencia-->
-<form>
+<form id="quiz_form">
     <div class="card">
     <div class="card-body">
         <!--Aqui iran las preguntas-->
@@ -36,7 +36,7 @@
             <!--Preguntas de opcion multiple-->
             @for($j=0;$j<count($valores[$i]['opciones']);$j++)
                 <div class="custom-control custom-radio">
-                    <input class="custom-control-input" id="{{ $valores[$i]['opciones'][$j]->id}}" name="{{ $valores[$i]['pregunta']->pregunta }}" type="radio">
+                    <input class="custom-control-input" id="{{ $valores[$i]['opciones'][$j]->id}}" name="pregunta_{{ $valores[$i]['pregunta']->id }}" type="radio" value="opcion_{{ $valores[$i]['opciones'][$j]->id }}" @if($valores[$i]['opciones'][$j]->seleccionada) checked @endif>
                         <label class="custom-control-label" for="{{ $valores[$i]['opciones'][$j]->id}}">
                              <h5>{{ $valores[$i]['opciones'][$j]->opcion }}</h5>
                         </label>
@@ -100,9 +100,30 @@
     <div class="card-footer">
         <!--Botones de control para paginacion-->
         <div class="offset-10">{{ $paginacion->links('vendor.pagination.simple-bootstrap-4') }}</div>
-        
     </div>
 </div>
 </form>
 @endsection
+@endsection
+
+@section("js")
+<script type="text/javascript">
+    
+    $("#previous_btn").click(function(){
+        var data = $("#quiz_form").serialize();
+        respuestas_val = data.replace(/&/g,"-");
+        $.get('http://localhost:8000/persistencia', {respuestas:respuestas_val}, function(response){
+            console.log("success");
+        });
+    });
+    
+    $("#next_btn").click(function(){
+        var data = $("#quiz_form").serialize();
+        respuestas_val = data.replace(/&/g,"-");
+        $.get('http://localhost:8000/persistencia', {respuestas:respuestas_val}, function(response){
+            console.log("success");
+        });
+    });
+    
+</script>
 @endsection

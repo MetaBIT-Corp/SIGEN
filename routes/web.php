@@ -27,6 +27,8 @@ Route::get('intento/{intento_id}/respuestas','IntentoController@calcularNota');
 Route::get('intento/', function() {
 	echo "<a href='intento/prueba/1?page=1'>Link para iniciar intento</a>";
 });
+    
+Route::get('persistencia/', 'IntentoController@persistence');
 
 Route::get('intento/prueba/{id_intento}','IntentoController@iniciarEvaluacion')->name('prueba');
 
