@@ -172,8 +172,10 @@ class IntentoController extends Controller
         return $paginacion;
     }
 
-    public function finalizarIntento(Request $request){
+    public function finalizarIntentoMovil(Request $request){
         $respuesta = new Respuesta();
+
+        $total_preguntas = $request->total_preguntas; //cantidad total de preguntas que vienen desde el móvil
 
         $respuesta->id_pregunta = $request->pregunta_id;
         $respuesta->id_opcion = $request->opcion_id;
@@ -182,7 +184,14 @@ class IntentoController extends Controller
 
         $respuesta->save();
 
-        return back();
+        $num_actual = Respuesta::where('intento_id', $request->intento_id);
+        //dd($num_actual);
+        if($total_preguntas == count($num_actual)){
+            $nota = $this->calcularNota($request->intento_id);
+            $intento = Intento::find($request->intento_id);
+            $intento->nota = $nota;
+            $intento->save();
+        }
     }
 
     //Función para calcular la nota del intento
@@ -198,6 +207,7 @@ class IntentoController extends Controller
 
                 //Obtener la pregunta a la que pertenece la respuesta
                 $pregunta_id = $respuesta->pregunta->id;
+
                 //Consulta para obtener el objeto clave_area_pregunta_estudiante al que pertenece la pregunta
                 $cape = Clave_Area_Pregunta_Estudiante::where('estudiante_id', $estudiante_id)
                                                         ->where('pregunta_id', $pregunta_id)
@@ -208,7 +218,7 @@ class IntentoController extends Controller
 
                 //Obtener el peso de la pregunta
                 $peso = $clave_area->peso;
-                
+
                 //Cuenta la cantidad de preguntas que tiene el objeto clave_are
                 $cantidad_preguntas = count($clave_area->clave_area_preguntas_estudiante);
 
@@ -216,9 +226,8 @@ class IntentoController extends Controller
                 $nota += ($peso/$cantidad_preguntas)/10;
             }
         }
-        
-        dd($nota);
 
+        return $nota;
         
     }
 }
