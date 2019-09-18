@@ -304,7 +304,7 @@ class TurnoController extends Controller
         $intento = new Intento();
         $intento->estudiante_id = $estudiante->id_est;
         $intento->clave_id = $clave->id;
-        $intento->encuesta_id = null;
+        $intento->encuestado_id = null;
         $intento->fecha_inicio_intento = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
         $intento->save();
         $evaluacion['intento'] = $intento;
