@@ -26,7 +26,7 @@ class IntentoController extends Controller
 
         //Recuperamos la cantidad de preguntas a mostrar en la paginacion
         //$preg_per_page = $evaluacion->preguntas_a_mostrar;
-        $preg_per_page = 4;
+        $preg_per_page = 2;
 
         //Recuperar las claves del turno
         $claves = $turno->claves;
@@ -122,13 +122,54 @@ class IntentoController extends Controller
 
                 //Si no pertence a un grupo de emparejamiento crea un array con cierta estructura
                 if ($i!=3) {
-                    $preguntas[] = ['tipo_item' => $i, 'pregunta' => $claves_areas_preguntas[$i][$j]->pregunta, 'opciones' => $claves_areas_preguntas[$i][$j]->pregunta->opciones];
+                    //Al estar recorriendo una pregunta, hacemos una consulta para ver si existe una respuesta para el intento que se esta realizado
+                    $respuesta = Respuesta::where('id_intento',1)->where('id_pregunta',$claves_areas_preguntas[$i][$j]->pregunta->id)->get();
+                    //Obtenemos todas las opciones de la pregunta
+                    $opciones = $claves_areas_preguntas[$i][$j]->pregunta->opciones;
+                    //Si existe respuesta procedemos a recorrer las opciones para ver cual es la seleccionada por parte del estudiante
+                    if(count($respuesta)){
+                    
+                        foreach($opciones as $opcion){
+                            //Primeramente establecemos a cada una a que no es SELECCIONADA
+                            $opcion['seleccionada'] = false;
+                            
+                            //En caso que la opción que se esta recorriendo, sea igual a la opcion de la respuesta
+                            //Establecemos a que si esta SELECCIONADA
+                            if($opcion->id == $respuesta[0]->id_opcion)
+                                $opcion['seleccionada'] = true;
+
+                        }
+                    }
+                    $pregunta = $claves_areas_preguntas[$i][$j]->pregunta;
+                    //Vamos a verificar si es texto corto, de ser asi a la pregunta le agregaremos la respuesta almacenada, en caso de existir 
+                    if($i == 4){
+                        $respuesta = Respuesta::where('id_intento',1)->where('id_pregunta',$pregunta->id)->first();
+                        //Por default el texto esta vacio
+                        $pregunta['texto'] = "";
+                        //Si existe ya una respuesta, obtenemos el texto de la respuesta y lo agregamos al objeto pregunta
+                        if($respuesta != null)
+                            $pregunta['texto'] = $respuesta->texto_respuesta;
+                    }
+                    
+                    $preguntas[] = ['tipo_item' => $i, 'pregunta' => $pregunta, 'opciones' => $opciones];
                 } else {
                     if ($ultimo_id_gpo != $claves_areas_preguntas[$i][$j]->pregunta->grupo_emparejamiento_id) {
-
+                        
                         $ultimo_id_gpo = $claves_areas_preguntas[$i][$j]->pregunta->grupo_emparejamiento_id;
-
-                        $preguntas[] = ['descripcion_gpo'=>Grupo_Emparejamiento::where('id',$ultimo_id_gpo)->first()->descripcion_grupo_emp,'tipo_item' => $i, 'preguntas' => Pregunta::where('grupo_emparejamiento_id', $ultimo_id_gpo)->get()];
+                        //Obtenemos las preguntas para recorrerlas y sacar para cada una su opcion seleccionada como respuesta
+                        $pregs = Pregunta::where('grupo_emparejamiento_id', $ultimo_id_gpo)->get();
+                        
+                        foreach($pregs as $preg){
+                            $respuesta = Respuesta::where('id_intento',1)->where('id_pregunta',$preg->id)->first();
+                            //Por defecto la seleccionada es la opcion de "Seleccione" que posee este valor
+                            $preg['seleccionada'] = "opcion_0";
+                            
+                            //Si la respuesta existe, establecemos el valor con el id de la opción
+                            if($respuesta != null)
+                                $preg['seleccionada'] = "opcion_".$respuesta->id_opcion;
+                        }
+                        
+                        $preguntas[] = ['descripcion_gpo'=>Grupo_Emparejamiento::where('id',$ultimo_id_gpo)->first()->descripcion_grupo_emp,'tipo_item' => $i, 'preguntas' => $pregs];
 
                     }
 
@@ -172,8 +213,10 @@ class IntentoController extends Controller
         return $paginacion;
     }
 
-    public function finalizarIntento(Request $request){
+    public function finalizarIntentoMovil(Request $request){
         $respuesta = new Respuesta();
+
+        $total_preguntas = $request->total_preguntas; //cantidad total de preguntas que vienen desde el móvil
 
         $respuesta->id_pregunta = $request->pregunta_id;
         $respuesta->id_opcion = $request->opcion_id;
@@ -182,7 +225,14 @@ class IntentoController extends Controller
 
         $respuesta->save();
 
-        return back();
+        $num_actual = Respuesta::where('intento_id', $request->intento_id);
+        //dd($num_actual);
+        if($total_preguntas == count($num_actual)){
+            $nota = $this->calcularNota($request->intento_id);
+            $intento = Intento::find($request->intento_id);
+            $intento->nota = $nota;
+            $intento->save();
+        }
     }
 
     //Función para calcular la nota del intento
@@ -198,6 +248,7 @@ class IntentoController extends Controller
 
                 //Obtener la pregunta a la que pertenece la respuesta
                 $pregunta_id = $respuesta->pregunta->id;
+
                 //Consulta para obtener el objeto clave_area_pregunta_estudiante al que pertenece la pregunta
                 $cape = Clave_Area_Pregunta_Estudiante::where('estudiante_id', $estudiante_id)
                                                         ->where('pregunta_id', $pregunta_id)
@@ -208,7 +259,7 @@ class IntentoController extends Controller
 
                 //Obtener el peso de la pregunta
                 $peso = $clave_area->peso;
-                
+
                 //Cuenta la cantidad de preguntas que tiene el objeto clave_are
                 $cantidad_preguntas = count($clave_area->clave_area_preguntas_estudiante);
 
@@ -216,9 +267,85 @@ class IntentoController extends Controller
                 $nota += ($peso/$cantidad_preguntas)/10;
             }
         }
-        
-        dd($nota);
 
+        return $nota;
         
+    }
+    
+    public function persistence(){
+        //Se obtiene el estudiante logueado para almacenar sus respuestas
+        $id_user = auth()->user()->id;
+        $id_est=Estudiante::where('user_id',$id_user)->first()->id_est;
+        //Obtenemos el intento el cual se esta realizando
+        $intento = Intento::find(1);
+        
+        //Obtenemos la variable respuestas pasada como param en metodo get, esta cadena posee este formato:
+        //pregunta_##=opcion_##/pregunta_##=opcion_##, en donde ## denota el identificador de cada objeto
+        //y la / separa cada par de pregunta-opcion
+        $respuestas = preg_split('[-]', $_GET['respuestas']);
+        
+        foreach($respuestas as $respuesta){
+            //Apartir del mismo formato en el que vienen las respuesta, procedemos a recorrer cada respuesta
+            //obteniendo la pregunta_id y la opcion_id
+            $pregunta_id = (int) preg_split('[_]', preg_split('[=]', $respuesta)[0])[1];
+            $opcion_arr = preg_split('[_]', preg_split('[=]', $respuesta)[1]);
+            //Si el split anterior es igual a dos significa que no es pregunta de respuesta corta
+            if(count($opcion_arr)==2){
+                $opcion_id = (int) $opcion_arr[1];
+                //Si opcion_id es distinto del valor por defecto, significa que hay una respuesta valida, por lo que procedemos a crear la respuesta
+                if($opcion_id != 0){
+                
+                    //Hacemos una busqueda de una respuesta que sea del mismo intento y para la pregunta que estamos recorriendo
+                    $respuesta = Respuesta::where('id_intento',$intento->id)->where('id_pregunta',$pregunta_id)->first();
+                    //Verificamos si existe, si no existe creamos nueva respuesta para la pregunta
+                    //si existe solo cambiamos la opcion_id asociada
+                    if($respuesta != null){
+                        //En caso que ya exista la respuesta a la pregunta especifica, solo cambiamos el id de la opcion seleccionada
+                        $respuesta->id_opcion = $opcion_id;
+                        $respuesta->save();
+                    }
+                    else{
+                        //En caso que sea la primera vez que se responda la pregunta
+                        //procedemos a crear la Respuesta
+                        $respuesta = new Respuesta();
+                        $respuesta->id_pregunta = $pregunta_id;
+                        $respuesta->id_opcion = $opcion_id;
+                        $respuesta->id_intento = $intento->id;
+                        $respuesta->save();
+                    }
+                    
+                }
+            }
+            else{
+                //Este caso indica que es respuesta corta, lo que significa que el proceso requiere un algunas tareas diferentes
+                $texto_respuesta = $opcion_arr[0];
+                //Hacemos una busqueda de una respuesta que sea del mismo intento y para la pregunta que estamos recorriendo
+                $respuesta = Respuesta::where('id_intento',$intento->id)->where('id_pregunta',$pregunta_id)->first();
+                
+                //Verificamos si existe, si no existe creamos nueva respuesta para la pregunta
+                //si existe solo cambiamos el texto_respuesta asociada
+                if($respuesta != null){
+                    //En caso que ya exista la respuesta a la pregunta especifica, solo cambiamos el id de la opcion seleccionada
+                    $respuesta->texto_respuesta = $texto_respuesta;
+                    $respuesta->save();
+                }
+                else{
+                    //En caso que sea la primera vez que se responda la pregunta
+                    //procedemos a crear la Respuesta
+                    
+                    if($texto_respuesta != ""){
+                        //Si el texto es diferente de vacio, entonces procedemos a crear la respuesta
+                        $respuesta = new Respuesta();
+                        $respuesta->id_pregunta = $pregunta_id;
+                        $respuesta->texto_respuesta = $texto_respuesta;
+                        $respuesta->id_intento = $intento->id;
+                        $respuesta->save();    
+                    }
+                }
+            }
+            
+            
+            
+        }
     }
 }

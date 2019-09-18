@@ -30,7 +30,7 @@ Route::get('/preguntas-agregadas-emp/{id}', 'ClaveController@preguntasAgregadasE
 Route::get('/encuestas-disponibles', 'EncuestaController@encuestasDisponibles');
 
 //Enviar respuestas desde la app móvil
-Route::post('/finalizar-intento', 'IntentoController@finalizarIntento');
+Route::post('/finalizar-intento', 'IntentoController@finalizarIntentoMovil');
 Route::get('/calcular-nota/{$intento_id}', 'IntentoController@calcularNota');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
