@@ -28,7 +28,7 @@
             </div>
         <!--Respuesta Corta-->
         @if($valores[$i]['tipo_item']==4)
-            <input aria-describedby="emailHelp" class="form-control" id="exampleInputEmail1" placeholder="Ingrese respuesta" type="text">
+            <input aria-describedby="emailHelp" name="pregunta_{{ $valores[$i]['pregunta']->id }}" class="form-control" id="exampleInputEmail1" placeholder="Ingrese respuesta" type="text" @if($valores[$i]['pregunta']->texto != "") value="{{ $valores[$i]['pregunta']->texto }}" @endif>
                 </input>
             </div>
         @else
@@ -63,8 +63,8 @@
                             {{ $valores[$i]['preguntas'][$r]->pregunta }}
                         </td>
                         <td>
-                            <select class="custom-select col-12" id="{{ $valores[$i]['preguntas'][$r]->id }}">
-                                <option selected="" value="-1">
+                            <select class="custom-select col-12" id="{{ $valores[$i]['preguntas'][$r]->id }}" name="pregunta_{{ $valores[$i]['preguntas'][$r]->id }}">
+                                <option value="opcion_0" @if($valores[$i]['preguntas'][$r]->seleccionada == "opcion_0") selected @endif>
                                     Seleccione
                                 </option>
                                 @php
@@ -81,7 +81,7 @@
                                     }}
                                 @endphp
                                 @for($m=0;$m<count($valores[$i]['preguntas']);$m++)
-                                <option value="{{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id }}">
+                                <option value="opcion_{{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id }}" @if($valores[$i]['preguntas'][$r]->seleccionada == "opcion_".$valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id) selected @endif>
                                     {{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->opcion }}
                                 </option>
                                 @endfor
@@ -107,23 +107,5 @@
 @endsection
 
 @section("js")
-<script type="text/javascript">
-    
-    $("#previous_btn").click(function(){
-        var data = $("#quiz_form").serialize();
-        respuestas_val = data.replace(/&/g,"-");
-        $.get('http://localhost:8000/persistencia', {respuestas:respuestas_val}, function(response){
-            console.log("success");
-        });
-    });
-    
-    $("#next_btn").click(function(){
-        var data = $("#quiz_form").serialize();
-        respuestas_val = data.replace(/&/g,"-");
-        $.get('http://localhost:8000/persistencia', {respuestas:respuestas_val}, function(response){
-            console.log("success");
-        });
-    });
-    
-</script>
+<script type="text/javascript" src="{{asset('js/intento/main.js')}}"></script>
 @endsection
