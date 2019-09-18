@@ -84,6 +84,7 @@
                 </tr>
               </tfoot>
               <tbody>
+                
                 @foreach($encuestas as $encuesta)
                   <tr>
                     <td>{{$encuesta->titulo_encuesta}}</td>
@@ -102,7 +103,7 @@
                     </td>
                     @if(auth()->user()->IsAdmin)
                     <td>
-                      
+                     {{$encuesta->docente->nombre_docente}}
                     </td>
                     @endif
                     <td>
@@ -177,6 +178,8 @@
   </div>
 </div>
 
+
+
 @endsection
 
 @section('js')
@@ -201,6 +204,8 @@
           $('#eliminarEncuesta').modal('show');
       });
     </script>
+
+    
 
 
 @endsection

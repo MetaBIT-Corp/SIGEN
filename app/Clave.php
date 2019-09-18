@@ -38,4 +38,8 @@ class Clave extends Model
     public function clave_areas(){
         return $this->hasMAny('App\Clave_Area');
     }
+
+    public function intentos(){
+        return $this->hasMAny('App\Intento');
+    }
 }
