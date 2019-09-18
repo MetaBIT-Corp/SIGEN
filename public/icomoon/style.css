@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?vac2y2');
-  src:  url('fonts/icomoon.eot?vac2y2#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?vac2y2') format('truetype'),
-    url('fonts/icomoon.woff?vac2y2') format('woff'),
-    url('fonts/icomoon.svg?vac2y2#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?2k4s9');
+  src:  url('fonts/icomoon.eot?2k4s9#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?2k4s9') format('truetype'),
+    url('fonts/icomoon.woff?2k4s9') format('woff'),
+    url('fonts/icomoon.svg?2k4s9#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,50 +25,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-options:before {
-  content: "\e912";
+.icon-recycler:before {
+  content: "\e917";
 }
-.icon-dice:before {
-  content: "\e90f";
+.icon-grafico:before {
+  content: "\e900";
 }
-.icon-edit:before {
-  content: "\e903";
-}
-.icon-admin:before {
-  content: "\e904";
-}
-.icon-delete_user:before {
-  content: "\e905";
-}
-.icon-add_user:before {
-  content: "\e906";
-}
-.icon-user:before {
-  content: "\e907";
-}
-.icon-detail_user:before {
-  content: "\e908";
-}
-.icon-download:before {
-  content: "\e909";
-}
-.icon-print:before {
-  content: "\e90a";
-}
-.icon-pdf:before {
-  content: "\e90b";
-}
-.icon-delete:before {
-  content: "\e90c";
-}
-.icon-list:before {
-  content: "\e9bb";
-}
-.icon-file-text:before {
-  content: "\e922";
-}
-.icon-users:before {
-  content: "\e972";
+.icon-recycle:before {
+  content: "\e916";
 }
 .icon-hand-paper-o:before {
   content: "\e911";
@@ -115,16 +79,70 @@
 .icon-student:before {
   content: "\f19d";
 }
-.icon-excel:before {
-  content: "\e90d";
-  color: #217346;
+.icon-copy:before {
+  content: "\e913";
 }
-.icon-grafico:before {
-  content: "\e900";
+.icon-options:before {
+  content: "\e912";
+}
+.icon-dice:before {
+  content: "\e90f";
+}
+.icon-edit:before {
+  content: "\e903";
+}
+.icon-admin:before {
+  content: "\e904";
+}
+.icon-delete_user:before {
+  content: "\e905";
+}
+.icon-add_user:before {
+  content: "\e906";
+}
+.icon-user:before {
+  content: "\e907";
+}
+.icon-detail_user:before {
+  content: "\e908";
+}
+.icon-download:before {
+  content: "\e909";
+}
+.icon-print:before {
+  content: "\e90a";
+}
+.icon-pdf:before {
+  content: "\e90b";
+}
+.icon-delete:before {
+  content: "\e90c";
+}
+.icon-list:before {
+  content: "\e9bb";
+}
+.icon-file-text:before {
+  content: "\e922";
+}
+.icon-users:before {
+  content: "\e972";
+}
+.icon-restore:before {
+  content: "\e918";
+}
+.icon-copy2:before {
+  content: "\e914";
+}
+.icon-copy3:before {
+  content: "\e915";
 }
 .icon-add-solid:before {
   content: "\e90e";
 }
 .icon-information-solid:before {
   content: "\e901";
+}
+.icon-excel:before {
+  content: "\e90d";
+  color: #217346;
 }

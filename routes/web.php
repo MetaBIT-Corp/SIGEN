@@ -98,7 +98,6 @@ Route::group(['middleware' => 'teacher'], function(){
 
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
 
-
     //URL's para Turno
     Route::get('/evaluacion/{id}/turnos', 'TurnoController@index')->name('listado_turnos')->middleware('signed');
     Route::get('/evaluacion/{id}/turnos/create', 'TurnoController@create')->name('crear_turno')->middleware('signed');
@@ -121,6 +120,8 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::get('materia/evaluacion/{id_eva}/editar','EvaluacionController@getUpdate')->name('gu_evaluacion');
     Route::post('materia/evaluacion/{id_eva}/editar','EvaluacionController@postUpdate')->name('pu_evaluacion');
     Route::post('/deshabilitar-evaluacion','EvaluacionController@deshabilitarEvaluacion')->name('deshabilitar_evaluacion');
+    Route::post('/habilitar-evaluacion','EvaluacionController@habilitar')->name('habilitar_evaluacion');
+    Route::get('materia/habilitar-evaluacion/{id}','EvaluacionController@reciclaje')->name('reciclaje_evaluacion');
 
 
     //URL's para crear encuesta

@@ -14,9 +14,7 @@ class EvaluacionController extends Controller
     //muestra el detalle de la evaluacion
 
     public function show($id){
-
     	$evaluacion = Evaluacion::findOrFail($id);
-
     	return view('evaluacion.detalleEvaluacion')->with(compact('evaluacion'));
 
     }
@@ -140,6 +138,17 @@ class EvaluacionController extends Controller
 
     }
 
+    /*listado de evaluaciones por docente
+    el id que recibe es la carga academica si es docente (role=1)
+    el id que recibe es materia_ciclo si es admin (role=0)*/
+
+    public function reciclaje($id){
+        $id_carga = $id;
+        $evaluaciones = Evaluacion::where('id_carga',$id)->where('habilitado',0)->get();
+        return view('evaluacion.recycleEvaluacion')->with(compact('evaluaciones','id_carga'));
+
+    }
+
     //Deshabilita evaluaciones, con excepción de aquellas que cuentan con turnos que están en periodo de evaluacion
     public function deshabilitarEvaluacion(Request $request){
         //dd($request->all());
@@ -157,7 +166,6 @@ class EvaluacionController extends Controller
                         $mensaje = 'La evaluacion no puede ser deshabilitada ya que posee uno o varios turnos en periodo de evaluación';
                         $si_deshabilita =false;
                     }
-
                 }
             }
             if($si_deshabilita){
@@ -167,6 +175,24 @@ class EvaluacionController extends Controller
         }else{
             $notification = 'error';
             $mensaje = 'La evaluacion no pudo ser deshabilitada, intente de nuevo';
+        }
+
+        return back()->with($notification, $mensaje);
+    }
+
+    //habilita evaluaciones
+    public function habilitar(Request $request){
+        //dd($request->all());
+        $id_evaluacion = $request->input('id_evaluacion');
+        if($id_evaluacion){
+            $notification = 'exito';
+            $mensaje = 'La evaluación ha sido habilitada exitosamente'; 
+            $evaluacion = Evaluacion::find($id_evaluacion); 
+            $evaluacion->habilitado = 1;
+            $evaluacion->save();
+        }else{
+            $notification = 'error';
+            $mensaje = 'La evaluacion no pudo ser habilitada, intente de nuevo';
         }
 
         return back()->with($notification, $mensaje);
