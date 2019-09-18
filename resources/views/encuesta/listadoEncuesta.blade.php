@@ -163,7 +163,8 @@
         </button>
       </div>
         <div class="modal-body" id="elimanr-encuesta">
-          <h3><strong>¿Desea eliminar esta Encuesta?</strong></h3>
+          <h3><strong>¿Desea eliminar esta Encuesta?</strong></h3><br>
+          <h4>Se borrarán todas la preguntas y opciones asociadas a esta encuesnta</h4>
         </div>
         <div class="modal-footer">
           <form action="{{ route('eliminar_encuesta')}}" method="POST">

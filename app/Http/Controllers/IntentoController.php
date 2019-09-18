@@ -9,6 +9,7 @@ use App\Respuesta;
 use App\Estudiante;
 use App\Grupo_Emparejamiento;
 use App\Intento;
+use Carbon\Carbon;
 use App\Clave_Area_Pregunta_Estudiante;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -184,12 +185,14 @@ class IntentoController extends Controller
 
         $respuesta->save();
 
-        $num_actual = Respuesta::where('intento_id', $request->intento_id);
-        //dd($num_actual);
+        $num_actual = Respuesta::where('id_intento', $request->intento_id)->get();
+
         if($total_preguntas == count($num_actual)){
             $nota = $this->calcularNota($request->intento_id);
             $intento = Intento::find($request->intento_id);
-            $intento->nota = $nota;
+            $fecha_hora_actual = Carbon::now('America/Denver')->addMinutes(10)->format('Y-m-d H:i:s');
+            $intento->nota_intento = $nota;
+            $intento->fecha_final_intento = $fecha_hora_actual;
             $intento->save();
         }
     }
@@ -212,7 +215,7 @@ class IntentoController extends Controller
                 $cape = Clave_Area_Pregunta_Estudiante::where('estudiante_id', $estudiante_id)
                                                         ->where('pregunta_id', $pregunta_id)
                                                         ->first();
-                
+        
                 //Obtener la clave_aera a la que pertenece la pregunta
                 $clave_area = $cape->clave_area;
 
@@ -220,7 +223,7 @@ class IntentoController extends Controller
                 $peso = $clave_area->peso;
 
                 //Cuenta la cantidad de preguntas que tiene el objeto clave_are
-                $cantidad_preguntas = count($clave_area->clave_area_preguntas_estudiante);
+                $cantidad_preguntas = count($clave_area->claves_areas_preguntas_estudiante);
 
                 //Calcula la ponderación de la pregunta
                 $nota += ($peso/$cantidad_preguntas)/10;
