@@ -11,4 +11,12 @@ class Respuesta extends Model
     protected $fillable = [
 
     ];
+
+    public function opcion(){
+    	return $this->belongsTo(Opcion::class, 'id_opcion', 'id');
+    }
+
+    public function pregunta(){
+    	return $this->belongsTo(Pregunta::class, 'id_pregunta', 'id');
+    }
 }

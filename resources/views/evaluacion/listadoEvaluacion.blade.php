@@ -14,9 +14,34 @@
 
 @section("ol_breadcrumb")
     <li class="breadcrumb-item"><a href="#">Materia</a></li>
-    <li class="breadcrumb-item">Evaluación</li>
+    <li class="breadcrumb-item">Evaluaciones</li>
 @endsection
+
 @section("main")
+<!-- Notificacion  -->
+            @if (session('notification'))
+                  <div class="alert alert-success">
+                        {{session('notification')}}
+                  </div>
+            @endif
+            <!-- Notificacion -->
+            <!--Mostrará mensaje de éxito-->
+            @if (session('exito'))
+              <div class="alert alert-success">
+                <ul>
+                  <h4 class="text-center">{{session('exito')}}</h4>
+                </ul>
+              </div>
+            @endif
+
+            <!--Mostrará mensaje de error -->
+            @if (session('error'))
+              <div class="alert alert-danger">
+                <ul>
+                  <h4 class="text-center">{{session('error')}}</h4>
+                </ul>
+              </div>
+            @endif
   <div id="wrapper">
   <div id="content-wrapper">
     <div class="container-fluid">
@@ -27,7 +52,7 @@
           Evaluaciones | Materia</div>
         <div class="card-body">
           @if(auth()->user()->role==1) 
-          <a class="btn btn-sm mb-3" href="#" title="Agregar">
+          <a class="btn btn-sm mb-3" href="{{route('gc_evaluacion', $id_carga)}}" title="Agregar">
                 <span class="icon-add-solid "></span>
                 <b>Nueva Evaluación</b>
           </a>
@@ -38,20 +63,18 @@
               <thead>
                 <tr>
                   <th>Título</th>
-                  <th>Descripción</th>
-                  <th>Estado</th>
-                  <th>Duración</th>
+                  <th>Duración (min)</th>
                   <th>Intentos</th>
+                  <th>Paginación</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
                   <th>Título</th>
-                  <th>Descripción</th>
-                  <th>Estado</th>
-                  <th>Duración</th>
+                  <th>Duración (min)</th>
                   <th>Intentos</th>
+                  <th>Paginación</th>
                   <th>Acciones</th>
                 </tr>
               </tfoot>
@@ -61,34 +84,33 @@
                 <tr>
                  
                   <td>{{$evaluacion->nombre_evaluacion}}</td>
-                  <td>{{$evaluacion->descripcion_evaluacion}}</td>
-                  <td>
-                    <span class="badge badge-success">Pública</span>
-                    <span class="icon-eye"></span>
-                  </td>
                   <td>{{$evaluacion->duracion}}</td>
                   <td>{{$evaluacion->intentos}}</td>
+                  <td>{{$evaluacion->preguntas_a_mostrar}}</td>
                   <td>
-                      <a class="btn btn-sm btn-option" title="Listado de turnos" href="{{ URL::signedRoute('listado_turnos', ['id' => $evaluacion->id]) }}">
-                           <span class="icon-calendar-plus-o"></span>
-                       </a>
-                       
-                       <a class="btn btn-sm btn-secondary" title="Detalle de evaluación" href="{{ URL::signedRoute('detalle_evaluacion', ['id' => $evaluacion->id]) }}">
+                      <a class="btn btn-sm btn-secondary mb-1" title="Detalle de evaluación" href="{{ URL::signedRoute('detalle_evaluacion', ['id' => $evaluacion->id]) }}">
                            <span class="icon-information-solid"></span>
-
-                       <a class="btn btn-option btn-sm" title="Publicar Evaluación" href="#">
-                        <span class="icon-upload"></span>
-                       </a>
-
-                       <a class="btn btn-option btn-sm" title="Editar Evaluación" href="#">
+                      </a>
+                        
+                        @if(auth()->user()->IsTeacher)
+                       <a class="btn btn-option btn-sm mb-1" title="Editar Evaluación" href="{{route('gu_evaluacion',$evaluacion->id)}}">
                         <span class="icon-edit"></span>
                        </a>
 
-                       <a class="btn btn-danger btn-sm" title="Deshabilitar Evaluación" href="#">
+                       <a class="btn btn-danger btn-sm mb-1" title="Deshabilitar Evaluación" href="#" data-deshabilitar-evaluacion="{{ $evaluacion->id }}">
                         <span class="icon-minus-circle"></span>
                        </a>
 
-                       <a class="btn btn-info btn-sm" title="Estadísticas" href="#">
+                       <a class="btn btn-option btn-sm mb-1" title="Publicar Evaluación" href="#">
+                        <span class="icon-upload"></span>
+                       </a>
+                       @endif
+                       
+                       <a class="btn btn-sm btn-option mb-1" title="Listado de turnos" href="{{ URL::signedRoute('listado_turnos', ['id' => $evaluacion->id]) }}">
+                           <span class="icon-calendar-plus-o"></span>
+                       </a>
+
+                       <a class="btn btn-info btn-sm mb-1" title="Estadísticas" href="#">
                         <span class="icon-grafico"></span>
                        </a>
                   </td>
@@ -152,6 +174,31 @@
 </div>
 <!-- /#wrapper -->
 
+<!-- Modal para desabilitar las encuestas -->
+<div class="modal fade" id="deshabilitarEvaluacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deshabilitarModalCenterTitle">Deshabilitar Encuesta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body" id="deshabilitar-encuesta">
+          <h3><strong>¿Desea deshabilitar esta Encuesta?</strong></h3>
+        </div>
+        <div class="modal-footer">
+          <form action="{{ route('deshabilitar_evaluacion')}}" method="POST">
+            {{ csrf_field() }}
+            <input type="hidden" value="" id="id_evaluacion" name="id_evaluacion">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-danger">Deshabilitar</button>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+
 
 @endsection
 
@@ -168,6 +215,13 @@
     <script type="text/javascript" src="{{asset('vendor/datatables/jquery.dataTables.js' )}}"></script>
     <script type="text/javascript" src="{{asset('vendor/datatables/dataTables.bootstrap4.js' )}}"></script>
   	<script type="text/javascript" src="{{asset('js/demo/datatables-demo.js')}}"></script>
+
+    <script>
+      $('[data-deshabilitar-evaluacion]').on('click', function(){
+          $('#id_evaluacion').attr('value', $(this).data('deshabilitar-evaluacion'));
+          $('#deshabilitarEvaluacion').modal('show');
+      });
+    </script>
 @endsection
 
 

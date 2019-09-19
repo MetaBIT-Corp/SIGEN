@@ -21,11 +21,14 @@ Route::post('turno/claves', 'ClaveController@asignarPreguntas')->name('agregar_c
 Route::post('clave-area/editar/', 'ClaveController@editarClaveArea')->name('editar_clave_area');
 Route::post('clave-area/eliminar/', 'ClaveController@eliminarClaveArea')->name('eliminar_clave_area');
 Route::get('clave-area/{clave_area_id}/preguntas','ClaveAreaController@listarPreguntas')->name('preguntas_por_area')->middleware('signed');
+Route::get('intento/{intento_id}/respuestas','IntentoController@calcularNota');
 /*-----------------------------------------------------------------------------------------------------------------*/
 
 Route::get('intento/', function() {
 	echo "<a href='intento/prueba/1?page=1'>Link para iniciar intento</a>";
 });
+    
+Route::get('persistencia/', 'IntentoController@persistence');
 
 Route::get('intento/prueba/{id_intento}','IntentoController@iniciarEvaluacion')->name('prueba');
 
@@ -90,6 +93,7 @@ Route::group(['middleware' => 'admin'], function(){
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente
 Route::group(['middleware' => 'teacher'], function(){
+
     Route::get('/evaluacion/{id}', 'EvaluacionController@show')->name('detalle_evaluacion');
 
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
@@ -112,13 +116,18 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::post('/area/{id}/pregunta/{pregunta}','PreguntaController@update');
 
      //URL's para crear evaluacion
-    Route::get('materia/evaluacion/{id}','EvaluacionController@getCreate')->name('gc_evaluacion');
-    Route::post('materia/evaluacion/{id}','EvaluacionController@postCreate')->name('pc_evaluacion');
+    Route::get('materia/evaluacion/{id}/nuevo','EvaluacionController@getCreate')->name('gc_evaluacion');
+    Route::post('materia/evaluacion/{id}/nuevo','EvaluacionController@postCreate')->name('pc_evaluacion');
+    Route::get('materia/evaluacion/{id_eva}/editar','EvaluacionController@getUpdate')->name('gu_evaluacion');
+    Route::post('materia/evaluacion/{id_eva}/editar','EvaluacionController@postUpdate')->name('pu_evaluacion');
+    Route::post('/deshabilitar-evaluacion','EvaluacionController@deshabilitarEvaluacion')->name('deshabilitar_evaluacion');
 
 
     //URL's para crear encuesta
     Route::get('/encuesta','EncuestaController@getCreate')->name('gc_encuesta');
-    Route::post('/encuesta','EncuestaController@postCreate')->name('pc_encuesta');   
+    Route::post('/encuesta','EncuestaController@postCreate')->name('pc_encuesta');
+    Route::get('/encuesta/{id}/editar','EncuestaController@getUpdate')->name('gu_encuesta');
+    Route::post('/encuesta/{id}/editar','EncuestaController@postUpdate')->name('pu_encuesta');    
     Route::post('/eliminar-encuesta','EncuestaController@eliminarEncuesta')->name('eliminar_encuesta');   
     
 });

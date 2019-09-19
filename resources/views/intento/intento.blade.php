@@ -16,62 +16,43 @@
 @section("main")
 <!--Card que contiene a cada pregunta-->
 <!--Se agrego la etiqueta form para persistencia-->
-<form>
+<form id="quiz_form">
     <div class="card">
     <div class="card-body">
         <!--Aqui iran las preguntas-->
-
         @for($i=0;$i<count($valores);$i++)
         @if($valores[$i]['tipo_item']!=3)
         <div class="card bg-light mt-2 mb-2">
             <div class="card-header" name='{{ $valores[$i]['pregunta']->id }}'>
                 <strong><h4>{{ $i+1}}.&nbsp&nbsp{{ $valores[$i]['pregunta']->pregunta }}</h4></strong> 
             </div>
-            <div class="card-body">
-
-                <!--Preguntas de opcion multiple-->
-                @if($valores[$i]['tipo_item']==1)
-
-                @for($j=0;$j<count($valores[$i]['opciones']);$j++)
+        <!--Respuesta Corta-->
+        @if($valores[$i]['tipo_item']==4)
+            <input aria-describedby="emailHelp" name="pregunta_{{ $valores[$i]['pregunta']->id }}" class="form-control" id="exampleInputEmail1" placeholder="Ingrese respuesta" type="text" @if($valores[$i]['pregunta']->texto != "") value="{{ $valores[$i]['pregunta']->texto }}" @endif>
+                </input>
+            </div>
+        @else
+        <div class="card-body">
+            <!--Preguntas de opcion multiple-->
+            @for($j=0;$j<count($valores[$i]['opciones']);$j++)
                 <div class="custom-control custom-radio">
-                    <input class="custom-control-input" id="{{ $valores[$i]['opciones'][$j]->id}}" name="{{ $valores[$i]['pregunta']->pregunta }}" type="radio">
+                    <input class="custom-control-input" id="{{ $valores[$i]['opciones'][$j]->id}}" name="pregunta_{{ $valores[$i]['pregunta']->id }}" type="radio" value="opcion_{{ $valores[$i]['opciones'][$j]->id }}" @if($valores[$i]['opciones'][$j]->seleccionada) checked @endif>
                         <label class="custom-control-label" for="{{ $valores[$i]['opciones'][$j]->id}}">
                              <h5>{{ $valores[$i]['opciones'][$j]->opcion }}</h5>
                         </label>
                     </input>
                 </div>
-                @endfor
-            </div>
-            @elseif($valores[$i]['tipo_item']==2)
-            <div class="custom-control custom-radio">
-                    <input class="custom-control-input" id="{{ $valores[$i]['opciones'][0]->id}}-V" name="{{ $valores[$i]['pregunta']->pregunta }}" type="radio">
-                        <label class="custom-control-label" for="{{ $valores[$i]['opciones'][0]->id}}-V">
-                             <h5>Verdadero</h5>
-                        </label>
-                    </input>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input class="custom-control-input" id="{{ $valores[$i]['opciones'][0]->id}}-F" name="customRadio" type="radio">
-                        <label class="custom-control-label" for="{{ $valores[$i]['opciones'][0]->id}}-F">
-                             <h5>Falso</h5>
-                        </label>
-                    </input>
-                </div>
-            </div>
-
-        @elseif($valores[$i]['tipo_item']==4)
-            <input aria-describedby="emailHelp" class="form-control" id="exampleInputEmail1" placeholder="Ingrese respuesta" type="text">
-                </input>
-            </div>
+            @endfor
+        </div>
         @endif
         </div>
         @endif
 
-        
+        <!--Preguntas de Emparejamiento-->
         @if($valores[$i]['tipo_item']==3)
         <div class="card bg-light mt-2">
             <div class="card-header">
-                <h4>{{ $i+1 }}.&nbsp&nbspEmpareje las respuestas correctamente </h4>
+                {{ $valores[$i]['descripcion_gpo'] }}
             </div>
             <div class="card-body">
                 <table class="table">
@@ -82,8 +63,8 @@
                             {{ $valores[$i]['preguntas'][$r]->pregunta }}
                         </td>
                         <td>
-                            <select class="custom-select col-12" id="{{ $valores[$i]['preguntas'][$r]->id }}">
-                                <option selected="">
+                            <select class="custom-select col-12" id="{{ $valores[$i]['preguntas'][$r]->id }}" name="pregunta_{{ $valores[$i]['preguntas'][$r]->id }}">
+                                <option value="opcion_0" @if($valores[$i]['preguntas'][$r]->seleccionada == "opcion_0") selected @endif>
                                     Seleccione
                                 </option>
                                 @php
@@ -100,7 +81,7 @@
                                     }}
                                 @endphp
                                 @for($m=0;$m<count($valores[$i]['preguntas']);$m++)
-                                <option id="{{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id }}">
+                                <option value="opcion_{{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id }}" @if($valores[$i]['preguntas'][$r]->seleccionada == "opcion_".$valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id) selected @endif>
                                     {{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->opcion }}
                                 </option>
                                 @endfor
@@ -116,11 +97,15 @@
         @endfor
 
     </div>
-    <div class="card-footer text-center">
+    <div class="card-footer">
         <!--Botones de control para paginacion-->
-        {{ $paginacion->links() }}
+        <div class="offset-10">{{ $paginacion->links('vendor.pagination.simple-bootstrap-4') }}</div>
     </div>
 </div>
 </form>
 @endsection
+@endsection
+
+@section("js")
+<script type="text/javascript" src="{{asset('js/intento/main.js')}}"></script>
 @endsection

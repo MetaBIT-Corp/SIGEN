@@ -268,7 +268,7 @@
 @endif
 @empty
 <tr>
-	<td><h2 class="h1">No hay materias en este ciclo.</h2></td>
+	<td class="alert alert-info"><h2 class="h4 text-center">No hay materias en este ciclo.</h2></td>
 </tr>
 @endforelse
 </tbody> 

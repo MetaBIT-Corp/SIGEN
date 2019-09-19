@@ -18,6 +18,7 @@ Route::get('/evaluacion/{id}/duracion/','TurnoController@getDuracionEvaluacion')
 
 //Obtener evaluación
 Route::get('/evaluacion/turno/{turno_id}/obtener/{estudiante_id}','TurnoController@getEvaluacion');
+Route::get('/encuesta/{encuesta_id}/{mac}','TurnoController@getEncuesta');
 
 //Clave
 Route::get('/area/{id}/preguntas', 'ClaveController@preguntasPorArea');
@@ -29,7 +30,8 @@ Route::get('/preguntas-agregadas-emp/{id}', 'ClaveController@preguntasAgregadasE
 Route::get('/encuestas-disponibles', 'EncuestaController@encuestasDisponibles');
 
 //Enviar respuestas desde la app móvil
-Route::post('finalizar-intento/', 'IntentoController@finalizarIntento');
+Route::post('/finalizar-intento', 'IntentoController@finalizarIntentoMovil');
+Route::get('/calcular-nota/{$intento_id}', 'IntentoController@calcularNota');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

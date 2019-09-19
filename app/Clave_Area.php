@@ -32,6 +32,14 @@ class Clave_Area extends Model
     	return $this->hasMany('App\Clave_Area_Pregunta','clave_area_id');
     }
 
+    /**
+     *  Metodo para obtener la clave_area_pregunta de un estudiante en concreto
+     * @author Ricardo Estupinian
+     * @return Un array de objetos de clave_area_pregunta.
+     */
+    public function claves_areas_preguntas_estudiante(){
+        return $this->hasMany('App\Clave_Area_Pregunta_Estudiante','clave_area_id');
+    }
 
     //Accessors
 
@@ -43,8 +51,7 @@ class Clave_Area extends Model
             return 'No';
     }
 
-    /*El campo calculado mostrará la cantidad de preguntas agregadas si es modalidad manual en caso 
-    contrario mostrará la cantidad especificada en el objeto*/
+    /*El campo calculado mostrará la cantidad de preguntas agregadas si es modalidad manual en caso contrario mostrará la cantidad especificada en el objeto*/
     public function getCantidadPreguntasAttribute(){
         if($this->aleatorio)
             return $this->numero_preguntas;
