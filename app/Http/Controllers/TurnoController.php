@@ -191,8 +191,9 @@ class TurnoController extends Controller
         $materiac = CicloMateria::where('id_mat_ci',$carga->id_mat_ci)->first();
         $areas = Area::where("id_cat_mat",$materiac->id_mat_ci)->get();
         $id_areas = Clave_Area::where('clave_id',$clave->id)->pluck('area_id')->toArray();
+        $peso_turno = (int)(Clave_Area::where('clave_id',$clave->id)->sum('peso'));
 
-        return view('turno.edit', compact('turno', 'id', 'claves', 'clave','evaluacion','carga','materiac','areas','id_areas'));
+        return view('turno.edit', compact('turno', 'id', 'claves', 'clave','evaluacion','carga','materiac','areas','id_areas','peso_turno'));
     }
 
     /**
