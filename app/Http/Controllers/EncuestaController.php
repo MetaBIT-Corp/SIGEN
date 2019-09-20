@@ -175,6 +175,26 @@ class EncuestaController extends Controller
 
             }
             else{
+                if($encuesta->claves){
+                    foreach ($encuesta->claves as $clave) {
+                        
+                        if($clave->clave_areas){
+                            foreach ($clave->clave_areas as $ca) {
+                                
+                                if($ca->claves_areas_preguntas){
+                                    foreach ($ca->claves_areas_preguntas as $cap) {
+                                        $cap->delete();
+                                    }
+                                }
+
+                                $ca->delete();
+                            }
+                        }
+
+                        $clave->delete();
+                    }
+                }
+
                 $encuesta->delete();
             }   
         }
