@@ -231,7 +231,7 @@ class IntentoController extends Controller
         if($total_preguntas == count($num_actual)){
             $nota = $this->calcularNota($request->intento_id);
             $intento = Intento::find($request->intento_id);
-            $fecha_hora_actual = Carbon::now('America/Denver')->addMinutes(10)->format('Y-m-d H:i:s');
+            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
             $intento->nota_intento = $nota;
             $intento->fecha_final_intento = $fecha_hora_actual;
             $intento->save();

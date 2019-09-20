@@ -120,6 +120,7 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::post('materia/evaluacion/{id}/nuevo','EvaluacionController@postCreate')->name('pc_evaluacion');
     Route::get('materia/evaluacion/{id_eva}/editar','EvaluacionController@getUpdate')->name('gu_evaluacion');
     Route::post('materia/evaluacion/{id_eva}/editar','EvaluacionController@postUpdate')->name('pu_evaluacion');
+    Route::post('/deshabilitar-evaluacion','EvaluacionController@deshabilitarEvaluacion')->name('deshabilitar_evaluacion');
 
 
     //URL's para crear encuesta

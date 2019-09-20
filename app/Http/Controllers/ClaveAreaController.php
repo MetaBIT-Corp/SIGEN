@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+
 use App\Turno;
 use App\Clave;
 use App\Area;
@@ -11,7 +14,6 @@ use App\CargaAcademica;
 use App\CicloMateria;
 use App\Clave_Area;
 use App\Grupo_Emparejamiento;
-use Illuminate\Support\Facades\DB;
 
 class ClaveAreaController extends Controller
 {
@@ -53,7 +55,38 @@ class ClaveAreaController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $clave_area = new Clave_Area;
+
+        $requestData = $request->all();
+        
+        $rules = [
+            'area_id'=> 'required:',
+            'clave_id' => 'required',
+            'peso' => 'required|integer|lte:peso_restante|max:100|min:1',
+            'cantidad' => 'required|integer|lte:cantidad_preguntas|min:0',
+        ];
+        
+        $messages = [
+
+            'peso.required' => 'Peso de Área no ingresado.',
+            'peso.integer' => 'Peso ingresado no es un valor numérico entero.',
+            'peso.max' => 'Peso ingresado es muy alto. Peso total del Área debe ser igual o menor a 100.',
+            'peso.lte' => 'Peso ingresado es muy alto. Peso total del Área debe ser igual o menor a 100.',
+            'peso.min' => 'Peso ingresado no es valido. Debe ser un valor mayor a 0.',
+
+            'cantidad.lte' => 'Cantidad de Preguntas Aleatorias ingresadas sobrepasa las preguntas disponibles del Área.',
+            'cantidad.integer' => 'Cantidad de Preguntas Aleatorias ingresadas no es un valor numérico entero',
+            'cantidad.min' => 'Cantidad de Preguntas Aleatorias ingresadas no es valido. Debe ser un valor numérico entero',
+
+        ];
+        
+        $validator = Validator::make($requestData, $rules, $messages);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
 
         $clave_area->area_id = $request->area_id;
         $clave_area->clave_id = $request->clave_id;

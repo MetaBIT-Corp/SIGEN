@@ -7,10 +7,11 @@ use App\Evaluacion;
 use App\CicloMateria;
 use App\CargaAcademica;
 use App\Turno;
+use Carbon\Carbon;
 
 class EvaluacionController extends Controller
 {
-    //
+    //muestra el detalle de la evaluacion
 
     public function show($id){
 
@@ -20,6 +21,7 @@ class EvaluacionController extends Controller
 
     }
 
+    //crear Evaluacion
     public function getCreate($id){
     	return view('evaluacion.createEvaluacion')->with(compact('id'));
 
@@ -132,9 +134,42 @@ class EvaluacionController extends Controller
             }
         }
         else{
-            $evaluaciones = Evaluacion::where('id_carga',$id)->get();
+            $evaluaciones = Evaluacion::where('id_carga',$id)->where('habilitado',1)->get();
         }
     	return view('evaluacion.listadoEvaluacion')->with(compact('evaluaciones','id_carga'));
 
     }
+
+    //Deshabilita evaluaciones, con excepción de aquellas que cuentan con turnos que están en periodo de evaluacion
+    public function deshabilitarEvaluacion(Request $request){
+        //dd($request->all());
+        $id_evaluacion = $request->input('id_evaluacion');
+        if($id_evaluacion){
+            $si_deshabilita =true;
+            $notification = 'exito';
+            $mensaje = 'La evaluación ha sido deshabilitada exitosamente'; 
+            $evaluacion = Evaluacion::find($id_evaluacion); 
+            if($evaluacion->turnos){
+                $fecha_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+                foreach ($evaluacion->turnos as $turno) {
+                    if($fecha_actual > $turno->fecha_inicio_turno && $fecha_actual < $turno->fecha_final_turno){
+                        $notification = 'error';
+                        $mensaje = 'La evaluacion no puede ser deshabilitada ya que posee uno o varios turnos en periodo de evaluación';
+                        $si_deshabilita =false;
+                    }
+
+                }
+            }
+            if($si_deshabilita){
+                $evaluacion->habilitado = 0;
+                $evaluacion->save();
+            }
+        }else{
+            $notification = 'error';
+            $mensaje = 'La evaluacion no pudo ser deshabilitada, intente de nuevo';
+        }
+
+        return back()->with($notification, $mensaje);
+    }
+
 }

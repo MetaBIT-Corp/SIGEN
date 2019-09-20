@@ -39,6 +39,7 @@ class Clave extends Model
         return $this->hasMAny('App\Clave_Area');
     }
 
+
     //Recupera los intentos asociados a la clave correspondiente
     public function intentos(){
         return $this->hasMAny(Intento::class);
