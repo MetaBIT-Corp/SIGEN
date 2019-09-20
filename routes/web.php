@@ -114,7 +114,7 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::resource('/area/{id}/pregunta','PreguntaController')->except(['update']);
     Route::post('/area/{id}/pregunta/{pregunta}','PreguntaController@update');
 
-     //URL's para crear evaluacion
+     //URL's para  evaluacion
     Route::get('materia/evaluacion/{id}/nuevo','EvaluacionController@getCreate')->name('gc_evaluacion');
     Route::post('materia/evaluacion/{id}/nuevo','EvaluacionController@postCreate')->name('pc_evaluacion');
     Route::get('materia/evaluacion/{id_eva}/editar','EvaluacionController@getUpdate')->name('gu_evaluacion');
@@ -122,9 +122,10 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::post('/deshabilitar-evaluacion','EvaluacionController@deshabilitarEvaluacion')->name('deshabilitar_evaluacion');
     Route::post('/habilitar-evaluacion','EvaluacionController@habilitar')->name('habilitar_evaluacion');
     Route::get('materia/habilitar-evaluacion/{id}','EvaluacionController@reciclaje')->name('reciclaje_evaluacion');
+    Route::post('evaluacion/publicar-turno','EvaluacionController@publicar')->name('publicar_evaluacion');
 
 
-    //URL's para crear encuesta
+    //URL's para  encuesta
     Route::get('/encuesta','EncuestaController@getCreate')->name('gc_encuesta');
     Route::post('/encuesta','EncuestaController@postCreate')->name('pc_encuesta');
     Route::get('/encuesta/{id}/editar','EncuestaController@getUpdate')->name('gu_encuesta');

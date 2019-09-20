@@ -198,4 +198,26 @@ class EvaluacionController extends Controller
         return back()->with($notification, $mensaje);
     }
 
+    //recibimos el id de los turnos que se desean publicar
+    public function publicar( Request $request){
+        //dd($request->all());
+        $turnos = $request->input('turnosnopublicos');
+        $notification = "exito";
+        $message = "Se publicaron los siguientes turnos:";
+        if($turnos){
+            foreach($turnos as $turno){
+                $turno_publico = Turno::find($turno);
+                $turno_publico->visibilidad = 1;
+                $message .= $turno_publico->fecha_inicio_turno; 
+                $turno_publico->save();
+                 
+            }
+            return back()->with($notification,$message);
+        }else{
+            $message = "raios";
+        }
+        return back();
+        
+    }
+
 }

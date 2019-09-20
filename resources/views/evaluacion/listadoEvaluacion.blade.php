@@ -29,7 +29,7 @@
             @if (session('exito'))
               <div class="alert alert-success">
                 <ul>
-                  <h4 class="text-center">{{session('exito')}}</h4>
+                  <h4 class="text-center">{{session('exito')}} <br> hola </h4>
                 </ul>
               </div>
             @endif
@@ -102,17 +102,18 @@
                        <a class="btn btn-danger btn-sm mb-1" title="Deshabilitar Evaluación" href="#" data-deshabilitar-evaluacion="{{ $evaluacion->id }}">
                         <span class="icon-minus-circle"></span>
                        </a>
-
-                       <a class="btn btn-option btn-sm mb-1" title="Publicar Evaluación" href="#">
+                      <!-- Opcion de publicar evaluacion-->
+                       <a class="btn btn-option btn-sm mb-1" title="Publicar Evaluación" href="#" data-id-evaluacion="{{ $evaluacion->id}}">
                         <span class="icon-upload"></span>
                        </a>
+                       <!-- Opcion de publicar evaluacion-->
                        @endif
                        
                        <a class="btn btn-sm btn-option mb-1" title="Listado de turnos" href="{{ URL::signedRoute('listado_turnos', ['id' => $evaluacion->id]) }}">
                            <span class="icon-calendar-plus-o"></span>
                        </a>
 
-                       <a class="btn btn-info btn-sm mb-1" title="Estadísticas" href="#">
+                       <a class="btn btn-option btn-sm mb-1" title="Estadísticas" href="#">
                         <span class="icon-grafico"></span>
                        </a>
                   </td>
@@ -165,13 +166,14 @@
   @endif
 
 		<!--Estudiante-->
-
         </div>
         <div class="card-footer small text-muted">
+          @if(auth()->user()->IsTeacher)
           <a class="btn btn-sm float-right btn-default" href="{{route('reciclaje_evaluacion', $id_carga)}}" title="">
                   <span class="icon-recycler h5 mr-1"></span>
                   <b>Restablecer Evaluación</b>
             </a>
+          @endif
         </div>
       </div>
     </div>
@@ -181,7 +183,7 @@
 </div>
 <!-- /#wrapper -->
 
-<!-- Modal para desabilitar las encuestas -->
+<!-- Modal para desabilitar las evaluaciones -->
 <div class="modal fade" id="deshabilitarEvaluacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -206,10 +208,39 @@
   </div>
 </div>
 
+<!-- Modal publicar turnos -->
+<div class="modal fade" id="publicarEvaluacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Publicar Turnos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{{ route('publicar_evaluacion') }}" method="POST">
+        {{ csrf_field() }}
+        <div class="modal-body" id="desplegar-turnos-publicos">
+          
+        </div>
+        <div class="modal-body" id="desplegar-turnos-nopublicos">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 
 @endsection
 
 @section('js')
+  
 	<script type="text/javascript" src="{{asset('js/sb-admin.js')}}"></script>
 	<script type="text/javascript" src="{{asset('js/sb-admin.min.js')}}"></script>
   <!-- Bootstrap core JavaScript-->
@@ -229,11 +260,11 @@
           $('#deshabilitarEvaluacion').modal('show');
       });
     </script>
+    <script src="/js/turno/desplegarturno.js"> </script>
 @endsection
 
 
 @endsection
 
 
-@section("footer")
-@endsection
+

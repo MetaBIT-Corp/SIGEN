@@ -18,13 +18,6 @@
 @endsection
 
 @section("main")
-            <!-- Notificacion  -->
-            @if (session('notification'))
-                  <div class="alert alert-success">
-                        {{session('notification')}}
-                  </div>
-            @endif
-            <!-- Notificacion -->
             <!--Mostrará mensaje de éxito-->
             @if (session('exito'))
               <div class="alert alert-success">
