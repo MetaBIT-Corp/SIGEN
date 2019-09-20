@@ -102,7 +102,8 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::get('/evaluacion/{id}/turnos', 'TurnoController@index')->name('listado_turnos')->middleware('signed');
     Route::get('/evaluacion/{id}/turnos/create', 'TurnoController@create')->name('crear_turno')->middleware('signed');
     Route::get('/evaluacion/{id}/turnos/{turno_id}/edit', 'TurnoController@edit')->name('editar_turno')->middleware('signed');
-    Route::resource('/evaluacion/{id}/turnos', 'TurnoController')->except(['index','create','edit']); 
+    Route::resource('/evaluacion/{id}/turnos', 'TurnoController')->except(['index','create','edit']);
+    Route::get('/evaluacion/{id}/{id_turno}','TurnoController@duplicarTurno')->name('duplicar');
 
 
     //URL's para Area

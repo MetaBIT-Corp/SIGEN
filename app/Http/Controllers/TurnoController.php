@@ -194,8 +194,9 @@ class TurnoController extends Controller
         $materiac = CicloMateria::where('id_mat_ci',$carga->id_mat_ci)->first();
         $areas = Area::where("id_cat_mat",$materiac->id_mat_ci)->get();
         $id_areas = Clave_Area::where('clave_id',$clave->id)->pluck('area_id')->toArray();
+        $peso_turno = (int)(Clave_Area::where('clave_id',$clave->id)->sum('peso'));
 
-        return view('turno.edit', compact('turno', 'id', 'claves', 'clave','evaluacion','carga','materiac','areas','id_areas'));
+        return view('turno.edit', compact('turno', 'id', 'claves', 'clave','evaluacion','carga','materiac','areas','id_areas','peso_turno'));
     }
 
     /**
@@ -503,6 +504,7 @@ class TurnoController extends Controller
         return $encuesta_arr;
     }
 
+
     //Funcion para cargar los turnos de una evaluacion mediante AJAX (Utilizada para mostrar los turnos a publicar)
     public function turnosPorEvaluacion($id){
         $turnos = Turno::where('evaluacion_id', $id)->get();
@@ -511,4 +513,49 @@ class TurnoController extends Controller
 
     }
     
+
+    /**
+     * Funcion para duplicar turno y su configuracion.
+     * @param int $id_eva
+     * @param int $id_turno
+     * @author Ricardo Estupinian
+     */
+    public function duplicarTurno($id_eva,$id_turno,Request $request){
+        //Recuperando turno a duplicar
+        $turno=Turno::find($id_turno);
+
+        //Duplicando turno
+        $turno_duplicado=new Turno();
+        $turno_duplicado->fecha_inicio_turno = $turno->fecha_inicio_turno;
+        $turno_duplicado->fecha_final_turno = $turno->fecha_final_turno;
+        $turno_duplicado->contraseña = $turno->contraseña;
+        $turno_duplicado->evaluacion_id = $turno->evaluacion_id;
+        $turno_duplicado->visibilidad = $turno->visibilidad;
+        $turno_duplicado->save();
+
+        //Obteniendo clave del turno
+        $clave=$turno->claves[0];
+
+        //Duplicando clave
+        $clave_duplicada=new Clave();
+        $clave_duplicada->turno_id=$turno_duplicado->id;
+        $clave_duplicada->numero_clave=$clave->numero_clave;
+        $clave_duplicada->save();
+
+        //Recuperando los claves_areas de la clave
+        $claves_areas=$clave->clave_areas;
+
+        //Duplicando los clavea areas
+        foreach ($claves_areas as $clave_area) {
+            $clave_area_duplicada=new Clave_Area();
+            $clave_area_duplicada->area_id= $clave_area->area_id;
+            $clave_area_duplicada->clave_id=$clave_duplicada->id;
+            $clave_area_duplicada->numero_preguntas=$clave_area->numero_preguntas;
+            $clave_area_duplicada->aleatorio=$clave_area->aleatorio;
+            $clave_area_duplicada->peso= $clave_area->peso;
+            $clave_area_duplicada->save();
+        }
+        return back()->with('notification-type','success')->with('notification-message','El turno se duplico correctamente!');
+    }
+
 }
