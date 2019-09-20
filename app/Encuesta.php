@@ -21,4 +21,8 @@ class Encuesta extends Model
     	return $this->belongsTo(Docente::class,'id_docente', 'id_pdg_dcn');
 
     }
+
+    public function claves(){
+        return $this->hasMany(Clave::class);
+    }
 }

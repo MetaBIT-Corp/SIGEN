@@ -163,20 +163,38 @@ class EncuestaController extends Controller
         $id_encuesta = $request->input('id_encuesta');
 
         if($id_encuesta){
-            //$intento = Intento::where('encuesta_id', $id_encuesta)->get();
             $clave = Clave::where('encuesta_id', $id_encuesta)->get();
             $encuesta = Encuesta::find($id_encuesta);
 
             $notificaicon = 'exito';
             $mensaje = 'La encuesta fue eliminada con éxito';
-
-            //if(count($intento) || count($clave)){
-            if(count($clave)){
+            
+            if(count($clave[0]->intentos)){
                 $notificaicon = 'error';
                 $mensaje = 'Esta encuesta no se puede eliminar porque ya fue asignada';                
 
             }
             else{
+                if($encuesta->claves){
+                    foreach ($encuesta->claves as $clave) {
+                        
+                        if($clave->clave_areas){
+                            foreach ($clave->clave_areas as $ca) {
+                                
+                                if($ca->claves_areas_preguntas){
+                                    foreach ($ca->claves_areas_preguntas as $cap) {
+                                        $cap->delete();
+                                    }
+                                }
+
+                                $ca->delete();
+                            }
+                        }
+
+                        $clave->delete();
+                    }
+                }
+
                 $encuesta->delete();
             }   
         }
