@@ -21,7 +21,6 @@ use App\Grupo_Emparejamiento;
 use Illuminate\Http\Request;
 use DateTime;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
     

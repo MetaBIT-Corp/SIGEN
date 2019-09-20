@@ -203,10 +203,6 @@ class IntentoController extends Controller
         //Dividir el array segun la pagina en la que se encuentra
         $preg_pagina = array_slice($array, $offset_in_array, $preg_per_page);
 
-        //Mezcla las preguntas a mostrar por pagina, en caso se una por pagina no pasa nada.
-        //DUDA CON ESTA FUNCIONALIDAD PLUS :v
-        //shuffle($preg_pagina);
-
         //Devolver las preguntas necesarias segun la paginacion
         $paginacion = new LengthAwarePaginator($preg_pagina, count($array), $preg_per_page);
         $paginacion->setPath('');
@@ -343,9 +339,6 @@ class IntentoController extends Controller
                     }
                 }
             }
-            
-            
-            
         }
     }
 }
