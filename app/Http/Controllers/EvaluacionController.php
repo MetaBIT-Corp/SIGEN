@@ -233,10 +233,26 @@ class EvaluacionController extends Controller
                                 $message .= "Info: La sumatoria de pesos del turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno . " es de ". $sumatoria_de_pesos . ", mayor al 100 requerido<br><br>";
 
                             }elseif($sumatoria_de_pesos==100){
-                                //CREACION DE CLAVES
-                                $turno_publico->visibilidad = 1; 
-                                $turno_publico->save();
+
+                                /*CREACION DE CLAVES
+                                *
+                                *
+                                *
+                                *
+                                **/
+
                                 $message .= "Info: Publicación exitosa del turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno ."<br><br>";
+
+                                $turno_publico->visibilidad = 1;
+                                $turno_publico->fecha_inicio_turno= DateTime::createFromFormat(
+                                        'l jS \\of F Y h:i A',
+                                        $turno_publico->fecha_inicio_turno
+                                    )->format('Y-m-d H:i:s');
+                                $turno_publico->fecha_final_turno= DateTime::createFromFormat(
+                                        'l jS \\of F Y h:i A',
+                                        $turno_publico->fecha_final_turno
+                                    )->format('Y-m-d H:i:s'); 
+                                $turno_publico->save();
                             }
                             
 

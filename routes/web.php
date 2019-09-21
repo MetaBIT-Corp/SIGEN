@@ -131,7 +131,8 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::post('/encuesta','EncuestaController@postCreate')->name('pc_encuesta');
     Route::get('/encuesta/{id}/editar','EncuestaController@getUpdate')->name('gu_encuesta');
     Route::post('/encuesta/{id}/editar','EncuestaController@postUpdate')->name('pu_encuesta');    
-    Route::post('/eliminar-encuesta','EncuestaController@eliminarEncuesta')->name('eliminar_encuesta');   
+    Route::post('/eliminar-encuesta','EncuestaController@eliminarEncuesta')->name('eliminar_encuesta'); 
+    Route::post('/encuesta/publicar-encuesta','EncuestaController@publicar')->name('publicar_encuesta');  
     
 });
 

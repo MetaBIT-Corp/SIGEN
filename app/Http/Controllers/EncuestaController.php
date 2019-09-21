@@ -8,6 +8,7 @@ use App\Docente;
 use Carbon\Carbon;
 use App\Intento;
 use App\Clave;
+use App\Clave_Area;
 use Illuminate\Support\Facades\DB;
 use DateTime;
 
@@ -65,6 +66,13 @@ class EncuestaController extends Controller
         if(isset($request->all()['visible']))
             $encuesta->visible = 1;
         $encuesta->save();
+
+        //creacion de clave
+        $clave = new Clave();
+        $clave->encuesta_id = $encuesta->id;
+        $clave->numero_clave = 1;
+        $clave->save();
+
         //return back()->with('notification','Se registró exitosamente');
         return redirect()->action('EncuestaController@listado');
 
@@ -210,5 +218,68 @@ class EncuestaController extends Controller
         //dd($encuestas);
         $data = ['encuestas'=>$encuestas];
         return $data;
+    }
+
+    public function publicar(Request $request){
+       
+        $id_encuesta = $request->input('id_encuesta_publicar');
+        $notification = "exito";
+        $message = "Éxito: Se ha publicado la encuesta de forma exitosa.";
+        if($id_encuesta){
+            $encuesta = Encuesta::find($id_encuesta); 
+            $encuesta->fecha_inicio_encuesta= DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $encuesta->fecha_inicio_encuesta
+                )->format('l jS \\of F Y h:i A');
+            $encuesta->fecha_final_encuesta= DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $encuesta->fecha_final_encuesta
+                )->format('l jS \\of F Y h:i A');
+            if(Clave::where('encuesta_id', $encuesta->id)->exists()){
+                    foreach ($encuesta->claves as $clave) {
+                        if(Clave_Area::where('clave_id', $clave->id)->exists()){
+                            $areas_de_clave = Clave_Area::where('clave_id', $clave->id)->get();
+                            $sumatoria_de_pesos = 0;
+                            foreach ($areas_de_clave as $area_de_clave) {
+                                $sumatoria_de_pesos += $area_de_clave->peso;
+                            }
+                            if($sumatoria_de_pesos<100){
+                                $notification = "error";
+                                $message = "Error: La sumatoria de pesos de las áreas de la encuesta es de ". $sumatoria_de_pesos . ", menor al 100 requerido<br><br>";
+                            }elseif($sumatoria_de_pesos>100){
+                                $notification = "error";
+                                $message = "Error: La sumatoria de pesos de las áreas de la encuesta es de ". $sumatoria_de_pesos . ", mayor al 100 requerido<br><br>";
+
+                            }elseif($sumatoria_de_pesos==100){
+                                $encuesta->visible = 1; 
+                                $encuesta->fecha_inicio_encuesta= DateTime::createFromFormat(
+                                        'l jS \\of F Y h:i A',
+                                        $encuesta->fecha_inicio_encuesta
+                                    )->format('Y-m-d H:i:s');
+                                $encuesta->fecha_final_encuesta= DateTime::createFromFormat(
+                                        'l jS \\of F Y h:i A',
+                                        $encuesta->fecha_final_encuesta
+                                    )->format('Y-m-d H:i:s');
+                                $encuesta->save();
+                            }
+                            
+
+                        }else{
+                            $notification = "error";
+                            $message = "Error: Para la publicación debe agregar áreas de preguntas a la encuesta<br><br>";
+                        }
+                    }
+                    
+                }else{
+                    $notification = "error";
+                    $message = "Error: no posee clave la encuesta";
+                }  
+            
+            
+        }else{
+            $notification = "error";
+            $message = "Error: la acción no se realizó con éxito, vuelva a intentar";
+        }
+        return back()->with($notification,$message); 
     }
 }

@@ -21,18 +21,14 @@
 <!--Mostrará mensaje de éxito en caso que la petición en clave-area se haya realizado correctamente-->
 @if (session('exito'))
   <div class="alert alert-success">
-    <ul>
-      <h4 class="text-center">{{session('exito')}}</h4>
-    </ul>
+    {!!session('exito')!!}
   </div>
 @endif
 
 <!--Mostrará mensaje de eror en caso que la petición en clave-area no se haya realizado correctamente-->
 @if (session('error'))
   <div class="alert alert-danger">
-    <ul>
-      <h4 class="text-center">{{session('error')}}</h4>
-    </ul>
+    {!!session('error')!!}
   </div>
 @endif
 
@@ -120,10 +116,13 @@
                           data-eliminar-encuesta="{{ $encuesta->id }}">
                           <span class="icon-delete"></span>
                       </a>
-
-                      <a class="btn btn-sm btn-option mb-1" href="#" title="Publicar Encuesta">
+                      @if($encuesta->visible==0)
+                      <a class="btn btn-sm btn-option mb-1" href="#" title="Publicar Encuesta"
+                      data-publicar-encuesta="{{ $encuesta->id }}" disabled = "true">
                           <span class="icon-upload"></span>
                       </a>
+                      @endif
+
                       @endif
                       <button title="Estadísticas" href="" class="btn btn-sm btn-option mb-1">
                         <span class="icon-grafico"></span>
@@ -176,7 +175,30 @@
   </div>
 </div>
 
-
+<!-- Modal para publicar encuesta -->
+<div class="modal fade" id="publicarEncuesta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="publicarModalCenterTitle">Publicación de Encuesta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body" id="publicar-encuesta">
+          <h5><strong>¿Desea Publicar esta Encuesta?</strong></h5>
+        </div>
+        <div class="modal-footer">
+          <form action="{{ route('publicar_encuesta')}}" method="POST">
+            {{ csrf_field() }}
+            <input type="hidden" value="" id="id_encuesta_publicar" name="id_encuesta_publicar">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Publicar</button>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
 
 @endsection
 
@@ -200,6 +222,13 @@
 
           $('#id_encuesta').attr('value', $(this).data('eliminar-encuesta'));
           $('#eliminarEncuesta').modal('show');
+      });
+    </script>
+
+    <script>
+      $('[data-publicar-encuesta]').on('click', function(){
+          $('#id_encuesta_publicar').attr('value', $(this).data('publicar-encuesta'));
+          $('#publicarEncuesta').modal('show');
       });
     </script>
 
