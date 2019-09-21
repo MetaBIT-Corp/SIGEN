@@ -7,7 +7,9 @@ use App\Evaluacion;
 use App\CicloMateria;
 use App\CargaAcademica;
 use App\Turno;
+use App\Clave_Area;
 use Carbon\Carbon;
+use DateTime;
 
 class EvaluacionController extends Controller
 {
@@ -121,7 +123,7 @@ class EvaluacionController extends Controller
 
     public function listado($id){
         $id_carga = $id;
-        if(auth()->user()->role==0){
+        if(auth()->user()->IsAdmin){
             $cargas=  CargaAcademica::where('id_mat_ci',$id)->get();
             $evaluaciones = array();
             foreach ($cargas as $carga) {
@@ -134,7 +136,7 @@ class EvaluacionController extends Controller
         else{
             $evaluaciones = Evaluacion::where('id_carga',$id)->where('habilitado',1)->get();
         }
-    	return view('evaluacion.listadoEvaluacion')->with(compact('evaluaciones','id_carga'));
+    	return view('evaluacion.listaEvaluacion')->with(compact('evaluaciones','id_carga'));
 
     }
 
@@ -202,22 +204,57 @@ class EvaluacionController extends Controller
     public function publicar( Request $request){
         //dd($request->all());
         $turnos = $request->input('turnosnopublicos');
-        $notification = "exito";
-        $message = "Se publicaron los siguientes turnos:";
+        $notification = "info";
+        $message = "";
         if($turnos){
             foreach($turnos as $turno){
                 $turno_publico = Turno::find($turno);
-                $turno_publico->visibilidad = 1;
-                $message .= $turno_publico->fecha_inicio_turno; 
-                $turno_publico->save();
-                 
+                
+                $turno_publico->fecha_inicio_turno= DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $turno_publico->fecha_inicio_turno
+                )->format('l jS \\of F Y h:i A');
+                $turno_publico->fecha_final_turno= DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $turno_publico->fecha_final_turno
+                )->format('l jS \\of F Y h:i A');
+                
+                if($turno_publico->claves){
+                    foreach ($turno_publico->claves as $clave) {
+                        if(Clave_Area::where('clave_id', $clave->id)->exists()){
+                            $areas_de_clave = Clave_Area::where('clave_id', $clave->id)->get();
+                            $sumatoria_de_pesos = 0;
+                            foreach ($areas_de_clave as $area_de_clave) {
+                                $sumatoria_de_pesos += $area_de_clave->peso;
+                            }
+                            if($sumatoria_de_pesos<100){
+                                $message .= "Info: La sumatoria de pesos del turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno . " es de ". $sumatoria_de_pesos . ", menor al 100 requerido<br><br>";
+                            }elseif($sumatoria_de_pesos>100){
+                                $message .= "Info: La sumatoria de pesos del turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno . " es de ". $sumatoria_de_pesos . ", mayor al 100 requerido<br><br>";
+
+                            }elseif($sumatoria_de_pesos==100){
+                                //CREACION DE CLAVES
+                                $turno_publico->visibilidad = 1; 
+                                $turno_publico->save();
+                                $message .= "Info: Publicación exitosa del turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno ."<br><br>";
+                            }
+                            
+
+                        }else{
+                            $message .= "Info: Debe agregar áreas de preguntas al turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno . "<br><br>";
+                        }
+                    }
+                    
+                }else{
+                    $message .= "Info: no posee clave el turno => <strong>Inicio:</strong>" . $turno_publico->fecha_inicio_turno . " <strong>Final:</strong> " . $turno_publico->fecha_final_turno . "<br><br>";
+                }  
             }
-            return back()->with($notification,$message);
+            
         }else{
-            $message = "raios";
+            $notification = "info";
+            $message = "Info: no ha seleccionado ningún turno a publicar";
         }
-        return back();
-        
+        return back()->with($notification,$message); 
     }
 
 }

@@ -111,15 +111,12 @@
                       <a title="Editar" href="{{route('gu_encuesta', $encuesta->id)}}" class="btn btn-sm btn-option mb-1">
                         <span class="icon-edit"></span>
                       </a>
-                      <a title="Deshabilitar" href="#" class="btn btn-sm btn-danger mb-1">
-                        <span class="icon-minus-circle"></span>
-                      </a>
                       
                       <a title="Añadir áreas" href="#" class="btn btn-sm btn-option mb-1">
                         <span class="icon-add-solid"></span>
                       </a>
 
-                      <a class="btn btn-sm btn-danger mb-1" href="#" title="Eliminar Área" 
+                      <a class="btn btn-sm btn-danger mb-1" href="#" title="Eliminar Encuesta" 
                           data-eliminar-encuesta="{{ $encuesta->id }}">
                           <span class="icon-delete"></span>
                       </a>

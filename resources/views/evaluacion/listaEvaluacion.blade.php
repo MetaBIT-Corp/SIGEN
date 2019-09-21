@@ -21,7 +21,7 @@
             <!-- Notificacion  -->
             @if (session('notification'))
                   <div class="alert alert-success">
-                        {{session('notification')}}
+                        {!!session('notification')!!}
                   </div>
             @endif
             <!-- Notificacion -->
@@ -29,7 +29,7 @@
             @if (session('exito'))
               <div class="alert alert-success">
                 <ul>
-                  <h4 class="text-center">{{session('exito')}} <br> hola </h4>
+                  <h5 class="text-center">{!!session('exito')!!}<h5>
                 </ul>
               </div>
             @endif
@@ -38,10 +38,18 @@
             @if (session('error'))
               <div class="alert alert-danger">
                 <ul>
-                  <h4 class="text-center">{{session('error')}}</h4>
+                  <h5 class="text-center">{!!session('error')!!}</h5>
                 </ul>
               </div>
             @endif
+
+            <!--Mostrará mensaje de error -->
+            @if (session('info'))
+              <div class="alert alert-info">
+               {!!session('info')!!}
+              </div>
+            @endif
+
   <div id="wrapper">
   <div id="content-wrapper">
     <div class="container-fluid">
@@ -49,13 +57,14 @@
       <div class="card mb-3">
         <div class="card-header">
           <i class="fas fa-table"></i>
-          Evaluaciones | Materia</div>
+          Evaluaciones | Materia
+          </div>
         <div class="card-body">
          
             @if(auth()->user()->role==1) 
             <a class="btn btn-sm mb-3" href="{{route('gc_evaluacion', $id_carga)}}" title="Agregar">
                   <span class="icon-add-solid "></span>
-                  <b>Nueva Evaluación</b>
+                  <b>Nueva Evaluacion</b>
             </a>
             
           @endif
@@ -213,22 +222,24 @@
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalCenterTitle">Publicar Turnos</h5>
+        <h5 class="modal-title" id="modalCenterTitle">Seleccione los turnos que desea publicar</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <form action="{{ route('publicar_evaluacion') }}" method="POST">
         {{ csrf_field() }}
+        <strong class="ml-3">Turnos publicados</strong>
         <div class="modal-body" id="desplegar-turnos-publicos">
           
         </div>
+        <strong class="ml-3">Turnos sin publicar</strong>
         <div class="modal-body" id="desplegar-turnos-nopublicos">
           
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          <button type="submit" class="btn btn-primary">Publicar</button>
         </div>
       </form>
     </div>
