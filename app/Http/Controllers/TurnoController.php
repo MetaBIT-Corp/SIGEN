@@ -38,27 +38,33 @@ class TurnoController extends Controller
         $nombre_evaluacion = $evaluacion->nombre_evaluacion;
         $evaluacion_id = $evaluacion->id;
         
+        //Obtenemos fecha:hora actual
+        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+
+        //A continuación procedemos a verificar si los turnos podran ser editados y/o eliminados
+        //Si el turno no ha empezado, se podrá editar y eliminar
+        //Si el turno ya empezo, solo podra editar, todo, menos la fecha de inicio
+        //Si el turno ya termino, no se podra editar ni elimianr
         foreach($turnos as $turno){
-            
-            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-            
+            //Si la fecha final no es mayor que la actual, que significa que ya termino, no tendra acciones disponibles
              if(!Carbon::parse($turno->fecha_final_turno)->gt(Carbon::parse($fecha_hora_actual)))
                  $turno['acciones'] = false;
              else
+                //Caso contrario, si tendrá acciones disponibles
                  $turno['acciones'] = true;
             
+            //Procedemos a verificar si tendrá la opción de eliminar, si ya empezo, no podrá
             if(!Carbon::parse($turno->fecha_inicio_turno)->gt(Carbon::parse($fecha_hora_actual)))
                  $turno['accion_delete'] = false;
              else
+                //Caso contrario, si podrá
                  $turno['accion_delete'] = true;
                  
-                 
+            //Procedemos a cambiar el formato de las fechas de "Y-m-d H:i:s" a "d/m/Y h:i A"     
             $turno->fecha_inicio_turno = DateTime::createFromFormat('Y-m-d H:i:s', $turno->fecha_inicio_turno)->format('d/m/Y h:i A');
             $turno->fecha_final_turno = DateTime::createFromFormat('Y-m-d H:i:s', $turno->fecha_final_turno)->format('d/m/Y h:i A');
             
         }
-        
-        //dd($turnos);
         
         return view('turno.index', compact('turnos','nombre_evaluacion','evaluacion_id'));
     }
@@ -70,6 +76,7 @@ class TurnoController extends Controller
      */
     public function create($id)
     {
+        //Si no existe la Evaluación lo redireccionamos a /home
         if(!Evaluacion::find($id))
             return redirect('/home');
         
@@ -110,24 +117,37 @@ class TurnoController extends Controller
                 ->withInput();
         }
         
+        //Cambiamos el formato de las fechas de "d/m/Y H:i A" a "Y-m-d H:i:s", que es el que se maneja en la base de datos
+        
         $requestData['fecha_inicio_turno'] = DateTime::createFromFormat('d/m/Y H:i A', $request->input('fecha_inicio_turno'))->format('Y-m-d H:i:s');
         $requestData['fecha_final_turno'] = DateTime::createFromFormat('d/m/Y H:i A', $request->input('fecha_final_turno'))->format('Y-m-d H:i:s');
         
+        //Validamos que la fecha final sea mayor que la fecha de inicio
+
         if(!Carbon::parse($requestData['fecha_final_turno'])->gt(Carbon::parse($requestData['fecha_inicio_turno'])))
             return back()->with('notification-type','danger')->with('notification-message','La fecha/hora de fin debe ser mayor que la fecha/hora de inicio.')->withInput();
         
+        //Obtenemos la fecha actual, para luego hacer una validación que la fecha de inicio sea mayor que la actual
+
         $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
         $fecha_hora_actual_alert = DateTime::createFromFormat('Y-m-d H:i:s', $fecha_hora_actual)->format('d/m/Y h:i A');
-            
+        
+        //Validamos que la fecha de inicio sea mayor que la fecha actual    
         if(!Carbon::parse($requestData['fecha_inicio_turno'])->gt(Carbon::parse($fecha_hora_actual)))
             return back()->with('notification-type','danger')->with('notification-message','La fecha/hora de inicio debe ser mayor que la fecha/hora actual ('.$fecha_hora_actual_alert.').')->withInput();
         
+        //Calculamos la diferencia entre la fecha final e inicial del turno
+
         $diff_fin_inicio = Carbon::parse($requestData['fecha_final_turno'])->diffInHours(Carbon::parse($requestData['fecha_inicio_turno']));
+
+        //Obtenemos la duración de la Evaluación
         $duracion_evaluacion = Evaluacion::find($requestData['evaluacion_id'])->duracion;
-                
+        
+        //Validamos que la duración del turno no sea menor que la duración de la Evaluación        
         if(! (($diff_fin_inicio - $duracion_evaluacion) >= 0) )
             return back()->with('notification-type','danger')->with('notification-message','La diferencia en horas entre la fecha/hora de fin y la fecha/hora de inicio debe ser mayor que la duración de la evaluación ('. $duracion_evaluacion.' horas).')->withInput();
 
+        //Procedemos a crear el nuevo Turno, luego que paso todas las validaciones
         $turno = new Turno();
         $turno->fecha_inicio_turno = $requestData['fecha_inicio_turno'];
         $turno->fecha_final_turno = $requestData['fecha_final_turno'];
@@ -135,10 +155,8 @@ class TurnoController extends Controller
         $turno->evaluacion_id = $requestData['evaluacion_id'];
         $turno->visibilidad = 0;
 
-        if(isset($requestData['visibilidad']))
-            $turno->visibilidad = 1;
-        
         $turno->save();
+
 
         $clave = new Clave();
 
@@ -231,39 +249,47 @@ class TurnoController extends Controller
                 ->withInput();
         }
         
+        //Cambiamos el formato de las fechas de "d/m/Y H:i A" a "Y-m-d H:i:s", que es el que se maneja en la base de datos
         $requestData['fecha_inicio_turno'] = DateTime::createFromFormat('d/m/Y H:i A', $request->input('fecha_inicio_turno'))->format('Y-m-d H:i:s');
         $requestData['fecha_final_turno'] = DateTime::createFromFormat('d/m/Y H:i A', $request->input('fecha_final_turno'))->format('Y-m-d H:i:s');
         
+        //Validamos que la fecha final sea mayor que la fecha de inicio
         if(!Carbon::parse($requestData['fecha_final_turno'])->gt(Carbon::parse($requestData['fecha_inicio_turno'])))
             return back()->with('notification-type','danger')->with('notification-message','La fecha/hora de fin debe ser mayor que la fecha/hora de inicio.')->withInput();
+        
+        //Obtenemos la fecha actual, para luego hacer una validación que la fecha de inicio sea mayor que la actual
         
         $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
         $fecha_hora_actual_alert = DateTime::createFromFormat('Y-m-d H:i:s', $fecha_hora_actual)->format('d/m/Y h:i A');
         
+        //Si no ha iniciado, significa que se puede editar fecha de inicio, por lo que ese necesario validar que la fecha de inicio sea mayor que la fecha actual
         if(!$requestData["iniciado"]){
             
             if(!Carbon::parse($requestData['fecha_inicio_turno'])->gt(Carbon::parse($fecha_hora_actual)))
                 return back()->with('notification-type','danger')->with('notification-message','La fecha/hora de inicio debe ser mayor que la fecha/hora actual ('.$fecha_hora_actual_alert.').')->withInput();
             
         }
+
+        //Calculamos la diferencia entre la fecha final e inicial del turno
         
         $diff_fin_inicio = Carbon::parse($requestData['fecha_final_turno'])->diffInHours(Carbon::parse($requestData['fecha_inicio_turno']));
+
+        //Obtenemos la duración de la Evaluación
         $duracion_evaluacion = Evaluacion::find($evaluacion_id)->duracion;
-                
+        
+        //Validamos que la duración del turno no sea menor que la duración de la Evaluación        
+
         if(! (($diff_fin_inicio - $duracion_evaluacion) >= 0) )
             return back()->with('notification-type','danger')->with('notification-message','La diferencia en horas entre la fecha/hora de fin y la fecha/hora de inicio debe ser mayor que la duración de la evaluación ('. $duracion_evaluacion.' horas).')->withInput();
         
+        //Finalmente, luego de pasar todas las validaciones, procedemos a actualizar el turno
         $turno = Turno::find($id);
         $turno->fecha_inicio_turno = $requestData['fecha_inicio_turno'];
         $turno->fecha_final_turno = $requestData['fecha_final_turno'];
         
+        //Si ha ingresado nueva contraseña, la cambiamos
         if(isset($requestData['contraseña']) and $requestData['contraseña'] != null)
            $turno->contraseña = bcrypt($requestData['contraseña']);
-        
-        $turno->visibilidad = 0;
-
-        if(isset($requestData['visibilidad']))
-            $turno->visibilidad = 1;
         
         $turno->save();
         
