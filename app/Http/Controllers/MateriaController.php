@@ -57,22 +57,38 @@ class MateriaController extends Controller
                 break;
             case 2:
                 $ciclo    = DB::table("ciclo")->where("estado", "=", 1)->get();
-                $materias = DB::table('cat_mat_materia')
-                    ->join('materia_ciclo', 'cat_mat_materia.id_cat_mat', '=', 'materia_ciclo.id_cat_mat')
-                    ->join('carga_academica', 'carga_academica.id_mat_ci', '=', 'materia_ciclo.id_mat_ci')
-                    ->join('detalle_insc_est', 'detalle_insc_est.id_carg_aca', '=', 'carga_academica.id_carg_aca')
-                    ->join('estudiante', function ($join) {
-                        //Consulta Avanzada donde se determina de que estudinte se trata
-                        $idUser = auth()->user()->id;
-                        $join->on('estudiante.id_est', '=', 'detalle_insc_est.id_est')
-                            ->where('estudiante.user_id', '=', $idUser);
-                    })
-                    ->join('ciclo', 'ciclo.id_ciclo', '=', 'materia_ciclo.id_ciclo')
-                    ->where('ciclo.estado', '=', 1)
-                    ->select('cat_mat_materia.*', 'materia_ciclo.id_mat_ci','carga_academica.id_carg_aca')->get();
-
+                $materias = $this->materiasEstudiante($id);
                 return view("materia.listadoMateria", compact("materias", "ciclo"));
                 break;
         }
+    }
+
+    /**
+     * Funcion para obtener las materias segun estudiante y el ciclo activo
+     * @param int $id_user ID del usuario del estudiante
+     * @author Ricardo Estupinian
+     */
+    private function materiasEstudiante($id_user){
+        $ciclo    = DB::table("ciclo")->where("estado", "=", 1)->get();
+        $materias = DB::table('cat_mat_materia')
+            ->join('materia_ciclo', 'cat_mat_materia.id_cat_mat', '=', 'materia_ciclo.id_cat_mat')
+            ->join('carga_academica', 'carga_academica.id_mat_ci', '=', 'materia_ciclo.id_mat_ci')
+            ->join('detalle_insc_est', 'detalle_insc_est.id_carg_aca', '=', 'carga_academica.id_carg_aca')
+            ->join('estudiante', 'estudiante.id_est', '=', 'detalle_insc_est.id_est')
+            ->where('estudiante.user_id', '=',$id_user)
+            ->join('ciclo', 'ciclo.id_ciclo', '=', 'materia_ciclo.id_ciclo')
+            ->where('ciclo.estado', '=', 1)
+            ->select('cat_mat_materia.*', 'materia_ciclo.id_mat_ci','carga_academica.id_carg_aca')->get();
+        return $materias;
+    }
+
+    /**
+     * Funcion para web service de materias que cursa un determinado estudiante
+     * @param int $id_user ID del usuario del estudiante
+     * @author Ricardo Estupinian
+     */
+    public function getMateriasEstudiante($id_user){
+        $materias=$this->materiasEstudiante($id_user);
+        dd(response()->toJson($materias));
     }
 }
