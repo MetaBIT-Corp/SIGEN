@@ -46,11 +46,6 @@
     <label for="exampleInputPassword1">Contraseña:</label>
     <input type="password" name="contraseña" class="form-control margen_form" style="margin-left:15px" id="exampleInputPassword1" placeholder="Contraseña" value="{{ old('contraseña',"") }}">
     <small class="form-text text-muted" style="margin-left:15px">La contraseña será la misma sino se digita una nueva.</small>
-  </div>
-  <div class="form-check">
-    <input type="checkbox" name="visibilidad" class="form-check-input" @if($turno->visibilidad) checked @endif>
-    <label class="form-check-label" for="exampleCheck1">Visible</label>
-    <small class="form-text text-muted">Al marcarlo el turno será visible para los estudiantes.</small>
   </div><br>
   <div class="row">
      <div class="form-group">
