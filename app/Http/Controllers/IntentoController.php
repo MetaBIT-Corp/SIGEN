@@ -9,6 +9,7 @@ use App\Respuesta;
 use App\Estudiante;
 use App\Grupo_Emparejamiento;
 use App\Intento;
+use Carbon\Carbon;
 use App\Clave_Area_Pregunta_Estudiante;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -209,24 +210,35 @@ class IntentoController extends Controller
         return $paginacion;
     }
 
+    //Funcion que es llamada cuando finaliza el intento en el móvil
     public function finalizarIntentoMovil(Request $request){
         $respuesta = new Respuesta();
 
-        $total_preguntas = $request->total_preguntas; //cantidad total de preguntas que vienen desde el móvil
+        //cantidad total de preguntas que vienen desde el móvil
+        $total_preguntas = $request->total_preguntas;
 
-        $respuesta->id_pregunta = $request->pregunta_id;
-        $respuesta->id_opcion = $request->opcion_id;
-        $respuesta->id_intento = $request->intento_id;
-        $respuesta->texto_respuesta = $request->texto_respuesta;
+        //Obteniendo los valores del request y asignandolos a la tabla respuesta
+        $respuesta->id_pregunta = $request->pregunta_id;        //pregunts
+        $respuesta->id_opcion = $request->opcion_id;            //opcion
+        $respuesta->id_intento = $request->intento_id;          //intento 
+        $respuesta->texto_respuesta = $request->texto_respuesta;//texto escrito en caso sea respues corta
 
+        //Guardar el objeto respuesta
         $respuesta->save();
 
-        $num_actual = Respuesta::where('intento_id', $request->intento_id);
-        //dd($num_actual);
+        //Consulta la cantidad de respuestas que ha sido guardadas del intento correspondiente
+        $num_actual = Respuesta::where('id_intento', $request->intento_id)->get();
+
+        //Verifica si todas las respuestas que venian del movil ya se guardaron en la base de datos mysql
         if($total_preguntas == count($num_actual)){
+            //Lama al método calcular nota
             $nota = $this->calcularNota($request->intento_id);
+
+            //Actualizar los datos del intento correspondiente
             $intento = Intento::find($request->intento_id);
-            $intento->nota = $nota;
+            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+            $intento->nota_intento = $nota;
+            $intento->fecha_final_intento = $fecha_hora_actual;
             $intento->save();
         }
     }
@@ -249,18 +261,32 @@ class IntentoController extends Controller
                 $cape = Clave_Area_Pregunta_Estudiante::where('estudiante_id', $estudiante_id)
                                                         ->where('pregunta_id', $pregunta_id)
                                                         ->first();
-                
+        
                 //Obtener la clave_aera a la que pertenece la pregunta
                 $clave_area = $cape->clave_area;
+
+                //Obtener la modalidad a la que pertecene la pregunta
+                $modalidad = $clave_area->area->tipo_item_id;
 
                 //Obtener el peso de la pregunta
                 $peso = $clave_area->peso;
 
                 //Cuenta la cantidad de preguntas que tiene el objeto clave_are
-                $cantidad_preguntas = count($clave_area->clave_area_preguntas_estudiante);
+                $cantidad_preguntas = count($clave_area->claves_areas_preguntas_estudiante);
 
-                //Calcula la ponderación de la pregunta
-                $nota += ($peso/$cantidad_preguntas)/10;
+                //Verifica si la pregunta pertenece a modalidad de respuesta corta
+                if($modalidad==4){
+                    $txt_respuesta = strtolower($respuesta->texto_respuesta);
+                    $txt_opcion = strtolower($respuesta->opcion->opcion);
+                    if(strcmp($txt_respuesta, $txt_opcion) == 0){
+                        
+                        //Calcula la ponderación de la pregunta
+                        $nota += ($peso/$cantidad_preguntas)/10;
+                    }
+                }else{
+                    //Calcula la ponderación de la pregunta
+                    $nota += ($peso/$cantidad_preguntas)/10;
+                }
             }
         }
 

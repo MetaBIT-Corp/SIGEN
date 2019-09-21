@@ -7,16 +7,16 @@ use App\Evaluacion;
 use App\CicloMateria;
 use App\CargaAcademica;
 use App\Turno;
+use App\Clave_Area;
 use Carbon\Carbon;
+use DateTime;
 
 class EvaluacionController extends Controller
 {
     //muestra el detalle de la evaluacion
 
     public function show($id){
-
     	$evaluacion = Evaluacion::findOrFail($id);
-
     	return view('evaluacion.detalleEvaluacion')->with(compact('evaluacion'));
 
     }
@@ -123,7 +123,7 @@ class EvaluacionController extends Controller
 
     public function listado($id){
         $id_carga = $id;
-        if(auth()->user()->role==0){
+        if(auth()->user()->IsAdmin){
             $cargas=  CargaAcademica::where('id_mat_ci',$id)->get();
             $evaluaciones = array();
             foreach ($cargas as $carga) {
@@ -136,7 +136,18 @@ class EvaluacionController extends Controller
         else{
             $evaluaciones = Evaluacion::where('id_carga',$id)->where('habilitado',1)->get();
         }
-    	return view('evaluacion.listadoEvaluacion')->with(compact('evaluaciones','id_carga'));
+    	return view('evaluacion.listaEvaluacion')->with(compact('evaluaciones','id_carga'));
+
+    }
+
+    /*listado de evaluaciones por docente
+    el id que recibe es la carga academica si es docente (role=1)
+    el id que recibe es materia_ciclo si es admin (role=0)*/
+
+    public function reciclaje($id){
+        $id_carga = $id;
+        $evaluaciones = Evaluacion::where('id_carga',$id)->where('habilitado',0)->get();
+        return view('evaluacion.recycleEvaluacion')->with(compact('evaluaciones','id_carga'));
 
     }
 
@@ -157,7 +168,6 @@ class EvaluacionController extends Controller
                         $mensaje = 'La evaluacion no puede ser deshabilitada ya que posee uno o varios turnos en periodo de evaluación';
                         $si_deshabilita =false;
                     }
-
                 }
             }
             if($si_deshabilita){
@@ -170,6 +180,81 @@ class EvaluacionController extends Controller
         }
 
         return back()->with($notification, $mensaje);
+    }
+
+    //habilita evaluaciones
+    public function habilitar(Request $request){
+        //dd($request->all());
+        $id_evaluacion = $request->input('id_evaluacion');
+        if($id_evaluacion){
+            $notification = 'exito';
+            $mensaje = 'La evaluación ha sido habilitada exitosamente'; 
+            $evaluacion = Evaluacion::find($id_evaluacion); 
+            $evaluacion->habilitado = 1;
+            $evaluacion->save();
+        }else{
+            $notification = 'error';
+            $mensaje = 'La evaluacion no pudo ser habilitada, intente de nuevo';
+        }
+
+        return back()->with($notification, $mensaje);
+    }
+
+    //recibimos el id de los turnos que se desean publicar
+    public function publicar( Request $request){
+        //dd($request->all());
+        $turnos = $request->input('turnosnopublicos');
+        $notification = "info";
+        $message = "";
+        if($turnos){
+            foreach($turnos as $turno){
+                $turno_publico = Turno::find($turno);
+                
+                $turno_publico->fecha_inicio_turno= DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $turno_publico->fecha_inicio_turno
+                )->format('l jS \\of F Y h:i A');
+                $turno_publico->fecha_final_turno= DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $turno_publico->fecha_final_turno
+                )->format('l jS \\of F Y h:i A');
+                
+                if($turno_publico->claves){
+                    foreach ($turno_publico->claves as $clave) {
+                        if(Clave_Area::where('clave_id', $clave->id)->exists()){
+                            $areas_de_clave = Clave_Area::where('clave_id', $clave->id)->get();
+                            $sumatoria_de_pesos = 0;
+                            foreach ($areas_de_clave as $area_de_clave) {
+                                $sumatoria_de_pesos += $area_de_clave->peso;
+                            }
+                            if($sumatoria_de_pesos<100){
+                                $message .= "Info: La sumatoria de pesos del turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno . " es de ". $sumatoria_de_pesos . ", menor al 100 requerido<br><br>";
+                            }elseif($sumatoria_de_pesos>100){
+                                $message .= "Info: La sumatoria de pesos del turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno . " es de ". $sumatoria_de_pesos . ", mayor al 100 requerido<br><br>";
+
+                            }elseif($sumatoria_de_pesos==100){
+                                //CREACION DE CLAVES
+                                $turno_publico->visibilidad = 1; 
+                                $turno_publico->save();
+                                $message .= "Info: Publicación exitosa del turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno ."<br><br>";
+                            }
+                            
+
+                        }else{
+                            $message .= "Info: Debe agregar áreas de preguntas al turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno . "<br><br>";
+                        }
+                    }
+                    
+                }else{
+                    $message .= "Info: no posee clave el turno => <strong>Inicio:</strong>" . $turno_publico->fecha_inicio_turno . " <strong>Final:</strong> " . $turno_publico->fecha_final_turno . "<br><br>";
+                }  
+            }
+            
+        }else{
+            $notification = "info";
+            $message = "Info: no ha seleccionado ningún turno a publicar";
+        }
+        return back()->with($notification,$message); 
     }
 
 }

@@ -13,12 +13,28 @@
 			
 			<div class="modal-header border-bottom-0">
 
-				<h5 class="modal-title">Asignar Áreas a Turno</h5>
+				<h3 class="modal-title"><b>Asignar Áreas a Turno</b></h3>
+				
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 
 			</div>
+
+			@if($peso_turno>=100)
+
+				<div class="pl-3">
+					<p>El peso del Turno está completo. No se pueden asignar nuevas Áreas.</p>
+				</div>
+
+			@else
+
+				<div class="pl-3">
+					<p><b>Peso Actual del Turno:</b> {{$peso_turno}}</p>
+					<p><b>Peso Asignable:</b> {{100-$peso_turno}}</p>
+				</div>
+
+			@endif
 
 			<div class="modal-body p-0">
 
@@ -85,16 +101,24 @@
 									@endphp
 
 									<td class="col-sm-3 text-center">
-										<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminarModal" data-id-area="{{$id_clave_area->id}}" onclick="$('#eliminarModal').modal();">Remover</button>
+										<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminarModal" data-id-area="{{$id_clave_area->id}}" onclick="$('#eliminarModal').modal();">&nbsp;&nbsp;&nbsp;&nbsp;Remover&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
 									</td>
 								@else
 
 									@php
 										$preguntas_area = Grupo_Emparejamiento::where("area_id",$area->id)->count();
 									@endphp
-									<td class="col-sm-3 text-center">
-										<button type="button" class="btn btn-info" data-id-turno="{{$turno->id}}" data-id-clave="{{$claves[0]->id}}" data-id-area="{{$area->id}}" data-titulo="{{$area->titulo}}" data-preguntas-area="{{$preguntas_area}}" data-peso-turno="{{$peso_turno}}" data-toggle="modal" data-target="#asignarModal" data-dismiss="modal" onclick="$('#asignarModal').modal();">&nbsp;Asignar&nbsp;</button>
-									</td>
+
+									@if($peso_turno < 100)
+										<td class="col-sm-3 text-center">
+											<button type="button" class="btn btn-info" data-id-turno="{{$turno->id}}" data-id-clave="{{$claves[0]->id}}" data-id-area="{{$area->id}}" data-titulo="{{$area->titulo}}" data-preguntas-area="{{$preguntas_area}}" data-peso-turno="{{$peso_turno}}" data-toggle="modal" data-target="#asignarModal" data-dismiss="modal" onclick="$('#asignarModal').modal();">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asignar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+										</td>
+									@else
+										<td class="col-sm-3 text-center">
+											<button type="button" class="btn btn-secondary" disabled="">&nbsp;No Asignable&nbsp;</button>
+										</td>
+									@endif
+
 								@endif
 							</tr>
 						@empty
@@ -106,7 +130,7 @@
 							<td class="col-sm-5"></td>
 							<td class="col-sm-3"></td>
 							<td class="col-sm-3 text-center">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">&nbsp;&nbsp;Cerrar&nbsp;&nbsp;</button>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
 							</td>
 						</tr>
 
