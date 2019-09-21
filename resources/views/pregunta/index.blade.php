@@ -168,25 +168,16 @@
 
 <!--Scripts para datatables con Laravel-->
 @section("js")
-<script src="https://code.jquery.com/jquery-3.3.1.js">
-</script>
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js">
-</script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js">
-</script>
-
 <script type="text/javascript">
-	$(document).ready(function() {
+    $(document).ready(function() {
     $(function() {
         var table = $('#areas').DataTable({
             "serverSide": true,
             "ajax": window.location.href,
             "columns": [
-                @if(Request::get('id_gpo') == 1) 
-                {
+                @if(Request::get('id_gpo') == 1) {
                     data: 'id'
-                },
-                {
+                }, {
                     data: 'descripcion_grupo_emp'
                 }, {
                     data: 'actions',
@@ -249,26 +240,23 @@
                 scrollTop: 0
             }, 'slow');
         }
-
-        var id_preg ="";
-        var id_gpo="";
-
+        var id_preg = "";
+        var id_gpo = "";
         //Evento para eliminar
         $('body').on('click', '.btn-eliminar', function() {
             id_preg = $(this).data('id');
-            id_gpo=$(this).data('gpo');
-            $.get('/area/'+id_gpo+'/pregunta/'+ id_preg).done(function(data) {
+            id_gpo = $(this).data('gpo');
+            $.get('/area/' + id_gpo + '/pregunta/' + id_preg).done(function(data) {
                 $("#id_preg_eli").val(data.id);
             }).fail(function() {
                 console.log("Error");
             });
         });
-
         //Peticion para eliminar
         $("#eliminar").click(function() {
             $(this).attr("disabled", true);
             $.ajax({
-                url: '/area/'+id_gpo+'/pregunta/'+ id_preg,
+                url: '/area/' + id_gpo + '/pregunta/' + id_preg,
                 type: "DELETE",
                 data: $("#form-elim").serialize(),
                 dataType: "json"
@@ -294,22 +282,20 @@
                 console.log(e);
             });
         });
-
         //Evento para crear una pregunta
-         $('body').on('click', '#add_pregunta', function() {
+        $('body').on('click', '#add_pregunta', function() {
             $('#form-edit').trigger("reset");
             $("#modificar").val('Crear');
             $("#title-modal").html("Crear Pregunta");
             $("#pregunta_id").val("{{ $area->id }}");
             $("#pregunta").val("");
         });
-
         //Evento para crear una edicion de la pregunta
         $('body').on('click', '.btn-editar', function() {
             $('#form-edit').trigger("reset");
             id_preg = $(this).data('id');
-            id_gpo=$(this).data('gpo');
-            $.get('/area/'+ id_gpo+'/pregunta/'+id_preg).done(function(data) {
+            id_gpo = $(this).data('gpo');
+            $.get('/area/' + id_gpo + '/pregunta/' + id_preg).done(function(data) {
                 $("#title-modal").html("Editar Pregunta");
                 $("#pregunta_id").val(data.id);
                 $("#pregunta").val(data.pregunta);
@@ -322,23 +308,23 @@
         $("#modificar").click(function() {
             if ($("#pregunta").val().length > 0) {
                 $(this).attr("disabled", true);
-                if($(this).val()=="Modificar"){
+                if ($(this).val() == "Modificar") {
                     $.ajax({
-                        url: '/area/'+ id_gpo+'/pregunta/'+id_preg,
+                        url: '/area/' + id_gpo + '/pregunta/' + id_preg,
                         type: "POST",
                         data: $("#form-edit").serialize(),
                         dataType: "json"
                     }).done(function(datos) {
                         $("#salir").click();
                         $("#modificar").removeAttr("disabled");
-                        $("#modificar").attr('data-type','create');
+                        $("#modificar").attr('data-type', 'create');
                         table.draw();
                         //Mostrando mensaje de exito
                         exito(datos);
                     }).fail(function(xhr, status, e) {
                         console.log(e);
                     });
-                }else{
+                } else {
                     $.ajax({
                         url: '/area/1/pregunta/',
                         type: "POST",
@@ -347,7 +333,7 @@
                     }).done(function(datos) {
                         $("#salir").click();
                         $("#modificar").removeAttr("disabled");
-                        $("#modificar").attr('data-type','update');
+                        $("#modificar").attr('data-type', 'update');
                         table.draw();
                         //Mostrando mensaje de exito
                         exito(datos);
@@ -362,5 +348,12 @@
         });
     });
 });
+</script>
+<script type="text/javascript" src="{{asset('js/pregunta/pregunta.js')}}"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js">
+</script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js">
+</script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js">
 </script>
 @endsection

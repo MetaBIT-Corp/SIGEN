@@ -7,19 +7,19 @@ use App\Evaluacion;
 use App\CicloMateria;
 use App\CargaAcademica;
 use App\Turno;
+use Carbon\Carbon;
 
 class EvaluacionController extends Controller
 {
-    //
+    //muestra el detalle de la evaluacion
 
     public function show($id){
-
     	$evaluacion = Evaluacion::findOrFail($id);
-
     	return view('evaluacion.detalleEvaluacion')->with(compact('evaluacion'));
 
     }
 
+    //crear Evaluacion
     public function getCreate($id){
     	return view('evaluacion.createEvaluacion')->with(compact('id'));
 
@@ -132,9 +132,92 @@ class EvaluacionController extends Controller
             }
         }
         else{
-            $evaluaciones = Evaluacion::where('id_carga',$id)->get();
+            $evaluaciones = Evaluacion::where('id_carga',$id)->where('habilitado',1)->get();
         }
     	return view('evaluacion.listadoEvaluacion')->with(compact('evaluaciones','id_carga'));
 
     }
+
+    /*listado de evaluaciones por docente
+    el id que recibe es la carga academica si es docente (role=1)
+    el id que recibe es materia_ciclo si es admin (role=0)*/
+
+    public function reciclaje($id){
+        $id_carga = $id;
+        $evaluaciones = Evaluacion::where('id_carga',$id)->where('habilitado',0)->get();
+        return view('evaluacion.recycleEvaluacion')->with(compact('evaluaciones','id_carga'));
+
+    }
+
+    //Deshabilita evaluaciones, con excepción de aquellas que cuentan con turnos que están en periodo de evaluacion
+    public function deshabilitarEvaluacion(Request $request){
+        //dd($request->all());
+        $id_evaluacion = $request->input('id_evaluacion');
+        if($id_evaluacion){
+            $si_deshabilita =true;
+            $notification = 'exito';
+            $mensaje = 'La evaluación ha sido deshabilitada exitosamente'; 
+            $evaluacion = Evaluacion::find($id_evaluacion); 
+            if($evaluacion->turnos){
+                $fecha_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+                foreach ($evaluacion->turnos as $turno) {
+                    if($fecha_actual > $turno->fecha_inicio_turno && $fecha_actual < $turno->fecha_final_turno){
+                        $notification = 'error';
+                        $mensaje = 'La evaluacion no puede ser deshabilitada ya que posee uno o varios turnos en periodo de evaluación';
+                        $si_deshabilita =false;
+                    }
+                }
+            }
+            if($si_deshabilita){
+                $evaluacion->habilitado = 0;
+                $evaluacion->save();
+            }
+        }else{
+            $notification = 'error';
+            $mensaje = 'La evaluacion no pudo ser deshabilitada, intente de nuevo';
+        }
+
+        return back()->with($notification, $mensaje);
+    }
+
+    //habilita evaluaciones
+    public function habilitar(Request $request){
+        //dd($request->all());
+        $id_evaluacion = $request->input('id_evaluacion');
+        if($id_evaluacion){
+            $notification = 'exito';
+            $mensaje = 'La evaluación ha sido habilitada exitosamente'; 
+            $evaluacion = Evaluacion::find($id_evaluacion); 
+            $evaluacion->habilitado = 1;
+            $evaluacion->save();
+        }else{
+            $notification = 'error';
+            $mensaje = 'La evaluacion no pudo ser habilitada, intente de nuevo';
+        }
+
+        return back()->with($notification, $mensaje);
+    }
+
+    //recibimos el id de los turnos que se desean publicar
+    public function publicar( Request $request){
+        //dd($request->all());
+        $turnos = $request->input('turnosnopublicos');
+        $notification = "exito";
+        $message = "Se publicaron los siguientes turnos:";
+        if($turnos){
+            foreach($turnos as $turno){
+                $turno_publico = Turno::find($turno);
+                $turno_publico->visibilidad = 1;
+                $message .= $turno_publico->fecha_inicio_turno; 
+                $turno_publico->save();
+                 
+            }
+            return back()->with($notification,$message);
+        }else{
+            $message = "raios";
+        }
+        return back();
+        
+    }
+
 }

@@ -16,14 +16,32 @@
     <li class="breadcrumb-item"><a href="#">Materia</a></li>
     <li class="breadcrumb-item">Evaluaciones</li>
 @endsection
-<!-- Notificacion  -->
+
+@section("main")
+            <!-- Notificacion  -->
             @if (session('notification'))
                   <div class="alert alert-success">
                         {{session('notification')}}
                   </div>
             @endif
             <!-- Notificacion -->
-@section("main")
+            <!--Mostrará mensaje de éxito-->
+            @if (session('exito'))
+              <div class="alert alert-success">
+                <ul>
+                  <h4 class="text-center">{{session('exito')}} <br> hola </h4>
+                </ul>
+              </div>
+            @endif
+
+            <!--Mostrará mensaje de error -->
+            @if (session('error'))
+              <div class="alert alert-danger">
+                <ul>
+                  <h4 class="text-center">{{session('error')}}</h4>
+                </ul>
+              </div>
+            @endif
   <div id="wrapper">
   <div id="content-wrapper">
     <div class="container-fluid">
@@ -33,11 +51,13 @@
           <i class="fas fa-table"></i>
           Evaluaciones | Materia</div>
         <div class="card-body">
-          @if(auth()->user()->role==1) 
-          <a class="btn btn-sm mb-3" href="{{route('gc_evaluacion', $id_carga)}}" title="Agregar">
-                <span class="icon-add-solid "></span>
-                <b>Nueva Evaluación</b>
-          </a>
+         
+            @if(auth()->user()->role==1) 
+            <a class="btn btn-sm mb-3" href="{{route('gc_evaluacion', $id_carga)}}" title="Agregar">
+                  <span class="icon-add-solid "></span>
+                  <b>Nueva Evaluación</b>
+            </a>
+            
           @endif
           @if(auth()->user()->role==1 | auth()->user()->role==0)
           <div class="table-responsive">
@@ -79,20 +99,21 @@
                         <span class="icon-edit"></span>
                        </a>
 
-                       <a class="btn btn-danger btn-sm mb-1" title="Deshabilitar Evaluación" href="#">
+                       <a class="btn btn-danger btn-sm mb-1" title="Deshabilitar Evaluación" href="#" data-deshabilitar-evaluacion="{{ $evaluacion->id }}">
                         <span class="icon-minus-circle"></span>
                        </a>
-
-                       <a class="btn btn-option btn-sm mb-1" title="Publicar Evaluación" href="#">
+                      <!-- Opcion de publicar evaluacion-->
+                       <a class="btn btn-option btn-sm mb-1" title="Publicar Evaluación" href="#" data-id-evaluacion="{{ $evaluacion->id}}">
                         <span class="icon-upload"></span>
                        </a>
+                       <!-- Opcion de publicar evaluacion-->
                        @endif
                        
                        <a class="btn btn-sm btn-option mb-1" title="Listado de turnos" href="{{ URL::signedRoute('listado_turnos', ['id' => $evaluacion->id]) }}">
                            <span class="icon-calendar-plus-o"></span>
                        </a>
 
-                       <a class="btn btn-info btn-sm mb-1" title="Estadísticas" href="#">
+                       <a class="btn btn-option btn-sm mb-1" title="Estadísticas" href="#">
                         <span class="icon-grafico"></span>
                        </a>
                   </td>
@@ -145,9 +166,15 @@
   @endif
 
 		<!--Estudiante-->
-
         </div>
-        <div class="card-footer small text-muted"></div>
+        <div class="card-footer small text-muted">
+          @if(auth()->user()->IsTeacher)
+          <a class="btn btn-sm float-right btn-default" href="{{route('reciclaje_evaluacion', $id_carga)}}" title="">
+                  <span class="icon-recycler h5 mr-1"></span>
+                  <b>Restablecer Evaluación</b>
+            </a>
+          @endif
+        </div>
       </div>
     </div>
     <!-- /.container-fluid -->
@@ -156,10 +183,64 @@
 </div>
 <!-- /#wrapper -->
 
+<!-- Modal para desabilitar las evaluaciones -->
+<div class="modal fade" id="deshabilitarEvaluacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deshabilitarModalCenterTitle">Deshabilitar Evaluación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body" id="deshabilitar-encuesta">
+          <h5><strong>¿Desea deshabilitar esta Evaluación?</strong></h5>
+        </div>
+        <div class="modal-footer">
+          <form action="{{ route('deshabilitar_evaluacion')}}" method="POST">
+            {{ csrf_field() }}
+            <input type="hidden" value="" id="id_evaluacion" name="id_evaluacion">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-danger">Deshabilitar</button>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal publicar turnos -->
+<div class="modal fade" id="publicarEvaluacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Publicar Turnos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{{ route('publicar_evaluacion') }}" method="POST">
+        {{ csrf_field() }}
+        <div class="modal-body" id="desplegar-turnos-publicos">
+          
+        </div>
+        <div class="modal-body" id="desplegar-turnos-nopublicos">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 
 @endsection
 
 @section('js')
+  
 	<script type="text/javascript" src="{{asset('js/sb-admin.js')}}"></script>
 	<script type="text/javascript" src="{{asset('js/sb-admin.min.js')}}"></script>
   <!-- Bootstrap core JavaScript-->
@@ -172,11 +253,18 @@
     <script type="text/javascript" src="{{asset('vendor/datatables/jquery.dataTables.js' )}}"></script>
     <script type="text/javascript" src="{{asset('vendor/datatables/dataTables.bootstrap4.js' )}}"></script>
   	<script type="text/javascript" src="{{asset('js/demo/datatables-demo.js')}}"></script>
+
+    <script>
+      $('[data-deshabilitar-evaluacion]').on('click', function(){
+          $('#id_evaluacion').attr('value', $(this).data('deshabilitar-evaluacion'));
+          $('#deshabilitarEvaluacion').modal('show');
+      });
+    </script>
+    <script src="/js/turno/desplegarturno.js"> </script>
 @endsection
 
 
 @endsection
 
 
-@section("footer")
-@endsection
+

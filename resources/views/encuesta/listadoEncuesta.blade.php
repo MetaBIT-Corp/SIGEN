@@ -84,6 +84,7 @@
                 </tr>
               </tfoot>
               <tbody>
+                
                 @foreach($encuestas as $encuesta)
                   <tr>
                     <td>{{$encuesta->titulo_encuesta}}</td>
@@ -102,7 +103,7 @@
                     </td>
                     @if(auth()->user()->IsAdmin)
                     <td>
-                      
+                     {{$encuesta->docente->nombre_docente}}
                     </td>
                     @endif
                     <td>
@@ -163,7 +164,8 @@
         </button>
       </div>
         <div class="modal-body" id="elimanr-encuesta">
-          <h3><strong>¿Desea eliminar esta Encuesta?</strong></h3>
+          <h3><strong>¿Desea eliminar esta Encuesta?</strong></h3><br>
+          <h4>Se borrarán todos los objetos asociados a esta encuesnta</h4>
         </div>
         <div class="modal-footer">
           <form action="{{ route('eliminar_encuesta')}}" method="POST">
@@ -176,6 +178,8 @@
     </div>
   </div>
 </div>
+
+
 
 @endsection
 
@@ -201,6 +205,8 @@
           $('#eliminarEncuesta').modal('show');
       });
     </script>
+
+    
 
 
 @endsection

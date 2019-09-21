@@ -26,12 +26,15 @@ Route::get('/area-emparejamiento/{id}/preguntas', 'ClaveController@preguntasPorA
 Route::get('/preguntas-agregadas/{id}', 'ClaveController@preguntasAgregadas');
 Route::get('/preguntas-agregadas-emp/{id}', 'ClaveController@preguntasAgregadasEmp');
 
+//Turno
+Route::get('/evaluacion/{id}/turnos', 'TurnoController@turnosPorEvaluacion');
+
 //Consultar encuestas desde la app móvil
 Route::get('/encuestas-disponibles', 'EncuestaController@encuestasDisponibles');
 
 //Enviar respuestas desde la app móvil
 Route::post('/finalizar-intento', 'IntentoController@finalizarIntentoMovil');
-Route::get('/calcular-nota/{$intento_id}', 'IntentoController@calcularNota');
+Route::get('/calcular-nota/{intento_id}', 'IntentoController@calcularNota');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

@@ -74,7 +74,7 @@
             </div>
             <div class="col-4" style="text-align: right;">
               <strong class="mb-3">Asignar Área</strong>
-              <button class="btn" data-id-turno="{{$turno->id}}" data-id-clave="{{$claves[0]->id}}" data-toggle="modal" data-target="#areasModal" onclick="$('#areasModal').modal();" title="Asignar Área a Turno">
+              <button class="btn" data-id-turno="{{$turno->id}}" data-id-clave="{{$claves[0]->id}}" data-peso-turno="{{$peso_turno}}" data-toggle="modal" data-target="#areasModal" onclick="$('#areasModal').modal();" title="Asignar Área a Turno">
                 <span class="icon-add text-primary">
                 </span>
               </button>

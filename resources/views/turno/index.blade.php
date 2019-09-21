@@ -17,6 +17,14 @@
     <div id="wrapper">
       <div id="content-wrapper">
         <div class="container-fluid">
+          @if(session('notification-message') and session('notification-type'))
+          <div class="alert alert-{{ session('notification-type') }} text-center alert-dismissible fade show" role="alert">
+            <h5>{{ session('notification-message') }}</h5>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          @endif
           <!-- DataTables Example -->
           <div class="card mb-3">
             <div class="card-header">
@@ -51,6 +59,9 @@
                                 <td><input type="checkbox" @if($turno->visibilidad) checked @endif disabled></td>
                                 <td>
                                     @if($turno->acciones)
+                                      <a id="btn_editar" class="btn btn-sm bg-success" title="Duplicar Turno" href="{{ URL::signedRoute('duplicar', ['id' => $evaluacion_id, 'turno_id' =>$turno->id ]) }}">
+                                           <span class="icon-paste"></span>
+                                       </a>
                                        <a id="btn_editar" class="btn btn-sm" title="Editar" href="{{ URL::signedRoute('editar_turno', ['id' => $evaluacion_id, 'turno_id' =>$turno->id ]) }}">
                                            <span class="icon-edit"></span>
                                        </a>
