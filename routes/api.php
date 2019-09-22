@@ -29,6 +29,7 @@ Route::get('/preguntas-agregadas-emp/{id}', 'ClaveController@preguntasAgregadasE
 //Turno
 Route::get('/evaluacion/{id}/turnos', 'TurnoController@turnosPorEvaluacion');
 
+
 //Consultar encuestas desde la app móvil
 Route::get('/encuestas-disponibles', 'EncuestaController@encuestasDisponibles');
 

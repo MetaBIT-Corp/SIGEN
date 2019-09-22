@@ -8,8 +8,11 @@ use App\CicloMateria;
 use App\CargaAcademica;
 use App\Turno;
 use App\Clave_Area;
+use App\Intento;
+use App\Estudiante;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Support\Facades\Hash;
 
 class EvaluacionController extends Controller
 {
@@ -132,8 +135,9 @@ class EvaluacionController extends Controller
                     array_push($evaluaciones, $eva);
                  }
             }
-        }
-        else{
+        }elseif(auth()->user()->IsTeacher){
+            $evaluaciones = Evaluacion::where('id_carga',$id)->where('habilitado',1)->get();
+        }elseif(auth()->user()->IsStudent){
             $evaluaciones = Evaluacion::where('id_carga',$id)->where('habilitado',1)->get();
         }
     	return view('evaluacion.listaEvaluacion')->with(compact('evaluaciones','id_carga'));
@@ -271,6 +275,53 @@ class EvaluacionController extends Controller
             $message = "Info: no ha seleccionado ningún turno a publicar";
         }
         return back()->with($notification,$message); 
+    }
+
+    /**
+     * Funcion para validar el acceso a los intentos de evaluaciones.
+     * @param 
+     * @author Edwin Palacios
+     */
+    public function acceso(Request $request){
+        //declaracion de variables
+        $id_turno = $request->input('id_turno_acceso');
+        $contrasenia = $request->input('contraseña');
+        if($contrasenia){
+            $disponible = 0;
+            $estudiante = Estudiante::where('user_id', auth()->user()->id)->first();
+            $turno_a_acceder =  Turno::find($id_turno);
+            $evaluacion = $turno_a_acceder->evaluacion;
+            $turnos = $evaluacion->turnos;
+
+            foreach ($turnos as $turno) {
+                $claves = $turno->claves;
+                foreach ($claves as $clave) {
+                $disponible += Intento::where('clave_id',$clave->id)
+                                ->where('estudiante_id',$estudiante->id_est)
+                                ->count();
+                }
+            }
+            if($disponible >= $evaluacion->intentos){
+                $notification = "error";
+                $message = "Error: Ya ha realizado todos los intentos";
+                return back()->with($notification,$message);
+            }else{
+                if(Hash::check($contrasenia, $turno_a_acceder->contraseña)){
+                    return redirect()->action(
+                        'IntentoController@iniciarEvaluacion', 
+                        ['id_intento' => $turno_a_acceder->id]
+                    );
+                }else{
+                    $notification = "error";
+                    $message = "Error: La contraseña no es valida";
+                    return back()->with($notification,$message);
+                }
+            }
+        }else{
+            $notification = "error";
+            $message = "Error: No ha ingresado la contraseña";
+            return back()->with($notification,$message);
+        }
     }
 
 }

@@ -28,18 +28,14 @@
             <!--Mostrará mensaje de éxito-->
             @if (session('exito'))
               <div class="alert alert-success">
-                <ul>
-                  <h5 class="text-center">{!!session('exito')!!}<h5>
-                </ul>
+                {!!session('exito')!!}
               </div>
             @endif
 
             <!--Mostrará mensaje de error -->
             @if (session('error'))
               <div class="alert alert-danger">
-                <ul>
-                  <h5 class="text-center">{!!session('error')!!}</h5>
-                </ul>
+                {!!session('error')!!}
               </div>
             @endif
 
@@ -145,7 +141,7 @@
               @foreach($evaluacion->turnos as $turno) <!-- recorrecomos los turnos por evaluacion -->
                 @if($turno->visibilidad == 1)
                   <div class="col-md-6">
-              		  <span class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+              		  <span class="list-group-item  flex-column align-items-start mb-3">
               		    <div class="d-flex w-100 justify-content-between">
               		      <h5 class="mb-1">
                           {{$evaluacion->nombre_evaluacion}} | Turno {{$loop->iteration}}
@@ -157,7 +153,7 @@
                       <br>
                       <small class="text-muted">Intentos: {{$evaluacion->intentos}}.</small>
                       <br>
-                      <button type="button" class="btn btn-info mt-1">Acceder</button>
+                      <button type="button" class="btn btn-info mt-1" data-acceder-evaluacion="{{ $turno->id }}">Acceder</button>
               		  </span>
                   </div>
                 @endif
@@ -173,8 +169,8 @@
   		</div>
     @endif
   @endif
-
 		<!--Estudiante-->
+
         </div>
         <div class="card-footer small text-muted">
           @if(auth()->user()->IsTeacher)
@@ -246,6 +242,44 @@
   </div>
 </div>
 
+<!-- Modal para acceder a evaluacion -->
+<div class="modal fade" id="accederEvaluacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="accederModalCenterTitle">Acceso a Evaluación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" >
+        
+         <form action="{{ route('acceso_evaluacion') }}" method="POST">
+        {{ csrf_field() }}
+        <input type="hidden" value="" id="id_turno_acceso" name="id_turno_acceso">
+        <div class="row">
+          
+          <div class="col-md-12">
+            <div class="alert alert-info">
+           Indicaciones 
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1 ml-3">Ingrese la contraseña:</label>
+              <input type="password" name="contraseña" class="form-control"  id="contraseñas" placeholder="Contraseña" >
+            </div>
+          </div>
+        </div>
+      </div>   
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Acceder</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 
 
 @endsection
@@ -269,6 +303,12 @@
       $('[data-deshabilitar-evaluacion]').on('click', function(){
           $('#id_evaluacion').attr('value', $(this).data('deshabilitar-evaluacion'));
           $('#deshabilitarEvaluacion').modal('show');
+      });
+    </script>
+    <script>
+      $('[data-acceder-evaluacion]').on('click', function(){
+          $('#id_turno_acceso').attr('value', $(this).data('acceder-evaluacion'));
+          $('#accederEvaluacion').modal('show');
       });
     </script>
     <script src="/js/turno/desplegarturno.js"> </script>

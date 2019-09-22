@@ -138,6 +138,7 @@ Route::group(['middleware' => 'teacher'], function(){
 
 //Aqui iran las rutas a las que tiene acceso solo el Estudiante
 Route::group(['middleware' => 'student'], function(){
+    Route::post('evaluacion/acceso','EvaluacionController@acceso')->name('acceso_evaluacion');
 });
 
 //Aqui iran las rutas a las que tiene acceso solamente el docente y el admin
