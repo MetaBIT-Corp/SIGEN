@@ -71,6 +71,7 @@ class EncuestaController extends Controller
     }
 
     public function getUpdate($id){
+
         $encuesta = Encuesta::find($id);
         $encuesta->fecha_inicio_encuesta= DateTime::createFromFormat(
             'Y-m-d H:i:s',$encuesta->fecha_inicio_encuesta)->format('m/d/Y g:i A');
@@ -82,6 +83,19 @@ class EncuestaController extends Controller
         if($encuesta->fecha_inicio_encuesta<=$fecha_actual){
             $se_puede_editar=false;
         }
+
+        /*Parte de René.*/
+
+        $clave = Clave::where('encuesta_id',$id)->first();
+
+        $docente = Docente::where('user_id',auth()->user()->id)
+
+
+        $areas = Area::where("id_pdg_dcn",$docente->id_pdg_dcn)->where('id_cat_mat',null)->get();
+        
+        $id_areas = Clave_Area::where('clave_id',$clave->id)->pluck('area_id')->toArray();
+        $peso_turno = (int)(Clave_Area::where('clave_id',$clave->id)->sum('peso'));
+
         return view('encuesta.updateEncuesta')->with(compact('encuesta','se_puede_editar'));
     }
 
