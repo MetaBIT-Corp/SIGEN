@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Hash;
 class EvaluacionController extends Controller
 {
     //muestra el detalle de la evaluacion
-
     public function show($id){
     	$evaluacion = Evaluacion::findOrFail($id);
     	return view('evaluacion.detalleEvaluacion')->with(compact('evaluacion'));
