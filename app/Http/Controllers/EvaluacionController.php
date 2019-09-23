@@ -17,6 +17,16 @@ use Illuminate\Support\Facades\Hash;
 
 class EvaluacionController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     //muestra el detalle de la evaluacion
     public function show($id){
     	$evaluacion = Evaluacion::findOrFail($id);

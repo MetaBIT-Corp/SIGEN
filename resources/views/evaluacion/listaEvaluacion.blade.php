@@ -13,7 +13,7 @@
 @section("body")
 
 @section("ol_breadcrumb")
-    <li class="breadcrumb-item"><a href="#">Materia</a></li>
+    <li class="breadcrumb-item"><a href="{{route('materias')}}">Materia</a></li>
     <li class="breadcrumb-item">Evaluaciones</li>
 @endsection
 

@@ -17,12 +17,12 @@
     <h4>Ciclo {{ $ciclo[0]->num_ciclo }}  Año: {{ $ciclo[0]->anio }}</h4>
   </div>
   <div class="card-body">
-<table class="col-12">
+<table class="col-md-12">
 <tbody>
 <tr class=" row mb-3">
 @forelse($materias as $materia)
 @if($loop->iteration==1||$loop->iteration==2)
-<td class="col-6">
+<td class="col-md-6">
 <div class="card border-dark bg-light">
     <div class="card-body">
       <h5 class="card-title"><strong>{{ $materia->codigo_mat }}</strong></h5>
@@ -44,16 +44,22 @@
         <span class="icon-admin"></span>
       </a>
 
-      <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">
+      <a class="btn btn-option btn-sm" title="Evaluaciones" href="
+      {{ URL::signedRoute('listado_evaluacion', ['id' => $materia->id_carg_aca]) }}">
         <span class="icon-file-text"></span>
       </a>
+      @if(auth()->user()->IsTeacher)
+      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('areas.index', ['id' => $materia->id_cat_mat]) }}">
+        <span class="icon-options"></span>
+      </a>
+      @endif
 
     </div>
 </div>
 </td>
 <!-- Validacion para que solo dos card view por filas se muestren-->
 @elseif(($loop->iteration+1)%2!=0)
-<td class="col-6">
+<td class="col-md-6">
 <div class="card border-dark bg-light">
     <div class="card-body">
       <h5 class="card-title"><strong>{{ $materia->codigo_mat }}</strong></h5>
@@ -63,7 +69,7 @@
       	 @else
       	  Es una materia electiva.
       	 @endif
-      </p>
+      </p>  
     </div>
     <div class="card-footer">
       <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}">
@@ -74,9 +80,15 @@
         <span class="icon-admin"></span>
       </a>
 
-      <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">
+      <a class="btn btn-option btn-sm" title="Evaluaciones" href="
+      {{ URL::signedRoute('listado_evaluacion', ['id' => $materia->id_carg_aca]) }}">
         <span class="icon-file-text"></span>
       </a>
+      @if(auth()->user()->IsTeacher)
+      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('areas.index', ['id' => $materia->id_cat_mat]) }}">
+        <span class="icon-options"></span>
+      </a>
+      @endif
 
     </div>
 </div>
@@ -84,7 +96,7 @@
 @else
 </tr>
 <tr class="row mb-3">
-<td class="col-6">
+<td class="col-md-6">
 <div class="card border-dark bg-light">
     <div class="card-body">
       <h5 class="card-title"><strong>{{ $materia->codigo_mat }}</strong></h5>
@@ -106,9 +118,15 @@
         <span class="icon-admin"></span>
       </a>
 
-      <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">
+      <a class="btn btn-option btn-sm" title="Evaluaciones" href="
+      {{ URL::signedRoute('listado_evaluacion', ['id' => $materia->id_carg_aca]) }}">
         <span class="icon-file-text"></span>
       </a>
+      @if(auth()->user()->IsTeacher)
+      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('areas.index', ['id' => $materia->id_cat_mat]) }}">
+        <span class="icon-options"></span>
+      </a>
+      @endif
     </div>
 </div>
 </td>
@@ -124,7 +142,7 @@
 </div>
 @else
 @if(count($ciclos)>0)
-<div class="accordion col-10" id="accordionExample">
+<div class="accordion col-md-10" id="accordionExample">
 @foreach($materias as $ciclo=>$materias)
 @if($ciclos[$loop->iteration-1]->estado==1)
 <!-- Inicio de un Collapse -->
@@ -153,12 +171,12 @@
       <div class="card-body">
         <!-- ----------------------------Inicio de Card Views----------------------------------- -->
 @endif
-<table class="col-12">
+<table class="col-md-12">
 <tbody>
 <tr class=" row mb-3">
 @forelse($materias as $materia)
 @if($loop->iteration==1||$loop->iteration==2)
-<td class="col-6">
+<td class="col-md-6">
 <div class="card border-dark bg-light">
     <div class="card-body">
       <h5 class="card-title"><strong>{{ $materia->codigo_mat }}</strong></h5>
@@ -181,13 +199,21 @@
       </a>
 
       @if(auth()->user()->role == 0)
-        <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_mat_ci )}}">
+        <a class="btn btn-option btn-sm" title="Evaluaciones" href="
+      {{ URL::signedRoute('listado_evaluacion', ['id' => $materia->id_mat_ci]) }}">
           <span class="icon-file-text"></span>
         </a>
       @elseif(auth()->user()->role == 1)
-        <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">
+        <a class="btn btn-option btn-sm" title="Evaluaciones" href="
+      {{ URL::signedRoute('listado_evaluacion', ['id' => $materia->id_carg_aca]) }}">
           <span class="icon-file-text"></span>
         </a>
+      @endif
+
+      @if(auth()->user()->IsTeacher)
+      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('areas.index', ['id' => $materia->id_cat_mat]) }}">
+        <span class="icon-options"></span>
+      </a>
       @endif
 
     </div>
@@ -195,7 +221,7 @@
 </td>
 <!-- Validacion para que solo dos card view por filas se muestren-->
 @elseif(($loop->iteration+1)%2!=0)
-<td class="col-6">
+<td class="col-md-6">
 <div class="card border-dark bg-light">
     <div class="card-body">
       <h5 class="card-title"><strong>{{ $materia->codigo_mat }}</strong></h5>
@@ -217,13 +243,21 @@
       </a>
 
       @if(auth()->user()->role == 0)
-        <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_mat_ci )}}">
+        <a class="btn btn-option btn-sm" title="Evaluaciones" href="
+      {{ URL::signedRoute('listado_evaluacion', ['id' => $materia->id_mat_ci]) }}">
           <span class="icon-file-text"></span>
         </a>
       @elseif(auth()->user()->role == 1)
-        <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">
+        <a class="btn btn-option btn-sm" title="Evaluaciones" href="
+      {{ URL::signedRoute('listado_evaluacion', ['id' => $materia->id_carg_aca]) }}">
           <span class="icon-file-text"></span>
         </a>
+      @endif
+
+      @if(auth()->user()->IsTeacher)
+      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('areas.index', ['id' => $materia->id_cat_mat]) }}">
+        <span class="icon-options"></span>
+      </a>
       @endif
 
     </div>
@@ -232,7 +266,7 @@
 @else
 </tr>
 <tr class="row mb-3">
-<td class="col-6">
+<td class="col-md-6">
 <div class="card border-dark bg-light">
     <div class="card-body">
       <h5 class="card-title"><strong>{{ $materia->codigo_mat }}</strong></h5>
@@ -254,13 +288,21 @@
       </a>
       
       @if(auth()->user()->role == 0)
-        <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_mat_ci )}}">
+        <a class="btn btn-option btn-sm" title="Evaluaciones" href="
+      {{ URL::signedRoute('listado_evaluacion', ['id' => $materia->id_mat_ci]) }}">
           <span class="icon-file-text"></span>
         </a>
       @elseif(auth()->user()->role == 1)
-        <a class="btn btn-option btn-sm" title="Evaluaciones" href="{{ route('listado_evaluacion',$materia->id_carg_aca )}}">
+        <a class="btn btn-option btn-sm" title="Evaluaciones" href="
+      {{ URL::signedRoute('listado_evaluacion', ['id' => $materia->id_carg_aca]) }}">
           <span class="icon-file-text"></span>
         </a>
+      @endif
+
+      @if(auth()->user()->IsTeacher)
+      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('areas.index', ['id' => $materia->id_cat_mat]) }}">
+        <span class="icon-options"></span>
+      </a>
       @endif
     </div>
 </div>

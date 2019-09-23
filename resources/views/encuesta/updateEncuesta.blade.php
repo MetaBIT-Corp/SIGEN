@@ -113,6 +113,8 @@
 </div>
 </div>
 
+@include('turno.asignarAreasClave')
+
 
   
 @endsection

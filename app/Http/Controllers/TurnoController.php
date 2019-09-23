@@ -34,10 +34,10 @@ class TurnoController extends Controller
     public function index($id)
     {
         $evaluacion = Evaluacion::find($id);
+        $evaluacion_id = $evaluacion->id;
         $turnos = $evaluacion->turnos;
         $nombre_evaluacion = $evaluacion->nombre_evaluacion;
-        $evaluacion_id = $evaluacion->id;
-        
+
         //Obtenemos fecha:hora actual
         $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
 
@@ -66,7 +66,7 @@ class TurnoController extends Controller
             
         }
         
-        return view('turno.index', compact('turnos','nombre_evaluacion','evaluacion_id'));
+        return view('turno.index', compact('turnos','nombre_evaluacion','evaluacion_id','evaluacion'));
     }
 
     /**
@@ -77,10 +77,12 @@ class TurnoController extends Controller
     public function create($id)
     {
         //Si no existe la Evaluación lo redireccionamos a /home
-        if(!Evaluacion::find($id))
+        $evaluacion = Evaluacion::find($id);
+        $id = $evaluacion->id;
+        if(!$evaluacion)
             return redirect('/home');
         
-        return view('turno.create', compact('id'));
+        return view('turno.create', compact('id','evaluacion'));
     }
 
     /**

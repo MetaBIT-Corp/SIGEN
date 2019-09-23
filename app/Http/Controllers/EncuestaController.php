@@ -14,6 +14,16 @@ use DateTime;
 
 class EncuestaController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function getCreate(){
     	return view('encuesta.createEncuesta');
     }
@@ -80,6 +90,9 @@ class EncuestaController extends Controller
 
     public function getUpdate($id){
         $encuesta = Encuesta::find($id);
+
+        $claves = Clave::where('encuesta_id', $id)->get();
+
         $encuesta->fecha_inicio_encuesta= DateTime::createFromFormat(
             'Y-m-d H:i:s',$encuesta->fecha_inicio_encuesta)->format('m/d/Y g:i A');
         $encuesta->fecha_final_encuesta=DateTime::createFromFormat(
@@ -90,7 +103,7 @@ class EncuestaController extends Controller
         if($encuesta->fecha_inicio_encuesta<=$fecha_actual){
             $se_puede_editar=false;
         }
-        return view('encuesta.updateEncuesta')->with(compact('encuesta','se_puede_editar'));
+        return view('encuesta.updateEncuesta')->with(compact('encuesta','se_puede_editar', 'claves'));
     }
 
     public function postUpdate($id, Request $request){

@@ -18,7 +18,7 @@
             </li>
         @else
             <li class="page-item disabled " aria-disabled="true">
-                <span class="page-link bg-danger text-white">Siguiente</span>
+                <span class="page-link bg-danger text-white">Terminar</span>
             </li>
         @endif
     </ul>

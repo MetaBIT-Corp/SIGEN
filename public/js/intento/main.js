@@ -3,7 +3,8 @@ function capturar_data(accion){
 	//accion = 1 es siguiente
     var data = $("#quiz_form").serialize();
     var respuestas_val = data.replace(/&/g,"-");
-    $.get('http://localhost:8000/persistencia', {respuestas:respuestas_val}, function(response){
+
+    $.get('/persistencia', {respuestas:respuestas_val}, function(response){
         console.log("success");
         var location_url = window.location.href;
         var res_arr = location_url.split("=");

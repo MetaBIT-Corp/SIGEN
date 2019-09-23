@@ -82,7 +82,7 @@ Route::get('/materia/estudiante/{id}/{id_mat}', 'EstudianteController@show')->na
 
 Route::get('docentes-ciclo/{id_mat_ci}', 'DocenteController@docentes_materia_ciclo')->name('docentes_materia_ciclo')->middleware('signed');
 
-Route::get('materia/listado-evaluacion/{id}','EvaluacionController@listado')->name('listado_evaluacion');
+Route::get('materia/listado-evaluacion/{id}','EvaluacionController@listado')->name('listado_evaluacion')->middleware('signed');
 Route::get('/encuestas','EncuestaController@listado_publico')->name('encuestas'); 
 Route::post('/encuesta/prueba/','EncuestaController@acceso')->name('acceso_encuesta');
 
@@ -110,7 +110,8 @@ Route::group(['middleware' => 'teacher'], function(){
 
     //URL's para Area
     Route::get('/materia/{id}/areas/create','AreaController@create')->name('crear_area')->middleware('signed');
-    Route::resource('materia/{id}/areas','AreaController')->except(['create']);
+    Route::resource('materia/{id}/areas','AreaController'
+    )->except(['create']);
 
     
     //URL's para Pregunta

@@ -4,7 +4,7 @@
 @section("ol_breadcrumb")
     <li class="breadcrumb-item"><a href="{{ route('materias') }}">Materia</a></li>
     <li class="breadcrumb-item"><a 
-      href="{{ route('listado_evaluacion', $evaluacion->carga_academica->id_carg_aca)}}">Evaluaciones</a></li>
+      href=" {{ URL::signedRoute('listado_evaluacion', ['id' => $evaluacion->carga_academica->id_carg_aca]) }}">Evaluaciones</a></li>
     <li class="breadcrumb-item">Detalle de estudiante</li>
 @endsection
 
