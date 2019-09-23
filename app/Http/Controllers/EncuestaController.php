@@ -95,10 +95,11 @@ class EncuestaController extends Controller
 
     public function postUpdate($id, Request $request){
         //dd($request->all());
-        $rules =[
+        if($request->input('se_puede_editar')){
+            $rules =[
             
             'title' => ['required', 'string','min:5','max:191'],
-            'description' => ['required'],
+            'description' => ['required','max:191'],
             'fecha_inicio' => ['required', 'date', 
                 function ($attribute, $value, $fail) {
                     $fecha_actual = Carbon::now('America/Denver')->format('m/d/Y g:i A');
@@ -118,15 +119,38 @@ class EncuestaController extends Controller
             'fecha_inicio.required' => 'Debe de indicar la fecha de inicio del periodo de disponibilidad',
             'fecha_final.required' => 'Debe de indicar la fecha de Fin del periodo de disponibilidad',
             'fecha_final.after' => 'La fecha final debe ser mayor a la fecha inicial ',
+            'description.max' => 'Ha excedido el tamaño máximo de la descripción'
         ];
+        }else{
+             $rules =[
+            
+            'title' => ['required', 'string','min:5','max:191'],
+            'description' => ['required','max:191'],
+            'fecha_final' => ['required' , 'date', 'after:fecha_inicio'],
+        ];
+        /* Mensaje de Reglas de Validación */
+        $messages = [
+            
+            'title.required' => 'Debe de ingresar un título para la encuesta',
+            'title.min' => 'El título debe contener como mínimo 5 caracteres',
+            'description.required' => 'Debe de ingresar una descripción para la encuesta',
+            'fecha_final.required' => 'Debe de indicar la fecha de Fin del periodo de disponibilidad',
+            'fecha_final.after' => 'La fecha final debe ser mayor a la fecha inicial ',
+            'description.max' => 'Ha excedido el tamaño máximo de la descripción'
+        ];
+        }
+        
+        
         
         $this->validate($request,$rules,$messages);
         $docente= Docente::where('user_id',auth()->user()->id)->first();
         $encuesta = Encuesta::find($id);
         $encuesta->titulo_encuesta= $request->input('title');
-        $encuesta->fecha_inicio_encuesta= DateTime::createFromFormat(
+        if($request->input('se_puede_editar')){
+            $encuesta->fecha_inicio_encuesta= DateTime::createFromFormat(
             'm/d/Y H:i A', 
             $request->input('fecha_inicio'))->format('Y-m-d H:i:s');
+        }
         $encuesta->fecha_final_encuesta=DateTime::createFromFormat(
             'm/d/Y H:i A', 
             $request->input('fecha_final'))->format('Y-m-d H:i:s');
@@ -162,7 +186,11 @@ class EncuestaController extends Controller
     }
 
     public function listado_publico(){
-        $encuestas = Encuesta::all();
+        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $encuestas = Encuesta::where('visible',1)
+                        ->where('fecha_final_encuesta','>', $fecha_hora_actual)
+                        ->where('fecha_inicio_encuesta','<=', $fecha_hora_actual)
+                        ->get();
         return view('encuesta.Encuestas')->with(compact('encuestas'));
 
     }
@@ -282,4 +310,18 @@ class EncuestaController extends Controller
         }
         return back()->with($notification,$message); 
     }
+    public function acceso(Request $request){
+        
+        $id_clave = $request->input('id_clave');
+        //dd($id_clave);
+        /*VALIDACIONES
+        *
+        *
+        */
+        return redirect()->action(
+                        'IntentoController@iniciarEncuesta', 
+                        ['id_clave' => $id_clave ]
+                    );
+    }
+    
 }

@@ -137,6 +137,7 @@
   		<div class="list-group">
         @forelse($evaluaciones as $evaluacion)
           @if($evaluacion->turnos)
+            <h4 class="ml-2 mb-3" style="color: gray">{{$evaluacion->nombre_evaluacion}}</h4>
             <div class="row">
               @foreach($evaluacion->turnos as $turno) <!-- recorrecomos los turnos por evaluacion -->
                 @if($turno->visibilidad == 1)
@@ -146,25 +147,29 @@
               		      <h5 class="mb-1">
                           {{$evaluacion->nombre_evaluacion}} | Turno {{$loop->iteration}}
                         </h5>
-              		      <small class="text-muted">Intentos diponibles: {{$evaluacion->intentos}}</small>
+              		      <small class="text-muted">Intentos diponibles: {{$evaluacion->CantIntentos}}</small>
               		    </div>
-              		    <p class="mb-1">{{$evaluacion->descripcion_evaluacion}}</p>
+              		    <!--<p class="mb-1">{{$evaluacion->descripcion_evaluacion}}</p>-->
               		    <small class="text-muted">Duración: {{$evaluacion->duracion}}.</small>
                       <br>
                       <small class="text-muted">Intentos: {{$evaluacion->intentos}}.</small>
                       <br>
-                      <button type="button" class="btn btn-info mt-1" data-acceder-evaluacion="{{ $turno->id }}">Acceder</button>
+                      <button type="button" class="btn btn-info mt-1" data-acceder-evaluacion="{{ $turno->id }}" data-descripcion-evaluacion="{{ $evaluacion->descripcion_evaluacion }}">Acceder</button>
               		  </span>
                   </div>
                 @endif
-             
               @endforeach
               </div>
           @else
-            <h5 class="mb-1">No se encuentran evaluaciones disponibles</h5>
+            <div class="alert alert-info">
+              No se encuentran evaluaciones disponibles
+          </div>
           @endif
+          <hr class="" style="color: #B0AFAF; background-color: #E1DEDE; width:100%;">
         @empty
-          <h5 class="mb-1">No se encuentran evaluaciones disponibles</h5>
+          <div class="alert alert-info">
+              No se encuentran evaluaciones disponibles
+          </div>
         @endforelse
   		</div>
     @endif
@@ -260,7 +265,7 @@
         <div class="row">
           
           <div class="col-md-12">
-            <div class="alert alert-info">
+            <div class="alert alert-info" id="descripcion_acceso">
            Indicaciones 
             </div>
             <div class="form-group">
@@ -307,7 +312,10 @@
     </script>
     <script>
       $('[data-acceder-evaluacion]').on('click', function(){
+          var indicaciones = "<strong>Indicaciones: </strong>";
           $('#id_turno_acceso').attr('value', $(this).data('acceder-evaluacion'));
+          $('#descripcion_acceso').html( indicaciones.concat($(this).data('descripcion-evaluacion')));
+          
           $('#accederEvaluacion').modal('show');
       });
     </script>

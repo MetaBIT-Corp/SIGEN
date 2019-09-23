@@ -31,6 +31,8 @@ Route::get('intento/', function() {
 Route::get('persistencia/', 'IntentoController@persistence');
 
 Route::get('intento/prueba/{id_intento}','IntentoController@iniciarEvaluacion')->name('prueba');
+Route::get('encuesta/prueba/{id_clave}','IntentoController@iniciarEncuesta')->name('prueba_encuesta');
+
 
 Route::get('/', function () {
     return view('layouts.plantilla');
@@ -81,8 +83,8 @@ Route::get('/materia/estudiante/{id}/{id_mat}', 'EstudianteController@show')->na
 Route::get('docentes-ciclo/{id_mat_ci}', 'DocenteController@docentes_materia_ciclo')->name('docentes_materia_ciclo')->middleware('signed');
 
 Route::get('materia/listado-evaluacion/{id}','EvaluacionController@listado')->name('listado_evaluacion');
-
 Route::get('/encuestas','EncuestaController@listado_publico')->name('encuestas'); 
+Route::post('/encuesta/prueba/','EncuestaController@acceso')->name('acceso_encuesta');
 
     
 
@@ -139,6 +141,7 @@ Route::group(['middleware' => 'teacher'], function(){
 //Aqui iran las rutas a las que tiene acceso solo el Estudiante
 Route::group(['middleware' => 'student'], function(){
     Route::post('evaluacion/acceso','EvaluacionController@acceso')->name('acceso_evaluacion');
+
 });
 
 //Aqui iran las rutas a las que tiene acceso solamente el docente y el admin

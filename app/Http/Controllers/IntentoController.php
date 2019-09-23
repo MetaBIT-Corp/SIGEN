@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Clave;
 use App\Evaluacion;
 use App\Pregunta;
 use App\Turno;

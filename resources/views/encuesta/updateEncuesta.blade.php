@@ -101,7 +101,7 @@
                 </div>
               </div>
             </div>
-          
+          <input type="hidden" name="se_puede_editar" value="{{$se_puede_editar}}">
           <div class="form-group">
              <button class="btn btn-primary mb-3">Editar</button>
              <a href="{{route('listado_encuesta')}}" class="btn btn-secondary mb-3"> Cancelar</a>

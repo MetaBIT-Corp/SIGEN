@@ -5,8 +5,6 @@
 	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.css')}}">
 	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
    <link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
-
-
 @endsection
 @endsection
 

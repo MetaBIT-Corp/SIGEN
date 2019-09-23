@@ -540,7 +540,6 @@ class TurnoController extends Controller
         $turnos = Turno::where('evaluacion_id', $id)->get();
         $data = ['turnos'=>$turnos];
         return $data;
-
     }
     
 
