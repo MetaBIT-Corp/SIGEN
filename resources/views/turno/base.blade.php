@@ -10,7 +10,8 @@
 @section("body")
 
 @section("ol_breadcrumb")
-    <li class="breadcrumb-item"><a href="/evaluacion/{{ $id }}/">Evaluación</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('materias')}}">Materias</a></li>
+    <li class="breadcrumb-item"><a href="{{ URL::signedRoute('listado_evaluacion', ['id' =>$evaluacion->carga_academica->id_carg_aca]) }}">Evaluaciones</a></li>
     <li class="breadcrumb-item"><a href="{{ URL::signedRoute('listado_turnos', ['id' => $id]) }}">Listado de turnos</a></li>
     <li class="breadcrumb-item">@yield("nombre_vista")</li>
 @endsection

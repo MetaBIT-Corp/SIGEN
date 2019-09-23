@@ -10,6 +10,8 @@ function desplegarTurno(){
     var html_modal2 ='';
     var turnos = data['turnos'];
     var checked = false;
+    var turnos_publicados = false;
+    var turnos_no_publicados = false;
 
     //Verifica si vienen turnos de la consulta
     if(turnos.length>0){
@@ -22,30 +24,35 @@ function desplegarTurno(){
 
       //Si el turno ya ha sido publicado no le permitirá volverlo a publicar
       if(checked){
-        html_modal1 += i+1+'. '+
+        turnos_publicados = true;
+        html_modal1 += '- '+
        '<label name="turnospublicos[]" '+
-          'value="'+turnos[i].id+'">'+
+          'value="'+turnos[i].id+'"> <strong> Inicio: </strong>'+
           turnos[i].fecha_inicio_turno+
-       '</label>';
+          '<strong> Final : </strong>'+
+          turnos[i].fecha_final_turno+
+       '</label> <br>';
       }else{
-        html_modal2 += i+1+'. '+
+        turnos_no_publicados = true;
+        html_modal2 += ' '+
        '<label>'+
-        '<input type="checkbox" name="turnosnopublicos[]" '+
-          'value="'+turnos[i].id+'"> '+
-          turnos[i].fecha_inicio_turno+
-       '</label>';
+        '<input class="ml-2" type="checkbox" name="turnosnopublicos[]" '+
+          'value="'+turnos[i].id+'"> <strong> Inicio: </strong>'+
+          turnos[i].fecha_inicio_turno+ 
+          '<strong> Final : </strong>'+
+          turnos[i].fecha_final_turno+ 
+       '</label> <br>';
       }
 
-
-       $('#modalCenterTitle').html('Seleccione los turnos que desea publicar');
-
-       if(i<turnos.length-1) html_modal2 += '<hr>';
        checked=false;
     }
-    }else{
-      html_modal1 = '<strong><h5>Esta evaluación no posee turnos publicos</h5></strong>'
-      html_modal2 = '<strong><h5>Esta evaluación no posee turnos sin publicar</h5></strong>'
     }
+     if(turnos_publicados == false){
+        html_modal1 = '<div class="alert alert-info">Esta evaluación no posee turnos publicos</div>'
+       }
+     if(turnos_no_publicados == false){
+      html_modal2 = '<div class="alert alert-info">Esta evaluación no posee turnos sin publicar</div>'
+     }
 
     //Asignando el resultado de la consulta al body del modal
   $('#desplegar-turnos-publicos').html(html_modal1);

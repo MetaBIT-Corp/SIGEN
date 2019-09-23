@@ -23,4 +23,24 @@ class Evaluacion extends Model
     public function carga_academica(){
         return $this->belongsTo(CargaAcademica::class, 'id_carga', 'id_carg_aca');
     }
+
+     /**
+     * Metodo para obtener la cantidad de intentos obtenidos en una evaluacion.
+     * @author Edwin Palacios
+     * @return int cantidad de intentos
+     */
+    public function getCantIntentosAttribute(){
+        $intento_realizados =0;
+        $estudiante = Estudiante::where('user_id', auth()->user()->id)->first();
+        $turnos = $this->hasMany('App\Turno');
+        foreach ($turnos as $turno) {
+                $claves = $turno->claves;
+                foreach ($claves as $clave) {
+                $intento_realizados += Intento::where('clave_id',$clave->id)
+                                ->where('estudiante_id',$estudiante->id_est)
+                                ->count();
+                }
+            }
+        return $this->intentos-$intento_realizados;
+    }
 }

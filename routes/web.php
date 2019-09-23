@@ -31,6 +31,8 @@ Route::get('intento/', function() {
 Route::get('persistencia/', 'IntentoController@persistence');
 
 Route::get('intento/prueba/{id_intento}','IntentoController@iniciarEvaluacion')->name('prueba');
+Route::get('encuesta/prueba/{id_clave}','IntentoController@iniciarEncuesta')->name('prueba_encuesta');
+
 
 Route::get('/', function () {
     return view('layouts.plantilla');
@@ -80,9 +82,9 @@ Route::get('/materia/estudiante/{id}/{id_mat}', 'EstudianteController@show')->na
 
 Route::get('docentes-ciclo/{id_mat_ci}', 'DocenteController@docentes_materia_ciclo')->name('docentes_materia_ciclo')->middleware('signed');
 
-Route::get('materia/listado-evaluacion/{id}','EvaluacionController@listado')->name('listado_evaluacion');
-
+Route::get('materia/listado-evaluacion/{id}','EvaluacionController@listado')->name('listado_evaluacion')->middleware('signed');
 Route::get('/encuestas','EncuestaController@listado_publico')->name('encuestas'); 
+Route::post('/encuesta/prueba/','EncuestaController@acceso')->name('acceso_encuesta');
 
     
 
@@ -108,7 +110,8 @@ Route::group(['middleware' => 'teacher'], function(){
 
     //URL's para Area
     Route::get('/materia/{id}/areas/create','AreaController@create')->name('crear_area')->middleware('signed');
-    Route::resource('materia/{id}/areas','AreaController')->except(['create']);
+    Route::resource('materia/{id}/areas','AreaController'
+    )->except(['create']);
 
     
     //URL's para Pregunta
@@ -133,12 +136,15 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::post('/encuesta','EncuestaController@postCreate')->name('pc_encuesta');
     Route::get('/encuesta/{id}/editar','EncuestaController@getUpdate')->name('gu_encuesta');
     Route::post('/encuesta/{id}/editar','EncuestaController@postUpdate')->name('pu_encuesta');    
-    Route::post('/eliminar-encuesta','EncuestaController@eliminarEncuesta')->name('eliminar_encuesta');   
+    Route::post('/eliminar-encuesta','EncuestaController@eliminarEncuesta')->name('eliminar_encuesta'); 
+    Route::post('/encuesta/publicar-encuesta','EncuestaController@publicar')->name('publicar_encuesta');  
     
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Estudiante
 Route::group(['middleware' => 'student'], function(){
+    Route::post('evaluacion/acceso','EvaluacionController@acceso')->name('acceso_evaluacion');
+
 });
 
 //Aqui iran las rutas a las que tiene acceso solamente el docente y el admin

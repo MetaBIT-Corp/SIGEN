@@ -1,6 +1,31 @@
 @extends("../layouts.plantilla")
 
+@section("ol_breadcrumb")
+<li class="breadcrumb-item">
+    <a href="{{ route('materias') }}">
+        Materias
+    </a>
+</li>
+<li class="breadcrumb-item">
+	<a href="#">
+        Áreas
+    </a>
+</li>
+<li class="breadcrumb-item">
+	<a href="#">
+        Preguntas
+    </a>
+</li>
+<li class="breadcrumb-item">
+    Opciones
+</li>
+
+
+
+@endsection
+
 @section('main')
+
 
 <h3 class="mt-2 mb-5"><b>Pregunta</b>: <?php echo $pregunta->pregunta ?></h3>
 

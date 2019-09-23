@@ -15,7 +15,7 @@ class CreateAreasTable extends Migration
     {
         Schema::create('area', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_cat_mat');
+            $table->unsignedInteger('id_cat_mat')->nullable();
             $table->foreign('id_cat_mat')->references('id_cat_mat')->on('cat_mat_materia');
             $table->unsignedInteger('id_pdg_dcn');
             $table->foreign('id_pdg_dcn')->references('id_pdg_dcn')->on('pdg_dcn_docente');

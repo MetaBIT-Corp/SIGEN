@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Clave;
 
 class Encuesta extends Model
 {
@@ -24,5 +25,17 @@ class Encuesta extends Model
 
     public function claves(){
         return $this->hasMany(Clave::class);
+    }
+     /**
+     * Metodo para obtener el id de la clave de encuesta.
+     * @author Edwin Palacios
+     * @return id clave
+     */
+    public function getIdClaveAttribute(){
+        $id_clave=0;
+        $clave = Clave::where('encuesta_id',$this->id)->first();
+        $id_clave= $clave->id;
+        
+        return $id_clave;
     }
 }

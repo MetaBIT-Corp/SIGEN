@@ -9,6 +9,11 @@
 
 @section("ol_breadcrumb")
 <li class="breadcrumb-item">
+    <a href="{{ route('materias') }}">
+        Materias
+    </a>
+</li>
+<li class="breadcrumb-item">
 	<a href="{{ route('areas.index',[$area->materia->id_cat_mat]) }}">
         Áreas
     </a>

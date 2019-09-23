@@ -13,7 +13,7 @@
 @section("body")
 
 @section("ol_breadcrumb")
-    <li class="breadcrumb-item"><a href="#">Materia</a></li>
+    <li class="breadcrumb-item"><a href="{{route('materias')}}">Materia</a></li>
     <li class="breadcrumb-item">Evaluaciones</li>
 @endsection
 
@@ -21,27 +21,31 @@
             <!-- Notificacion  -->
             @if (session('notification'))
                   <div class="alert alert-success">
-                        {{session('notification')}}
+                        {!!session('notification')!!}
                   </div>
             @endif
             <!-- Notificacion -->
             <!--Mostrará mensaje de éxito-->
             @if (session('exito'))
               <div class="alert alert-success">
-                <ul>
-                  <h4 class="text-center">{{session('exito')}} <br> hola </h4>
-                </ul>
+                {!!session('exito')!!}
               </div>
             @endif
 
             <!--Mostrará mensaje de error -->
             @if (session('error'))
               <div class="alert alert-danger">
-                <ul>
-                  <h4 class="text-center">{{session('error')}}</h4>
-                </ul>
+                {!!session('error')!!}
               </div>
             @endif
+
+            <!--Mostrará mensaje de error -->
+            @if (session('info'))
+              <div class="alert alert-info">
+               {!!session('info')!!}
+              </div>
+            @endif
+
   <div id="wrapper">
   <div id="content-wrapper">
     <div class="container-fluid">
@@ -49,13 +53,14 @@
       <div class="card mb-3">
         <div class="card-header">
           <i class="fas fa-table"></i>
-          Evaluaciones | Materia</div>
+          Evaluaciones | Materia
+          </div>
         <div class="card-body">
          
             @if(auth()->user()->role==1) 
             <a class="btn btn-sm mb-3" href="{{route('gc_evaluacion', $id_carga)}}" title="Agregar">
                   <span class="icon-add-solid "></span>
-                  <b>Nueva Evaluación</b>
+                  <b>Nueva Evaluacion</b>
             </a>
             
           @endif
@@ -132,40 +137,45 @@
   		<div class="list-group">
         @forelse($evaluaciones as $evaluacion)
           @if($evaluacion->turnos)
+            <h4 class="ml-2 mb-3" style="color: gray">{{$evaluacion->nombre_evaluacion}}</h4>
             <div class="row">
               @foreach($evaluacion->turnos as $turno) <!-- recorrecomos los turnos por evaluacion -->
                 @if($turno->visibilidad == 1)
                   <div class="col-md-6">
-              		  <span class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+              		  <span class="list-group-item  flex-column align-items-start mb-3">
               		    <div class="d-flex w-100 justify-content-between">
               		      <h5 class="mb-1">
                           {{$evaluacion->nombre_evaluacion}} | Turno {{$loop->iteration}}
                         </h5>
-              		      <small class="text-muted">Intentos diponibles: {{$evaluacion->intentos}}</small>
+              		      <small class="text-muted">Intentos diponibles: {{$evaluacion->CantIntentos}}</small>
               		    </div>
-              		    <p class="mb-1">{{$evaluacion->descripcion_evaluacion}}</p>
+              		    <!--<p class="mb-1">{{$evaluacion->descripcion_evaluacion}}</p>-->
               		    <small class="text-muted">Duración: {{$evaluacion->duracion}}.</small>
                       <br>
                       <small class="text-muted">Intentos: {{$evaluacion->intentos}}.</small>
                       <br>
-                      <button type="button" class="btn btn-info mt-1">Acceder</button>
+                      <button type="button" class="btn btn-info mt-1" data-acceder-evaluacion="{{ $turno->id }}" data-descripcion-evaluacion="{{ $evaluacion->descripcion_evaluacion }}">Acceder</button>
               		  </span>
                   </div>
                 @endif
-             
               @endforeach
               </div>
           @else
-            <h5 class="mb-1">No se encuentran evaluaciones disponibles</h5>
+            <div class="alert alert-info">
+              No se encuentran evaluaciones disponibles
+          </div>
           @endif
+          <hr class="" style="color: #B0AFAF; background-color: #E1DEDE; width:100%;">
         @empty
-          <h5 class="mb-1">No se encuentran evaluaciones disponibles</h5>
+          <div class="alert alert-info">
+              No se encuentran evaluaciones disponibles
+          </div>
         @endforelse
   		</div>
     @endif
   @endif
-
 		<!--Estudiante-->
+
         </div>
         <div class="card-footer small text-muted">
           @if(auth()->user()->IsTeacher)
@@ -213,27 +223,67 @@
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalCenterTitle">Publicar Turnos</h5>
+        <h5 class="modal-title" id="modalCenterTitle">Seleccione los turnos que desea publicar</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <form action="{{ route('publicar_evaluacion') }}" method="POST">
         {{ csrf_field() }}
+        <strong class="ml-3">Turnos publicados</strong>
         <div class="modal-body" id="desplegar-turnos-publicos">
           
         </div>
+        <strong class="ml-3">Turnos sin publicar</strong>
         <div class="modal-body" id="desplegar-turnos-nopublicos">
           
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          <button type="submit" class="btn btn-primary">Publicar</button>
         </div>
       </form>
     </div>
   </div>
 </div>
+
+<!-- Modal para acceder a evaluacion -->
+<div class="modal fade" id="accederEvaluacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="accederModalCenterTitle">Acceso a Evaluación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" >
+        
+         <form action="{{ route('acceso_evaluacion') }}" method="POST">
+        {{ csrf_field() }}
+        <input type="hidden" value="" id="id_turno_acceso" name="id_turno_acceso">
+        <div class="row">
+          
+          <div class="col-md-12">
+            <div class="alert alert-info" id="descripcion_acceso">
+           Indicaciones 
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1 ml-3">Ingrese la contraseña:</label>
+              <input type="password" name="contraseña" class="form-control"  id="contraseñas" placeholder="Contraseña" >
+            </div>
+          </div>
+        </div>
+      </div>   
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Acceder</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -258,6 +308,15 @@
       $('[data-deshabilitar-evaluacion]').on('click', function(){
           $('#id_evaluacion').attr('value', $(this).data('deshabilitar-evaluacion'));
           $('#deshabilitarEvaluacion').modal('show');
+      });
+    </script>
+    <script>
+      $('[data-acceder-evaluacion]').on('click', function(){
+          var indicaciones = "<strong>Indicaciones: </strong>";
+          $('#id_turno_acceso').attr('value', $(this).data('acceder-evaluacion'));
+          $('#descripcion_acceso').html( indicaciones.concat($(this).data('descripcion-evaluacion')));
+          
+          $('#accederEvaluacion').modal('show');
       });
     </script>
     <script src="/js/turno/desplegarturno.js"> </script>

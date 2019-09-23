@@ -19,7 +19,8 @@ Route::get('/evaluacion/{id}/duracion/','TurnoController@getDuracionEvaluacion')
 //Obtener evaluación
 Route::get('/evaluacion/turno/{turno_id}/obtener/{estudiante_id}','TurnoController@getEvaluacion');
 Route::get('/encuesta/{encuesta_id}/{mac}','TurnoController@getEncuesta');
-
+Route::get('/evaluaciones_m/turnos_m/{id_carga}','EvaluacionController@evaluacionTurnosDisponibles');
+Route::get('/user/acceso/{email}/{password}','EvaluacionController@accesoUserMovil');
 //Clave
 Route::get('/area/{id}/preguntas', 'ClaveController@preguntasPorArea');
 Route::get('/area-emparejamiento/{id}/preguntas', 'ClaveController@preguntasPorAreaEmp');
@@ -28,6 +29,7 @@ Route::get('/preguntas-agregadas-emp/{id}', 'ClaveController@preguntasAgregadasE
 
 //Turno
 Route::get('/evaluacion/{id}/turnos', 'TurnoController@turnosPorEvaluacion');
+
 
 //Consultar encuestas desde la app móvil
 Route::get('/encuestas-disponibles', 'EncuestaController@encuestasDisponibles');
