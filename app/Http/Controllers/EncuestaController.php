@@ -211,13 +211,13 @@ class EncuestaController extends Controller
 
             }
             else{
-                if($encuesta->claves){
+                if(count($encuesta->claves)){
                     foreach ($encuesta->claves as $clave) {
                         
-                        if($clave->clave_areas){
+                        if(count($clave->clave_areas)){
                             foreach ($clave->clave_areas as $ca) {
                                 
-                                if($ca->claves_areas_preguntas){
+                                if(count($ca->claves_areas_preguntas)){
                                     foreach ($ca->claves_areas_preguntas as $cap) {
                                         $cap->delete();
                                     }
