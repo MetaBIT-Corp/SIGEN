@@ -163,35 +163,37 @@
 
 			</div>
 
-			<form action="{{ route('asignar-area-clave',$turno->id)}}" method="POST">
+			<form action="{{ route('asignar-area-clave',$turno->id)}}" id="form-asignar" method="POST">
 
-			<div class="modal-body">
-
-				<div class="form-group">
-
-					<div class="form-group" style="display: none; border: solid gold;">
-						<label class="col-form-label" for="turno_id">Turno ID:</label>
-						<input type="text" class="form-control" name="turno_id" placeholder="ID de Pregunta" id="turno_id">
-						<label class="col-form-label" for="clave_id">Clave ID:</label>
-						<input type="text" class="form-control" name="clave_id" placeholder="ID de Pregunta" id="clave_id">
-						<label class="col-form-label" for="area_id">Area ID:</label>
-						<input type="text" class="form-control" name="area_id" placeholder="ID de Pregunta" id="area_id">
-						<label class="col-form-label" for="preguntas_area">Preguntas por Área:</label>
-						<input type="text" class="form-control" name="preguntas_area" placeholder="Preguntas por Area" id="preguntas_area">
-						<label class="col-form-label" for="titulo">T&iacute;tulo del &Aacute;rea:</label>
-						<input type="text" class="form-control" name="titulo" id="titulo" readonly="">
-						<label class="col-form-label" for="cantidad_preguntas">Cantidad de Preguntas disponibles en el &Aacute;rea:</label>
-						<input type="text" class="form-control" name="cantidad_preguntas" id="cantidad_preguntas" readonly="">
-						<label class="col-form-label" for="peso_turno">Peso Asignado al Turno:</label>
-						<input type="text" class="form-control" name="peso_turno" placeholder="Peso de Turno" id="peso_turno" readonly="">
-						<label class="col-form-label" for="peso_restante">Peso Restante de Turno:</label>
-						<input type="text" class="form-control" name="peso_restante" placeholder="Peso restante" id="peso_restante" readonly="">
-					</div>
+				<div class="modal-body">
 
 					<div class="form-group">
-						<b>Titulo del Área:</b> <span id="titulo_s" name="titulo_s"></span><br>
-						<b>Cantidad de Preguntas del Área:</b> <span id="cantidad_preguntas_s" name="cantidad_preguntas_s"></span><br>
-						<b>Peso Total Actual del Turno:</b> <span id="peso_turno_s" name="peso_turno_s"></span><br>
+
+						<div class="form-group" style="display: none; border: solid gold;">
+							<label class="col-form-label" for="turno_id">Turno ID:</label>
+							<input type="text" class="form-control" name="turno_id" placeholder="ID de Pregunta" id="turno_id">
+							<label class="col-form-label" for="clave_id">Clave ID:</label>
+							<input type="text" class="form-control" name="clave_id" placeholder="ID de Pregunta" id="clave_id">
+							<label class="col-form-label" for="area_id">Area ID:</label>
+							<input type="text" class="form-control" name="area_id" placeholder="ID de Pregunta" id="area_id">
+							<label class="col-form-label" for="preguntas_area">Preguntas por Área:</label>
+							<input type="text" class="form-control" name="preguntas_area" placeholder="Preguntas por Area" id="preguntas_area">
+							<label class="col-form-label" for="titulo">T&iacute;tulo del &Aacute;rea:</label>
+							<input type="text" class="form-control" name="titulo" id="titulo" readonly="">
+							<label class="col-form-label" for="cantidad_preguntas">Cantidad de Preguntas disponibles en el &Aacute;rea:</label>
+							<input type="text" class="form-control" name="cantidad_preguntas" id="cantidad_preguntas" readonly="">
+							<label class="col-form-label" for="peso_turno">Peso Asignado al Turno:</label>
+							<input type="text" class="form-control" name="peso_turno" placeholder="Peso de Turno" id="peso_turno" readonly="">
+							<label class="col-form-label" for="peso_restante">Peso Restante de Turno:</label>
+							<input type="text" class="form-control" name="peso_restante" placeholder="Peso restante" id="peso_restante" readonly="">
+						</div>
+
+						<div class="form-group">
+							<b>Titulo del Área:</b> <span id="titulo_s" name="titulo_s"></span><br>
+							<b>Cantidad de Preguntas del Área:</b> <span id="cantidad_preguntas_s" name="cantidad_preguntas_s"></span><br>
+							<b>Peso Total Actual del Turno:</b> <span id="peso_turno_s" name="peso_turno_s"></span><br>
+						</div>
+
 					</div>
 
 					<hr>
@@ -224,16 +226,19 @@
 
 				</div>
 
-			</div>
+				<div class="alert alert-danger m-3" id="alerta">
+					<ul id="ul-alert">
+					</ul>
+				</div>
 
-			<div class="modal-footer">
+				<div class="modal-footer">
 
-				{{ csrf_field() }}
+					{{ csrf_field() }}
 
-				<button type="submit" class="btn btn-primary">Asignar Área</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-				
-			</div>
+					<button type="submit" id="btn-asignar" class="btn btn-primary">Asignar Área</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" id="salir">Cerrar</button>
+					
+				</div>
 
 			</form>
 

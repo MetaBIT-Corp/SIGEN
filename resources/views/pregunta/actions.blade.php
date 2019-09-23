@@ -4,7 +4,7 @@
         <span class="icon-list">
         </span>
     </a>
-    <a class="btn-editar btn" id="btn_editar"title="Editar Grupo Emparejamiento" href="">
+    <a class="btn-editar btn" style="cursor: pointer;" id="btn_editar"title="Editar Grupo Emparejamiento" data-toggle="modal" data-target="#editModal">
         <span class="icon-edit">
         </span>
     </a>

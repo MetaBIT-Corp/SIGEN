@@ -164,6 +164,28 @@
         </div>
     </div>
 </div>
+
+
+
+<!-- Modal para la edición de grupo emparejamiento -->
+
+<div class="modal" id="editModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Titulo de Grupo Emparejamiento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Fin de modal para edición de grupo emparejamiento -->
 @endsection
 
 <!--Scripts para datatables con Laravel-->

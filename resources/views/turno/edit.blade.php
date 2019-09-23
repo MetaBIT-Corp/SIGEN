@@ -272,6 +272,7 @@
   <script src="/js/clave/cargarPreguntas.js"> </script>
   <script src="/js/clave/operacionesClaveArea.js"> </script>
   <script type="text/javascript" src="{{ asset('js/turno/areaclave.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('js/turno/areaclavevalidacion.js') }}"></script>
    
    @if($turno->iniciado) 
        <script type="text/javascript" src="{{ asset('js/turno/edit/main.js') }}"></script>

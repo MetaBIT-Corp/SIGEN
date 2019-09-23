@@ -114,6 +114,8 @@ Route::group(['middleware' => 'teacher'], function(){
     //URL's para Pregunta
     Route::resource('/area/{id}/pregunta','PreguntaController')->except(['update']);
     Route::post('/area/{id}/pregunta/{pregunta}','PreguntaController@update');
+    Route::post('grupo/{grupo_id}/edit','GrupoEmparejamientoController@updateGE')->name('editar-grupo');
+
 
      //URL's para  evaluacion
     Route::get('materia/evaluacion/{id}/nuevo','EvaluacionController@getCreate')->name('gc_evaluacion');

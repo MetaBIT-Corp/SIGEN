@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Response;
 
 use App\Turno;
 use App\Clave;
@@ -76,6 +77,7 @@ class ClaveAreaController extends Controller
             'peso.lte' => 'Peso ingresado es muy alto. Peso total del Área debe ser igual o menor a 100.',
             'peso.min' => 'Peso ingresado no es valido. Debe ser un valor mayor a 0.',
 
+            'cantidad.required' => 'Cantidad de Preguntas Aleatorias no ingresada.',
             'cantidad.lte' => 'Cantidad de Preguntas Aleatorias ingresadas sobrepasa las preguntas disponibles del Área.',
             'cantidad.integer' => 'Cantidad de Preguntas Aleatorias ingresadas no es un valor numérico entero',
             'cantidad.min' => 'Cantidad de Preguntas Aleatorias ingresadas no es valido. Debe ser un valor numérico entero',
@@ -85,23 +87,24 @@ class ClaveAreaController extends Controller
         $validator = Validator::make($requestData, $rules, $messages);
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            return response::json(array('errors'=>$validator->getMessageBag()->toarray()));
+        } else{
+
+            $clave_area->area_id = $request->area_id;
+            $clave_area->clave_id = $request->clave_id;
+            $clave_area->peso = (int)($request->peso);        
+            $clave_area->aleatorio = (int)($request->aleatorio);
+
+            if ($clave_area->aleatorio == 1) {
+                $clave_area->numero_preguntas = $request->cantidad;
+            }else{
+                $clave_area->numero_preguntas = 0;
+            }
+
+            $clave_area->save();
+
+            return response()->json($clave_area);
         }
-
-        $clave_area->area_id = $request->area_id;
-        $clave_area->clave_id = $request->clave_id;
-        $clave_area->peso = (int)($request->peso);        
-        $clave_area->aleatorio = (int)($request->aleatorio);
-
-        if ($clave_area->aleatorio == 1) {
-            $clave_area->numero_preguntas = $request->cantidad;
-        }else{
-            $clave_area->numero_preguntas = 0;
-        }
-
-        $clave_area->save();
-
-        return back();
 
     }
 

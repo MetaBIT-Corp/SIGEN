@@ -38,7 +38,9 @@ class PreguntaController extends Controller
             }
         }
 
-        return view('pregunta.index',compact('area'));
+        $grupos = Grupo_Emparejamiento::where("area_id",$id_area)->get();
+
+        return view('pregunta.index', compact('area', 'grupos'));
     }
 
     /**
