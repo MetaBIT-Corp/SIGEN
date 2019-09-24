@@ -12,10 +12,19 @@
             </div>
             <div class="col-4" style="text-align: right;">
               <strong class="mb-3">Asignar Área</strong>
-              <button class="btn" data-id-turno="{{$turno->id}}" data-id-clave="{{$claves[0]->id}}" data-peso-turno="{{$peso_turno}}" data-toggle="modal" data-target="#areasModal" onclick="$('#areasModal').modal();" title="Asignar Área a Turno">
-                <span class="icon-add text-primary">
-                </span>
-              </button>
+
+              @if($encuesta)
+                <button class="btn" data-id-clave="{{$clave->id}}" data-toggle="modal" data-target="#areasEncuestaModal" onclick="$('#areasEncuestaModal').modal();" title="Asignar Área a Encuesta">
+                  <span class="icon-add text-primary">
+                  </span>
+                </button>
+              @else
+                <button class="btn" data-id-turno="{{$turno->id}}" data-id-clave="{{$clave->id}}" data-peso-turno="{{$peso_turno}}" data-toggle="modal" data-target="#areasModal" onclick="$('#areasModal').modal();" title="Asignar Área a Turno">
+                  <span class="icon-add text-primary">
+                  </span>
+                </button>
+              @endif
+              
             </div>
           </div>
         </div>
@@ -95,14 +104,24 @@
   <!-- /.content-wrapper -->
 </div>
 
-@include('turno.areasclave')
+@if($encuesta)
+
+  @include('encuesta.areasclave')
+
+@else
+
+  @include('turno.areasclave')
+
+@endif
+
+
 
 <!-- Modal agregar preguntas-->
 <div class="modal fade" id="asignarPreguntasClaveArea" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalCenterTitle">Asiganar preguntas a la clave</h5>
+        <h5 class="modal-title" id="modalCenterTitle">Asignar preguntas a la clave</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

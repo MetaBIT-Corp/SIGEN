@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Encuesta;
+use App\Area;
 use App\Docente;
 use Carbon\Carbon;
 use App\Intento;
@@ -108,16 +109,11 @@ class EncuestaController extends Controller
         /*Parte de René.*/
 
         $clave = Clave::where('encuesta_id',$id)->first();
-
-        $docente = Docente::where('user_id',auth()->user()->id)
-
-
+        $docente = Docente::where('user_id',auth()->user()->id)->first();
         $areas = Area::where("id_pdg_dcn",$docente->id_pdg_dcn)->where('id_cat_mat',null)->get();
-        
         $id_areas = Clave_Area::where('clave_id',$clave->id)->pluck('area_id')->toArray();
-        $peso_turno = (int)(Clave_Area::where('clave_id',$clave->id)->sum('peso'));
 
-        return view('encuesta.updateEncuesta')->with(compact('encuesta','se_puede_editar', 'claves'));
+        return view('encuesta.updateEncuesta')->with(compact('encuesta','se_puede_editar', 'claves','areas','id_areas','clave'));
 
     }
 
