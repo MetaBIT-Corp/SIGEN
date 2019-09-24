@@ -156,6 +156,14 @@
       <form action="{{ route('editar_clave_area')}}" method="POST">
         {{ csrf_field() }}
         <div class="modal-body" id="editar-preguntas">
+          <div class="form-group">
+            <h6 id="val_peso"></h6>
+          </div>
+          <div class="form-group">
+            <h6 id="val_asignable"></h6>
+          </div>
+          <hr>
+          <input type="hidden" value="" id="val_peso_actual" name="peso_total">
           <input type="hidden" value="" id="id_ca" name="id_clave_area">
           <div class="form-group">
             <label for="cantidad_preguntas_id" id="msj_cant_preg">Cantidad de preguntas</label>
