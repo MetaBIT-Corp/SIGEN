@@ -41,6 +41,10 @@ class Clave_Area extends Model
         return $this->hasMany('App\Clave_Area_Pregunta_Estudiante','clave_area_id');
     }
 
+    public function clave(){
+        return $this->belongsTo(Clave::class);
+    }
+
     //Accessors
 
     //El atributo calcula mostrará el mensaje en base al campo aleatorio

@@ -94,7 +94,10 @@ class ClaveController extends Controller
     //Funcion para editar datos de la área asignada a la clave
     public function editarClaveArea(Request $request){
         $id_clave_area = $request->input('id_clave_area');
+        $peso_total = $request->input('peso_total');
         $clave_area = Clave_Area::find($id_clave_area);
+        $notificacion = 'exito';
+        $mensaje = 'Los datos fueron modifcados con éxito';
 
         $rules = [
             'numero_preguntas' => 'required|integer|min:1|max:20',
@@ -114,12 +117,18 @@ class ClaveController extends Controller
 
         $this->validate($request, $rules, $messages);
 
-        $clave_area->numero_preguntas = $request->input('numero_preguntas');
-        $clave_area->peso = $request->input('peso');
+        //Pregunta si el peso ingresado + el peso total actual de turno es mayor a 100
+        if($request->input('peso') - $clave_area->peso + $peso_total > 100){
+            $notificacion='error';
+            $mensaje='El peso del turno no puede ser mayor a 100';
+        }else{
+            $clave_area->numero_preguntas = $request->input('numero_preguntas');
+            $clave_area->peso = $request->input('peso');
 
-        $clave_area->save();
+            $clave_area->save();
+        }
 
-        return back()->with('exito', 'Los datos fueron modificafos con éxito');
+        return back()->with($notificacion, $mensaje);
 
     }
 
@@ -183,6 +192,19 @@ class ClaveController extends Controller
                                     ->get();
 
         return $preguntas_asginadas;
+    }
+
+    //Funcion AJAX para para validar que el peso del turno no sobrepase a 100
+    public function validarPeso($id_clave_area){
+        $clave_area = Clave_Area::find($id_clave_area);
+        $clave = $clave_area->clave;
+        $peso = 0.0;
+
+        foreach ($clave->clave_areas as $ca) {
+            $peso += $ca->peso;
+        }
+
+        return ($peso);
     }
 
 }

@@ -75,13 +75,21 @@
                     <button class="icon-delete btn btn-sm btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></button>
                     <button class="icon-edit btn btn-sm btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></button>
                     @if($clave_area->aleatorio)
-                      <a href="{{ URL::signedRoute('preguntas_por_area', ['id' => $clave_area->id]) }}" class="icon-list btn btn-sm btn-success" title="Ver preguntas de esta área"></a>
+                      <a class="icon-list btn btn-sm btn-success"
+                        @if($clave_area->area->tipo_item_id==3)
+                          href="{{ URL::signedRoute('pregunta.index', ['id_area' => $clave_area->area->id ,'id_gpo'=>true]) }}" 
+                          title="Ver grupos de esta área"
+                        @else 
+                          href="{{ URL::signedRoute('pregunta.index', ['id_area' => $clave_area->area->id ,'id_gpo'=>false]) }}" 
+                          title="Ver preguntas de esta área"
+                        @endif>
+                      </a>
                     @else
                       @if($clave_area->area->tipo_item_id==3)
-                        <button class="icon-information-solid btn btn-sm btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas-emp="{{ $clave_area->id }}"></button>
+                        <button class="icon-list btn btn-sm btn-success" href="#" title="Ver preguntas agregadas" data-preguntas-emp="{{ $clave_area->id }}"></button>
                         <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area-emp="{{ $clave_area->id }}"></button>
                       @else
-                        <button class="icon-information-solid btn btn-sm btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
+                        <button class="icon-list btn btn-sm btn-success" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
                         <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></button>
                       @endif
                     @endif
@@ -175,6 +183,14 @@
       <form action="{{ route('editar_clave_area')}}" method="POST">
         {{ csrf_field() }}
         <div class="modal-body" id="editar-preguntas">
+          <div class="form-group">
+            <h6 id="val_peso"></h6>
+          </div>
+          <div class="form-group">
+            <h6 id="val_asignable"></h6>
+          </div>
+          <hr>
+          <input type="hidden" value="" id="val_peso_actual" name="peso_total">
           <input type="hidden" value="" id="id_ca" name="id_clave_area">
           <div class="form-group">
             <label for="cantidad_preguntas_id" id="msj_cant_preg">Cantidad de preguntas</label>
