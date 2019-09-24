@@ -266,16 +266,6 @@ class EncuestaController extends Controller
         return back()->with($notificaicon, $mensaje);
     }
 
-    //Funcion rotorna las encuestas de propósito general que se encuentra disponibles en formato JSON  
-    public function encuestasDisponibles(){
-        $fecha_hora_actual = Carbon::now('America/Denver')->addMinutes(10)->format('Y-m-d H:i:s');
-        $encuestas = Encuesta::whereDate('fecha_final_encuesta', '>', $fecha_hora_actual)->get();
-
-        //dd($encuestas);
-        $data = ['encuestas'=>$encuestas];
-        return $data;
-    }
-
     public function publicar(Request $request){
        
         $id_encuesta = $request->input('id_encuesta_publicar');

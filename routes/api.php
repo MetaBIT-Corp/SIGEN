@@ -32,7 +32,7 @@ Route::get('/evaluacion/{id}/turnos', 'TurnoController@turnosPorEvaluacion');
 
 
 //Consultar encuestas desde la app móvil
-Route::get('/encuestas-disponibles', 'EncuestaController@encuestasDisponibles');
+Route::get('/encuestas-disponibles', 'ApiController@encuestasDisponibles');
 
 //Enviar respuestas desde la app móvil
 Route::post('/finalizar-intento', 'IntentoController@finalizarIntentoMovil');
