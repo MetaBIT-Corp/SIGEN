@@ -109,7 +109,7 @@ class EncuestaController extends Controller
 
         $clave = Clave::where('encuesta_id',$id)->first();
 
-        $docente = Docente::where('user_id',auth()->user()->id)
+        $docente = Docente::where('user_id',auth()->user()->id);
 
 
         $areas = Area::where("id_pdg_dcn",$docente->id_pdg_dcn)->where('id_cat_mat',null)->get();
