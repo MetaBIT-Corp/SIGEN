@@ -11,6 +11,7 @@ use App\Intento;
 use App\Clave;
 use App\Clave_Area;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use DateTime;
 
 class EncuestaController extends Controller
@@ -85,7 +86,7 @@ class EncuestaController extends Controller
         $clave->save();
 
         //return back()->with('notification','Se registró exitosamente');
-        return redirect()->action('EncuestaController@listado');
+        return redirect(URL::signedRoute('listado_encuesta'));;
 
     }
 
@@ -123,7 +124,7 @@ class EncuestaController extends Controller
             $rules =[
             
             'title' => ['required', 'string','min:5','max:191'],
-            'description' => ['required','max:191'],
+            'description' => ['required'],
             'fecha_inicio' => ['required', 'date', 
                 function ($attribute, $value, $fail) {
                     $fecha_actual = Carbon::now('America/Denver')->format('m/d/Y g:i A');
@@ -143,7 +144,6 @@ class EncuestaController extends Controller
             'fecha_inicio.required' => 'Debe de indicar la fecha de inicio del periodo de disponibilidad',
             'fecha_final.required' => 'Debe de indicar la fecha de Fin del periodo de disponibilidad',
             'fecha_final.after' => 'La fecha final debe ser mayor a la fecha inicial ',
-            'description.max' => 'Ha excedido el tamaño máximo de la descripción'
         ];
         }else{
              $rules =[
@@ -179,16 +179,10 @@ class EncuestaController extends Controller
             'm/d/Y H:i A', 
             $request->input('fecha_final'))->format('Y-m-d H:i:s');
         $encuesta->descripcion_encuesta=$request->input('description');
-        $encuesta->visible=0;
 
-        
-            
-
-        if(isset($request->all()['visible']))
-            $encuesta->visible = 1;
         $encuesta->save();
         //return back()->with('notification','Se registró exitosamente');
-        return redirect()->action('EncuestaController@listado');
+        return redirect(URL::signedRoute('listado_encuesta'));;
 
     }
     //Función que lista las encuestas creadas de un docente
@@ -277,22 +271,11 @@ class EncuestaController extends Controller
                     'Y-m-d H:i:s',
                     $encuesta->fecha_final_encuesta
                 )->format('l jS \\of F Y h:i A');
+            //se verifica que si tiene una clave agregada
             if(Clave::where('encuesta_id', $encuesta->id)->exists()){
                     foreach ($encuesta->claves as $clave) {
+                        //se verifica que tenga areas la clave
                         if(Clave_Area::where('clave_id', $clave->id)->exists()){
-                            $areas_de_clave = Clave_Area::where('clave_id', $clave->id)->get();
-                            $sumatoria_de_pesos = 0;
-                            foreach ($areas_de_clave as $area_de_clave) {
-                                $sumatoria_de_pesos += $area_de_clave->peso;
-                            }
-                            if($sumatoria_de_pesos<100){
-                                $notification = "error";
-                                $message = "Error: La sumatoria de pesos de las áreas de la encuesta es de ". $sumatoria_de_pesos . ", menor al 100 requerido<br><br>";
-                            }elseif($sumatoria_de_pesos>100){
-                                $notification = "error";
-                                $message = "Error: La sumatoria de pesos de las áreas de la encuesta es de ". $sumatoria_de_pesos . ", mayor al 100 requerido<br><br>";
-
-                            }elseif($sumatoria_de_pesos==100){
                                 $encuesta->visible = 1; 
                                 $encuesta->fecha_inicio_encuesta= DateTime::createFromFormat(
                                         'l jS \\of F Y h:i A',
@@ -303,9 +286,6 @@ class EncuestaController extends Controller
                                         $encuesta->fecha_final_encuesta
                                     )->format('Y-m-d H:i:s');
                                 $encuesta->save();
-                            }
-                            
-
                         }else{
                             $notification = "error";
                             $message = "Error: Para la publicación debe agregar áreas de preguntas a la encuesta<br><br>";

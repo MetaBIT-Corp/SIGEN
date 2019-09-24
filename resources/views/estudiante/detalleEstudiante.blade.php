@@ -2,8 +2,8 @@
 @section("body")
 
 @section("ol_breadcrumb")
-    <li class="breadcrumb-item"><a href="#">Materia</a></li>
-    <li class="breadcrumb-item"><a href="listado_estudiante">Listado de estudiantes</a></li>
+    <li class="breadcrumb-item"><a href="{{route('materias')}}">Materia</a></li>
+    <li class="breadcrumb-item"><a href="{{ URL::signedRoute('listado_estudiante', ['id' => $id_mat_ci]) }}">Listado de estudiantes</a></li>
     <li class="breadcrumb-item">Detalle de estudiante</li>
 @endsection
 

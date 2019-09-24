@@ -20,7 +20,7 @@ class CreateEvaluacionsTable extends Migration
             $table->integer('duracion');
             $table->integer('intentos');
             $table->string('nombre_evaluacion');
-            $table->string('descripcion_evaluacion');
+            $table->text('descripcion_evaluacion');
             $table->integer('preguntas_a_mostrar');//Cantidad de preguntas a presentar en la paginacion
             $table->boolean('revision');//parametro que indica si se permite revisión o no
             $table->boolean('habilitado')->default(1);//parametro que indica si la evaluación está habilitada o deshabilitada

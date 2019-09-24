@@ -70,13 +70,36 @@
                 <div class="row sidebar-row">
                     <nav class="col-md-2 d-none d-md-block bg-dark sidebar">
                         @yield("sidebar")
+
                         <div class="sidebar-sticky">
                             <ul class="nav flex-column">
                                 @yield("ul_sidebar")
                                 <li class="nav-item first-one">
-                                    <a class="nav-link active" href="/">
+                                    <a class="nav-link active" href="{{route('materias')}}">
                                         <span data-feather="home"></span>
                                         SIGEN
+                                        <span class="arrow-sidebar" data-feather="chevron-right"></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item first-one">
+                                    <a class="nav-link " href="{{route('encuestas')}}">
+                                        <span data-feather="home"></span>
+                                        Encuestas Disponibles
+                                        <span class="arrow-sidebar" data-feather="chevron-right"></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item first-one">
+                                    <a class="nav-link " href="
+                                    {{ URL::signedRoute('listado_encuesta') }}">
+                                        <span data-feather=""></span>
+                                        Listado Encuesta
+                                        <span class="arrow-sidebar" data-feather="chevron-right"></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item first-one">
+                                    <a class="nav-link " href="{{route('materias')}}">
+                                        <span data-feather="home"></span>
+                                        Area - Encuestas
                                         <span class="arrow-sidebar" data-feather="chevron-right"></span>
                                     </a>
                                 </li>

@@ -58,9 +58,9 @@
         <div class="card-body">
          
             @if(auth()->user()->role==1) 
-            <a class="btn btn-sm mb-3" href="{{route('gc_evaluacion', $id_carga)}}" title="Agregar">
-                  <span class="icon-add-solid "></span>
-                  <b>Nueva Evaluacion</b>
+            <a class="btn btn-sm mb-3" href="{{ URL::signedRoute('gc_evaluacion', ['id' => $id_carga]) }}" title="Agregar">
+              <span class="icon-add-solid "></span>
+              <b>Nueva Evaluacion</b>
             </a>
             
           @endif
@@ -100,7 +100,8 @@
                       </a>
                         
                         @if(auth()->user()->IsTeacher)
-                       <a class="btn btn-option btn-sm mb-1" title="Editar Evaluación" href="{{route('gu_evaluacion',$evaluacion->id)}}">
+                       <a class="btn btn-option btn-sm mb-1" title="Editar Evaluación" href="
+                        {{ URL::signedRoute('gu_evaluacion', ['id_eva' => $evaluacion->id]) }}">
                         <span class="icon-edit"></span>
                        </a>
 
@@ -179,7 +180,7 @@
         </div>
         <div class="card-footer small text-muted">
           @if(auth()->user()->IsTeacher)
-          <a class="btn btn-sm float-right btn-default" href="{{route('reciclaje_evaluacion', $id_carga)}}" title="">
+          <a class="btn btn-sm float-right btn-default" href="{{ URL::signedRoute('reciclaje_evaluacion', ['id' =>  $id_carga]) }}" title="">
                   <span class="icon-recycler h5 mr-1"></span>
                   <b>Restablecer Evaluación</b>
             </a>

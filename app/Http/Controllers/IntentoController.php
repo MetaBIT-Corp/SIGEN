@@ -57,7 +57,7 @@ class IntentoController extends Controller
     public function iniciarEncuesta($id_clave, Request $request)
     {
         //Se obtiene el objeto clave para poder extraer las preguntas de la encuesta
-        $clave_de_intento = Clave::find($id_clave)->first();
+        $clave_de_intento = Clave::find($id_clave);
 
         //Se obtienen las preguntas segun la clave
         //Se envia el tipo=1 para encuestas
@@ -65,8 +65,9 @@ class IntentoController extends Controller
 
         //Variable que contiene el array a mostrar en la paginacion
         //Falta definir si se paginaran las encuestas OJO
-        $paginacion = $this->paginacion($request, 1, $preguntas);
+        $paginacion = $this->paginacion($request, 10, $preguntas);
 
+        //dd($paginacion);
         return view('intento.intento', compact('paginacion'));
     }
 
@@ -92,10 +93,11 @@ class IntentoController extends Controller
             }
         }else{
             foreach ($claves_areas as $clave_area) {
-            $claves_areas_preguntas[$clave_area->area->tipo_item->id] = $clave_area->claves_areas_preguntas;
+                $claves_areas_preguntas[$clave_area->area->tipo_item->id] = $clave_area->claves_areas_preguntas;
             }
         }
         
+        //dd($claves_areas_preguntas);
         /*Se recorre el array de claves_areas_preguntas, el primer bucle recorre los clave_area
         basandose siempre en el id del tipo de item, luego el segundo bucle se utiliza para recorrer
         cada clave_area_pregunta y obtener la pregunta en si.

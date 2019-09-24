@@ -13,7 +13,7 @@
 @section("body")
 
 @section("ol_breadcrumb")
-    <li class="breadcrumb-item"><a href="#">Materia</a></li>
+    <li class="breadcrumb-item"><a href="{{route('materias')}}">Materia</a></li>
     <li class="breadcrumb-item">Estudiante</li>
 @endsection
 @section("main")
@@ -60,7 +60,9 @@
                   @endif
                   <td>{{$estudiante->anio_ingreso}}</td>
                   <td>
-                    <a title="Detalle estudiante" href="{{ route('detalle_estudiante',[$estudiante->id_est,$id_mat_ci]) }}" class="btn btn-sm btn-option">
+                    <a title="Detalle estudiante" href="
+                    {{ URL::signedRoute('detalle_estudiante', ['id' => $estudiante->id_est, 'id_mat' =>$id_mat_ci]) }}
+                   " class="btn btn-sm btn-option">
                       <span class="icon-student"></span>
                     </a>
                   </td>
