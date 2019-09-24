@@ -216,7 +216,9 @@ class TurnoController extends Controller
         $id_areas = Clave_Area::where('clave_id',$clave->id)->pluck('area_id')->toArray();
         $peso_turno = (int)(Clave_Area::where('clave_id',$clave->id)->sum('peso'));
 
-        return view('turno.edit', compact('turno', 'id', 'claves', 'clave','evaluacion','carga','materiac','areas','id_areas','peso_turno'));
+        $encuesta = false;
+
+        return view('turno.edit', compact('turno', 'id', 'claves', 'clave','evaluacion','carga','materiac','areas','id_areas','peso_turno','encuesta'));
     }
 
     /**
