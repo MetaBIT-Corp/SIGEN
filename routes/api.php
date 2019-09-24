@@ -12,6 +12,10 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+//Route para obtener materias segun el estudiante
+Route::get('materias/estudiante/{id}', 'MateriaController@getMateriasEstudiante');
+
 Route::get('/respuesta/{id}','AreaController@respuesta');
 Route::post('/respuesta/{id}','AreaController@respuesta');
 Route::get('/evaluacion/{id}/duracion/','TurnoController@getDuracionEvaluacion');

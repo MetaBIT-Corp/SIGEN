@@ -99,6 +99,6 @@ class MateriaController extends Controller
      */
     public function getMateriasEstudiante($id_user){
         $materias=$this->materiasEstudiante($id_user);
-        dd(response()->toJson($materias));
+        response()->Json($materias);
     }
 }
