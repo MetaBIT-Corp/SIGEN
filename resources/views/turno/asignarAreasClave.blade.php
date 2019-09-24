@@ -66,13 +66,21 @@
                     <button class="icon-delete btn btn-sm btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></button>
                     <button class="icon-edit btn btn-sm btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></button>
                     @if($clave_area->aleatorio)
-                      <a href="{{ URL::signedRoute('preguntas_por_area', ['id' => $clave_area->id]) }}" class="icon-list btn btn-sm btn-success" title="Ver preguntas de esta área"></a>
+                      <a class="icon-list btn btn-sm btn-success"
+                        @if($clave_area->area->tipo_item_id==3)
+                          href="{{ URL::signedRoute('pregunta.index', ['id_area' => $clave_area->area->id ,'id_gpo'=>true]) }}" 
+                          title="Ver grupos de esta área"
+                        @else 
+                          href="{{ URL::signedRoute('pregunta.index', ['id_area' => $clave_area->area->id ,'id_gpo'=>false]) }}" 
+                          title="Ver preguntas de esta área"
+                        @endif>
+                      </a>
                     @else
                       @if($clave_area->area->tipo_item_id==3)
-                        <button class="icon-information-solid btn btn-sm btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas-emp="{{ $clave_area->id }}"></button>
+                        <button class="icon-list btn btn-sm btn-success" href="#" title="Ver preguntas agregadas" data-preguntas-emp="{{ $clave_area->id }}"></button>
                         <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area-emp="{{ $clave_area->id }}"></button>
                       @else
-                        <button class="icon-information-solid btn btn-sm btn-secondary" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
+                        <button class="icon-list btn btn-sm btn-success" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
                         <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></button>
                       @endif
                     @endif

@@ -10,15 +10,17 @@ function editarClaveArea(){
   var aleatorio = $(this).data('aleatorio');
   var id_clave_area = $(this).parent().siblings('input').val();
 
+  peso = parseInt(peso, 10);
+
   //AJAX
   $.get('/api/clave-area/'+id_clave_area+'/validar-peso', function(data){
     $('#val_peso').html('<b>Peso actual del turno:</b> '+data);
     $('#val_peso_actual').attr('value', data);
 
     if(data >= 100){
-      $('#val_asignable').html('<b>No se puede asignar un peso mayor al actual</b>');
+      $('#val_asignable').html('<b><em>No se puede asignar un peso mayor al actual</em></b>');
     }else{
-      $('#val_asignable').html('<b>Peso asignable:</b> '+(100-data));
+      $('#val_asignable').html('<b>Peso asignable:</b> '+(100-data+peso));
     }
   });
 

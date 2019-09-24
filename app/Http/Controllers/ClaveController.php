@@ -118,7 +118,7 @@ class ClaveController extends Controller
         $this->validate($request, $rules, $messages);
 
         //Pregunta si el peso ingresado + el peso total actual de turno es mayor a 100
-        if($request->input('peso') + $peso_total > 100){
+        if($request->input('peso') - $clave_area->peso + $peso_total > 100){
             $notificacion='error';
             $mensaje='El peso del turno no puede ser mayor a 100';
         }else{
