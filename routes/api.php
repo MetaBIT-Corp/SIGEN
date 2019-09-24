@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 //Route para obtener materias segun el estudiante
-Route::get('materias/estudiante/{id}', 'MateriaController@getMateriasEstudiante');
+Route::get('/materias/estudiante/{id}', 'MateriaController@getMateriasEstudiante');
 
 Route::get('/respuesta/{id}','AreaController@respuesta');
 Route::post('/respuesta/{id}','AreaController@respuesta');
