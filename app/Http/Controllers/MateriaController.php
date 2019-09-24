@@ -12,10 +12,6 @@ class MateriaController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     public function listar()
     {
@@ -99,6 +95,6 @@ class MateriaController extends Controller
      */
     public function getMateriasEstudiante($id_user){
         $materias=$this->materiasEstudiante($id_user);
-        dd(response()->toJson($materias));
+        return response()->Json($materias);
     }
 }
