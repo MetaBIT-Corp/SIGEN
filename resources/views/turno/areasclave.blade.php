@@ -109,7 +109,7 @@
 										$preguntas_area = Grupo_Emparejamiento::where("area_id",$area->id)->count();
 									@endphp
 
-									@if($peso_turno < 100)
+									@if(($peso_turno < 100) && ($preguntas_area > 0))
 										<td class="col-sm-3 text-center">
 											<button type="button" class="btn btn-info" data-id-turno="{{$turno->id}}" data-id-clave="{{$claves[0]->id}}" data-id-area="{{$area->id}}" data-titulo="{{$area->titulo}}" data-preguntas-area="{{$preguntas_area}}" data-peso-turno="{{$peso_turno}}" data-toggle="modal" data-target="#asignarModal" data-dismiss="modal" onclick="$('#asignarModal').modal();">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asignar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
 										</td>
@@ -126,9 +126,9 @@
 						@endforelse
 
 						<tr class="d-flex" id="trBtn">
-							<td class="col-sm-1"></td>
-							<td class="col-sm-5"></td>
-							<td class="col-sm-3"></td>
+							<td class="col-sm-9" colspan="3">
+								<p>* Áreas sin Preguntas no son asignables.</p>
+							</td>
 							<td class="col-sm-3 text-center">
 								<button type="button" class="btn btn-secondary" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
 							</td>
