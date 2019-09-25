@@ -21,6 +21,7 @@ class CreateClaveAreaPreguntaEstudiantesTable extends Migration
             $table->foreign('clave_area_id')->references('id')->on('clave_area');
             $table->unsignedInteger('pregunta_id');
             $table->foreign('pregunta_id')->references('id')->on('pregunta');
+            $table->integer('numero_intento');
             $table->timestamps();
         });
     }
