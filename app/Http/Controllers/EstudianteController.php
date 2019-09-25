@@ -22,7 +22,7 @@ class EstudianteController extends Controller
      {
 	$this->middleware('auth');
      }
-
+    //recibo materia ciclo
     public function index($id)
     {
         
@@ -105,7 +105,7 @@ class EstudianteController extends Controller
 
             }
             
-            return view('estudiante.detalleEstudiante',compact('estudiante','materias_cursando','consulta_valida','materia_consulta_codido','ciclo','mat_ci_valido'));
+            return view('estudiante.detalleEstudiante',compact('estudiante','materias_cursando','consulta_valida','materia_consulta_codido','ciclo','mat_ci_valido', 'id_mat_ci'));
             
         }
         

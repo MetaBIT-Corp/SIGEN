@@ -13,6 +13,7 @@ use App\Intento;
 use App\Estudiante;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Hash;
 
 class EvaluacionController extends Controller
@@ -76,7 +77,8 @@ class EvaluacionController extends Controller
             $evaluacion->revision = 1;
         $evaluacion->save();
         //return back()->with('notification','Se registró exitosamente');
-        return redirect()->action('EvaluacionController@listado', ['id' => $id]);
+        //return redirect()->action('EvaluacionController@listado', ['id' => $id]);
+        return redirect(URL::signedRoute('listado_evaluacion', ['id' => $id]));
 
 
     }
@@ -124,7 +126,8 @@ class EvaluacionController extends Controller
             $evaluacion->revision = 1;
         $evaluacion->save();
         //return back()->with('notification','Se registró exitosamente');
-        return redirect()->action('EvaluacionController@listado', ['id' => $evaluacion->id_carga]);
+        //return redirect()->action('EvaluacionController@listado', ['id' => $evaluacion->id_carga]);
+        return redirect(URL::signedRoute('listado_evaluacion', ['id' => $evaluacion->id_carga]));
 
 
     }

@@ -13,8 +13,9 @@
 @section("body")
 
 @section("ol_breadcrumb")
-    <li class="breadcrumb-item"><a href="#">Materia</a></li>
-    <li class="breadcrumb-item">Evaluaciones</li>
+    <li class="breadcrumb-item"><a href="{{ route('materias')}}">Materia</a></li>
+    <li class="breadcrumb-item"><a href="{{ URL::signedRoute('listado_evaluacion', ['id' => $id_carga]) }}">Evaluaciones</a> </li>
+    <li class="breadcrumb-item">Evaluaciones Deshabilitadas</li>
 @endsection
 
 @section("main")
@@ -91,7 +92,7 @@
           </div>
         </div>
         <div class="card-footer small text-muted">
-          <a class="btn btn-sm float-right btn-default" href="{{route('listado_evaluacion', $id_carga)}}" title="">
+          <a class="btn btn-sm float-right btn-default" href="{{ URL::signedRoute('listado_evaluacion', ['id' => $id_carga]) }}" title="">
                   <span class="icon-file-text h5 mr-1"></span>
                   <b>Ver Evaluaciones</b>
             </a>

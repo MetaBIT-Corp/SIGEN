@@ -12,6 +12,10 @@ class MateriaController extends Controller
      *
      * @return void
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function listar()
     {
@@ -63,7 +67,7 @@ class MateriaController extends Controller
                 break;
             case 2:
                 $ciclo    = DB::table("ciclo")->where("estado", "=", 1)->get();
-                $materias = $this->materiasEstudiante($id);
+                $materias = MateriaController::materiasEstudiante($id);
                 return view("materia.listadoMateria", compact("materias", "ciclo"));
                 break;
         }
@@ -74,7 +78,7 @@ class MateriaController extends Controller
      * @param int $id_user ID del usuario del estudiante
      * @author Ricardo Estupinian
      */
-    private function materiasEstudiante($id_user){
+    public static function materiasEstudiante($id_user){
         $ciclo    = DB::table("ciclo")->where("estado", "=", 1)->get();
         $materias = DB::table('cat_mat_materia')
             ->join('materia_ciclo', 'cat_mat_materia.id_cat_mat', '=', 'materia_ciclo.id_cat_mat')
@@ -86,15 +90,5 @@ class MateriaController extends Controller
             ->where('ciclo.estado', '=', 1)
             ->select('cat_mat_materia.*', 'materia_ciclo.id_mat_ci','carga_academica.id_carg_aca')->get();
         return $materias;
-    }
-
-    /**
-     * Funcion para web service de materias que cursa un determinado estudiante
-     * @param int $id_user ID del usuario del estudiante
-     * @author Ricardo Estupinian
-     */
-    public function getMateriasEstudiante($id_user){
-        $materias=$this->materiasEstudiante($id_user);
-        return response()->Json($materias);
     }
 }

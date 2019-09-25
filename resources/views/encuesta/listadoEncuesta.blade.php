@@ -43,7 +43,7 @@
         <div class="card-body">
 
             @if(auth()->user()->IsTeacher) 
-            <a class="btn btn-sm mb-3" href="{{route('gc_encuesta')}}" title="Agregar">
+            <a class="btn btn-sm mb-3" href="{{ URL::signedRoute('gc_encuesta') }}" title="Agregar">
                 <span class="icon-add-solid "></span>
                 <b>Nueva Encuesta</b>
             </a>
@@ -102,14 +102,10 @@
                     @endif
                     <td>
                     @if(auth()->user()->IsTeacher)
-                      <a title="Editar" href="{{route('gu_encuesta', $encuesta->id)}}" class="btn btn-sm btn-option mb-1">
+                      <a title="Editar" href="
+                      {{ URL::signedRoute('gu_encuesta', ['id' => $encuesta->id]) }}" class="btn btn-sm btn-option mb-1">
                         <span class="icon-edit"></span>
                       </a>
-                      
-                      <a title="Añadir áreas" href="#" class="btn btn-sm btn-option mb-1">
-                        <span class="icon-add-solid"></span>
-                      </a>
-
                       <a class="btn btn-sm btn-danger mb-1" href="#" title="Eliminar Encuesta" 
                           data-eliminar-encuesta="{{ $encuesta->id }}">
                           <span class="icon-delete"></span>

@@ -6,9 +6,9 @@
 @section("body")
 
 @section("ol_breadcrumb")
-    <li class="breadcrumb-item"><a href="#">Materia</a></li>
-    <li class="breadcrumb-item">Evaluación</li>
-    <li class="breadcrumb-item">Nueva Evaluación</li>
+    <li class="breadcrumb-item"><a href="{{ route('materias')}}">Materia</a></li>
+    <li class="breadcrumb-item"><a href="{{ URL::signedRoute('listado_evaluacion', ['id' => $id]) }}">Evaluaciones</a> </li>
+    <li class="breadcrumb-item">Nueva Evaluacion</li>
 @endsection
 @section("main")
   <div class="row">

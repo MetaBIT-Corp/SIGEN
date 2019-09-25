@@ -9,7 +9,7 @@
 @section("body")
 
 @section("ol_breadcrumb")
-    <li class="breadcrumb-item"><a href="#">Encuesta</a></li>
+    <li class="breadcrumb-item"><a href="{{ URL::signedRoute('listado_encuesta') }}">Encuesta</a></li>
     <li class="breadcrumb-item">Nueva Encuesta</li>
 @endsection
 @section("main")
@@ -80,7 +80,7 @@
               
               
             </div>
-
+            <!--
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -93,10 +93,11 @@
                 </div>
               </div>
             </div>
-          
+          -->
           <div class="form-group">
              <button class="btn btn-primary mb-3">Crear</button>
-             <a href="{{route('listado_encuesta')}}" class="btn btn-secondary mb-3"> Cancelar</a>
+             <a href="{{ URL::signedRoute('listado_encuesta')}}"
+              class="btn btn-secondary mb-3"> Cancelar</a>
           </div>
          
       </form>

@@ -36,7 +36,7 @@
     </div>
     <div class="card-footer">
 
-      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}">
+      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ URL::signedRoute('listado_estudiante', ['id' => $materia->id_mat_ci]) }}">
           <span class="icon-users"></span>
       </a>
       
@@ -72,7 +72,7 @@
       </p>  
     </div>
     <div class="card-footer">
-      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}">
+      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ URL::signedRoute('listado_estudiante', ['id' => $materia->id_mat_ci]) }}">
           <span class="icon-users"></span>
       </a>
 
@@ -110,7 +110,7 @@
     </div>
     <div class="card-footer">
 
-      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}">
+      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ URL::signedRoute('listado_estudiante', ['id' => $materia->id_mat_ci]) }}">
           <span class="icon-users"></span>
       </a>
 
@@ -190,7 +190,7 @@
     </div>
     <div class="card-footer">
 
-      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}">
+      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ URL::signedRoute('listado_estudiante', ['id' => $materia->id_mat_ci]) }}">
           <span class="icon-users"></span>
       </a>
 
@@ -234,7 +234,7 @@
       </p>
     </div>
     <div class="card-footer">
-      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ route('listado_estudiante',$materia->id_mat_ci) }}">
+      <a class="btn btn-option btn-sm" title="Estudiantes Inscritos" href="{{ URL::signedRoute('listado_estudiante', ['id' => $materia->id_mat_ci]) }}">
           <span class="icon-users"></span>
       </a>
 
@@ -283,7 +283,7 @@
         <span class="icon-users"></span>
       </a>
 
-      <a class="btn btn-option btn-sm" title="Docentes" href="{{ URL::signedRoute('docentes_materia_ciclo', ['id_mat_ci' => $materia->id_mat_ci]) }}">
+      <a class="btn btn-option btn-sm" title="Docentes" href="{{ URL::signedRoute('listado_estudiante', ['id' => $materia->id_mat_ci]) }}">
         <span class="icon-admin"></span>
       </a>
       
