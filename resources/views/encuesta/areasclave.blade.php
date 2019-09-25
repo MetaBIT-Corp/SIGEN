@@ -7,8 +7,8 @@
 <div class="modal" id="areasEncuestaModal">
 	<div class="modal-dialog" role="document" style="max-width: 60% !important;">
 		
-		<div class="modal-content">				
-			
+		<div class="modal-content">
+
 			<div class="modal-header border-bottom-0">
 
 				<h3 class="modal-title"><b>Asignar Áreas a Encuesta</b></h3>
@@ -20,6 +20,7 @@
 			</div>
 
 			<div class="modal-body p-0">
+
 				<table class="table table-hover border-top-0">
 
 					<thead class="text-left ">
@@ -73,16 +74,25 @@
 									@endphp
 
 									<td class="col-sm-3 text-center">
-										<button type="button" class="btn btn-danger">&nbsp;&nbsp;&nbsp;&nbsp;Remover&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+										<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminarModal" data-id-area="{{$id_clave_area->id}}">
+										&nbsp;&nbsp;&nbsp;&nbsp;Remover&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									</button>
 									</td>
 								@else
 
 									@php
 										$preguntas_area = Grupo_Emparejamiento::where("area_id",$area->id)->count();
 									@endphp
-									<td class="col-sm-3 text-center">
-										<button type="button" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asignar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
-									</td>
+
+									@if($preguntas_area>0)
+										<td class="col-sm-3 text-center">
+											<button type="button" class="btn btn-info btn-asignacion" data-id-encuesta="{{$encuesta->id}}" data-id-clave="{{$clave->id}}" data-id-area="{{$area->id}}" data-titulo="{{$area->titulo}}" data-preguntas-area="{{$preguntas_area}}" data-url="{{ route('asignar-area-encuesta',$encuesta->id) }}" data-token-a="{{ csrf_token() }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asignar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+										</td>
+									@else
+										<td class="col-sm-3 text-center">
+											<button type="button" class="btn btn-secondary" disabled="">&nbsp;No Asignable&nbsp;</button>
+										</td>
+									@endif
 
 								@endif
 							</tr>
@@ -91,11 +101,13 @@
 						@endforelse
 
 						<tr class="d-flex" id="trBtn">
-							<td class="col-sm-1"></td>
-							<td class="col-sm-5"></td>
-							<td class="col-sm-3"></td>
+							<td class="col-sm-9" colspan="3">
+								<p>* Áreas sin Preguntas no son asignables.</p>
+							</td>
 							<td class="col-sm-3 text-center">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								</button>
 							</td>
 						</tr>
 
@@ -109,3 +121,47 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal" id="eliminarModal">
+	<div class="modal-dialog" role="document" style="max-width: 50% !important;">
+			
+		<div class="modal-content">
+				
+			<div class="modal-header">
+
+				<h5 class="modal-title">Remover Área de Turno</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+
+			</div>
+
+			<div class="modal-body">
+
+				<div class="form-group">
+						
+					<form action="{{ route('eliminar_clave_area')}}" method="POST">
+
+						<div class="form-group" style="display:none;">
+							<label class="col-form-label" for="id_clave_area">ClaveArea ID:</label>
+							<input type="text" class="form-control" name="id_clave_area" placeholder="ID de Pregunta" id="id_clave_area">
+						</div>
+
+						<h5>¿Desea Remover el Área del Turno?</h5>
+
+						<div class="modal-footer">
+
+							{{ csrf_field() }}
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+							<button type="submit" class="btn btn-danger">Eliminar</button>
+								
+						</div>
+					</form>
+
+				</div>
+					
+			</div>
+
+		</div>
+	</div>
+</div>  

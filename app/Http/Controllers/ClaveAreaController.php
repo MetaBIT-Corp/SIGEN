@@ -108,6 +108,23 @@ class ClaveAreaController extends Controller
 
     }
 
+    public function storeAreaEncuesta(Request $request){
+
+        $clave_area = new Clave_Area;
+
+        $clave_area->area_id = $request->area_id;
+        $clave_area->clave_id = $request->clave_id;        
+        $clave_area->numero_preguntas = $request->numero_preguntas;
+        $clave_area->aleatorio = 0;
+        $clave_area->peso = 0;
+
+        $clave_area->save();
+
+        return response()->json($clave_area);
+
+
+    }
+
     /**
      * Display the specified resource.
      *
