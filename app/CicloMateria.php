@@ -12,4 +12,7 @@ class CicloMateria extends Model
     protected $fillable = [
         'id_cat_mat','id_ciclo',
     ];
+    public function cargas(){
+    	return $this->hasMany(CargaAcademica::class, 'id_mat_ci', 'id_mat_ci');
+    }
 }

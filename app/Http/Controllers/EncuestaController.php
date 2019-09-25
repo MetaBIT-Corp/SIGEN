@@ -206,7 +206,6 @@ class EncuestaController extends Controller
     public function listado_publico(){
         $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
         $encuestas = Encuesta::where('visible',1)
-                        ->where('fecha_final_encuesta','>', $fecha_hora_actual)
                         ->where('fecha_inicio_encuesta','<=', $fecha_hora_actual)
                         ->get();
         return view('encuesta.Encuestas')->with(compact('encuestas'));
