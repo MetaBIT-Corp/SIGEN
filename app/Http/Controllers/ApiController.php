@@ -94,4 +94,14 @@ class ApiController extends Controller
         $data = ['user'=>$user_autenticado,'pass'=>$password];
         return $data;
     }
+    /*
+     * Funcion para web service de materias que cursa un determinado estudiante
+     * @param int $id_user ID del usuario del estudiante
+     * @author Ricardo Estupinian
+     */
+    public function getMateriasEstudiante($id_user){
+        $materias=MateriaController::materiasEstudiante($id_user);
+        return response()->Json($materias);
+    }
+
 }

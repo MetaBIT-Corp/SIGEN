@@ -14,7 +14,7 @@
               <strong class="mb-3">Asignar Área</strong>
 
               @if($encuesta)
-                <button class="btn" data-id-clave="{{$clave->id}}" data-toggle="modal" data-target="#areasEncuestaModal" onclick="$('#areasEncuestaModal').modal();" title="Asignar Área a Encuesta">
+                <button class="btn" data-id-clave="{{$clave->id}}" data-toggle="modal" data-target="#areasEncuestaModal" id="btnEncuestasAreas" title="Asignar Área a Encuesta">
                   <span class="icon-add text-primary">
                   </span>
                 </button>

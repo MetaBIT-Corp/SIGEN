@@ -168,3 +168,4 @@ Route::post('grupo/{grupo_id}/preguntas/delete','GrupoEmparejamientoController@d
 
 /*Rutas para Asignación de Áreas a Clave/Turno*/
 Route::post('turno/{turno_id}/claves/store','ClaveAreaController@store')->name('asignar-area-clave');
+Route::post('encuesta/{encuesta_id}/claves/store','ClaveAreaController@storeAreaEncuesta')->name('asignar-area-encuesta');
