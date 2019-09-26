@@ -17,6 +17,17 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class IntentoController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        
+    }
+
     public function iniciarEvaluacion($id_turno, Request $request)
     {
         //Se obtiene el estudiante logueado para recuperar sus preguntas
@@ -41,7 +52,7 @@ class IntentoController extends Controller
         $clave_de_intento = $claves[0];
 
         //Verificamos si es el primer intento que realiza
-        $intento=Intento::where('estudiante_id',$id_est)->first();
+        $intento=Intento::where('estudiante_id',$id_est)->get();
 
         //Inicializar el intento y asignar clave a la que pertenece el turno
         $num_intento=1;
