@@ -97,7 +97,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item first-one">
-                                    <a class="nav-link " href="{{route('materias')}}">
+                                    <a class="nav-link " href="{{route('areas_encuestas')}}">
                                         <span data-feather="home"></span>
                                         Area - Encuestas
                                         <span class="arrow-sidebar" data-feather="chevron-right"></span>

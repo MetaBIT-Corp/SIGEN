@@ -31,7 +31,48 @@ class AreaController extends Controller
         if($request->ajax()){
             $areas=$materia->areas;
             $a=[];
-            if(count($areas)>0){
+            $a=$this->areasArray($areas);
+            return dataTables()
+                    ->of($a)
+                    ->addColumn('actions','area/actions')
+                    ->rawColumns(['actions'])
+                    ->toJson();
+        }
+        $encuesta=false;
+        return view('area.index', compact('materia','encuesta'));
+    }
+
+    /**
+     * Mostrar el listado de areas de las areas segun docente.
+     * @author Ricardo Estupinian
+     */
+    public function indexEncuesta(Request $request){
+        $id_user = auth()->user()->id;
+        $id_docente=Docente::where('user_id',$id_user)->first()->id_pdg_dcn;
+        $areas=Area::where('id_pdg_dcn',$id_docente)->get();
+        $materia=Materia::where('id_cat_mat',1)->first();
+        $encuesta=true;
+        if($request->ajax()){
+            $a=[];
+            $a=$this->areasArray($areas);
+            return dataTables()
+                    ->of($a)
+                    ->addColumn('actions','area/actions')
+                    ->rawColumns(['actions'])
+                    ->toJson();
+        }
+
+        return view('area.index', compact('materia','encuesta'));
+
+    }
+    /**
+     * Funcion que retorna un array perzonalizado para devolverlo en el dataTable
+     * @param Eloquent Areas
+     * @return Array
+     */
+    private function areasArray($areas){
+        $a=[];
+        if(count($areas)>0){
                 //Construccion de array perzonalizado para mostrar en Data Table
                 for($i=0;$i<count($areas);$i++){
                     $a[]=[
@@ -41,15 +82,8 @@ class AreaController extends Controller
                         "tipo_item"=>$areas[$i]->tipo_item->nombre_tipo_item,
                     ];
                 }
-            }
-            return dataTables()
-                    ->of($a)
-                    ->addColumn('actions','area/actions')
-                    ->rawColumns(['actions'])
-                    ->toJson();
         }
-
-        return view('area.index', compact('materia'));
+        return $a;
     }
 
     /**
