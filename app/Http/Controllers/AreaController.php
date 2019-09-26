@@ -21,8 +21,7 @@ class AreaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index($id_materia, Request $request)
-    {
-        
+    {   
         if(!Materia::where('id_cat_mat',$id_materia)->first()){
             return redirect('/');
         }
