@@ -446,16 +446,41 @@ class EvaluacionController extends Controller
         }elseif ($clave_area->aleatorio==1) {
             //si son de emparejamiento (item id 3) u otra modalidad, el tratamiento es el mismo
             foreach ($estudiantes as $estudiante) {
-                foreach ( $area->grupos_emparejamiento as $grupo) {
-                    foreach ($grupo->preguntas as $pregunta) {
-                       for( $i=1 ; $i<=$cant_intentos ; $i++){
-                            Clave_Area_Pregunta_Estudiante::create([
-                            'estudiante_id'=>$estudiante->id_est,
-                            'clave_area_id'=>$clave_area->id,
-                            'pregunta_id'=>$pregunta->id,
-                            'numero_intento'=> $i
-                            ]);
-                        } 
+                for( $i=1 ; $i<=$cant_intentos ; $i++){
+                    //si no es de emparejamiento se barajean las preguntas dentro del grupo emparejamiento
+                    if($tipo_item->id != 3){
+                        foreach ( $area->grupos_emparejamiento as $grupo) {
+                            $preguntas_all = $grupo->preguntas;
+                            $random_preguntas = $preguntas_all->random($clave_area->numero_preguntas);
+                            foreach ($random_preguntas as $pregunta) {
+                                    Clave_Area_Pregunta_Estudiante::create([
+                                    'estudiante_id'=>$estudiante->id_est,
+                                    'clave_area_id'=>$clave_area->id,
+                                    'pregunta_id'=>$pregunta->id,
+                                    'numero_intento'=> $i
+                                    ]);
+                            }
+                            
+                        }
+
+                    }
+                    //si es de emparejamiento se barajean los grupos de emparejamiento
+                    else{
+                        $grupos_emparejamientos = $area->grupos_emparejamiento;
+                        $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
+                        foreach ( $random_grupos_emparejamientos as $grupo) {
+                            foreach ($grupo->preguntas as $pregunta) {
+                               
+                                    Clave_Area_Pregunta_Estudiante::create([
+                                    'estudiante_id'=>$estudiante->id_est,
+                                    'clave_area_id'=>$clave_area->id,
+                                    'pregunta_id'=>$pregunta->id,
+                                    'numero_intento'=> $i
+                                    ]);
+                                 
+                            }
+                            
+                        }
                     }
                     
                 }
@@ -496,8 +521,4 @@ class EvaluacionController extends Controller
         }
         return $array;
     }
-
-
-
-
 }

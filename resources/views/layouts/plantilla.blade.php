@@ -74,6 +74,7 @@
                         <div class="sidebar-sticky">
                             <ul class="nav flex-column">
                                 @yield("ul_sidebar")
+                                 @if(auth()->check())
                                 <li class="nav-item first-one">
                                     <a class="nav-link active" href="{{route('materias')}}">
                                         <span data-feather="home"></span>
@@ -81,6 +82,7 @@
                                         <span class="arrow-sidebar" data-feather="chevron-right"></span>
                                     </a>
                                 </li>
+                                @endif
                                 <li class="nav-item first-one">
                                     <a class="nav-link " href="{{route('encuestas')}}">
                                         <span data-feather="home"></span>
@@ -88,6 +90,7 @@
                                         <span class="arrow-sidebar" data-feather="chevron-right"></span>
                                     </a>
                                 </li>
+                                 @if(auth()->check())
                                 <li class="nav-item first-one">
                                     <a class="nav-link " href="
                                     {{ URL::signedRoute('listado_encuesta') }}">
@@ -103,6 +106,7 @@
                                         <span class="arrow-sidebar" data-feather="chevron-right"></span>
                                     </a>
                                 </li>
+                                @endif
                             </ul>
                         </div>
                     </nav>

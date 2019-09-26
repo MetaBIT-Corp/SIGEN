@@ -41,7 +41,7 @@
               		      <small></small>
               		    </div>
               		    <!--<p class="mb-2">{{$encuesta->descripcion_encuesta}}</p>-->
-              		    <small>Disponible hasta: {{$encuesta->fecha_final_encuesta}} </small>
+              		    <small>Disponible desde: {{$encuesta->fecha_inicio_encuesta}} hasta: {{$encuesta->fecha_final_encuesta}} </small>
                        <br>
                       <small>Autor: {{$encuesta->docente->nombre_docente}} </small>
                       <br><br>

@@ -208,6 +208,12 @@ class EncuestaController extends Controller
         $encuestas = Encuesta::where('visible',1)
                         ->where('fecha_inicio_encuesta','<=', $fecha_hora_actual)
                         ->get();
+        foreach ($encuestas as $encuesta) {
+            $encuesta->fecha_inicio_encuesta = $this->convertirFechaS($encuesta->fecha_inicio_encuesta);
+            $encuesta->fecha_final_encuesta = $this->convertirFechaS($encuesta->fecha_final_encuesta);
+        
+        }
+        
         return view('encuesta.Encuestas')->with(compact('encuestas'));
 
     }
@@ -315,6 +321,15 @@ class EncuestaController extends Controller
                         'IntentoController@iniciarEncuesta', 
                         ['id_clave' => $id_clave ]
                     );
+    }
+    /**
+     * Funcion para convertir la fecha de formato que no tenga hasta los segundos
+     * @param fecha
+     * @author Edwin Palacios
+     */
+    public function convertirFechaS($fecha){
+        $new_fecha = DateTime::createFromFormat('Y-m-d H:i:s',$fecha)->format('Y-m-d H:i');
+        return $new_fecha;
     }
     
 }
