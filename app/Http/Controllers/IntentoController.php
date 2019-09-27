@@ -25,7 +25,7 @@ class IntentoController extends Controller
      */
     public function __construct()
     {
-        
+        $this->middleware('auth');
     }
 
     public function iniciarEvaluacion($id_turno, Request $request)
@@ -52,22 +52,26 @@ class IntentoController extends Controller
         $clave_de_intento = $claves[0];
 
         //Verificamos si es el primer intento que realiza
-        $intento=Intento::where('estudiante_id',$id_est)->get();
+        $intento=Intento::where('estudiante_id',$id_est)->first();
 
         //Inicializar el intento y asignar clave a la que pertenece el turno
         $num_intento=1;
-        if($intento->count()==0){
+        if($intento==null){
             $intento=new Intento();
             $intento->estudiante_id=$id_est;
             $intento->clave_id=$clave_de_intento->id;
             $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-            $intento->numero_intento=1;
+            $intento->fecha_final_intento=null;
+            $intento->numero_intento=$num_intento;
             $intento->save();
         }else{
-            $num_intento=$intento->numero_intento;
-            $intento->numero_intento=$num_intento+1;
-            $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-            $intento->save();
+            if($intento->fecha_final_intento!=null){
+                $num_intento=$intento->numero_intento;
+                $intento->numero_intento=$num_intento+1;
+                $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+                $intento->fecha_final_intento=null;
+                $intento->save();
+            }
         }
         
         //Obtener las preguntas segun la clave asignada aleatoriamente
