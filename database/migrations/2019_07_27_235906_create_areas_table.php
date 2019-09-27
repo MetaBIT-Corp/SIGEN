@@ -17,7 +17,7 @@ class CreateAreasTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('id_cat_mat')->nullable();
             $table->foreign('id_cat_mat')->references('id_cat_mat')->on('cat_mat_materia');
-            $table->unsignedInteger('id_pdg_dcn');
+            $table->unsignedInteger('id_pdg_dcn')->nullable();
             $table->foreign('id_pdg_dcn')->references('id_pdg_dcn')->on('pdg_dcn_docente');
             $table->unsignedInteger('tipo_item_id');
             $table->foreign('tipo_item_id')->references('id')->on('tipo_item');

@@ -135,7 +135,6 @@ class AreaController extends Controller
             $area->id_pdg_dcn = $id_docente;
         }
 
-        $area->id_pdg_dcn = Docente::where('user_id', Auth::user()->id)->first()->id_pdg_dcn;
         $area->tipo_item_id = $request->input('tipo_item');
         $area->titulo = $request->input('titulo');
         $area->save();
