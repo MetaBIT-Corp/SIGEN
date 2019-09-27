@@ -26,7 +26,11 @@
         Áreas
     </div>
     <div class="col-3">
-        <a class="btn" href="{{ URL::signedRoute('crear_area', ['id_materia' => $materia->id_cat_mat]) }}">
+        @if(! $encuesta)
+            <a class="btn" href="{{ URL::signedRoute('crear_area', ['id_materia' => $materia->id_cat_mat]) }}">
+        @else
+            <a class="btn" href="{{ URL::signedRoute('crear_area', ['id_materia' => 0]) }}">
+        @endif
             <span class="icon-add text-primary">
             </span>
         </a>

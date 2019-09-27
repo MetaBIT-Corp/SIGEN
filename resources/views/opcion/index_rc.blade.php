@@ -1,4 +1,11 @@
 @extends("../layouts.plantilla")
+
+@section('css')
+	<link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
+@endsection
+
 @section("ol_breadcrumb")
 <li class="breadcrumb-item">
     <a href="{{ route('materias') }}">
@@ -47,9 +54,9 @@
 				<td  style="text-align: center;">{{$opcion->opcion}}</td>
 				<td>
 					
-					<a href="#" class="mr-2" style="color: rgb(70,115,200);" data-id="{{$opcion->id}}" data-opcion="{{$opcion->opcion}}" data-tipo="{{$tipo_opcion}}" data-toggle="modal" data-target="#editModal"><i class="fas fa-pencil-alt"></i></a>
+					<a href="#" class="mr-2 btn-editar btn" id="btn_editar" data-id="{{$opcion->id}}" data-opcion="{{$opcion->opcion}}" data-tipo="{{$tipo_opcion}}" data-toggle="modal" data-target="#editModal"><span class="icon-edit"></span></a>
 					
-					<a href="" class="ml-2" style="color: rgb(200,10,50);" data-id="{{$opcion->id}}" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash-alt"></i></a>
+					<a href="" class="ml-2 btn-eliminar btn" id="btn_eliminar" data-id="{{$opcion->id}}" data-toggle="modal" data-target="#deleteModal"><span class="icon-delete"></span></a>
 
 				</td>
 			</tr>

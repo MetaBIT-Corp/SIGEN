@@ -18,11 +18,11 @@ Route::get('/materias/estudiante/{id}', 'ApiController@getMateriasEstudiante');
 
 Route::get('/respuesta/{id}','AreaController@respuesta');
 Route::post('/respuesta/{id}','AreaController@respuesta');
-Route::get('/evaluacion/{id}/duracion/','TurnoController@getDuracionEvaluacion');
+Route::get('/evaluacion/{id}/duracion/','ApiController@getDuracionEvaluacion');
 
 //Obtener evaluación
-Route::get('/evaluacion/turno/{turno_id}/obtener/{estudiante_id}','TurnoController@getEvaluacion');
-Route::get('/encuesta/{encuesta_id}/{mac}','TurnoController@getEncuesta');
+Route::get('/evaluacion/turno/{turno_id}/obtener/{estudiante_id}','ApiController@getEvaluacion');
+Route::get('/encuesta/{encuesta_id}/{mac}','ApiController@getEncuesta');
 Route::get('/evaluaciones_m/turnos_m/{id_carga}','ApiController@evaluacionTurnosDisponibles');
 Route::get('/user/acceso/{email}/{password}','ApiController@accesoUserMovil');
 

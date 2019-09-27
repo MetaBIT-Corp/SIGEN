@@ -63,7 +63,7 @@ class ClaveAreaController extends Controller
         $requestData = $request->all();
         
         $rules = [
-            'area_id'=> 'required:',
+            'area_id'=> 'required',
             'clave_id' => 'required',
             'peso' => 'required|integer|lte:peso_restante|max:100|min:1',
             'cantidad' => 'required|integer|lte:cantidad_preguntas|min:0',

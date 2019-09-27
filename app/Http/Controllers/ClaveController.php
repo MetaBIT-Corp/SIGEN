@@ -111,7 +111,7 @@ class ClaveController extends Controller
             'numero_preguntas.integer' => 'La cantidad de preguntas debe ser un dato entero',
             'peso.min' => 'El peso del área no puede ser negativo',
             'peso.max' => 'No se puede asignar un peso mayor a 100%',
-            'peso.required' => 'Debe ingresar el peso que tendrá área',
+            'peso.required' => 'Debe ingresar el peso que tendrá el área',
             'peso.integer' => 'El peso debe ser un dato entero'
         ];
 

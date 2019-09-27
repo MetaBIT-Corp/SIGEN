@@ -49,7 +49,6 @@ class AreaController extends Controller
         $id_user = auth()->user()->id;
         $id_docente=Docente::where('user_id',$id_user)->first()->id_pdg_dcn;
         $areas=Area::where('id_pdg_dcn',$id_docente)->get();
-        $materia=Materia::where('id_cat_mat',1)->first();
         $encuesta=true;
         if($request->ajax()){
             $a=[];
@@ -61,7 +60,7 @@ class AreaController extends Controller
                     ->toJson();
         }
 
-        return view('area.index', compact('materia','encuesta'));
+        return view('area.index', compact('encuesta'));
 
     }
     /**
@@ -104,8 +103,6 @@ class AreaController extends Controller
      */
     public function store($id_materia, Request $request)
     {
-        if(!Materia::where('id_cat_mat',$id_materia)->first())
-            return redirect('/');
         
         $rules = [
             'tipo_item' => 'required|exists:tipo_item,id',
@@ -129,7 +126,15 @@ class AreaController extends Controller
         }
         
         $area = new Area();
-        $area->id_cat_mat = $id_materia;
+        
+        if($id_materia)
+            $area->id_cat_mat = $id_materia;
+        else{
+            $id_user = auth()->user()->id;
+            $id_docente=Docente::where('user_id',$id_user)->first()->id_pdg_dcn;
+            $area->id_pdg_dcn = $id_docente;
+        }
+
         $area->id_pdg_dcn = Docente::where('user_id', Auth::user()->id)->first()->id_pdg_dcn;
         $area->tipo_item_id = $request->input('tipo_item');
         $area->titulo = $request->input('titulo');

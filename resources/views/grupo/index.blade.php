@@ -1,5 +1,11 @@
 @extends("../layouts.plantilla")
 
+@section('css')
+	<link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
+@endsection
+
 @section('main')
 
 <?php $contador=1; ?>
@@ -18,27 +24,42 @@
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($preguntas as $pregunta): ?>
+
+		@if(isset($preguntas))
+			<?php foreach ($preguntas as $pregunta): ?>
+				<tr>
+					<th scope="row"><?php echo $contador; ?></th>
+					<td>{{$pregunta->pregunta}}</td>
+					<td>{{$opciones[$contador-1]->opcion}}</td>
+
+					<td>
+
+						@if($opciones_incorrectas[$contador-1]!=null)
+						
+							<a href="#" class="mr-2 btn-editar btn" id="btn_editar" data-id-pregunta="{{$pregunta->id}}" data-id-opcion="{{$opciones[$contador-1]->id}}" data-pregunta="{{$pregunta->pregunta}}" data-opcion="{{$opciones[$contador-1]->opcion}}" data-opcion-incorrecta="{{$opciones_incorrectas[$contador-1]->opcion}}" data-opcion-incorrecta-id="{{$opciones_incorrectas[$contador-1]->id}}" data-toggle="modal" data-target="#editModal"><i class="fas fa-pencil-alt"></i></a>
+
+						@else
+							<a href="#" class="mr-2 btn-editar btn" id="btn_editar" data-id-pregunta="{{$pregunta->id}}" data-id-opcion="{{$opciones[$contador-1]->id}}" data-pregunta="{{$pregunta->pregunta}}" data-opcion="{{$opciones[$contador-1]->opcion}}" data-opcion-incorrecta="" data-toggle="modal" data-target="#editModal"><i class="fas fa-pencil-alt"></i></a>
+						@endif
+						
+						<a href="#" class="ml-2 btn-eliminar btn" id="btn_eliminar" data-id-pregunta="{{$pregunta->id}}" data-id-opcion="{{$opciones[$contador-1]->id}}" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash-alt"></i></a>
+
+					</td>
+				</tr>
+				<?php $contador++ ?>
+			<?php endforeach; ?>
+		@else
 			<tr>
-				<th scope="row"><?php echo $contador; ?></th>
-				<td>{{$pregunta->pregunta}}</td>
-				<td>{{$opciones[$contador-1]->opcion}}</td>
-
-				<td>
-					
-					<a href="#" class="mr-2" style="color: rgb(70,115,200);" data-id-pregunta="{{$pregunta->id}}" data-id-opcion="{{$opciones[$contador-1]->id}}" data-pregunta="{{$pregunta->pregunta}}" data-opcion="{{$opciones[$contador-1]->opcion}}" data-toggle="modal" data-target="#editModal"><i class="fas fa-pencil-alt"></i></a>
-					
-					<a href="#" class="ml-2" style="color: rgb(200,10,50);" data-id-pregunta="{{$pregunta->id}}" data-id-opcion="{{$opciones[$contador-1]->id}}" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash-alt"></i></a>
-
+				<td colspan="4" class="p-5">
+					<h4>Grupo de Emparejamiento vacío.</h4>
 				</td>
 			</tr>
-			<?php $contador++ ?>
-		<?php endforeach; ?>
+		@endif
 	</tbody>
 </table>
 
 <div class="d-flex justify-content-end m-3">
-	<button type="button" class="btn btn-info btn mt-3" data-toggle="modal" data-target="#createModal">
+	<button type="button" class="btn btn-info btn mt-3 mx-3" id="btn-agregar" data-toggle="modal" data-target="#createModal">
 		<i class="fas fa-plus-circle"></i> Agregar Pregunta
 	</button>
 </div>
@@ -54,10 +75,9 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">
 
-				<form action="{{ route('crear-pregunta-grupo',$grupo->id)}}" method="POST">
-
+			<form action="{{ route('crear-pregunta-grupo',$grupo->id)}}" method="POST">
+				<div class="modal-body">
 					<div class="form-group" style="display:none;">
 						<label class="col-form-label" for="idGrupo">Grupo ID:</label>
 						<input type="text" class="form-control" name="idGrupo" placeholder="ID de Pregunta" id="idGrupo" value="{{$grupo->id}}">
@@ -67,18 +87,34 @@
 						<label class="col-form-label" for="pregunta">Pregunta:</label>
 						<input type="text" class="form-control" name="pregunta" placeholder="Inserte el texto de la Pregunta" id="pregunta">
 					</div>
+
 					<div class="form-group">
-						<label class="col-form-label" for="opcion">Respuesta:</label>
+						<label class="col-form-label" for="opcion">Respuesta Correcta:</label>
 						<input type="text" class="form-control" name="opcion" placeholder="Inserte el texto de la Respuesta" id="opcion">
 					</div>
 
+					<div class="form-group" id="incorrecta">
+						<label class="col-form-label" for="opcionincorrecta">Respuesta Incorrecta:</label>
+						<input type="text" class="form-control" name="opcionincorrecta" placeholder="Inserte el texto de la Respuesta" id="opcionincorrecta">
+						<button id="cancelar-incorrecta" class="btn btn-link float-right p-0">Cancelar</button>
+					</div>
+
+					<div class="form-group text-right">
+						<button id="btn-incorrecta" class="btn btn-outline-dark">Agregar Respuesta Incorrecta</button>
+					</div>
+				</div>
+
+				<div class="alert alert-danger m-3" id="alerta">
+					<ul id="ul-alert">
+					</ul>
+				</div>
+
+				<div class="modal-footer">
 					{{ csrf_field() }}
-
-					<button type="submit" class="btn btn-primary">Guardar Cambios</button>
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-
-				</form>
-			</div>
+					<button type="submit" id="btn-crear" class="btn btn-primary">Agregar Pregunta</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>				
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
@@ -96,15 +132,15 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">
-
-				<form action="{{ route('editar-pregunta-grupo',$grupo->id)}}" method="POST">
-
+			<form action="{{ route('editar-pregunta-grupo',$grupo->id)}}" method="POST">
+				<div class="modal-body">
 					<div class="form-group" style="display:none;">
 						<label class="col-form-label" for="idPregunta">Pregunta ID:</label>
 						<input type="text" class="form-control" name="idPregunta" placeholder="ID de Pregunta" id="idPregunta">
 						<label class="col-form-label" for="idOpcion">Opcion ID:</label>
 						<input type="text" class="form-control" name="idOpcion" placeholder="ID de Pregunta" id="idOpcion">
+						<label class="col-form-label" for="idOpcionIncorrecta">Opcion ID:</label>
+						<input type="text" class="form-control" name="idOpcionIncorrecta" placeholder="ID de Pregunta" id="idOpcionIncorrecta">
 					</div>
 
 					<div class="form-group">
@@ -115,14 +151,28 @@
 						<label class="col-form-label" for="opcion">Respuesta:</label>
 						<input type="text" class="form-control" name="opcion" placeholder="Inserte el texto de la Respuesta" id="opcion">
 					</div>
+					<div class="form-group" id="incorrecta-edit">
+						<label class="col-form-label" for="opcionincorrectaedit">Respuesta Incorrecta:</label>
+						<input type="text" class="form-control" name="opcionincorrectaedit" placeholder="Inserte el texto de la Respuesta" id="opcionincorrectaedit">
+						<button id="eliminar-incorrecta-edit" class="btn btn-link float-right p-0">Eliminar</button>
+					</div>
 
+					<div class="form-group text-right">
+						<button id="btn-incorrecta-edit" class="btn btn-outline-dark">Agregar Respuesta Incorrecta</button>
+					</div>
+				</div>
+
+				<div class="alert alert-danger mx-2" id="alerta-edit">
+					<ul id="ul-alert-edit">
+					</ul>
+				</div>
+
+				<div class="modal-footer">
 					{{ csrf_field() }}
-
-					<button type="submit" class="btn btn-primary">Guardar Cambios</button>
+					<button type="submit" id="btn-guardar" class="btn btn-primary">Guardar Cambios</button>
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
@@ -165,40 +215,5 @@
 @endsection
 
 @section('js')
-
-	<script>
-
-        $('#editModal').on('show.bs.modal', function(event){
-
-            var link = $(event.relatedTarget)
-
-            var idPregunta = link.data('id-pregunta')
-            var idOpcion = link.data('id-opcion')
-            var opcion = link.data('opcion')
-            var pregunta = link.data('pregunta')
-            
-            var modal = $(this)
-
-            modal.find('.modal-body #idPregunta').val(idPregunta)
-            modal.find('.modal-body #idOpcion').val(idOpcion)
-            modal.find('.modal-body #pregunta').val(pregunta)
-            modal.find('.modal-body #opcion').val(opcion)
-
-        })
-
-        $('#deleteModal').on('show.bs.modal', function(event){
-
-            var link = $(event.relatedTarget)
-
-            var idPregunta = link.data('id-pregunta')
-            var idOpcion = link.data('id-opcion')
-            
-            var modal = $(this)
-
-            modal.find('.modal-footer #idPregunta').val(idPregunta)
-            modal.find('.modal-footer #idOpcion').val(idOpcion)
-
-        })
-
-    </script>
+	<script src="{{asset('js/opcion/opcionGrupo.js')}}"></script>
 @endsection
