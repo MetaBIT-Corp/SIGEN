@@ -86,7 +86,7 @@
                 </tr>
               </tfoot>
               <tbody>
-                @if($evaluaciones)
+                
                  @foreach($evaluaciones as $evaluacion)
                 <tr>
                  
@@ -126,7 +126,7 @@
                   
                 </tr>
                 @endforeach
-                @endif
+                
               </tbody>
             </table>
           </div>
@@ -134,7 +134,6 @@
            
 		<!--Estudiante-->
    @if(auth()->user()->role==2)
-    @if($evaluaciones)
   		<div class="list-group">
         @forelse($evaluaciones as $evaluacion)
           @if($evaluacion->turnos)
@@ -156,8 +155,19 @@
                       <small class="text-muted">Intentos: {{$evaluacion->intentos}}.</small>
                       <br>
                       <small>Disponible desde: {{$turno->fecha_inicio_turno}} hasta: {{$turno->fecha_final_turno}} </small>
-                      <br>
-                      <button type="button" class="btn btn-info mt-1" data-acceder-evaluacion="{{ $turno->id }}" data-descripcion-evaluacion="{{ $evaluacion->descripcion_evaluacion }}">Acceder</button>
+                      <br><br>
+                      @if($evaluacion->CantIntentos > 0)
+                      
+                        <div class="alert alert-primary" style="background: #f5efee">
+                            <button type="button" class="btn btn-info mt-1 mr-3" data-acceder-evaluacion="{{ $turno->id }}" data-descripcion-evaluacion="{{ $evaluacion->descripcion_evaluacion }}" >Acceder</button>
+                        </div>
+                      @else
+                      <div class="alert alert-danger" style="background: #f5efee">
+                            <button type="button" class="btn btn-info mt-1 mr-3" data-acceder-evaluacion="{{ $turno->id }}" data-descripcion-evaluacion="{{ $evaluacion->descripcion_evaluacion }}" disabled="true">Acceder</button>
+                            <a class="alert-link" style="color: #da4727;font-size: 13px">Ha realizado todos sus intentos!</a>
+                      </div>
+                        
+                      @endif
               		  </span>
                   </div>
                 @endif
@@ -176,7 +186,7 @@
         @endforelse
   		</div>
     @endif
-  @endif
+  
 		<!--Estudiante-->
 
         </div>
