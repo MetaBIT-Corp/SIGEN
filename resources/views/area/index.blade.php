@@ -10,11 +10,17 @@
 @section("ol_breadcrumb")
     <div class="col-9 mt-2">
         <a class="mr-2" href="{{ route('materias') }}">
+            
             Materias
+           
         </a>
         /
-        <a class="ml-2 mr-2" href="#">
+        <a class="ml-2 mr-2">
+            @if($encuesta==true)
+            Encuestas
+            @else
             {{ $materia->nombre_mar }}
+            @endif
         </a>
         /
         Áreas

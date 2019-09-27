@@ -17,8 +17,23 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class IntentoController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        
+    }
+
     public function iniciarEvaluacion($id_turno, Request $request)
     {
+        //Se obtiene el estudiante logueado para recuperar sus preguntas
+        $id_user = auth()->user()->id;
+        $id_est=Estudiante::where('user_id',$id_user)->first()->id_est;
+
         //Recuperar el turno
         $turno = Turno::find($id_turno);
 
@@ -36,16 +51,28 @@ class IntentoController extends Controller
         //$clave_de_intento=$claves[rand(0,count($claves)-1)];
         $clave_de_intento = $claves[0];
 
-        //Inicializar el intento y asignar clave aleatoriamente de las que pertenecen al turno
+        //Verificamos si es el primer intento que realiza
+        $intento=Intento::where('estudiante_id',$id_est)->get();
 
-
-        //Se obtiene el estudiante logueado para recuperar sus preguntas
-        $id_user = auth()->user()->id;
-        $id_est=Estudiante::where('user_id',$id_user)->first()->id_est;
-
+        //Inicializar el intento y asignar clave a la que pertenece el turno
+        $num_intento=1;
+        if($intento->count()==0){
+            $intento=new Intento();
+            $intento->estudiante_id=$id_est;
+            $intento->clave_id=$clave_de_intento->id;
+            $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+            $intento->numero_intento=1;
+            $intento->save();
+        }else{
+            $num_intento=$intento->numero_intento;
+            $intento->numero_intento=$num_intento+1;
+            $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+            $intento->save();
+        }
+        
         //Obtener las preguntas segun la clave asignada aleatoriamente
         //Se envia el tipo 0 para evaluaciones
-        $preguntas = $this->obtenerPreguntas($clave_de_intento,0,$id_est);
+        $preguntas = $this->obtenerPreguntas($clave_de_intento,0,$id_est,$num_intento+1);
 
         //Variable que contiene el array a mostrar en la paginacion
         $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
@@ -56,8 +83,19 @@ class IntentoController extends Controller
 
     public function iniciarEncuesta($id_clave, Request $request)
     {
+        //Se obtiene el id de la persona logueada
+        $id_user = auth()->user()->id;
+
         //Se obtiene el objeto clave para poder extraer las preguntas de la encuesta
         $clave_de_intento = Clave::find($id_clave);
+
+        //Se inicializa el intento
+        $intento=new Intento();
+        $intento->encuestado=$id_user;
+        $intento->clave_id=$clave_de_intento->id;
+        $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $intento->numero_intento=1;
+        $intento->save();
 
         //Se obtienen las preguntas segun la clave
         //Se envia el tipo=1 para encuestas
@@ -67,7 +105,6 @@ class IntentoController extends Controller
         //Falta definir si se paginaran las encuestas OJO
         $paginacion = $this->paginacion($request, 10, $preguntas);
 
-        //dd($paginacion);
         return view('intento.intento', compact('paginacion'));
     }
 
@@ -79,7 +116,7 @@ class IntentoController extends Controller
      * @param int ID del estudiante logueado
      * @return Array Compuesto por el id del tipo de item,pregunta y sus opciones.
      */
-    private function obtenerPreguntas($clave,$tipo, $estudiante=null)
+    private function obtenerPreguntas($clave,$tipo, $estudiante=null,$num_intento=null)
     {
         //Recupera en un array las areas que conforman la clave (Registros de la relacion entre clave y area)
         $claves_areas = $clave->clave_areas;
@@ -89,7 +126,8 @@ class IntentoController extends Controller
          */
         if($tipo==0){
             foreach ($claves_areas as $clave_area) {
-                $claves_areas_preguntas[$clave_area->area->tipo_item->id] = $clave_area->claves_areas_preguntas_estudiante()->where('estudiante_id',$estudiante)->get();
+                $claves_areas_preguntas[$clave_area->area->tipo_item->id] = $clave_area->claves_areas_preguntas_estudiante()->where('estudiante_id',$estudiante)
+                    ->where('numero_intento',$num_intento)->get();
             }
         }else{
             foreach ($claves_areas as $clave_area) {

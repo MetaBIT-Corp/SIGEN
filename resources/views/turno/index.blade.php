@@ -60,8 +60,8 @@
                                 <td><input type="checkbox" @if($turno->visibilidad) checked @endif disabled></td>
                                 <td>
                                     @if($turno->acciones)
-                                      <a id="btn_editar" class="btn btn-sm bg-success" title="Duplicar Turno" href="{{ URL::signedRoute('duplicar', ['id' => $evaluacion_id, 'turno_id' =>$turno->id ]) }}">
-                                           <span class="icon-paste"></span>
+                                      <a  class="btn btn-sm btn-secondary" title="Duplicar Turno" href="{{ URL::signedRoute('duplicar', ['id' => $evaluacion_id, 'turno_id' =>$turno->id ]) }}">
+                                           <span class="icon-copy"></span>
                                        </a>
                                        <a id="btn_editar" class="btn btn-sm" title="Editar" href="{{ URL::signedRoute('editar_turno', ['id' => $evaluacion_id, 'turno_id' =>$turno->id ]) }}">
                                            <span class="icon-edit"></span>

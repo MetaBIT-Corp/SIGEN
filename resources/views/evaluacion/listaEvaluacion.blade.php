@@ -151,9 +151,11 @@
               		      <small class="text-muted">Intentos diponibles: {{$evaluacion->CantIntentos}}</small>
               		    </div>
               		    <!--<p class="mb-1">{{$evaluacion->descripcion_evaluacion}}</p>-->
-              		    <small class="text-muted">Duración: {{$evaluacion->duracion}}.</small>
+              		    <small class="text-muted">Duración: {{$evaluacion->duracion}} minutos.</small>
                       <br>
                       <small class="text-muted">Intentos: {{$evaluacion->intentos}}.</small>
+                      <br>
+                      <small>Disponible desde: {{$turno->fecha_inicio_turno}} hasta: {{$turno->fecha_final_turno}} </small>
                       <br>
                       <button type="button" class="btn btn-info mt-1" data-acceder-evaluacion="{{ $turno->id }}" data-descripcion-evaluacion="{{ $evaluacion->descripcion_evaluacion }}">Acceder</button>
               		  </span>

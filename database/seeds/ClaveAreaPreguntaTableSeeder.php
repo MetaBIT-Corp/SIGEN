@@ -49,27 +49,32 @@ class ClaveAreaPreguntaTableSeeder extends Seeder
         Clave_Area_Pregunta_Estudiante::create([
             'estudiante_id'=>1,
             'clave_area_id'=>1,
-            'pregunta_id'=>2
+            'pregunta_id'=>2,
+            'numero_intento'=>2
         ]);
         Clave_Area_Pregunta_Estudiante::create([
             'estudiante_id'=>1,
             'clave_area_id'=>1,
-            'pregunta_id'=>8
+            'pregunta_id'=>8,
+            'numero_intento'=>2
         ]);
         Clave_Area_Pregunta_Estudiante::create([
             'estudiante_id'=>1,
             'clave_area_id'=>2,
-            'pregunta_id'=>1
+            'pregunta_id'=>1,
+            'numero_intento'=>2
         ]);
         Clave_Area_Pregunta_Estudiante::create([
             'estudiante_id'=>1,
             'clave_area_id'=>3,
-            'pregunta_id'=>7
+            'pregunta_id'=>7,
+            'numero_intento'=>2
         ]);
         Clave_Area_Pregunta_Estudiante::create([
             'estudiante_id'=>1,
             'clave_area_id'=>2,
-            'pregunta_id'=>3
+            'pregunta_id'=>3,
+            'numero_intento'=>2
         ]);
 
 

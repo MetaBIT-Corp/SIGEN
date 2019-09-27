@@ -113,6 +113,8 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::resource('materia/{id}/areas','AreaController'
     )->except(['create']);
 
+    Route::get('areas/encuestas', 'AreaController@indexEncuesta')->name('areas_encuestas');
+
     
     //URL's para Pregunta
     Route::resource('/area/{id}/pregunta','PreguntaController')->except(['update']);
