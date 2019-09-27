@@ -339,7 +339,11 @@ class IntentoController extends Controller
         $id_user = auth()->user()->id;
         $id_est=Estudiante::where('user_id',$id_user)->first()->id_est;
         //Obtenemos el intento el cual se esta realizando
-        $intento = Intento::find(1);
+        $intento = Intento::where('estudiante_id',$id_est)->where('fecha_final_intento', null)->first();
+
+        //Si no hay ningún intento sin finalizar terminamos el proceso
+        if(! $intento)
+            return;
         
         //Obtenemos la variable respuestas pasada como param en metodo get, esta cadena posee este formato:
         //pregunta_##=opcion_##/pregunta_##=opcion_##, en donde ## denota el identificador de cada objeto
