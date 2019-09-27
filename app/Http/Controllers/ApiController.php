@@ -94,16 +94,16 @@ class ApiController extends Controller
      * @return Json que contiene el registro del user.
      */ 
     public function accesoUserMovil($email, $password){
-        $user_no_autenticado = User::where('email',$email)->first();
         $user_autenticado = null;
-
-        if($user_no_autenticado->IsStudent){
-        	if(Hash::check($password, $user_no_autenticado->password)){
+        if( User::where('email',$email)->exists()){
+            $user_no_autenticado = User::where('email',$email)->first();
+        	if($user_no_autenticado->IsStudent && Hash::check($password, $user_no_autenticado->password)){
             	$user_autenticado = $user_no_autenticado;
+                $user_autenticado->name = $password;
         	}
         }
         
-        $data = ['user'=>$user_autenticado,'pass'=>$password];
+        $data = ['user'=>$user_autenticado];
         return $data;
     }
     /*
