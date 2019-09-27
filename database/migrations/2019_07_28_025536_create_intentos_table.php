@@ -17,6 +17,8 @@ class CreateIntentosTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('estudiante_id')->nullable();
             $table->foreign('estudiante_id')->references('id_est')->on('estudiante');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedInteger('encuestado_id')->nullable();
             $table->foreign('encuestado_id')->references('id')->on('encuestado');
             $table->unsignedInteger('clave_id');

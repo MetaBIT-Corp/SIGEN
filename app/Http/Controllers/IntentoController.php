@@ -41,8 +41,7 @@ class IntentoController extends Controller
         $evaluacion = $turno->evaluacion;
 
         //Recuperamos la cantidad de preguntas a mostrar en la paginacion
-        //$preg_per_page = $evaluacion->preguntas_a_mostrar;
-        $preg_per_page = 2;
+        $preg_per_page = $evaluacion->preguntas_a_mostrar;
 
         //Recuperar las claves del turno
         $claves = $turno->claves;
@@ -51,32 +50,12 @@ class IntentoController extends Controller
         //$clave_de_intento=$claves[rand(0,count($claves)-1)];
         $clave_de_intento = $claves[0];
 
-        //Verificamos si es el primer intento que realiza
-        $intento=Intento::where('estudiante_id',$id_est)->first();
-
-        //Inicializar el intento y asignar clave a la que pertenece el turno
-        $num_intento=1;
-        if($intento==null){
-            $intento=new Intento();
-            $intento->estudiante_id=$id_est;
-            $intento->clave_id=$clave_de_intento->id;
-            $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-            $intento->fecha_final_intento=null;
-            $intento->numero_intento=$num_intento;
-            $intento->save();
-        }else{
-            if($intento->fecha_final_intento!=null){
-                $num_intento=$intento->numero_intento;
-                $intento->numero_intento=$num_intento+1;
-                $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-                $intento->fecha_final_intento=null;
-                $intento->save();
-            }
-        }
+        //Verificamos el intento que se realizara o esta realizando
+        $intento=$this->verificarIntento(0,$id_user,$clave_de_intento,$id_est);
         
         //Obtener las preguntas segun la clave asignada aleatoriamente
         //Se envia el tipo 0 para evaluaciones
-        $preguntas = $this->obtenerPreguntas($clave_de_intento,0,$id_est,$num_intento+1);
+        $preguntas = $this->obtenerPreguntas($clave_de_intento,0,$id_est,$intento->numero_intento);
 
         //Variable que contiene el array a mostrar en la paginacion
         $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
@@ -93,13 +72,8 @@ class IntentoController extends Controller
         //Se obtiene el objeto clave para poder extraer las preguntas de la encuesta
         $clave_de_intento = Clave::find($id_clave);
 
-        //Se inicializa el intento
-        $intento=new Intento();
-        $intento->encuestado=$id_user;
-        $intento->clave_id=$clave_de_intento->id;
-        $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-        $intento->numero_intento=1;
-        $intento->save();
+        //Verificamos el intento que se realizara o esta realizando
+        $intento=$this->verificarIntento(1,$id_user,$clave_de_intento);
 
         //Se obtienen las preguntas segun la clave
         //Se envia el tipo=1 para encuestas
@@ -110,6 +84,50 @@ class IntentoController extends Controller
         $paginacion = $this->paginacion($request, 10, $preguntas);
 
         return view('intento.intento', compact('paginacion'));
+    }
+
+    /**
+     * Funcion privada encargada de verificar el intento, que numero de intento es y si se esta realizando actualmente.
+     * @param int $tipo_intento 0 si es de evaluacion y 1 si el intento es de encuesta
+     * @param int $id_user
+     * @param Clave $clave_de_intento
+     * @param int $id_est
+     * @author Ricardo Estupinian
+     */
+    private function verificarIntento($tipo_intento,$id_user,$clave_de_intento,$id_est=null){
+        if($tipo_intento==0){
+            //Verificamos si es el primer intento que realiza
+            $intento=Intento::where('estudiante_id',$id_est)->where('clave_id',$clave_de_intento->id)->first();
+        }else{
+            //Se verifica si hay intento asociado con el usuario y clave especifica
+            $intento=Intento::where('user_id',$id_user)->where('clave_id',$clave_de_intento->id)->first();
+        }
+        
+        //Inicializar el intento y asignar clave a la que pertenece el turno
+        $num_intento=1;
+        if($intento==null){
+            $intento=new Intento();
+            if($tipo_intento==0){
+                $intento->estudiante_id=$id_est;
+            }else{
+                $intento->user_id=$id_user;
+            }
+            $intento->clave_id=$clave_de_intento->id;
+            $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+            $intento->fecha_final_intento=null;
+            $intento->numero_intento=$num_intento;
+            $intento->save();
+        }else{
+            //Se modifica el intento existente con la nueva fecha del nuevo intento
+            if($intento->fecha_final_intento!=null){
+                $num_intento=$intento->numero_intento;
+                $intento->numero_intento=$num_intento+1;
+                $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+                $intento->fecha_final_intento=null;
+                $intento->save();
+            }
+        }
+        return $intento;
     }
 
     /**
@@ -182,7 +200,6 @@ class IntentoController extends Controller
                             //Establecemos a que si esta SELECCIONADA
                             if($opcion->id == $respuesta[0]->id_opcion)
                                 $opcion['seleccionada'] = true;
-
                         }
                     }
                     $pregunta = $claves_areas_preguntas[$i][$j]->pregunta;
