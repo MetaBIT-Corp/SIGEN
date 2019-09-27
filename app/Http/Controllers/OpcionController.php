@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Response;
+
 use App\Area;
 use App\Grupo_Emparejamiento;
 use App\Pregunta;
 use App\Opcion;
-
-use Illuminate\Support\Facades\Validator;
 
 class OpcionController extends Controller
 {
@@ -104,6 +106,11 @@ class OpcionController extends Controller
         *opcion que se quiera crear.
         */
 
+        $requestData = $request->all();
+
+        $rules = [];
+        $messages = [];
+
         /*Obteniendo la pregunta a la que se le agregará la opción (A partir del Request).*/
         $pregunta = Pregunta::where("id",$request->pregunta_id)->first();
         /*Obteniendo el Grupo Emparejamiento al que pertenece la pregunta (A partir de la pregunta).*/
@@ -129,7 +136,26 @@ class OpcionController extends Controller
                 $pregunta_id = $request->pregunta_id;
 
                 for ($i=0; $i < $indice ; $i++) {
-                    $this->validate($request,['contador'=>'required|numeric|gte:3','opcion'.$i=>'required']);
+
+                    $new_rules = array(
+                        'contador'=>'required|numeric|gte:3',
+                        'opcion'.$i=>'required');
+
+                    $new_messages = array(
+                        'opcion'.$i.'.required' => 'Texto de Opción no fue ingresado.',
+                        'contador.gte'=>'Cantidad de Opciones ingresadas muy baja. Debe ingresar tres opciones como mínimo.'
+
+                    );
+
+                    $rules=array_merge($rules, $new_rules);
+                    $messages=array_merge($messages,$new_messages);
+
+                }
+
+                $validator = Validator::make($requestData, $rules, $messages);
+
+                if ($validator->fails()) {
+                    return back()->withErrors($validator)->withInput();
                 }
 
                 for ($i=0; $i < $indice ; $i++) {

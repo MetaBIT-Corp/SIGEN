@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Response;
+
 use App\Area;
 use App\Grupo_Emparejamiento;
 use App\Pregunta;
@@ -25,13 +29,21 @@ class GrupoEmparejamientoController extends Controller
 
         foreach ($preguntas as $pregunta) {
 
-            $opciones[$indice] = Opcion::where("pregunta_id",$pregunta->id)->first();
+            $opciones[$indice] = Opcion::where('pregunta_id',$pregunta->id)->where('correcta',1)->first();
+
+            $opciones_incorrectas[$indice] = Opcion::where('pregunta_id',$pregunta->id)->where('correcta',0)->first();
 
             $indice++;
 
         }
 
-        return view('grupo.index',['grupo'=>$grupo,'preguntas'=>$preguntas,'opciones'=>$opciones]);
+        // dd($opciones_incorrectas);
+
+        if(isset($opciones)){
+            return view('grupo.index',['grupo'=>$grupo,'preguntas'=>$preguntas,'opciones'=>$opciones,'opciones_incorrectas'=>$opciones_incorrectas]);
+        }else{
+            return view('grupo.index',['grupo'=>$grupo]);
+        }
 
     }
 
@@ -55,20 +67,54 @@ class GrupoEmparejamientoController extends Controller
     {
         $pregunta = new Pregunta;
 
-        $pregunta->pregunta = $request->pregunta;
-        $pregunta->grupo_emparejamiento_id = $request->idGrupo;
+        $request_data = $request->all();
 
-        $pregunta->save();
+        $rules = [
+            'pregunta'=> 'required',
+            'opcion' => 'required'
+        ];
 
-        $opcion = new Opcion;
+        $messages = [
 
-        $opcion->pregunta_id = $pregunta->id;
-        $opcion->opcion = $request->opcion;
-        $opcion->correcta = 1;
+            'pregunta.required' => 'Pregunta no ingresada.',
+            'opcion.required' => 'Respuesta no ingresada.'
+        ];
 
-        $opcion->save();
+        $validator = Validator::make($request_data, $rules, $messages);
 
-        return back();
+        if ($validator->fails()) {
+            return response::json(array('errors'=>$validator->getMessageBag()->toarray()));
+        }else{
+
+            $pregunta->pregunta = $request->pregunta;
+            $pregunta->grupo_emparejamiento_id = $request->idGrupo;
+
+            $pregunta->save();
+
+            $opcion = new Opcion;
+
+            $opcion->pregunta_id = $pregunta->id;
+            $opcion->opcion = $request->opcion;
+            $opcion->correcta = 1;
+
+            $opcion->save();
+
+            if($request->opcionincorrecta!=""){
+
+                $opcion_incorrecta = new Opcion;
+
+                $opcion_incorrecta->pregunta_id = $pregunta->id;
+                $opcion_incorrecta->opcion = $request->opcionincorrecta;
+                $opcion_incorrecta->correcta = 0;
+                $opcion_incorrecta->save();
+
+                return response()->json(['pregunta'=>$pregunta, 'opcion'=>$opcion, 'opcion_incorrecta'=>$opcion_incorrecta]);
+
+            }else{
+                return response()->json(['pregunta'=>$pregunta, 'opcion'=>$opcion]);
+            }
+
+        }
     }
 
     /**
@@ -102,9 +148,52 @@ class GrupoEmparejamientoController extends Controller
      */
     public function update(Request $request)
     {
-        $pregunta = Pregunta::where('id',$request->idPregunta)->update(['pregunta'=>$request->pregunta]);
-        $opcion = Opcion::where('id',$request->idOpcion)->update(['opcion'=>$request->opcion]);
-        return back();
+
+        $request_data = $request->all();
+
+        $rules = [
+            'pregunta'=> 'required',
+            'opcion' => 'required'
+        ];
+
+        $messages = [
+
+            'pregunta.required' => 'Pregunta no ingresada.',
+            'opcion.required' => 'Respuesta no ingresada.'
+        ];
+
+        $validator = Validator::make($request_data, $rules, $messages);
+
+        if ($validator->fails()) {
+            return response::json(array('errors'=>$validator->getMessageBag()->toarray()));
+        }else{
+
+            $pregunta = Pregunta::where('id',$request->idPregunta)->update(['pregunta'=>$request->pregunta]);
+            $opcion = Opcion::where('id',$request->idOpcion)->update(['opcion'=>$request->opcion]);
+
+            if($request->opcionincorrectaedit==null){
+                Opcion::where('pregunta_id',$request->idPregunta)->where('correcta',0)->delete();
+            }else{
+                $count = Opcion::where('pregunta_id',$request->idPregunta)->where('correcta',0)->count();
+                if($count!=0){
+                    //Update
+                    Opcion::where('pregunta_id',$request->idPregunta)->where('correcta',0)->update(['opcion'=>$request->opcionincorrecta]);
+                }else{
+                    //Create
+                    $opcion_incorrecta = new Opcion;
+
+                    $opcion_incorrecta->pregunta_id = $request->idPregunta;
+                    $opcion_incorrecta->opcion = $request->opcionincorrectaedit;
+                    $opcion_incorrecta->correcta = 0;
+
+                    $opcion_incorrecta->save();
+
+                    return response()->json(['pregunta'=>$pregunta, 'opcion'=>$opcion, 'opcion_incorrecta'=>$opcion_incorrecta]);
+                }
+            }
+
+            return response()->json(['pregunta'=>$pregunta, 'opcion'=>$opcion]);
+        }
     }
 
     /**
@@ -115,13 +204,8 @@ class GrupoEmparejamientoController extends Controller
      */
     public function destroy(Request $request)
     {
-        $opcion=Opcion::find($request->idOpcion);
-        $opcion->delete();
-
-        $pregunta=Pregunta::find($request->idPregunta);
-        $pregunta->delete();
-
+        Opcion::where('pregunta_id',$request->idPregunta)->delete();
+        Pregunta::find($request->idPregunta)->delete();
         return back();
-
     }
 }

@@ -21,7 +21,7 @@ $(document).ready(function(){
 
 			if (!(datos.errors)){						/*SIN ERRORES HACEMOS LO QUE SIGUE A CONTINUACIÓN*/
 				btnAsignar.attr("disabled", true);		/*Desabilitamos el botón para no hacer multiples envios*/
-				// location.reload(true);					/*Recargamos la página web*/
+				location.reload(true);					/*Recargamos la página web*/
 			}else{										/*Y CON ERRORES LO QUE SIGUE A CONTINUACIÓN*/
 				
 				alerta.show();				/*Mostramos el div de alerta*/
