@@ -21,10 +21,17 @@ Route::post('/respuesta/{id}','AreaController@respuesta');
 Route::get('/evaluacion/{id}/duracion/','ApiController@getDuracionEvaluacion');
 
 //Obtener evaluación
+<<<<<<< HEAD
 Route::get('/evaluacion/turno/{turno_id}/obtener/{estudiante_id}','ApiController@getEvaluacion');
 Route::get('/encuesta/{encuesta_id}/{mac}','ApiController@getEncuesta');
 Route::get('/evaluaciones_m/turnos_m/{id_carga}','EvaluacionController@evaluacionTurnosDisponibles');
 Route::get('/user/acceso/{email}/{password}','EvaluacionController@accesoUserMovil');
+=======
+Route::get('/evaluacion/turno/{turno_id}/obtener/{estudiante_id}','TurnoController@getEvaluacion');
+Route::get('/encuesta/{encuesta_id}/{mac}','TurnoController@getEncuesta');
+Route::get('/evaluaciones_m/turnos_m/{id_carga}','ApiController@evaluacionTurnosDisponibles');
+Route::get('/user/acceso/{email}/{password}','ApiController@accesoUserMovil');
+>>>>>>> f3ece666dc0dd3a21ab0827c0f5a218fecaf9ac9
 
 //Clave
 Route::get('/area/{id}/preguntas', 'ClaveController@preguntasPorArea');

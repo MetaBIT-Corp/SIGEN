@@ -1,5 +1,13 @@
 $(document).ready(function() {
 
+    $('#enviar').attr('disabled',true)
+
+    if($('#contador').value<=3){
+        $('#sugerencia').attr('disabled',false)
+    }else{
+        $('#sugerencia').attr('disabled',true)
+    }
+
     $('#editModal').on('show.bs.modal', function(event){
 
         var link = $(event.relatedTarget)
@@ -43,8 +51,9 @@ $(document).ready(function() {
         if (contador<=3) {
 
             for (i = 0; i < btnDel.length; i++) {
-                btnDel[i].style.color = "grey";
+                btnDel[i].style.color = "white";
                 btnDel[i].style.pointerEvents = "none";
+                btnDel[i].style.background = "grey";
             }
 
         } else{
@@ -52,7 +61,7 @@ $(document).ready(function() {
             document.getElementById("infoP").style.display="none";
 
             for (i = 0; i < btnDel.length; i++) {
-                btnDel[i].style.color = "rgb(200,10,50)";
+                btnDel[i].style.color = "white";
             }
 
         }
@@ -95,6 +104,10 @@ $(document).ready(function() {
 
         inputI.setAttribute('value',indice);
         contador.setAttribute('value',fila.rowIndex-2);
+
+        if (contador.value>=3) {
+            $('#enviar').attr('disabled',false)
+        }
 
     });
     

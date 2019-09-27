@@ -62,4 +62,5 @@ class Clave_Area extends Model
         else
             return count($this->claves_areas_preguntas);
     }
+
 }

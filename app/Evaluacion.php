@@ -25,9 +25,9 @@ class Evaluacion extends Model
     }
 
      /**
-     * Metodo para obtener la cantidad de intentos obtenidos en una evaluacion.
+     * Metodo para obtener la cantidad de intentos que le faltan al estudiante en una evaluacion.
      * @author Edwin Palacios
-     * @return int cantidad de intentos
+     * @return int cantidad de intentos que le faltan
      */
     public function getCantIntentosAttribute(){
         $intento_realizados =0;

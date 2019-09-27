@@ -8,8 +8,8 @@ class Clave_Area_Pregunta_Estudiante extends Model
 {
 	protected $table='clave_area_pregunta_estudiantes';
     
-    protected $fillable = [
-        'clave_area_id','pregunta_id',
+    protected $fillable = [ 'estudiante_id',
+        'clave_area_id','pregunta_id', 'numero_intento'
     ];
     
     /**
