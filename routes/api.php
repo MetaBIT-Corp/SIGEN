@@ -35,7 +35,7 @@ Route::get('/clave-area/{id_clave_area}/validar-peso', 'ClaveController@validarP
 
 
 //Turno
-Route::get('/evaluacion/{id}/turnos', 'TurnoController@turnosPorEvaluacion');
+Route::get('/evaluacion/{id}/turnos', 'ApiController@turnosPorEvaluacion');
 
 
 //Consultar encuestas desde la app móvil

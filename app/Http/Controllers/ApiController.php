@@ -37,6 +37,18 @@ class ApiController extends Controller
     }
 
     /**
+     * Funcion para cargar los turnos de una evaluacion mediante AJAX 
+     *(Utilizada para mostrar los turnos a publicar).
+     * @param int $id id de la evaluacion
+     * @author Edwin Palacios
+     */
+    public function turnosPorEvaluacion($id){
+        $turnos = Turno::where('evaluacion_id', $id)->get();
+        $data = ['turnos'=>$turnos];
+        return $data;
+    }
+
+    /**
      * Metodo que devuelve las evaluaicones y turnos disponibles (MOVIL)..
      * @author Edwin Palacios
      * @param id_carga que corresponde al id de la carga academica del estudiante
