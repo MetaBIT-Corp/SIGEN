@@ -42,7 +42,7 @@ Route::get('/evaluacion/{id}/turnos', 'ApiController@turnosPorEvaluacion');
 Route::get('/encuestas-disponibles', 'ApiController@encuestasDisponibles');
 
 //Enviar respuestas desde la app móvil
-Route::post('/finalizar-intento', 'IntentoController@finalizarIntentoMovil');
+Route::post('/finalizar-intento', 'ApiController@finalizarIntentoMovil');
 Route::get('/calcular-nota/{intento_id}', 'IntentoController@calcularNota');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
