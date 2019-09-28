@@ -32,6 +32,7 @@ Route::get('persistencia/', 'IntentoController@persistence');
 
 Route::get('intento/prueba/{id_intento}','IntentoController@iniciarEvaluacion')->name('prueba');
 Route::get('encuesta/prueba/{id_clave}','IntentoController@iniciarEncuesta')->name('prueba_encuesta');
+Route::get('intento/revision/{id_intento}','IntentoController@revisionEvaluacion')->name('revision_evaluacion');
 
 
 Route::get('/', function () {
