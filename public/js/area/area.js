@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $(function() {
         var table = $('#areas').DataTable({
+            "processing":true,
             "serverSide": true,
             "ajax": window.location.href,
             "columns": [{
