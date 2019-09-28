@@ -319,20 +319,6 @@ class TurnoController extends Controller
         Turno::find($id)->delete();
         return back();
     }
-    
-
-    /**
-     * Funcion para cargar los turnos de una evaluacion mediante AJAX 
-     *(Utilizada para mostrar los turnos a publicar).
-     * @param int $id id de la evaluacion
-     * @author Edwin Palacios
-     */
-    public function turnosPorEvaluacion($id){
-        $turnos = Turno::where('evaluacion_id', $id)->get();
-        $data = ['turnos'=>$turnos];
-        return $data;
-    }
-    
 
     /**
      * Funcion para duplicar turno y su configuracion.
