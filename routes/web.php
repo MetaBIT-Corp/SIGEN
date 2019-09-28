@@ -110,8 +110,7 @@ Route::group(['middleware' => 'teacher'], function(){
 
     //URL's para Area
     Route::get('/materia/{id}/areas/create','AreaController@create')->name('crear_area')->middleware('signed');
-    Route::resource('materia/{id}/areas','AreaController'
-    )->except(['create']);
+    Route::resource('materia/{id}/areas','AreaController')->except(['create']);
 
     Route::get('areas/encuestas', 'AreaController@indexEncuesta')->name('areas_encuestas');
 
