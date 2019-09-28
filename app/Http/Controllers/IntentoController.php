@@ -348,4 +348,20 @@ class IntentoController extends Controller
             }
         }
     }
+
+    //Funcion que es llamada cuando finaliza el intento en el móvil
+    public function finalizarIntentoWeb($intento_id){
+
+        //Obtener el objeto intento que se está realizando
+        $intento = Intento::find($intento_id);
+        
+        //Lama al método calcular nota y lo guarda en la variable $nota
+        $nota = $intento->calcularNota($request->intento_id);
+
+        //Actualizar los datos del intento correspondiente
+        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $intento->nota_intento = $nota;
+        $intento->fecha_final_intento = $fecha_hora_actual;
+        $intento->save();
+    }
 }
