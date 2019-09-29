@@ -49,4 +49,5 @@ class User extends Authenticatable
     public function getIsStudentAttribute(){ //is_student
         return $this->role == 2;
     }
+
 }

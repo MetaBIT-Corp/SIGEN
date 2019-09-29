@@ -14,6 +14,7 @@ use App\Clave_Area_Pregunta_Estudiante;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\URL;
 
 class IntentoController extends Controller
 {
@@ -41,8 +42,7 @@ class IntentoController extends Controller
         $evaluacion = $turno->evaluacion;
 
         //Recuperamos la cantidad de preguntas a mostrar en la paginacion
-        //$preg_per_page = $evaluacion->preguntas_a_mostrar;
-        $preg_per_page = 2;
+        $preg_per_page = $evaluacion->preguntas_a_mostrar;
 
         //Recuperar las claves del turno
         $claves = $turno->claves;
@@ -51,32 +51,12 @@ class IntentoController extends Controller
         //$clave_de_intento=$claves[rand(0,count($claves)-1)];
         $clave_de_intento = $claves[0];
 
-        //Verificamos si es el primer intento que realiza
-        $intento=Intento::where('estudiante_id',$id_est)->first();
-
-        //Inicializar el intento y asignar clave a la que pertenece el turno
-        $num_intento=1;
-        if($intento==null){
-            $intento=new Intento();
-            $intento->estudiante_id=$id_est;
-            $intento->clave_id=$clave_de_intento->id;
-            $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-            $intento->fecha_final_intento=null;
-            $intento->numero_intento=$num_intento;
-            $intento->save();
-        }else{
-            if($intento->fecha_final_intento!=null){
-                $num_intento=$intento->numero_intento;
-                $intento->numero_intento=$num_intento+1;
-                $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-                $intento->fecha_final_intento=null;
-                $intento->save();
-            }
-        }
+        //Verificamos el intento que se realizara o esta realizando
+        $intento=$this->verificarIntento(0,$id_user,$clave_de_intento,$id_est);
         
         //Obtener las preguntas segun la clave asignada aleatoriamente
         //Se envia el tipo 0 para evaluaciones
-        $preguntas = $this->obtenerPreguntas($clave_de_intento,0,$id_est,$num_intento+1);
+        $preguntas = $this->obtenerPreguntas($clave_de_intento,0,$id_est,$intento->numero_intento);
 
         //Variable que contiene el array a mostrar en la paginacion
         $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
@@ -93,13 +73,8 @@ class IntentoController extends Controller
         //Se obtiene el objeto clave para poder extraer las preguntas de la encuesta
         $clave_de_intento = Clave::find($id_clave);
 
-        //Se inicializa el intento
-        $intento=new Intento();
-        $intento->encuestado=$id_user;
-        $intento->clave_id=$clave_de_intento->id;
-        $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-        $intento->numero_intento=1;
-        $intento->save();
+        //Verificamos el intento que se realizara o esta realizando
+        $intento=$this->verificarIntento(1,$id_user,$clave_de_intento);
 
         //Se obtienen las preguntas segun la clave
         //Se envia el tipo=1 para encuestas
@@ -110,6 +85,50 @@ class IntentoController extends Controller
         $paginacion = $this->paginacion($request, 10, $preguntas);
 
         return view('intento.intento', compact('paginacion'));
+    }
+
+    /**
+     * Funcion privada encargada de verificar el intento, que numero de intento es y si se esta realizando actualmente.
+     * @param int $tipo_intento 0 si es de evaluacion y 1 si el intento es de encuesta
+     * @param int $id_user
+     * @param Clave $clave_de_intento
+     * @param int $id_est
+     * @author Ricardo Estupinian
+     */
+    private function verificarIntento($tipo_intento,$id_user,$clave_de_intento,$id_est=null){
+        if($tipo_intento==0){
+            //Verificamos si es el primer intento que realiza
+            $intento=Intento::where('estudiante_id',$id_est)->where('clave_id',$clave_de_intento->id)->first();
+        }else{
+            //Se verifica si hay intento asociado con el usuario y clave especifica
+            $intento=Intento::where('user_id',$id_user)->where('clave_id',$clave_de_intento->id)->first();
+        }
+        
+        //Inicializar el intento y asignar clave a la que pertenece el turno
+        $num_intento=1;
+        if($intento==null){
+            $intento=new Intento();
+            if($tipo_intento==0){
+                $intento->estudiante_id=$id_est;
+            }else{
+                $intento->user_id=$id_user;
+            }
+            $intento->clave_id=$clave_de_intento->id;
+            $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+            $intento->fecha_final_intento=null;
+            $intento->numero_intento=$num_intento;
+            $intento->save();
+        }else{
+            //Se modifica el intento existente con la nueva fecha del nuevo intento
+            if($intento->fecha_final_intento!=null){
+                $num_intento=$intento->numero_intento;
+                $intento->numero_intento=$num_intento+1;
+                $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+                $intento->fecha_final_intento=null;
+                $intento->save();
+            }
+        }
+        return $intento;
     }
 
     /**
@@ -182,7 +201,6 @@ class IntentoController extends Controller
                             //Establecemos a que si esta SELECCIONADA
                             if($opcion->id == $respuesta[0]->id_opcion)
                                 $opcion['seleccionada'] = true;
-
                         }
                     }
                     $pregunta = $claves_areas_preguntas[$i][$j]->pregunta;
@@ -252,90 +270,6 @@ class IntentoController extends Controller
         $paginacion = new LengthAwarePaginator($preg_pagina, count($array), $preg_per_page);
         $paginacion->setPath('');
         return $paginacion;
-    }
-
-    //Funcion que es llamada cuando finaliza el intento en el móvil
-    public function finalizarIntentoMovil(Request $request){
-        $respuesta = new Respuesta();
-
-        //cantidad total de preguntas que vienen desde el móvil
-        $total_preguntas = $request->total_preguntas;
-
-        //Obteniendo los valores del request y asignandolos a la tabla respuesta
-        $respuesta->id_pregunta = $request->pregunta_id;        //pregunts
-        $respuesta->id_opcion = $request->opcion_id;            //opcion
-        $respuesta->id_intento = $request->intento_id;          //intento 
-        $respuesta->texto_respuesta = $request->texto_respuesta;//texto escrito en caso sea respues corta
-
-        //Guardar el objeto respuesta
-        $respuesta->save();
-
-        //Consulta la cantidad de respuestas que ha sido guardadas del intento correspondiente
-        $num_actual = Respuesta::where('id_intento', $request->intento_id)->get();
-
-        //Verifica si todas las respuestas que venian del movil ya se guardaron en la base de datos mysql
-        if($total_preguntas == count($num_actual)){
-            //Lama al método calcular nota
-            $nota = $this->calcularNota($request->intento_id);
-
-            //Actualizar los datos del intento correspondiente
-            $intento = Intento::find($request->intento_id);
-            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-            $intento->nota_intento = $nota;
-            $intento->fecha_final_intento = $fecha_hora_actual;
-            $intento->save();
-        }
-    }
-
-    //Función para calcular la nota del intento
-    public function calcularNota($intento_id){
-        $intento = Intento::find($intento_id); //Obtener el intento
-        $estudiante_id = $intento->estudiante->id_est; //Obtener al estudiante que realizó el intento
-        $nota = 0.0;
-
-        foreach($intento->respuestas as $respuesta){
-
-            //Si la respuesta que seleccionó en la pregunta es correcta
-            if($respuesta->opcion->correcta==1){
-
-                //Obtener la pregunta a la que pertenece la respuesta
-                $pregunta_id = $respuesta->pregunta->id;
-
-                //Consulta para obtener el objeto clave_area_pregunta_estudiante al que pertenece la pregunta
-                $cape = Clave_Area_Pregunta_Estudiante::where('estudiante_id', $estudiante_id)
-                                                        ->where('pregunta_id', $pregunta_id)
-                                                        ->first();
-        
-                //Obtener la clave_aera a la que pertenece la pregunta
-                $clave_area = $cape->clave_area;
-
-                //Obtener la modalidad a la que pertecene la pregunta
-                $modalidad = $clave_area->area->tipo_item_id;
-
-                //Obtener el peso de la pregunta
-                $peso = $clave_area->peso;
-
-                //Cuenta la cantidad de preguntas que tiene el objeto clave_are
-                $cantidad_preguntas = count($clave_area->claves_areas_preguntas_estudiante);
-
-                //Verifica si la pregunta pertenece a modalidad de respuesta corta
-                if($modalidad==4){
-                    $txt_respuesta = strtolower($respuesta->texto_respuesta);
-                    $txt_opcion = strtolower($respuesta->opcion->opcion);
-                    if(strcmp($txt_respuesta, $txt_opcion) == 0){
-                        
-                        //Calcula la ponderación de la pregunta
-                        $nota += ($peso/$cantidad_preguntas)/10;
-                    }
-                }else{
-                    //Calcula la ponderación de la pregunta
-                    $nota += ($peso/$cantidad_preguntas)/10;
-                }
-            }
-        }
-
-        return $nota;
-        
     }
     
     public function persistence(){
@@ -414,5 +348,94 @@ class IntentoController extends Controller
                 }
             }
         }
+    }
+
+    //Funcion que es llamada cuando finaliza el intento en el móvil
+    public function finalizarIntentoWeb($intento_id){
+
+        //Obtener el objeto intento que se está realizando
+        $intento = Intento::find($intento_id);
+        
+        //Lama al método calcular nota y lo guarda en la variable $nota
+        $nota = $intento->calcularNota($intento_id);
+
+        //Actualizar los datos del intento correspondiente
+        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $intento->nota_intento = $nota;
+        $intento->fecha_final_intento = $fecha_hora_actual;
+        $intento->save();
+    }
+    public function revisionEvaluacion($id_intento){
+        
+        
+        $estudiante=null;
+        $intento=null;
+        $respuestas = null;
+        $paginacion = null;
+        $evaluacion = null;
+        if(auth()->check()){
+            if(auth()->user()->IsStudent){
+                $estudiante = Estudiante::where('user_id',auth()->user()->id)->first();
+                if($id_intento==0){
+                    $intento = Intento::where('estudiante_id',$estudiante->id_est)->where('fecha_final_intento', null)->first();
+                }else{
+                    $intento = Intento::find($id_intento)->first();
+                }
+                
+                
+                //metodo de calificar
+                $this->finalizarIntentoWeb($intento->id);
+                
+                
+                $respuestas = $intento->respuestas;
+                $clave = $intento->clave;
+                $turno = $clave->turno;
+                $evaluacion = $turno->evaluacion;
+                if($evaluacion->revision == 0){
+                    return redirect(URL::signedRoute('listado_evaluacion', ['id' => $evaluacion->id_carga]));
+                }
+
+                //Obtener las preguntas segun la clave asignada aleatoriamente
+                //Se envia el tipo 0 para evaluaciones
+                $preguntas = $this->obtenerPreguntas($intento->clave,0,$estudiante->id_est,$intento->numero_intento);
+
+                //Variable que contiene el array a mostrar en la paginacion
+                $paginacion = $this->paginacionRevision( 100, $preguntas);
+            }
+        }
+        return view('intento.revisionDeIntento')->with(compact('estudiante','intento','respuestas','paginacion','evaluacion'));
+    }
+
+    public function calificacionEvaluacion(){
+        $id_intento=0;
+        if(auth()->check()){
+            if(auth()->user()->IsStudent){
+                $estudiante = Estudiante::where('user_id',auth()->user()->id)->first();
+                $intento = Intento::where('estudiante_id',$estudiante->id_est)->where('fecha_final_intento', null)->first();
+                $id_intento = $intento->id;
+            }
+        }
+        return redirect(URL::signedRoute('revision_evaluacion', ['id_intento' => $id_intento]));
+    }
+
+   
+
+
+    private function paginacionRevision($preg_per_page, $array)
+    {
+        /*Calcular el desplazamiento segun la variable page, para determina que
+        parte del array debe devolverse segun la pagina*/
+        
+        $pagina_actual = 0;
+        
+        $offset_in_array = ($pagina_actual * $preg_per_page);
+
+        //Dividir el array segun la pagina en la que se encuentra
+        $preg_pagina = array_slice($array, $offset_in_array, $preg_per_page);
+
+        //Devolver las preguntas necesarias segun la paginacion
+        $paginacion = new LengthAwarePaginator($preg_pagina, count($array), $preg_per_page);
+        $paginacion->setPath('');
+        return $paginacion;
     }
 }

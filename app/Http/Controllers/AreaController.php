@@ -10,6 +10,8 @@ use App\Tipo_Item;
 use App\Area;
 use App\Docente;
 use App\Clave_Area;
+use App\CicloMateria;
+use App\CargaAcademica;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,10 +23,11 @@ class AreaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index($id_materia, Request $request)
-    {   
+    {
         if(!Materia::where('id_cat_mat',$id_materia)->first()){
-            return redirect('/');
+            return redirect('/materias');
         }
+
         $materia=Materia::where('id_cat_mat',$id_materia)->first();
 
         if($request->ajax()){

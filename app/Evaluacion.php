@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Turno;
 
 class Evaluacion extends Model
 {
@@ -32,15 +33,17 @@ class Evaluacion extends Model
     public function getCantIntentosAttribute(){
         $intento_realizados =0;
         $estudiante = Estudiante::where('user_id', auth()->user()->id)->first();
-        $turnos = $this->hasMany('App\Turno');
+        //$turnos = $this->hasMany('App\Turno');
+        $turnos = Turno::where('evaluacion_id', $this->id)->get();
         foreach ($turnos as $turno) {
                 $claves = $turno->claves;
                 foreach ($claves as $clave) {
+
                 $intento_realizados += Intento::where('clave_id',$clave->id)
                                 ->where('estudiante_id',$estudiante->id_est)
                                 ->count();
                 }
             }
-        return $this->intentos-$intento_realizados;
+        return $this->intentos - $intento_realizados;
     }
 }

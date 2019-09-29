@@ -17,8 +17,8 @@
                 <input type="button" id="next_btn" onclick="capturar_data(1)" class="page-link bg-danger text-white btn-md" rel="next" value="Siguiente"/>
             </li>
         @else
-            <li class="page-item disabled " aria-disabled="true">
-                <span class="page-link bg-danger text-white">Terminar</span>
+            <li class="page-item" aria-disabled="true">
+                <a class="page-link bg-danger text-white" href="{{route('calificar_evaluacion')}}">Terminar</a>
             </li>
         @endif
     </ul>

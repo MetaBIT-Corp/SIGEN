@@ -30,7 +30,7 @@
         
     </head>
 
-    <body id="page-top" style="background: white;">
+    <body id="page-top" style="background: white;" onload="deshabilitaRetroceso()">
         @yield("body")
 
         <nav class="navbar navbar-dark bg-dark sticky-top flex-md-nowrap p-0">
@@ -91,6 +91,7 @@
                                     </a>
                                 </li>
                                  @if(auth()->check())
+                                 @if(auth()->user()->IsTeacher)
                                 <li class="nav-item first-one">
                                     <a class="nav-link " href="
                                     {{ URL::signedRoute('listado_encuesta') }}">
@@ -106,6 +107,7 @@
                                         <span class="arrow-sidebar" data-feather="chevron-right"></span>
                                     </a>
                                 </li>
+                                @endif
                                 @endif
                             </ul>
                         </div>
