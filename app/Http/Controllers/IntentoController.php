@@ -62,7 +62,7 @@ class IntentoController extends Controller
         $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
 
         //return dd($preguntas);
-        return view('intento.intento', compact('paginacion','intento'));
+        return view('intento.intento', compact('paginacion','evaluacion','intento'));
     }
 
     public function iniciarEncuesta($id_clave, Request $request)
