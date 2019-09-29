@@ -46,9 +46,16 @@ class Turno extends Model
         $estudiante = Estudiante::where('user_id', auth()->user()->id)->first();
         $evaluacion = Evaluacion::find($this->evaluacion_id);
         $clave = Clave::where('turno_id',$this->id)->first();
+        if(Intento::where('clave_id',$clave->id)
+                        ->where('estudiante_id',$estudiante->id_est)
+                        ->exists()){
         $intento= Intento::where('clave_id',$clave->id)
                         ->where('estudiante_id',$estudiante->id_est)
                         ->first();
-        return $evaluacion->intentos - $intento->numero_intento;
+        $intento_realizados = $intento->numero_intento;
+        }
+        
+
+        return $evaluacion->intentos - $intento_realizados;
     }
 }

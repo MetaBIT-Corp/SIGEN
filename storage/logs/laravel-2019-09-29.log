@@ -5144,7 +5144,26 @@
 #59 C:\\wamp64\\www\\SIGEN\\server.php(21): require_once('C:\\\\wamp64\\\\www\\\\S...')
 #60 {main}
 "} 
+<<<<<<< HEAD
+[2019-09-29 23:43:58] local.ERROR: There are no commands defined in the "migrate:" namespace.
+
+Did you mean this?
+    migrate {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"migrate:\" namespace.
+
+Did you mean this?
+    migrate at C:\\wamp64\\www\\SIGEN\\vendor\\symfony\\console\\Application.php:589)
+[stacktrace]
+#0 C:\\wamp64\\www\\SIGEN\\vendor\\symfony\\console\\Application.php(638): Symfony\\Component\\Console\\Application->findNamespace('migrate:')
+#1 C:\\wamp64\\www\\SIGEN\\vendor\\symfony\\console\\Application.php(237): Symfony\\Component\\Console\\Application->find('migrate::refres...')
+#2 C:\\wamp64\\www\\SIGEN\\vendor\\symfony\\console\\Application.php(149): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 C:\\wamp64\\www\\SIGEN\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 C:\\wamp64\\www\\SIGEN\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(133): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#5 C:\\wamp64\\www\\SIGEN\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+=======
 >>>>>>> dd2e33b603868588a30da9bd8038d77dfcf3820e
+<<<<<<< HEAD
 [2019-09-29 16:46:45] local.ERROR: Undefined variable: preguntas {"userId":7,"exception":"[object] (ErrorException(code: 0): Undefined variable: preguntas at C:\\Users\\Carlos\\code\\sigen\\app\\Http\\Controllers\\IntentoController.php:244)
 [stacktrace]
 #0 C:\\Users\\Carlos\\code\\sigen\\app\\Http\\Controllers\\IntentoController.php(244): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Undefined varia...', 'C:\\\\Users\\\\Carlos...', 244, Array)
@@ -7189,3 +7208,6 @@
 #51 C:\\Users\\Carlos\\code\\sigen\\server.php(21): require_once('C:\\\\Users\\\\Carlos...')
 #52 {main}
 "} 
+=======
+>>>>>>> 232fc0f95c1939ea0012af47b80474fd7223bd69
+>>>>>>> 44c191f2db0367d4b7b9959f9e3cbcdec162c0b0
