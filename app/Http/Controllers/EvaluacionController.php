@@ -336,17 +336,19 @@ class EvaluacionController extends Controller
             } 
             
             $evaluacion = $turno_a_acceder->evaluacion;
-            if($evaluacion->CantIntentos <= 0){
+            if($turno_a_acceder->CantIntentos <= 0){
                 $notification = "error";
                 $message = "Error: Ya ha realizado todos los intentos";
                 return back()->with($notification,$message);
             }else{
                 //Se valida si la contraseña es valida
                 if(Hash::check($contrasenia, $turno_a_acceder->contraseña)){
+                    /*
                     return redirect()->action(
                         'IntentoController@iniciarEvaluacion', 
                         ['id_intento' => $turno_a_acceder->id]
-                    );
+                    );*/
+                    return redirect('intento/prueba/'.$turno_a_acceder->id.'?page=1');
                 }else{
                     $notification = "error";
                     $message = "Error: La contraseña no es valida";
@@ -429,7 +431,8 @@ class EvaluacionController extends Controller
         //si son manuales es 0
         if($clave_area->aleatorio==0){
             //si son de emparejamiento (item id 3) u otra modalidad, el tratamiento es el mismo si es manual
-            foreach ($clave_area->claves_areas_preguntas as $clave_area_pregunta) {
+            $clave_areas_preguntas = $clave_area->claves_areas_preguntas->shuffle();
+            foreach ($clave_areas_preguntas as $clave_area_pregunta) {
                 foreach ($estudiantes as $estudiante) {
                    for( $i=1 ; $i<=$cant_intentos ; $i++){
                         Clave_Area_Pregunta_Estudiante::create([
@@ -451,7 +454,12 @@ class EvaluacionController extends Controller
                     if($tipo_item->id != 3){
                         foreach ( $area->grupos_emparejamiento as $grupo) {
                             $preguntas_all = $grupo->preguntas;
-                            $random_preguntas = $preguntas_all->random($clave_area->numero_preguntas);
+                            if($clave_area->numero_preguntas >= $preguntas_all->count()){
+                                 $random_preguntas = $preguntas_all->shuffle();
+                            }else{
+                                $random_preguntas = $preguntas_all->random($clave_area->numero_preguntas);
+                            }
+                            
                             foreach ($random_preguntas as $pregunta) {
                                     Clave_Area_Pregunta_Estudiante::create([
                                     'estudiante_id'=>$estudiante->id_est,
@@ -467,6 +475,12 @@ class EvaluacionController extends Controller
                     //si es de emparejamiento se barajean los grupos de emparejamiento
                     else{
                         $grupos_emparejamientos = $area->grupos_emparejamiento;
+                        if($clave_area->numero_preguntas >= $grupos_emparejamientos->count()){
+                            $random_grupos_emparejamientos = $grupos_emparejamientos->shuffle();
+                        }else{
+                            $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
+                        }
+                            
                         $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
                         foreach ( $random_grupos_emparejamientos as $grupo) {
                             foreach ($grupo->preguntas as $pregunta) {

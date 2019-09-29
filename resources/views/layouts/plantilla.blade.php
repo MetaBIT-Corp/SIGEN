@@ -30,7 +30,7 @@
         
     </head>
 
-    <body id="page-top" style="background: white;">
+    <body id="page-top" style="background: white;" onload="deshabilitaRetroceso()">
         @yield("body")
 
         <nav class="navbar navbar-dark bg-dark sticky-top flex-md-nowrap p-0">

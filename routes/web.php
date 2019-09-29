@@ -29,10 +29,10 @@ Route::get('intento/', function() {
 });
     
 Route::get('persistencia/', 'IntentoController@persistence');
-
+Route::get('calificar/', 'IntentoController@calificacionEvaluacion')->name('calificar_evaluacion');
 Route::get('intento/prueba/{id_intento}','IntentoController@iniciarEvaluacion')->name('prueba');
 Route::get('encuesta/prueba/{id_clave}','IntentoController@iniciarEncuesta')->name('prueba_encuesta');
-Route::get('intento/revision/{id_intento}','IntentoController@revisionEvaluacion')->name('revision_evaluacion');
+Route::get('intento/revision/{id_intento}','IntentoController@revisionEvaluacion')->name('revision_evaluacion')->middleware('signed');
 
 
 Route::get('/', function () {

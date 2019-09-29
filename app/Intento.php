@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Clave_Area_Pregunta_Estudiante;
 use App\Intento;
+use App\Clave;
 
 class Intento extends Model
 {
@@ -23,6 +24,10 @@ class Intento extends Model
 
     public function estudiante(){
     	return $this->belongsTo(Estudiante::class, 'estudiante_id', 'id_est');
+    }
+
+    public function clave(){
+        return $this->belongsTo(Clave::class);
     }
 
 

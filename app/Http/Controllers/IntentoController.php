@@ -14,6 +14,7 @@ use App\Clave_Area_Pregunta_Estudiante;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\URL;
 
 class IntentoController extends Controller
 {
@@ -61,7 +62,7 @@ class IntentoController extends Controller
         $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
 
         //return dd($preguntas);
-        return view('intento.intento', compact('paginacion'));
+        return view('intento.intento', compact('paginacion','intento'));
     }
 
     public function iniciarEncuesta($id_clave, Request $request)
@@ -356,12 +357,85 @@ class IntentoController extends Controller
         $intento = Intento::find($intento_id);
         
         //Lama al método calcular nota y lo guarda en la variable $nota
-        $nota = $intento->calcularNota($request->intento_id);
+        $nota = $intento->calcularNota($intento_id);
 
         //Actualizar los datos del intento correspondiente
         $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
         $intento->nota_intento = $nota;
         $intento->fecha_final_intento = $fecha_hora_actual;
         $intento->save();
+    }
+    public function revisionEvaluacion($id_intento){
+        
+        
+        $estudiante=null;
+        $intento=null;
+        $respuestas = null;
+        $paginacion = null;
+        $evaluacion = null;
+        if(auth()->check()){
+            if(auth()->user()->IsStudent){
+                $estudiante = Estudiante::where('user_id',auth()->user()->id)->first();
+                if($id_intento==0){
+                    $intento = Intento::where('estudiante_id',$estudiante->id_est)->where('fecha_final_intento', null)->first();
+                }else{
+                    $intento = Intento::find($id_intento)->first();
+                }
+                
+                
+                //metodo de calificar
+                $this->finalizarIntentoWeb($intento->id);
+                
+                
+                $respuestas = $intento->respuestas;
+                $clave = $intento->clave;
+                $turno = $clave->turno;
+                $evaluacion = $turno->evaluacion;
+                if($evaluacion->revision == 0){
+                    return redirect(URL::signedRoute('listado_evaluacion', ['id' => $evaluacion->id_carga]));
+                }
+
+                //Obtener las preguntas segun la clave asignada aleatoriamente
+                //Se envia el tipo 0 para evaluaciones
+                $preguntas = $this->obtenerPreguntas($intento->clave,0,$estudiante->id_est,$intento->numero_intento);
+
+                //Variable que contiene el array a mostrar en la paginacion
+                $paginacion = $this->paginacionRevision( 100, $preguntas);
+            }
+        }
+        return view('intento.revisionDeIntento')->with(compact('estudiante','intento','respuestas','paginacion','evaluacion'));
+    }
+
+    public function calificacionEvaluacion(){
+        $id_intento=0;
+        if(auth()->check()){
+            if(auth()->user()->IsStudent){
+                $estudiante = Estudiante::where('user_id',auth()->user()->id)->first();
+                $intento = Intento::where('estudiante_id',$estudiante->id_est)->where('fecha_final_intento', null)->first();
+                $id_intento = $intento->id;
+            }
+        }
+        return redirect(URL::signedRoute('revision_evaluacion', ['id_intento' => $id_intento]));
+    }
+
+   
+
+
+    private function paginacionRevision($preg_per_page, $array)
+    {
+        /*Calcular el desplazamiento segun la variable page, para determina que
+        parte del array debe devolverse segun la pagina*/
+        
+        $pagina_actual = 0;
+        
+        $offset_in_array = ($pagina_actual * $preg_per_page);
+
+        //Dividir el array segun la pagina en la que se encuentra
+        $preg_pagina = array_slice($array, $offset_in_array, $preg_per_page);
+
+        //Devolver las preguntas necesarias segun la paginacion
+        $paginacion = new LengthAwarePaginator($preg_pagina, count($array), $preg_per_page);
+        $paginacion->setPath('');
+        return $paginacion;
     }
 }

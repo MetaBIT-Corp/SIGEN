@@ -4,6 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Evaluacion;
+use App\Estudiante;
+use App\Clave;
+use App\Intento;
 
 class Turno extends Model
 {
@@ -30,5 +34,21 @@ class Turno extends Model
      */
     public function evaluacion(){
         return $this->belongsTo('App\Evaluacion');
+    }
+
+    /**
+     * Metodo para obtener la cantidad de intentos que le faltan al estudiante en un turno.
+     * @author Edwin Palacios
+     * @return int cantidad de intentos que le faltan
+     */
+    public function getCantIntentosAttribute(){
+        $intento_realizados =0;
+        $estudiante = Estudiante::where('user_id', auth()->user()->id)->first();
+        $evaluacion = Evaluacion::find($this->evaluacion_id);
+        $clave = Clave::where('turno_id',$this->id)->first();
+        $intento= Intento::where('clave_id',$clave->id)
+                        ->where('estudiante_id',$estudiante->id_est)
+                        ->first();
+        return $evaluacion->intentos - $intento->numero_intento;
     }
 }

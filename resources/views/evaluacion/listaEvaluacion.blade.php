@@ -147,7 +147,7 @@
               		      <h5 class="mb-1">
                           {{$evaluacion->nombre_evaluacion}} | Turno {{$loop->iteration}}
                         </h5>
-              		      <small class="text-muted">Intentos diponibles: {{$evaluacion->CantIntentos}}</small>
+              		      <small class="text-muted">Intentos diponibles: {{$turno->CantIntentos}}</small>
               		    </div>
               		    <!--<p class="mb-1">{{$evaluacion->descripcion_evaluacion}}</p>-->
               		    <small class="text-muted">Duración: {{$evaluacion->duracion}} minutos.</small>
@@ -156,7 +156,7 @@
                       <br>
                       <small>Disponible desde: {{$turno->fecha_inicio_turno}} hasta: {{$turno->fecha_final_turno}} </small>
                       <br><br>
-                      @if($evaluacion->CantIntentos > 0)
+                      @if($turno->CantIntentos > 0)
                       
                         <div class="alert alert-primary" style="background: #f5efee">
                             <button type="button" class="btn btn-info mt-1 mr-3" data-acceder-evaluacion="{{ $turno->id }}" data-descripcion-evaluacion="{{ $evaluacion->descripcion_evaluacion }}" >Acceder</button>
