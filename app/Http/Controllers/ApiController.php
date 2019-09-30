@@ -41,13 +41,16 @@ class ApiController extends Controller
     public function finalizarIntentoMovil(Request $request){
         $respuesta = new Respuesta();
         $es_encuesta=$request->es_encuesta;
+        $es_respuesta_corta = $request->es_rc;
         
         //cantidad total de preguntas que vienen desde el móvil
         $total_preguntas = $request->total_preguntas;
 
         //Obteniendo los valores del request y asignandolos a la tabla respuesta
         $respuesta->id_pregunta = $request->pregunta_id;        //pregunts
-        $respuesta->id_opcion = $request->opcion_id;            //opcion
+        if($es_respuesta_corta==1){
+            $respuesta->id_opcion = $request->opcion_id;            //opcion
+        }
         $respuesta->id_intento = $request->intento_id;          //intento 
         $respuesta->texto_respuesta = $request->texto_respuesta;//texto escrito en caso sea respues corta
 
