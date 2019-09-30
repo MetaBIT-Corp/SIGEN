@@ -2,13 +2,14 @@ $(document).ready(function() {
     $(function() {
         var id_mat =$("#materia-name").data('materia');
         var url="";
+        var token =$("#materia-name").data('token');
         if(id_mat==undefined){
             id_mat=1;
             url='/areas/encuestas';
         }else{
-            url='/materia/'+id_mat+'/areas/';
+            url='/materia/'+id_mat+'/areas/post';
         }
-        var token =$("#materia-name").data('token');
+        
         var table = $('#areas').DataTable({
             "processing":true,
             "serverSide": true,
