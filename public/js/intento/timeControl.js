@@ -35,6 +35,7 @@ $(document).ready(function(){
 		if (distancia < 0) {
 			clearInterval(x)
 			document.getElementById("contador").innerHTML = "Finalizado"
+			// $(location).attr('href', '/calificar/')
 		}
 	}, 1000)
 

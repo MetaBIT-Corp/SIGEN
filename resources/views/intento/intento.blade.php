@@ -47,8 +47,6 @@
             
             </div>
 
-            <p>{{$clave_de_intento->turno_id}}</p>    
-
             <?php $aux=1; ?>
 
             <div id="paginador-pregunta">
@@ -179,7 +177,7 @@
                 </div>
                 <div class="card-footer">
                     <!--Botones de control para paginacion-->
-                    <div class="offset-10">{{ $paginacion->links('vendor.pagination.simple-bootstrap-4') }}</div>
+                    <div class="offset-9">{{ $paginacion->links('vendor.pagination.simple-bootstrap-4') }}</div>
                 </div>
             </div>
         </form>
