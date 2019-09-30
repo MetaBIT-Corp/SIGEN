@@ -34,8 +34,7 @@ $(document).ready(function(){
 		// If the count down is finished, write some text
 		if (distancia < 0) {
 			clearInterval(x)
-			document.getElementById("contador").innerHTML = "EXPIRED"
-			alert('Tiempo del intento finalizado prro >:v')
+			document.getElementById("contador").innerHTML = "Finalizado"
 		}
 	}, 1000)
 

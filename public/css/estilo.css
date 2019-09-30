@@ -109,3 +109,50 @@ footer{
     background-color: #283747;
 }
 
+#carta{
+	position:;
+	background-color: rgba(50,100,200,0.9);
+	border-radius: 10px;
+	padding:10px;
+	width: 30%;
+	margin:20px;
+}
+
+#h-carta{
+	color: rgb(255,255,255);
+	font-weight:bold;
+}
+
+.p-carta{
+	font-weight: bold;
+	color:rgb(248,248,248);
+	margin:0;
+	padding:0;
+}
+
+.in-carta{
+	color:rgb(248,248,248);
+	margin:0;
+	padding:0;
+}
+
+#paginador-pregunta{
+	padding: ;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.a-pregunta{
+	color: white;
+}
+
+.a-div{
+	text-align: center;
+	display: inline-block;
+	border: solid white;
+	margin: 5px;
+	height: 30px;
+
+	width: 40px;
+
+}
