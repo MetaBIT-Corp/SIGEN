@@ -15,25 +15,25 @@ class AreaTableSeeder extends Seeder
         //Areas de Matematica
         Area::create([
         	'id_cat_mat'=>1,
-        	'id_pdg_dcn'=>1,
+        	//'id_pdg_dcn'=>1,
         	'tipo_item_id'=>1,
         	'titulo'=>'Razones Trigonometricas'
         ]);
         Area::create([
         	'id_cat_mat'=>1,
-        	'id_pdg_dcn'=>1,
+        	//'id_pdg_dcn'=>1,
         	'tipo_item_id'=>2,
         	'titulo'=>'Resultado de ecuaciones'
         ]);
         Area::create([
         	'id_cat_mat'=>1,
-        	'id_pdg_dcn'=>1,
+        	//'id_pdg_dcn'=>1,
         	'tipo_item_id'=>3,
         	'titulo'=>'Matematicos reconocidos'
         ]);
         Area::create([
         	'id_cat_mat'=>1,
-        	'id_pdg_dcn'=>1,
+        	//'id_pdg_dcn'=>1,
         	'tipo_item_id'=>4,
         	'titulo'=>'Aritmetica'
         ]);
@@ -52,30 +52,5 @@ class AreaTableSeeder extends Seeder
             'titulo'=>'Numero de equipos'
         ]);
 
-        /*Areas de Prueba (René).789*/
-        Area::create([
-            'id_cat_mat'=>1,
-            'id_pdg_dcn'=>1,
-            'tipo_item_id'=>1,
-            'titulo'=>'Área de prueba de Opción Múltiple'
-        ]);
-        Area::create([
-            'id_cat_mat'=>1,
-            'id_pdg_dcn'=>1,
-            'tipo_item_id'=>2,
-            'titulo'=>'Área de prueba de Verdadero/Falso'
-        ]);
-        Area::create([
-            'id_cat_mat'=>1,
-            'id_pdg_dcn'=>1,
-            'tipo_item_id'=>4,
-            'titulo'=>'Área de prueba de Respuesta Corta'
-        ]);
-        Area::create([
-            'id_cat_mat'=>1,
-            'id_pdg_dcn'=>1,
-            'tipo_item_id'=>3,
-            'titulo'=>'Área de prueba de Grupo de Emparejamiento'
-        ]);
     }
 }

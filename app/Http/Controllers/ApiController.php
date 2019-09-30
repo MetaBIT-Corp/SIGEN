@@ -172,6 +172,7 @@ class ApiController extends Controller
      */
     public function getMateriasEstudiante($id_user){
         $materias=MateriaController::materiasEstudiante($id_user);
+        //dd($materias);
         return response()->Json($materias);
     }
 
