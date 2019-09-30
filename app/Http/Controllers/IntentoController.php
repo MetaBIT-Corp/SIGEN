@@ -97,7 +97,7 @@ class IntentoController extends Controller
      * @param int $id_est
      * @author Ricardo Estupinian
      */
-    private function verificarIntento($tipo_intento,$id_user,$clave_de_intento,$id_est=null){
+    public static function verificarIntento($tipo_intento,$id_user,$clave_de_intento,$id_est=null){
         if($tipo_intento==0){
             //Verificamos si es el primer intento que realiza
             $intento=Intento::where('estudiante_id',$id_est)->where('clave_id',$clave_de_intento->id)->first();

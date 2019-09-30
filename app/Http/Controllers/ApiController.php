@@ -185,12 +185,14 @@ class ApiController extends Controller
         $estudiante = Estudiante::where('id_est',$estudiante_id)->first();
         
         //Creamos el intento, para luego ser enviado a la aplicación móvil
-        $intento = new Intento();
+        $intento = IntentoController::verificarIntento(0,0,$clave,$estudiante->id_est);
+        /*$intento = new Intento();
         $intento->estudiante_id = $estudiante->id_est;
         $intento->clave_id = $clave->id;
         $intento->encuestado_id = null;
+        $intento->numero_intento = 1;
         $intento->fecha_inicio_intento = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-        $intento->save();
+        $intento->save();*/
         $evaluacion['intento'] = $intento;
         
         //Obtenemos las clave_area, esto significa obtener las areas que corresponden a la clave
@@ -305,7 +307,7 @@ class ApiController extends Controller
         $intento->estudiante_id = null;
         $intento->encuestado_id = $encuestado->id;
         $intento->clave_id = $clave->id;
-        //$intento->encuesta_id = $encuesta->id;
+        $intento->numero_intento = 1;
         $intento->fecha_inicio_intento = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
         $intento->save();
         
