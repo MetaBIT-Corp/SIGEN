@@ -14,6 +14,7 @@ use App\CicloMateria;
 use App\CargaAcademica;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 class AreaController extends Controller
 {
@@ -141,7 +142,7 @@ class AreaController extends Controller
         $area->titulo = $request->input('titulo');
         $area->save();
         
-        return back()->with('notification-type','success')->with('notification-message','El área se ha registrado con éxito!');
+        return redirect(URL::signedRoute('getAreaIndex', ['id' => $id_materia]));
     }
 
     /**
