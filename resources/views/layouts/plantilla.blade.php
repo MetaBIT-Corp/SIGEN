@@ -46,7 +46,8 @@
             @if(auth()->check())
                 <div class="my-2 my-lg-2">
                     <a href="" class="navbar-brand"><i class="fas fa-user"></i> 
-                        @yield("a_perfil")</a>
+                        @yield("a_perfil"){{auth()->user()->name}}{{auth()->user()->lastname}}</a>
+
                     <a class="navbar-brand" href="{{ route('logout') }}"
                         onclick="event.preventDefault();
                                  document.getElementById('logout-form').submit();">
