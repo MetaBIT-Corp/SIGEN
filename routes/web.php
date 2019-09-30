@@ -39,36 +39,6 @@ Route::get('/', function () {
     return view('layouts.plantilla');
 });
 
-//Plantillas y ejemplo.
-/*
-Route::get('plantilla/', function () {
-    return view('layouts.plantilla');
-});
-*/
-
-Route::get('/insertar', function () {
-
-	/*
-	$docente = new Docente;
-	$docente->id_pdg_dcn= 2;
-	$docente->id=1;
-	$docente->carnet_dcn='AA99999';
-	$docente->anio_titulo='2000';
-	$docente->activo=1;
-	$docente->tipo_jornada=1;
-	$docente->descripcion_docente='Un crack';
-	$docente->id_cargo_actual=1;
-	$docente->id_segundo_cargo=1;
-	$docente->nombre_docente='Rudy Chicas';
-	$docente->save();
-	
-    DB::insert("INSERT INTO pdg_dcn_docente 
-    	(id_pdg_dcn,id,carnet_dcn,anio_titulo,activo, tipo_jornada,descripcion_docente,id_cargo_actual,id_segundo_cargo,nombre_docente)
-		VALUES(?,?,?,?,?,?,?,?,?,?)",[1,1,'AA99999','2000',1,1,'Buen docente',1,1,'El Amo']);
-		*/
-});
-
-
 
 //Rutas Funcionales
 Auth::routes();
@@ -111,15 +81,27 @@ Route::group(['middleware' => 'teacher'], function(){
 
     //URL's para Area
     Route::get('/materia/{id}/areas/create','AreaController@create')->name('crear_area')->middleware('signed');
-    Route::resource('materia/{id}/areas','AreaController')->except(['create']);
-
+    Route::post('materia/{id}/areas','AreaController@store')->name('storeArea');
+    Route::get('materia/{id}/areas','AreaController@index')->name('getAreaIndex')->middleware('signed');
+    Route::post('materia/{id}/areas/post','AreaController@index')->name('postAreaIndex');
+    Route::get('materia/{id}/areas/{id_area}/edit','AreaController@edit')->name('getArea');
+    Route::put('materia/{id}/areas/{id_area}','AreaController@update')->name('putArea');
+    Route::delete('materia/{id}/areas/{id_area}','AreaController@destroy')->name('deleteArea');
     Route::get('areas/encuestas', 'AreaController@indexEncuesta')->name('areas_encuestas');
+    Route::post('areas/encuestas', 'AreaController@indexEncuesta')->name('post_areas_encuestas');
 
     
     //URL's para Pregunta
-    Route::resource('/area/{id}/pregunta','PreguntaController')->except(['update']);
-    Route::post('/area/{id}/pregunta/{pregunta}','PreguntaController@update');
+    //Route::resource('area/{id}/pregunta','PreguntaController')->except(['update']);
+    Route::get('area/{id}/pregunta','PreguntaController@index')->name('getPreguntas')->middleware('signed');
+    Route::post('area/{id}/pregunta','PreguntaController@index')->name('postPregunta');
+    Route::post('area/{id}/pregunta/create','PreguntaController@store')->name('postPregunta');
+    Route::get('area/{id}/pregunta/{id_preg}','PreguntaController@show')->name('showPregunta');
+    Route::put('/area/{id}/pregunta/{pregunta}','PreguntaController@update');
+    Route::delete('/area/{id}/pregunta/{pregunta}','PreguntaController@destroy');
     Route::post('grupo/{grupo_id}/edit','GrupoEmparejamientoController@updateGE')->name('editar-grupo');
+
+    Route::post('area/{id}/grupo-store','GrupoEmparejamientoController@storeGE')->name('crear-grupo-emparejamiento');
 
 
      //URL's para  evaluacion
@@ -139,7 +121,24 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::get('/encuesta/{id}/editar','EncuestaController@getUpdate')->name('gu_encuesta')->middleware('signed');;
     Route::post('/encuesta/{id}/editar','EncuestaController@postUpdate')->name('pu_encuesta');    
     Route::post('/eliminar-encuesta','EncuestaController@eliminarEncuesta')->name('eliminar_encuesta'); 
-    Route::post('/encuesta/publicar-encuesta','EncuestaController@publicar')->name('publicar_encuesta');  
+    Route::post('/encuesta/publicar-encuesta','EncuestaController@publicar')->name('publicar_encuesta'); 
+
+    /*Rutas para Gestión de Opciones (Sin Grupo Emparejamiento)*/
+    Route::get('pregunta/{pregunta_id}/opcion/','OpcionController@index')->name('index-opcion');
+    Route::post('pregunta/{pregunta_id}/opcion/store','OpcionController@store')->name('agregar-opcion');
+    Route::post('pregunta/{pregunta_id}/opcion/update','OpcionController@update')->name('actualizar-opcion');
+    Route::post('pregunta/{pregunta_id}/opcion/delete','OpcionController@destroy')->name('eliminar-opcion');
+
+    /*Rutas para Gestión Grupo Emparejamiento*/
+    Route::get('grupo/{grupo_id}/preguntas/','GrupoEmparejamientoController@index')->name('list-preguntas');
+    Route::post('grupo/{grupo_id}/preguntas/store','GrupoEmparejamientoController@store')->name('crear-pregunta-grupo');
+    Route::post('grupo/{grupo_id}/preguntas/update','GrupoEmparejamientoController@update')->name('editar-pregunta-grupo');
+    Route::post('grupo/{grupo_id}/preguntas/delete','GrupoEmparejamientoController@destroy')->name('eliminar-pregunta-grupo');
+
+
+    /*Rutas para Asignación de Áreas a Clave/Turno*/
+    Route::post('turno/{turno_id}/claves/store','ClaveAreaController@store')->name('asignar-area-clave');
+    Route::post('encuesta/{encuesta_id}/claves/store','ClaveAreaController@storeAreaEncuesta')->name('asignar-area-encuesta'); 
     
 });
 
@@ -153,21 +152,3 @@ Route::group(['middleware' => 'student'], function(){
 Route::group(['middleware' => 'admin_teacher'], function(){
     Route::get('/listado-encuesta','EncuestaController@listado')->name('listado_encuesta')->middleware('signed');
 });
-
-
-
-/*Rutas para Gestión de Opciones (Sin Grupo Emparejamiento)*/
-Route::get('pregunta/{pregunta_id}/opcion/','OpcionController@index')->name('index-opcion');
-Route::post('pregunta/{pregunta_id}/opcion/store','OpcionController@store')->name('agregar-opcion');
-Route::post('pregunta/{pregunta_id}/opcion/update','OpcionController@update')->name('actualizar-opcion');
-Route::post('pregunta/{pregunta_id}/opcion/delete','OpcionController@destroy')->name('eliminar-opcion');
-
-/*Rutas para Gestión Grupo Emparejamiento*/
-Route::get('grupo/{grupo_id}/preguntas/','GrupoEmparejamientoController@index')->name('list-preguntas');
-Route::post('grupo/{grupo_id}/preguntas/store','GrupoEmparejamientoController@store')->name('crear-pregunta-grupo');
-Route::post('grupo/{grupo_id}/preguntas/update','GrupoEmparejamientoController@update')->name('editar-pregunta-grupo');
-Route::post('grupo/{grupo_id}/preguntas/delete','GrupoEmparejamientoController@destroy')->name('eliminar-pregunta-grupo');
-
-/*Rutas para Asignación de Áreas a Clave/Turno*/
-Route::post('turno/{turno_id}/claves/store','ClaveAreaController@store')->name('asignar-area-clave');
-Route::post('encuesta/{encuesta_id}/claves/store','ClaveAreaController@storeAreaEncuesta')->name('asignar-area-encuesta');

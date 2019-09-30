@@ -1,4 +1,4 @@
-<?php
+1<?php
 
 use Illuminate\Database\Seeder;
 use App\Clave_Area_Pregunta;
@@ -50,13 +50,13 @@ class ClaveAreaPreguntaTableSeeder extends Seeder
             'estudiante_id'=>1,
             'clave_area_id'=>1,
             'pregunta_id'=>2,
-            'numero_intento'=>2
+            'numero_intento'=>1
         ]);
         Clave_Area_Pregunta_Estudiante::create([
             'estudiante_id'=>1,
             'clave_area_id'=>1,
             'pregunta_id'=>8,
-            'numero_intento'=>2
+            'numero_intento'=>1
         ]);
         Clave_Area_Pregunta_Estudiante::create([
             'estudiante_id'=>1,

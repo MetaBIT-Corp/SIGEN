@@ -14,7 +14,7 @@
     </a>
 </li>
 <li class="breadcrumb-item">
-	<a href="{{ route('areas.index',[$area->materia->id_cat_mat]) }}">
+	<a href="{{ URL::signedRoute('getAreaIndex',['materia_id'=>$area->materia->id_cat_mat]) }}" id="id-area" data-area="{{ $area->id }}">
         Áreas
     </a>
 </li>
@@ -25,9 +25,11 @@
 </li>
 <li class="breadcrumb-item">
 	@if(Request::get('id_gpo')==1)
-    	Listado de grupos emparejamiento
+    	Listado de Emparejamiento
+        <label id="gpo-preg" data-control="0" data-token="{{ csrf_token() }}"></label>
     @else
     	Listado de preguntas
+        <label id="gpo-preg" data-control="1" data-token="{{ csrf_token() }}"></label>
     @endif
 </li>
 @if(Request::get('id_gpo')==0)
@@ -42,7 +44,7 @@
 </div>
     @else
 <div class="col-5 text-right">
-    <a class="btn" href="" id="add_gpo">
+    <a class="btn" href="#" data-toggle="modal" data-target="#createModal">
         <span class="icon-add text-primary">
         </span>
     </a>
@@ -178,209 +180,89 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Editar Titulo de Grupo Emparejamiento</h5>
+                <h5 class="modal-title">Editar Grupo de Emparejamiento</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <p></p>
-            </div>
+            <form action="" method="POST">
+                <div class="modal-body">
+                    <div class="form-group" style="display:none;">
+                        <label class="col-form-label" for="areaid">Area ID:</label>
+                        <input type="text" class="form-control" name="areaid" placeholder="ID de Pregunta" id="areaid" value="{{$area->id}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label" for="descripcion">Descripción del Grupo:</label>
+                        <input type="text" class="form-control" name="descripcion" placeholder="Inserte la Descripción" id="descripcion">
+                    </div>
+
+                </div>
+
+                <div class="alert alert-danger m-3" id="alerta">
+                    <ul id="ul-alert">
+                    </ul>
+                </div>
+
+                <div class="modal-footer">
+                    {{ csrf_field() }}
+                    <button type="submit" id="btn-agregar" class="btn btn-primary">Agregar Grupo de Emparejamiento</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 <!-- Fin de modal para edición de grupo emparejamiento -->
+
+<!-- Modal para la creación de grupo emparejamiento -->
+
+<div class="modal" id="createModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Nuevo Grupo de Emparejamiento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('crear-grupo-emparejamiento',$area->id)}}" method="POST">
+                <div class="modal-body">
+                    <div class="form-group" style="display:none;">
+                        <label class="col-form-label" for="areaid">Area ID:</label>
+                        <input type="text" class="form-control" name="areaid" placeholder="ID de Pregunta" id="areaid" value="{{$area->id}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label" for="descripcion">Descripción del Grupo:</label>
+                        <input type="text" class="form-control" name="descripcion" placeholder="Inserte la Descripción" id="descripcion">
+                    </div>
+
+                </div>
+
+                <div class="alert alert-danger m-3" id="alerta">
+                    <ul id="ul-alert">
+                    </ul>
+                </div>
+
+                <div class="modal-footer">
+                    {{ csrf_field() }}
+                    <button type="submit" id="btn-agregar" class="btn btn-primary">Agregar Grupo de Emparejamiento</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 <!--Scripts para datatables con Laravel-->
 @section("js")
-<script type="text/javascript">
-    $(document).ready(function() {
-    $(function() {
-        var table = $('#areas').DataTable({
-            "serverSide": true,
-            "ajax": window.location.href,
-            "columns": [
-                @if(Request::get('id_gpo') == 1) {
-                    data: 'id'
-                }, {
-                    data: 'descripcion_grupo_emp'
-                }, {
-                    data: 'actions',
-                    orderable: false,
-                    searchable: false
-                },
-                @else {
-                    data: 'id'
-                }, {
-                    data: 'pregunta'
-                }, {
-                    data: 'actions',
-                    orderable: false,
-                    searchable: false
-                },
-                @endif
-            ],
-            "language": {
-                "info": "Mostrando Pagina _PAGE_ de _PAGES_",
-                "search": "Buscar:",
-                "paginate": {
-                    "next": "Siguiente",
-                    "previous": "Anterior",
-                },
-                "lengthMenu": 'Mostrar <select class="browser-default custom-select">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="25">25</option>' + '<option value="50">50</option>' + '<option value="-1">TODOS</option>' + '</select> registros',
-                "loadingRecords": "Cargando...",
-                "processing": "Procesando...",
-                "emptyTable": "No hay datos",
-                "zeroRecords": "Lo sentimos, no hay coincidencias.",
-                "infoEmpty": "",
-                "infoFiltered": "",
-            },
-            //Centrar datos dentro de una columna target=3
-            columnDefs: [{
-                'className': 'text-center',
-                'targets': 2
-            }, {
-                "searchable": false,
-                "orderable": false,
-                "targets": 0
-            }]
-        });
-        table.on('order.dt search.dt', function() {
-            table.column(0, {
-                search: 'applied',
-                order: 'applied'
-            }).nodes().each(function(cell, i) {
-                cell.innerHTML = i + 1;
-            });
-        }).draw();
-
-        function exito(datos) {
-            $("#message-success").removeAttr("hidden");
-            $("#text-success").text(datos.success);
-            setTimeout(function() {
-                $("#message-success").attr('hidden', true);
-            }, 4000);
-            //Para mover al inicio de la pagina el control
-            $('html, body').animate({
-                scrollTop: 0
-            }, 'slow');
-        }
-        var id_preg = "";
-        var id_gpo = "";
-        //Evento para eliminar
-        $('body').on('click', '.btn-eliminar', function() {
-            id_preg = $(this).data('id');
-            id_gpo = $(this).data('gpo');
-            $.get('/area/' + id_gpo + '/pregunta/' + id_preg).done(function(data) {
-                $("#id_preg_eli").val(data.id);
-            }).fail(function() {
-                console.log("Error");
-            });
-        });
-        //Peticion para eliminar
-        $("#eliminar").click(function() {
-            $(this).attr("disabled", true);
-            $.ajax({
-                url: '/area/' + id_gpo + '/pregunta/' + id_preg,
-                type: "DELETE",
-                data: $("#form-elim").serialize(),
-                dataType: "json"
-            }).done(function(datos) {
-                $("#salir_eli").click();
-                $("#eliminar").removeAttr("disabled");
-                table.draw();
-                //Mostrando mensaje de exito
-                if (datos.type == 2) {
-                    exito(datos);
-                } else {
-                    $("#message-error").removeAttr("hidden");
-                    $("#text-error").text(datos.error);
-                    setTimeout(function() {
-                        $("#message-error").attr('hidden', true);
-                    }, 4000);
-                    //Para mover al inicio de la pagina el control
-                    $('html, body').animate({
-                        scrollTop: 0
-                    }, 'slow');
-                }
-            }).fail(function(xhr, status, e) {
-                console.log(e);
-            });
-        });
-        //Evento para crear una pregunta
-        $('body').on('click', '#add_pregunta', function() {
-            $('#form-edit').trigger("reset");
-            $("#modificar").val('Crear');
-            $("#title-modal").html("Crear Pregunta");
-            $("#pregunta_id").val("{{ $area->id }}");
-            $("#pregunta").val("");
-        });
-        //Evento para crear una edicion de la pregunta
-        $('body').on('click', '.btn-editar', function() {
-            $('#form-edit').trigger("reset");
-            id_preg = $(this).data('id');
-            id_gpo = $(this).data('gpo');
-            $.get('/area/' + id_gpo + '/pregunta/' + id_preg).done(function(data) {
-                $("#title-modal").html("Editar Pregunta");
-                $("#pregunta_id").val(data.id);
-                $("#pregunta").val(data.pregunta);
-                $('#modificar').val('Modificar');
-            }).fail(function() {
-                console.log("Error");
-            });
-        });
-        //Peticion para modificar
-        $("#modificar").click(function() {
-            if ($("#pregunta").val().length > 0) {
-                $(this).attr("disabled", true);
-                if ($(this).val() == "Modificar") {
-                    $.ajax({
-                        url: '/area/' + id_gpo + '/pregunta/' + id_preg,
-                        type: "POST",
-                        data: $("#form-edit").serialize(),
-                        dataType: "json"
-                    }).done(function(datos) {
-                        $("#salir").click();
-                        $("#modificar").removeAttr("disabled");
-                        $("#modificar").attr('data-type', 'create');
-                        table.draw();
-                        //Mostrando mensaje de exito
-                        exito(datos);
-                    }).fail(function(xhr, status, e) {
-                        console.log(e);
-                    });
-                } else {
-                    $.ajax({
-                        url: '/area/1/pregunta/',
-                        type: "POST",
-                        data: $("#form-edit").serialize(),
-                        dataType: "json"
-                    }).done(function(datos) {
-                        $("#salir").click();
-                        $("#modificar").removeAttr("disabled");
-                        $("#modificar").attr('data-type', 'update');
-                        table.draw();
-                        //Mostrando mensaje de exito
-                        exito(datos);
-                    }).fail(function(xhr, status, e) {
-                        console.log(e);
-                    });
-                }
-            } else {
-                $("#validacion").removeAttr("hidden");
-                $("#modificar").removeAttr("disabled");
-            }
-        });
-    });
-});
-</script>
-<script type="text/javascript" src="{{asset('js/pregunta/pregunta.js')}}"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.js">
-</script>
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js">
-</script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js">
-</script>
+    <script type="text/javascript" src="{{ asset('js/pregunta/pregunta.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{asset('js/pregunta/grupo.js')}}"></script>
 @endsection

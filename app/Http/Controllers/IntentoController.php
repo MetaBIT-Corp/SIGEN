@@ -54,26 +54,6 @@ class IntentoController extends Controller
         //Verificamos si es el primer intento que realiza
         $intento=Intento::where('estudiante_id',$id_est)->first();
 
-        //Inicializar el intento y asignar clave a la que pertenece el turno
-        $num_intento=1;
-        if($intento==null){
-            $intento=new Intento();
-            $intento->estudiante_id=$id_est;
-            $intento->clave_id=$clave_de_intento->id;
-            $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-            $intento->fecha_final_intento=null;
-            $intento->numero_intento=$num_intento;
-            $intento->save();
-        }else{
-            if($intento->fecha_final_intento!=null){
-                $num_intento=$intento->numero_intento;
-                $intento->numero_intento=$num_intento+1;
-                $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-                $intento->fecha_final_intento=null;
-                $intento->save();
-            }
-        }
-
         //Verificamos el intento que se realizara o esta realizando
         $intento=$this->verificarIntento(0,$id_user,$clave_de_intento,$id_est);
         
@@ -83,9 +63,8 @@ class IntentoController extends Controller
 
         //Variable que contiene el array a mostrar en la paginacion
         $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
-
-
-        return view('intento.intento', compact('paginacion','evaluacion','intento'));
+        // return dd($preguntas);
+        return view('intento.intento', compact('paginacion','evaluacion','intento','clave_de_intento'));
     }
 
     public function iniciarEncuesta($id_clave, Request $request)
@@ -118,7 +97,7 @@ class IntentoController extends Controller
      * @param int $id_est
      * @author Ricardo Estupinian
      */
-    private function verificarIntento($tipo_intento,$id_user,$clave_de_intento,$id_est=null){
+    public static function verificarIntento($tipo_intento,$id_user,$clave_de_intento,$id_est=null){
         if($tipo_intento==0){
             //Verificamos si es el primer intento que realiza
             $intento=Intento::where('estudiante_id',$id_est)->where('clave_id',$clave_de_intento->id)->first();
@@ -144,6 +123,7 @@ class IntentoController extends Controller
         }else{
             //Se modifica el intento existente con la nueva fecha del nuevo intento
             if($intento->fecha_final_intento!=null){
+                DB::table('respuesta')->where('id_intento',$intento->id)->delete();
                 $num_intento=$intento->numero_intento;
                 $intento->numero_intento=$num_intento+1;
                 $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');

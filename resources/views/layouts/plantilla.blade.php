@@ -130,6 +130,7 @@
                             
                             
                         </main>
+                        
                         <footer class="footer position-absolute w-100">
 
                             @yield("footer")
@@ -139,9 +140,6 @@
                                 </div>
                             </div>                            
                         </footer>
-                        <a class="scroll-to-top rounded position-fixed" href="#page-top" style="bottom: 1rem; right: 1rem;">
-                            <i class="fas fa-angle-up"></i>
-                        </a>
                     </div>
                 </div>
             </div>
