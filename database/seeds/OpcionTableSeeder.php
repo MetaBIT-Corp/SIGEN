@@ -11,215 +11,429 @@ class OpcionTableSeeder extends Seeder
      */
     public function run()
     {
-    	//Pregunta id 1 de opcion multiple 
+    	//Grupo emparejamiento 1
         Opcion::create([
         	'pregunta_id'=>1,
-        	'opcion'=>'10',
-        	'correcta'=>true
-        ]);
-        Opcion::create([
-        	'pregunta_id'=>1,
-        	'opcion'=>'15',
+        	'opcion'=>'20',
         	'correcta'=>false
         ]);
         Opcion::create([
-        	'pregunta_id'=>1,
-        	'opcion'=>'x+2',
-        	'correcta'=>false
+            'pregunta_id'=>1,
+            'opcion'=>'14',
+            'correcta'=>true
         ]);
         Opcion::create([
-        	'pregunta_id'=>1,
-        	'opcion'=>'9+1-2',
-        	'correcta'=>false
-        ]);
-
-        //Pregunta id 2 de opcion multiple
-        Opcion::create([
-        	'pregunta_id'=>2,
-        	'opcion'=>'800-300',
-        	'correcta'=>true
+            'pregunta_id'=>2,
+            'opcion'=>'262',
+            'correcta'=>false
         ]);
         Opcion::create([
-        	'pregunta_id'=>2,
-        	'opcion'=>'5000',
-        	'correcta'=>false
-        ]);
-        Opcion::create([
-        	'pregunta_id'=>2,
-        	'opcion'=>'501',
-        	'correcta'=>false
-        ]);
-        Opcion::create([
-        	'pregunta_id'=>2,
-        	'opcion'=>'y+(z^2)',
-        	'correcta'=>false
-        ]);
-
-        //Pregunta id 3 y 4 de Verdadero/falso
-        Opcion::create([
-        	'pregunta_id'=>3,
-        	'opcion'=>'Falso',
-        	'correcta'=>false
+            'pregunta_id'=>2,
+            'opcion'=>'1000',
+            'correcta'=>true
         ]);
         Opcion::create([
             'pregunta_id'=>3,
-            'opcion'=>'Verdadero',
+            'opcion'=>'San Salvador',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>3,
+            'opcion'=>'Soya',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>4,
+            'opcion'=>'San miguel',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>4,
+            'opcion'=>'Usulutan',
             'correcta'=>true
         ]);
         Opcion::create([
             'pregunta_id'=>4,
-            'opcion'=>'Verdadero',
-            'correcta'=>true
-        ]);
-        Opcion::create([
-        	'pregunta_id'=>4,
-        	'opcion'=>'Falso',
-        	'correcta'=>false
+            'opcion'=>'La unión',
+            'correcta'=>false
         ]);
 
-        //Pregunta id 5 y 6 texto corto
+        //Grupo emparejamiento 2
         Opcion::create([
             'pregunta_id'=>5,
-            'opcion'=>'newtom',
+            'opcion'=>'Linux foundation',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>5,
+            'opcion'=>'IBM',
             'correcta'=>true
         ]);
         Opcion::create([
             'pregunta_id'=>6,
-            'opcion'=>'4',
+            'opcion'=>'Google',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>6,
+            'opcion'=>'Android Inc',
             'correcta'=>true
         ]);
+        Opcion::create([
+            'pregunta_id'=>7,
+            'opcion'=>'Steve Jonbs foundation',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>7,
+            'opcion'=>'Apple',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>8,
+            'opcion'=>'Git Hub',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>8,
+            'opcion'=>'Microsoft',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>8,
+            'opcion'=>'Microshop',
+            'correcta'=>false
+        ]);
 
-        //Emparejamiento
-        Opcion::create([
-        	'pregunta_id'=>7,
-        	'opcion'=>'Sigma Plus',
-        	'correcta'=>true
-        ]);
-        Opcion::create([
-        	'pregunta_id'=>8,
-        	'opcion'=>'Pigma Pix',
-        	'correcta'=>true
-        ]);
-        Opcion::create([
-        	'pregunta_id'=>9,
-        	'opcion'=>'Peter Eueler Fracas',
-        	'correcta'=>true
-        ]);
-        Opcion::create([
-        	'pregunta_id'=>10,
-        	'opcion'=>'Arquimedes',
-        	'correcta'=>true
-        ]);
 
-        //Opciones para preguntas de Encuesta
+        //Opción múltiple
+        Opcion::create([
+            'pregunta_id'=>9,
+            'opcion'=>'OpenJump',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>9,
+            'opcion'=>'Google maps',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>9,
+            'opcion'=>'Ilwis',
+            'correcta'=>flase
+        ]);
+        Opcion::create([
+            'pregunta_id'=>9,
+            'opcion'=>'SpringGis',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>10,
+            'opcion'=>'Ingeniería económica',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>10,
+            'opcion'=>'Herramientas de productividad',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>10,
+            'opcion'=>'Sistema de información geográfica',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>10,
+            'opcion'=>'Seguridad informática',
+            'correcta'=>false
+        ]);
         Opcion::create([
             'pregunta_id'=>11,
-            'opcion'=>'GL20',
+            'opcion'=>'Eclipse',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>11,
+            'opcion'=>'Netbeans',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>11,
+            'opcion'=>'Android studio',
             'correcta'=>true
         ]);
         Opcion::create([
             'pregunta_id'=>11,
-            'opcion'=>'GL25',
-            'correcta'=>true
+            'opcion'=>'Todas',
+            'correcta'=>false
         ]);
         Opcion::create([
-            'pregunta_id'=>11,
-            'opcion'=>'GL23',
+            'pregunta_id'=>12,
+            'opcion'=>'IntelliJ IDEA',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>12,
+            'opcion'=>'Xcode',
             'correcta'=>true
         ]);
         Opcion::create([
             'pregunta_id'=>12,
-            'opcion'=>'UNO',
-            'correcta'=>true
+            'opcion'=>'Android studio',
+            'correcta'=>false
         ]);
         Opcion::create([
             'pregunta_id'=>12,
-            'opcion'=>'OCHO',
-            'correcta'=>true
-        ]);
-        Opcion::create([
-            'pregunta_id'=>12,
-            'opcion'=>'TRECE',
-            'correcta'=>true
-        ]);
-        Opcion::create([
-            'pregunta_id'=>12,
-            'opcion'=>'VEINTE',
-            'correcta'=>true
-        ]);
-
-        /*Opciones de Prueba (René).*/
-
-        /*Opciones para Opción Múltiple.*/
-        Opcion::create([
-            'pregunta_id'=>13,
-            'opcion'=>'Si',
-            'correcta'=>true
-        ]);
-        Opcion::create([
-            'pregunta_id'=>13,
-            'opcion'=>'No',
+            'opcion'=>'Eclipse',
             'correcta'=>false
         ]);
         Opcion::create([
             'pregunta_id'=>13,
-            'opcion'=>'Quizá',
+            'opcion'=>'Un carro',
             'correcta'=>false
         ]);
         Opcion::create([
             'pregunta_id'=>13,
-            'opcion'=>'Definitivamente Talvez',
+            'opcion'=>'Un planeta',
             'correcta'=>false
         ]);
-
-        /*Opciones para Verdadero/Falso.*/
+        Opcion::create([
+            'pregunta_id'=>13,
+            'opcion'=>'Un árbol',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>13,
+            'opcion'=>'Todas',
+            'correcta'=>true
+        ]);
         Opcion::create([
             'pregunta_id'=>14,
-            'opcion'=>'Verdadero',
+            'opcion'=>'Eficiencia',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>14,
+            'opcion'=>'Mantenibilidad',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>14,
+            'opcion'=>'Usabilidad',
             'correcta'=>true
         ]);
         Opcion::create([
             'pregunta_id'=>14,
-            'opcion'=>'Falso',
+            'opcion'=>'Operabilidad',
             'correcta'=>false
         ]);
-
-        /*Opciones para Respuesta Corta*/
         Opcion::create([
             'pregunta_id'=>15,
-            'opcion'=>'Si',
+            'opcion'=>'En cascada',
             'correcta'=>true
         ]);
         Opcion::create([
             'pregunta_id'=>15,
-            'opcion'=>'Verdadero',
-            'correcta'=>true
+            'opcion'=>'RUP',
+            'correcta'=>false
         ]);
         Opcion::create([
             'pregunta_id'=>15,
-            'opcion'=>'verdadero',
-            'correcta'=>true
+            'opcion'=>'XP',
+            'correcta'=>false
         ]);
-
-        /*Opciones para Emparejamiento*/
+        Opcion::create([
+            'pregunta_id'=>15,
+            'opcion'=>'SCRUM',
+            'correcta'=>false
+        ]);
         Opcion::create([
             'pregunta_id'=>16,
-            'opcion'=>'Acuático',
+            'opcion'=>'Efectivo',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>16,
+            'opcion'=>'Cuentas por pagar',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>16,
+            'opcion'=>'Ingresos por servicio',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>16,
+            'opcion'=>'Mobiliario',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>17,
+            'opcion'=>'Newton',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>17,
+            'opcion'=>'Aristoteles',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>17,
+            'opcion'=>'Eratostenes',
             'correcta'=>true
         ]);
         Opcion::create([
             'pregunta_id'=>17,
-            'opcion'=>'Aéreo',
-            'correcta'=>true
+            'opcion'=>'Pitágoras',
+            'correcta'=>false
         ]);
         Opcion::create([
             'pregunta_id'=>18,
-            'opcion'=>'Terrestre',
+            'opcion'=>'UTM',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>18,
+            'opcion'=>'Conforme de Lambert',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>18,
+            'opcion'=>'Conforme cónica de Lambert',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>18,
+            'opcion'=>'Cónica conforme de Lambert',
+            'correcta'=>true
+        ]);
+
+        //Verdadero y false
+        Opcion::create([
+            'pregunta_id'=>19,
+            'opcion'=>'Verdadero',
             'correcta'=>true
         ]);
         Opcion::create([
             'pregunta_id'=>19,
-            'opcion'=>'Subacuático',
+            'opcion'=>'Falso',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>20,
+            'opcion'=>'Verdadero',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>20,
+            'opcion'=>'Falso',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>21,
+            'opcion'=>'Verdadero',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>21,
+            'opcion'=>'Falso',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>22,
+            'opcion'=>'Verdadero',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>22,
+            'opcion'=>'Falso',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>23,
+            'opcion'=>'Verdadero',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>23,
+            'opcion'=>'Falso',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>24,
+            'opcion'=>'Verdadero',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>24,
+            'opcion'=>'Falso',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>25,
+            'opcion'=>'Verdadero',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>25,
+            'opcion'=>'Falso',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>26,
+            'opcion'=>'Verdadero',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>26,
+            'opcion'=>'Falso',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>27,
+            'opcion'=>'Verdadero',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>27,
+            'opcion'=>'Falso',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>28,
+            'opcion'=>'Verdadero',
+            'correcta'=>false
+        ]);
+        Opcion::create([
+            'pregunta_id'=>28,
+            'opcion'=>'Falso',
+            'correcta'=>true
+        ]);
+
+        //Resouesta corta
+        Opcion::create([
+            'pregunta_id'=>29,
+            'opcion'=>'Google',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>30,
+            'opcion'=>'Facebook',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>31,
+            'opcion'=>'Debian',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>32,
+            'opcion'=>'Red',
+            'correcta'=>true
+        ]);
+        Opcion::create([
+            'pregunta_id'=>33,
+            'opcion'=>'CentOS',
             'correcta'=>true
         ]);
 
