@@ -16,8 +16,24 @@
 @section("main")
 <!--Card que contiene a cada pregunta-->
 <!--Se agrego la etiqueta form para persistencia-->
+
+<div class="alert alert-dismissible alert-info">
+    <p><strong>Tiempo Restante: </strong><span id="contador"></span></p>
+</div>
+
+<div class="form-group" style="display:none; border: solid gold;">
+    <label class="col-form-label" for="fecha-inicio-intento">Inicio de Intento:</label>
+    <input type="text" class="form-control" id="fecha-inicio-intento" name="fecha-inicio-intento" value="{{$intento->fecha_inicio_intento}}" disabled>
+    <label class="col-form-label" for="duracion-intento">Duración de Intento:</label>
+    <input type="text" class="form-control" id="duracion-intento" name="duracion-intento" value="{{$evaluacion->duracion}}" disabled>
+    <label class="col-form-label" for="fecha-final-intento">Final de Intento:</label>
+    <input type="text" class="form-control" id="fecha-final-intento" name="fecha-final-intento" disabled>    
+    <label class="col-form-label" for="tiempo-restante">Tiempo Restante:</label>
+    <input type="text" class="form-control" id="tiempo-restante" name="tiempo-restante" disabled>
+</div>
+
 <form id="quiz_form">
-    <input type="hidden" id="intento_id" value="{{ $intento_id }}">
+    <input type="hidden" id="intento_id" value="{{ $intento->id }}">
     <div class="card">
     <div class="card-body">
         <!--Aqui iran las preguntas-->
@@ -104,9 +120,12 @@
     </div>
 </div>
 </form>
+
 @endsection
 @endsection
 
 @section("js")
 <script type="text/javascript" src="{{asset('js/intento/main.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/intento/timeControl.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/intento/moment.min.js')}}"></script>
 @endsection

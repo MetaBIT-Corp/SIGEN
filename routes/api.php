@@ -35,14 +35,14 @@ Route::get('/clave-area/{id_clave_area}/validar-peso', 'ClaveController@validarP
 
 
 //Turno
-Route::get('/evaluacion/{id}/turnos', 'TurnoController@turnosPorEvaluacion');
+Route::get('/evaluacion/{id}/turnos', 'ApiController@turnosPorEvaluacion');
 
 
 //Consultar encuestas desde la app móvil
 Route::get('/encuestas-disponibles', 'ApiController@encuestasDisponibles');
 
 //Enviar respuestas desde la app móvil
-Route::post('/finalizar-intento', 'IntentoController@finalizarIntentoMovil');
+Route::post('/finalizar-intento', 'ApiController@finalizarIntentoMovil');
 Route::get('/calcular-nota/{intento_id}', 'IntentoController@calcularNota');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

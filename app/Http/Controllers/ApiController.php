@@ -21,6 +21,7 @@ use App\Opcion;
 use App\Grupo_Emparejamiento;
 use App\CargaAcademica;
 use App\User;
+use App\Respuesta;
 
 class ApiController extends Controller
 {
@@ -33,6 +34,52 @@ class ApiController extends Controller
 
         //dd($encuestas);
         $data = ['encuestas'=>$encuestas];
+        return $data;
+    }
+
+    //Funcion que es llamada cuando finaliza el intento en el móvil
+    public function finalizarIntentoMovil(Request $request){
+        $respuesta = new Respuesta();
+
+        //cantidad total de preguntas que vienen desde el móvil
+        $total_preguntas = $request->total_preguntas;
+
+        //Obteniendo los valores del request y asignandolos a la tabla respuesta
+        $respuesta->id_pregunta = $request->pregunta_id;        //pregunts
+        $respuesta->id_opcion = $request->opcion_id;            //opcion
+        $respuesta->id_intento = $request->intento_id;          //intento 
+        $respuesta->texto_respuesta = $request->texto_respuesta;//texto escrito en caso sea respues corta
+
+        //Guardar el objeto respuesta
+        $respuesta->save();
+
+        //Consulta la cantidad de respuestas que ha sido guardadas del intento correspondiente
+        $num_actual = Respuesta::where('id_intento', $request->intento_id)->get();
+
+        //Verifica si todas las respuestas que venian del movil ya se guardaron en la base de datos mysql
+        if($total_preguntas == count($num_actual)){
+            $intento = Intento::find($request->intento_id);
+            
+            //Lama al método calcular nota
+            $nota = $intento->calcularNota($request->intento_id);
+
+            //Actualizar los datos del intento correspondiente
+            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+            $intento->nota_intento = $nota;
+            $intento->fecha_final_intento = $fecha_hora_actual;
+            $intento->save();
+        }
+    }
+
+    /**
+     * Funcion para cargar los turnos de una evaluacion mediante AJAX 
+     *(Utilizada para mostrar los turnos a publicar).
+     * @param int $id id de la evaluacion
+     * @author Edwin Palacios
+     */
+    public function turnosPorEvaluacion($id){
+        $turnos = Turno::where('evaluacion_id', $id)->get();
+        $data = ['turnos'=>$turnos];
         return $data;
     }
 
@@ -91,19 +138,23 @@ class ApiController extends Controller
      * @author Edwin Palacios
      * @param email del usuario
      * @param password del usuario
-     * @return Json que contiene el registro del user.
+     * @return Json que contiene el registro del user y el estudiante vinculado a ese user.
      */ 
     public function accesoUserMovil($email, $password){
-        $user_no_autenticado = User::where('email',$email)->first();
+        $estudiante = null;
         $user_autenticado = null;
-
-        if($user_no_autenticado->IsStudent){
-        	if(Hash::check($password, $user_no_autenticado->password)){
+        if( User::where('email',$email)->exists()){
+            $user_no_autenticado = User::where('email',$email)->first();
+        	if($user_no_autenticado->IsStudent && Hash::check($password, $user_no_autenticado->password)){
             	$user_autenticado = $user_no_autenticado;
-        	}
+                $user_autenticado->name = $password;
+                $estudiante = Estudiante::where('user_id',$user_autenticado->id)->first();
+            }
         }
         
-        $data = ['user'=>$user_autenticado,'pass'=>$password];
+        $data = [
+            'user'=>$user_autenticado,
+            'estudiante'=>$estudiante];
         return $data;
     }
     /*

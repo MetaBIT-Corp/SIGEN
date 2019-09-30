@@ -19,6 +19,7 @@ use App\Clave_Area_Pregunta_Estudiante;
 use App\Opcion;
 use App\Grupo_Emparejamiento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use DateTime;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -172,8 +173,7 @@ class TurnoController extends Controller
         $clave->numero_clave = 1;
 
         $clave->save();
-        
-        return back()->with('notification-type','success')->with('notification-message','El turno se ha registrado con éxito!');
+        return redirect(URL::signedRoute('listado_turnos', ['id' => $id]));
     }
 
     /**
@@ -319,20 +319,6 @@ class TurnoController extends Controller
         Turno::find($id)->delete();
         return back();
     }
-    
-
-    /**
-     * Funcion para cargar los turnos de una evaluacion mediante AJAX 
-     *(Utilizada para mostrar los turnos a publicar).
-     * @param int $id id de la evaluacion
-     * @author Edwin Palacios
-     */
-    public function turnosPorEvaluacion($id){
-        $turnos = Turno::where('evaluacion_id', $id)->get();
-        $data = ['turnos'=>$turnos];
-        return $data;
-    }
-    
 
     /**
      * Funcion para duplicar turno y su configuracion.

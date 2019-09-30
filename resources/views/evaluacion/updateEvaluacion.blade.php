@@ -107,7 +107,7 @@
           
           <div class="form-group">
              <button class="btn btn-primary">Editar</button>
-             <a href="{{route('listado_evaluacion',$evaluacion->id_carga)}}" class="btn btn-secondary"> Cancelar</a>
+             <a href="{{ URL::signedRoute('listado_evaluacion', ['id' => $evaluacion->id_carga]) }}" class="btn btn-secondary"> Cancelar</a>
           </div>
 
       </form>
