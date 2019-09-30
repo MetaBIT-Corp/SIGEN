@@ -156,7 +156,7 @@ class IntentoController extends Controller
         if($tipo==0){
             foreach ($claves_areas as $clave_area) {
                 $claves_areas_preguntas[$clave_area->area->tipo_item->id] = $clave_area->claves_areas_preguntas_estudiante()->where('estudiante_id',$estudiante)
-                    ->where('numero_intento',($num_intento))->get();
+                    ->where('numero_intento',($num_intento + 1))->get();
             }
         }else{
             foreach ($claves_areas as $clave_area) {

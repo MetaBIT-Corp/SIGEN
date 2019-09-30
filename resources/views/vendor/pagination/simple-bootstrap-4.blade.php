@@ -18,7 +18,10 @@
             </li>
         @else
             <li class="page-item" aria-disabled="true">
-                <a class="page-link bg-danger text-white" href="{{route('calificar_evaluacion')}}">Terminar</a>
+                <input type="button" onclick="capturar_data(2)" class="page-link bg-danger text-white btn-md" value="Terminar"/>
+
+                <a id="finish_btn" type="button" style="display:none;" href="{{route('calificar_evaluacion')}}">Terminar</a>
+
             </li>
         @endif
     </ul>
