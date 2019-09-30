@@ -49,8 +49,18 @@ $(document).ready(function() {
             //Centrar datos dentro de una columna target=3
             columnDefs: [{
                 'className': 'text-center',
-                'targets': 3
-            }, ]
+                'targets': 3,
+                'width' : "20%"
+            }, {
+                'targets':0,
+                'width' : "10%"
+            },{
+                'targets':1,
+                'width' : "50%"
+            },{
+                'targets':2,
+                'width' : "20%"
+            }]
         });
 
         function exito(datos) {
