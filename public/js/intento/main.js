@@ -1,6 +1,7 @@
 function capturar_data(accion){
 	//accion = 0 es previo
 	//accion = 1 es siguiente
+    //accion = 2 es terminar
 
     //Obtenemos el id del intento para que en la persistencia se facilite la validación y saber a que intento pertenece la petición
     var intento_id = $("#intento_id").val();
@@ -25,10 +26,12 @@ function paginacion(accion){
     
     var page = 0;
 
-    if(accion == 0)
-        page = parseInt(res_arr[1], 10) - 1;
+    if(accion == 2)
+        window.location.href = $("#finish_btn").attr('href');
+    else if(accion == 0)
+        window.location.href = res_arr[0] + "=" + (parseInt(res_arr[1], 10) - 1).toString();
     else
-        page = parseInt(res_arr[1], 10) + 1;
+        window.location.href = res_arr[0] + "=" + (parseInt(res_arr[1], 10) + 1).toString();
 
-    window.location.href = res_arr[0] + "=" + page.toString();
+    //window.location.href = res_arr[0] + "=" + page.toString();
 }
