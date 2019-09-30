@@ -4,7 +4,7 @@ $(document).ready(function(){
 	var fecha_final_intento = new Date()
 	var duracion = parseInt($('#duracion-intento').attr('value'))
 
-	fecha_final_intento.setTime(fecha_inicio_intento.getTime() + (100 * 60 * 1000))
+	fecha_final_intento.setTime(fecha_inicio_intento.getTime() + (duracion * 60 * 1000))
 
 	var fecha = fecha_final_intento.getFullYear()+'-'+('0'+(fecha_final_intento.getMonth()+1)).slice(-2)+'-'+fecha_final_intento.getDate()
 	var hora = fecha_final_intento.getHours() + ":" + fecha_final_intento.getMinutes() + ":" + fecha_final_intento.getSeconds()
