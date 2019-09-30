@@ -55,19 +55,19 @@
 
                 @for($i=0;$i<$paginacion->total();$i++)
                     @if($i % $paginacion->perPage() == 0)
-                        <a href="/intento/prueba/{{$clave_de_intento->turno_id}}?page={{$aux}}#pregunta{{$i+1}}" class="a-pregunta">
-                            <div class="a-div">
+                        <button onclick="capturar_data_navigator('/intento/prueba/{{$clave_de_intento->turno_id}}?page={{$aux}}#pregunta{{$i+1}}')" class="a-pregunta btn btn-link text-align-center text-align-center mb-1">
+                            <div class="a-div mb-2 text-align-center">
                                 {{$i+1}}
                                 <?php $aux++; ?>
                             </div>
-                        </a>
+                        </button>
                     @else
-                        <a href="/intento/prueba/{{$clave_de_intento->turno_id}}?page={{$aux-1}}#pregunta{{$i+1}}" class="a-pregunta">
-                            <div class="a-div">
+                        <button onclick="capturar_data_navigator('/intento/prueba/{{$clave_de_intento->turno_id}}?page={{$aux-1}}#pregunta{{$i+1}}')" class="a-pregunta btn btn-link text-align-center mb-1">
+                            <div class="a-div text-align-center mb-2">
                                 {{$i+1}}
                                 <?php $aux-1 ?>
                             </div>
-                        </a>
+                        </button>
                     @endif
                 @endfor
             </div>
@@ -87,9 +87,7 @@
 
                     <!--Aqui iran las preguntas-->
 
-                    @for($i=0; $i < count($valores); $i++)
-
-                    
+                    @for($i=0; $i < count($valores); $i++)                    
 
                         @if($valores[$i]['tipo_item']!=3)
 

@@ -21,6 +21,7 @@ $('#asignarModal').on('show.bs.modal', function(event){
     var preguntas = link.data('preguntas-area')
     var titulo = link.data('titulo')
     var peso = link.data('peso-turno')
+    var tipo = link.data('tipo')
 
     var peso_restante = 100-peso
 
@@ -32,11 +33,28 @@ $('#asignarModal').on('show.bs.modal', function(event){
     modal.find('.modal-body #peso_turno').val(peso)
     modal.find('.modal-body #cantidad_preguntas').val(preguntas)
     modal.find('.modal-body #peso_restante').val(peso_restante)
+    modal.find('.modal-body #tipo_item_d').val(tipo)
 
     modal.find('.modal-body #titulo_s').text(String(titulo))
     modal.find('.modal-body #cantidad_preguntas_s').text(String(preguntas))
     modal.find('.modal-body #cantidad_preguntas_s2').text("*(Menor o igual a "+String(preguntas)+")")
     modal.find('.modal-body #peso_turno_s').text(String(peso))
+    
+    switch (tipo) {
+        case 1:
+            modal.find('.modal-body #tipo_s').text("Opción Múltiple")
+        break;
+        case 2:
+            modal.find('.modal-body #tipo_s').text("Verdadero/Falso")
+        break;
+        case 3:
+            modal.find('.modal-body #tipo_s').text("Emparejamiento")
+        break;
+        case 4:
+            modal.find('.modal-body #tipo_s').text("Respuesta Corta")
+        break;
+    }
+    
     modal.find('.modal-body #peso_restante_s').text("*(Menor o igual a "+String(peso_restante)+")")
 
 

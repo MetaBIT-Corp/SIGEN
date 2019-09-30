@@ -111,7 +111,7 @@
 
 									@if(($peso_turno < 100) && ($preguntas_area > 0))
 										<td class="col-sm-3 text-center">
-											<button type="button" class="btn btn-info" data-id-turno="{{$turno->id}}" data-id-clave="{{$claves[0]->id}}" data-id-area="{{$area->id}}" data-titulo="{{$area->titulo}}" data-preguntas-area="{{$preguntas_area}}" data-peso-turno="{{$peso_turno}}" data-toggle="modal" data-target="#asignarModal" data-dismiss="modal" onclick="$('#asignarModal').modal();">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asignar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+											<button type="button" class="btn btn-info" data-id-turno="{{$turno->id}}" data-id-clave="{{$claves[0]->id}}" data-id-area="{{$area->id}}" data-tipo="{{$area->tipo_item_id}}" data-titulo="{{$area->titulo}}" data-preguntas-area="{{$preguntas_area}}" data-peso-turno="{{$peso_turno}}" data-toggle="modal" data-target="#asignarModal" data-dismiss="modal" onclick="$('#asignarModal').modal();">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asignar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
 										</td>
 									@else
 										<td class="col-sm-3 text-center">
@@ -169,7 +169,7 @@
 
 					<div class="form-group">
 
-						<div class="form-group" style="display: none; border: solid gold;">
+						<div class="form-group" style="display:none; border: solid gold;">
 							<label class="col-form-label" for="turno_id">Turno ID:</label>
 							<input type="text" class="form-control" name="turno_id" placeholder="ID de Pregunta" id="turno_id">
 							<label class="col-form-label" for="clave_id">Clave ID:</label>
@@ -186,10 +186,13 @@
 							<input type="text" class="form-control" name="peso_turno" placeholder="Peso de Turno" id="peso_turno" readonly="">
 							<label class="col-form-label" for="peso_restante">Peso Restante de Turno:</label>
 							<input type="text" class="form-control" name="peso_restante" placeholder="Peso restante" id="peso_restante" readonly="">
+							<label class="col-form-label" for="tipo_item_d">Tipo:</label>
+							<input type="text" class="form-control" name="tipo_item_d" placeholder="Tipo" id="tipo_item_d" readonly="">
 						</div>
 
 						<div class="form-group">
 							<b>Titulo del Área:</b> <span id="titulo_s" name="titulo_s"></span><br>
+							<b>Tipo de Preguntas del Área:</b> <span id="tipo_s" name="tipo_s"></span><br>
 							<b>Cantidad de Preguntas del Área:</b> <span id="cantidad_preguntas_s" name="cantidad_preguntas_s"></span><br>
 							<b>Peso Total Actual del Turno:</b> <span id="peso_turno_s" name="peso_turno_s"></span><br>
 						</div>
