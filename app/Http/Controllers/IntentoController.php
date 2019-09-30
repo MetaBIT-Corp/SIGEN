@@ -123,6 +123,7 @@ class IntentoController extends Controller
         }else{
             //Se modifica el intento existente con la nueva fecha del nuevo intento
             if($intento->fecha_final_intento!=null){
+                DB::table('respuesta')->where('id_intento',$intento->id)->delete();
                 $num_intento=$intento->numero_intento;
                 $intento->numero_intento=$num_intento+1;
                 $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
