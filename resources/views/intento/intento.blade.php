@@ -17,6 +17,7 @@
 <!--Card que contiene a cada pregunta-->
 <!--Se agrego la etiqueta form para persistencia-->
 <form id="quiz_form">
+    <input type="hidden" id="intento_id" value="{{ $intento_id }}">
     <div class="card">
     <div class="card-body">
         <!--Aqui iran las preguntas-->

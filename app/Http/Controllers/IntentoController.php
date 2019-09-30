@@ -73,6 +73,8 @@ class IntentoController extends Controller
                 $intento->save();
             }
         }
+
+        $intento_id = $intento->id;
         
         //Obtener las preguntas segun la clave asignada aleatoriamente
         //Se envia el tipo 0 para evaluaciones
@@ -82,7 +84,7 @@ class IntentoController extends Controller
         $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
 
         //return dd($preguntas);
-        return view('intento.intento', compact('paginacion'));
+        return view('intento.intento', compact('paginacion', 'intento_id'));
     }
 
     public function iniciarEncuesta($id_clave, Request $request)
@@ -342,8 +344,9 @@ class IntentoController extends Controller
         //Se obtiene el estudiante logueado para almacenar sus respuestas
         $id_user = auth()->user()->id;
         $id_est=Estudiante::where('user_id',$id_user)->first()->id_est;
-        //Obtenemos el intento el cual se esta realizando
-        $intento = Intento::where('estudiante_id',$id_est)->where('fecha_final_intento', null)->first();
+        
+        //Obtenemos el intento el cual se esta realizando 
+        $intento = Intento::find( (int) $_GET['intento_id'] );
 
         //Si no hay ningún intento sin finalizar terminamos el proceso
         if(! $intento)
