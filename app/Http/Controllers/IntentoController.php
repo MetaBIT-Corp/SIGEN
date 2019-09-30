@@ -54,26 +54,6 @@ class IntentoController extends Controller
         //Verificamos si es el primer intento que realiza
         $intento=Intento::where('estudiante_id',$id_est)->first();
 
-        //Inicializar el intento y asignar clave a la que pertenece el turno
-        $num_intento=1;
-        if($intento==null){
-            $intento=new Intento();
-            $intento->estudiante_id=$id_est;
-            $intento->clave_id=$clave_de_intento->id;
-            $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-            $intento->fecha_final_intento=null;
-            $intento->numero_intento=$num_intento;
-            $intento->save();
-        }else{
-            if($intento->fecha_final_intento!=null){
-                $num_intento=$intento->numero_intento;
-                $intento->numero_intento=$num_intento+1;
-                $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-                $intento->fecha_final_intento=null;
-                $intento->save();
-            }
-        }
-
         //Verificamos el intento que se realizara o esta realizando
         $intento=$this->verificarIntento(0,$id_user,$clave_de_intento,$id_est);
         
