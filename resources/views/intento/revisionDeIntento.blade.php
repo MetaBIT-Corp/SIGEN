@@ -162,7 +162,8 @@
 		                            @foreach($respuestas as $respuesta)
 										@if($respuesta->id_pregunta == $valores[$i]['preguntas'][$r]->id)
 											@for($p=0;$p<count($valores[$i]['preguntas']);$p++)
-											@if($respuesta->id_opcion== $valores[$i]['preguntas'][$nums[$p]]->opciones[0]->id )
+											@if($respuesta->id_opcion== $valores[$i]['preguntas'][$nums[$p]]->opciones[0]->id 
+												&& $respuesta->id_pregunta  == $valores[$i]['preguntas'][$r]->id)
 												@if($valores[$i]['preguntas'][$nums[$p]]->opciones[0]->correcta)
 													style="background-color: #9FF189;"
 												@else

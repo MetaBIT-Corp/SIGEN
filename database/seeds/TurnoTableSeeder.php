@@ -17,14 +17,14 @@ class TurnoTableSeeder extends Seeder
         	'fecha_inicio_turno'=>'2019-07-28 21:52:28',
         	'fecha_final_turno'=>'2019-07-28 22:52:28',
         	'visibilidad'=>true,
-        	'contraseña'=>bcrypt('ues')
+        	'contraseña'=>'ues'
         ]);
         Turno::create([
         	'evaluacion_id'=>1,
         	'fecha_inicio_turno'=>'2019-07-28 22:59:28',
         	'fecha_final_turno'=>'2019-07-28 23:59:28',
         	'visibilidad'=>true,
-        	'contraseña'=>bcrypt('ues')
+        	'contraseña'=>'ues'
         ]);
 
         //Turnos de evaluacion id 2 de docente Ricardo y materia MAT115
@@ -33,7 +33,7 @@ class TurnoTableSeeder extends Seeder
         	'fecha_inicio_turno'=>'2019-07-28 21:52:28',
         	'fecha_final_turno'=>'2019-07-28 21:52:28',
         	'visibilidad'=>true,
-        	'contraseña'=>bcrypt('ues')
+        	'contraseña'=>'ues'
         ]);
 
         //Turnos de evaluacion id 3 de de docente Ricardo y materia HDP115
@@ -42,14 +42,14 @@ class TurnoTableSeeder extends Seeder
         	'fecha_inicio_turno'=>'2019-07-28 21:52:28',
         	'fecha_final_turno'=>'2019-07-28 21:52:28',
         	'visibilidad'=>true,
-        	'contraseña'=>bcrypt('ues')
+        	'contraseña'=>'ues'
         ]);
         Turno::create([
         	'evaluacion_id'=>3,
         	'fecha_inicio_turno'=>'2019-07-29 21:52:28',
         	'fecha_final_turno'=>'2019-07-29 22:52:28',
         	'visibilidad'=>true,
-        	'contraseña'=>bcrypt('ues')
+        	'contraseña'=>'ues'
         ]);
 
         /*Turno de Prueba (René).*/
@@ -58,7 +58,7 @@ class TurnoTableSeeder extends Seeder
             'fecha_inicio_turno'=>'2019-10-02 00:00:00',
             'fecha_final_turno'=>'2019-10-16 00:00:00',
             'visibilidad'=>true,
-            'contraseña'=>bcrypt('ues')
+            'contraseña'=>'ues'
         ]);
     }
 }

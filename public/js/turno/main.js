@@ -28,7 +28,7 @@ $(document).ready(function() {
             type: 'GET',
             success: function(data){
                 
-                var date_margen = moment(fecha_hora_inicio,'DD/MM/YYYY h:mm A').add(data,'hours').add(10,'minutes').format('DD/MM/YYYY h:mm A');
+                var date_margen = moment(fecha_hora_inicio,'DD/MM/YYYY h:mm A').add(data,'minutes').add(10,'minutes').format('DD/MM/YYYY h:mm A');
                 
                 $('#datetimepicker2input').val(date_margen);
                                 

@@ -342,7 +342,8 @@ class EvaluacionController extends Controller
                 return back()->with($notification,$message);
             }else{
                 //Se valida si la contraseña es valida
-                if(Hash::check($contrasenia, $turno_a_acceder->contraseña)){
+                //devuelve false si son correctas
+                if(!strcmp($contrasenia, $turno_a_acceder->contraseña)){
                     /*
                     return redirect()->action(
                         'IntentoController@iniciarEvaluacion', 

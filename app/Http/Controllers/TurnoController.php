@@ -147,7 +147,7 @@ class TurnoController extends Controller
         
         //Calculamos la diferencia entre la fecha final e inicial del turno
 
-        $diff_fin_inicio = Carbon::parse($requestData['fecha_final_turno'])->diffInHours(Carbon::parse($requestData['fecha_inicio_turno']));
+        $diff_fin_inicio = Carbon::parse($requestData['fecha_final_turno'])->diffInMinutes(Carbon::parse($requestData['fecha_inicio_turno']));
 
         //Obtenemos la duración de la Evaluación
         $duracion_evaluacion = Evaluacion::find($requestData['evaluacion_id'])->duracion;
@@ -160,7 +160,11 @@ class TurnoController extends Controller
         $turno = new Turno();
         $turno->fecha_inicio_turno = $requestData['fecha_inicio_turno'];
         $turno->fecha_final_turno = $requestData['fecha_final_turno'];
-        $turno->contraseña = bcrypt($requestData['contraseña']);
+
+        $turno->contraseña = $requestData['contraseña'];
+        //bcrypt($requestData['contraseña']);
+
+
         $turno->evaluacion_id = $requestData['evaluacion_id'];
         $turno->visibilidad = 0;
 
@@ -283,7 +287,7 @@ class TurnoController extends Controller
 
         //Calculamos la diferencia entre la fecha final e inicial del turno
         
-        $diff_fin_inicio = Carbon::parse($requestData['fecha_final_turno'])->diffInHours(Carbon::parse($requestData['fecha_inicio_turno']));
+        $diff_fin_inicio = Carbon::parse($requestData['fecha_final_turno'])->diffInMinutes(Carbon::parse($requestData['fecha_inicio_turno']));
 
         //Obtenemos la duración de la Evaluación
         $duracion_evaluacion = Evaluacion::find($evaluacion_id)->duracion;
@@ -300,7 +304,8 @@ class TurnoController extends Controller
         
         //Si ha ingresado nueva contraseña, la cambiamos
         if(isset($requestData['contraseña']) and $requestData['contraseña'] != null)
-           $turno->contraseña = bcrypt($requestData['contraseña']);
+           $turno->contraseña = $requestData['contraseña']; 
+            //bcrypt($requestData['contraseña']);
         
         $turno->save();
         
