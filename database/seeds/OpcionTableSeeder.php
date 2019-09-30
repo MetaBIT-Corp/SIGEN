@@ -120,7 +120,7 @@ class OpcionTableSeeder extends Seeder
         Opcion::create([
             'pregunta_id'=>9,
             'opcion'=>'Ilwis',
-            'correcta'=>flase
+            'correcta'=>false
         ]);
         Opcion::create([
             'pregunta_id'=>9,
