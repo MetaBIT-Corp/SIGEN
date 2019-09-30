@@ -9,6 +9,7 @@
 @endsection
 
 @section("body")
+
     
     @section("ol_breadcrumb")
         <a href="#">
@@ -62,12 +63,12 @@
                         </a>
                     @endif
                 @endfor
-
             </div>
 
         </div>
 
         <form id='quiz_form'>
+            <input type="hidden" id="intento_id" value="{{ $intento->id }}">
             <div class='card'>
                 <div class='card-body'>
 
