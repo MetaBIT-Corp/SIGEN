@@ -101,6 +101,8 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::delete('/area/{id}/pregunta/{pregunta}','PreguntaController@destroy');
     Route::post('grupo/{grupo_id}/edit','GrupoEmparejamientoController@updateGE')->name('editar-grupo');
 
+    Route::post('area/{id}/grupo-store','GrupoEmparejamientoController@storeGE')->name('crear-grupo-emparejamiento');
+
 
      //URL's para  evaluacion
     Route::get('materia/evaluacion/{id}/nuevo','EvaluacionController@getCreate')->name('gc_evaluacion')->middleware('signed');
@@ -132,6 +134,7 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::post('grupo/{grupo_id}/preguntas/store','GrupoEmparejamientoController@store')->name('crear-pregunta-grupo');
     Route::post('grupo/{grupo_id}/preguntas/update','GrupoEmparejamientoController@update')->name('editar-pregunta-grupo');
     Route::post('grupo/{grupo_id}/preguntas/delete','GrupoEmparejamientoController@destroy')->name('eliminar-pregunta-grupo');
+
 
     /*Rutas para Asignación de Áreas a Clave/Turno*/
     Route::post('turno/{turno_id}/claves/store','ClaveAreaController@store')->name('asignar-area-clave');
