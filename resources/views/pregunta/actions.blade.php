@@ -19,10 +19,6 @@
         <span class="icon-options">
         </span>
     </a>
-    <a class="btn btn-success btn-sm  btn mr-2 ml-2" title="Informacion Opciones" href="">
-        <span class="icon-information-solid">
-        </span>
-    </a>
     <a class="btn-editar btn btn-sm" id="btn_editar" title="Editar Pregunta" href="javascript:void(0)" data-id="{{ $id }}" data-gpo="{{ $grupo_emparejamiento_id }}" data-target="#modal" data-toggle="modal">
         <span class="icon-edit">
         </span>

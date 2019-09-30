@@ -49,7 +49,7 @@
         <span class="icon-file-text"></span>
       </a>
       @if(auth()->user()->IsTeacher)
-      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('areas.index', ['id' => $materia->id_cat_mat]) }}">
+      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('getAreaIndex', ['id' => $materia->id_cat_mat]) }}">
         <span class="icon-options"></span>
       </a>
       @endif
@@ -85,7 +85,7 @@
         <span class="icon-file-text"></span>
       </a>
       @if(auth()->user()->IsTeacher)
-      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('areas.index', ['id' => $materia->id_cat_mat]) }}">
+      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('getAreaIndex', ['id' => $materia->id_cat_mat]) }}">
         <span class="icon-options"></span>
       </a>
       @endif
@@ -123,7 +123,7 @@
         <span class="icon-file-text"></span>
       </a>
       @if(auth()->user()->IsTeacher)
-      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('areas.index', ['id' => $materia->id_cat_mat]) }}">
+      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('getAreaIndex', ['id' => $materia->id_cat_mat]) }}">
         <span class="icon-options"></span>
       </a>
       @endif
@@ -211,7 +211,7 @@
       @endif
 
       @if(auth()->user()->IsTeacher)
-      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('areas.index', ['id' => $materia->id_cat_mat]) }}">
+      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('getAreaIndex', ['id' => $materia->id_cat_mat]) }}">
         <span class="icon-options"></span>
       </a>
       @endif
@@ -255,7 +255,7 @@
       @endif
 
       @if(auth()->user()->IsTeacher)
-      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('areas.index', ['id' => $materia->id_cat_mat]) }}">
+      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('getAreaIndex', ['id' => $materia->id_cat_mat]) }}">
         <span class="icon-options"></span>
       </a>
       @endif
@@ -300,7 +300,7 @@
       @endif
 
       @if(auth()->user()->IsTeacher)
-      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('areas.index', ['id' => $materia->id_cat_mat]) }}">
+      <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('getAreaIndex', ['id' => $materia->id_cat_mat]) }}">
         <span class="icon-options"></span>
       </a>
       @endif

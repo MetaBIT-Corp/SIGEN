@@ -62,7 +62,6 @@ class AreaController extends Controller
                     ->rawColumns(['actions'])
                     ->toJson();
         }
-
         return view('area.index', compact('encuesta'));
 
     }
