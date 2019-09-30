@@ -32,6 +32,4 @@ function paginacion(accion){
         window.location.href = res_arr[0] + "=" + (parseInt(res_arr[1], 10) - 1).toString();
     else
         window.location.href = res_arr[0] + "=" + (parseInt(res_arr[1], 10) + 1).toString();
-
-    //window.location.href = res_arr[0] + "=" + page.toString();
 }
