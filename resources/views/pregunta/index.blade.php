@@ -14,7 +14,7 @@
     </a>
 </li>
 <li class="breadcrumb-item">
-	<a href="{{ route('areas.index',[$area->materia->id_cat_mat]) }}">
+	<a href="{{ route('getAreaIndex',[$area->materia->id_cat_mat]) }}">
         Áreas
     </a>
 </li>

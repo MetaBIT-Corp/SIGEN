@@ -1,9 +1,24 @@
 $(document).ready(function() {
     $(function() {
+        var id_mat =$("#materia-name").data('materia');
+        var url="";
+        if(id_mat==undefined){
+            id_mat=1;
+            url='/areas/encuestas';
+        }else{
+            url='/materia/'+id_mat+'/areas/';
+        }
+        var token =$("#materia-name").data('token');
         var table = $('#areas').DataTable({
             "processing":true,
             "serverSide": true,
-            "ajax": window.location.href,
+            "ajax": {
+                "url":url,
+                "type":"POST",
+                "data":{
+                     "_token": token,
+                }
+            },
             "columns": [{
                 data: 'id'
             }, {
@@ -50,7 +65,7 @@ $(document).ready(function() {
         }
         $('body').on('click', '.btn-editar', function() {
             var id_area = $(this).data('name');
-            $.get(window.location.href + '/' + id_area + '/edit').done(function(data) {
+            $.get('/materia/'+id_mat+'/areas/'+ id_area + '/edit').done(function(data) {
                 $("#id_area").val(data.id);
                 $("#input_titulo").val(data.titulo);
             }).fail(function() {
@@ -59,7 +74,7 @@ $(document).ready(function() {
         });
         $('body').on('click', '.btn-eliminar', function() {
             var id_area = $(this).data('name');
-            $.get(window.location.href + '/' + id_area + '/edit').done(function(data) {
+            $.get('/materia/'+id_mat+'/areas/'+ id_area + '/edit').done(function(data) {
                 $("#id_area_eli").val(data.id);
             }).fail(function() {
                 console.log("Error");
@@ -71,7 +86,7 @@ $(document).ready(function() {
             if ($("#input_titulo").val().length > 0) {
                 $(this).attr("disabled", true);
                 $.ajax({
-                    url: window.location.href + '/0',
+                    url: '/materia/'+id_mat+'/areas/0',
                     type: "PUT",
                     data: $("#form-edit").serialize(),
                     dataType: "json"
@@ -94,7 +109,7 @@ $(document).ready(function() {
         $("#eliminar").click(function() {
             $(this).attr("disabled", true);
             $.ajax({
-                url: window.location.href + '/0',
+                url: '/materia/'+id_mat+'/areas/0',
                 type: "DELETE",
                 data: $("#form-elim").serialize(),
                 dataType: "json"

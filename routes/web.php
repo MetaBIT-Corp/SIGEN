@@ -111,9 +111,17 @@ Route::group(['middleware' => 'teacher'], function(){
 
     //URL's para Area
     Route::get('/materia/{id}/areas/create','AreaController@create')->name('crear_area')->middleware('signed');
-    Route::resource('materia/{id}/areas','AreaController')->except(['create']);
+    Route::get('materia/{id}/areas','AreaController@index')->name('getAreaIndex')->middleware('signed');
+    Route::post('materia/{id}/areas','AreaController@index')->name('postAreaIndex');
+    Route::get('materia/{id}/areas/{id_area}/edit','AreaController@edit')->name('getArea');
+
+    Route::put('materia/{id}/areas/{id_area}','AreaController@update')->name('putArea');
+    
+    Route::delete('materia/{id}/areas/{id_area}','AreaController@destroy')->name('deleteArea');
+    //Route::resource('materia/{id}/areas','AreaController')->except(['create']);
 
     Route::get('areas/encuestas', 'AreaController@indexEncuesta')->name('areas_encuestas');
+    Route::post('areas/encuestas', 'AreaController@indexEncuesta')->name('post_areas_encuestas');
 
     
     //URL's para Pregunta

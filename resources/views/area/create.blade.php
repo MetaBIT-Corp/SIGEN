@@ -35,7 +35,7 @@ Crear Área
              <button type="submit" class="btn btn-primary">Guardar</button>                 
          </div>
          <div class="form-group offset-1">
-             <button type="button" class="btn btn-secondary" onclick="location.href='{{ route('areas.index',[$id_materia]) }}'">Cancelar</button>                           
+             <button type="button" class="btn btn-secondary" onclick="location.href='{{ route('getAreaIndex',[$id_materia]) }}'">Cancelar</button>                           
          </div>
       </div>
 </form>

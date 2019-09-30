@@ -17,8 +17,10 @@
         /
         <a class="ml-2 mr-2">
             @if($encuesta==true)
+            <label id="materia-name" data-token="{{ csrf_token() }}"></label>
             Encuestas
             @else
+            <label id="materia-name" data-materia="{{ $materia->id_cat_mat }}" data-token="{{ csrf_token() }}"></label>
             {{ $materia->nombre_mar }}
             @endif
         </a>
