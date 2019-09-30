@@ -237,5 +237,4 @@ class GrupoEmparejamientoController extends Controller
 
         return response()->json(['grupo'=>$grupo]);
     }
-
 }

@@ -71,6 +71,12 @@
                     @endif
                 @endfor
             </div>
+            <div class="carta-info">
+
+                <div class="carta-div-float">
+                    <input type="button" onclick="capturar_data(2)" class="page-link bg-danger text-white btn-md" value="Terminar"/>
+                </div>
+            </div>
 
         </div>
 
