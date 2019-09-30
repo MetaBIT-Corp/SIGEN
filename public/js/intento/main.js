@@ -1,6 +1,10 @@
 function capturar_data(accion){
 	//accion = 0 es previo
 	//accion = 1 es siguiente
+
+    //Obtenemos el id del intento para que en la persistencia se facilite la validación y saber a que intento pertenece la petición
+    var intento_id = $("#intento_id").val();
+    
     var data = $("#quiz_form").serialize();
     //Si no hay datos, procedemos a paginar, según acción del Estudiante
     if(! data)
@@ -8,7 +12,7 @@ function capturar_data(accion){
 
     var respuestas_val = data.replace(/&/g,"-");
 
-    $.get('/persistencia', {respuestas:respuestas_val}, function(response){
+    $.get('/persistencia', {respuestas:respuestas_val,intento_id:intento_id}, function(response){
         console.log("success");
         //Luego de almacenar las respuestas procedemos a paginar
         paginacion(accion);

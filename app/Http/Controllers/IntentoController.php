@@ -51,6 +51,29 @@ class IntentoController extends Controller
         //$clave_de_intento=$claves[rand(0,count($claves)-1)];
         $clave_de_intento = $claves[0];
 
+        //Verificamos si es el primer intento que realiza
+        $intento=Intento::where('estudiante_id',$id_est)->first();
+
+        //Inicializar el intento y asignar clave a la que pertenece el turno
+        $num_intento=1;
+        if($intento==null){
+            $intento=new Intento();
+            $intento->estudiante_id=$id_est;
+            $intento->clave_id=$clave_de_intento->id;
+            $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+            $intento->fecha_final_intento=null;
+            $intento->numero_intento=$num_intento;
+            $intento->save();
+        }else{
+            if($intento->fecha_final_intento!=null){
+                $num_intento=$intento->numero_intento;
+                $intento->numero_intento=$num_intento+1;
+                $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+                $intento->fecha_final_intento=null;
+                $intento->save();
+            }
+        }
+
         //Verificamos el intento que se realizara o esta realizando
         $intento=$this->verificarIntento(0,$id_user,$clave_de_intento,$id_est);
         
@@ -60,9 +83,8 @@ class IntentoController extends Controller
 
         //Variable que contiene el array a mostrar en la paginacion
         $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
-
-        //return dd($preguntas);
-        return view('intento.intento', compact('paginacion','evaluacion','intento'));
+        // return dd($preguntas);
+        return view('intento.intento', compact('paginacion','evaluacion','intento','clave_de_intento'));
     }
 
     public function iniciarEncuesta($id_clave, Request $request)
@@ -143,6 +165,9 @@ class IntentoController extends Controller
     {
         //Recupera en un array las areas que conforman la clave (Registros de la relacion entre clave y area)
         $claves_areas = $clave->clave_areas;
+    
+        //Obtenemos el intento con el cual obtendremos las respuestas del Estudiante
+        $intento = Intento::where('clave_id',$clave->id)->where('estudiante_id',$estudiante)->first();
 
         /*Recupera los objetos clave_area_pregunta de cada clave_area y lo guarda en un array
         se le pone como clave a cada posicion del array el id del tipo de item
@@ -150,7 +175,7 @@ class IntentoController extends Controller
         if($tipo==0){
             foreach ($claves_areas as $clave_area) {
                 $claves_areas_preguntas[$clave_area->area->tipo_item->id] = $clave_area->claves_areas_preguntas_estudiante()->where('estudiante_id',$estudiante)
-                    ->where('numero_intento',$num_intento)->get();
+                    ->where('numero_intento',($num_intento))->get();
             }
         }else{
             foreach ($claves_areas as $clave_area) {
@@ -187,7 +212,7 @@ class IntentoController extends Controller
                 //Si no pertence a un grupo de emparejamiento crea un array con cierta estructura
                 if ($i!=3) {
                     //Al estar recorriendo una pregunta, hacemos una consulta para ver si existe una respuesta para el intento que se esta realizado
-                    $respuesta = Respuesta::where('id_intento',1)->where('id_pregunta',$claves_areas_preguntas[$i][$j]->pregunta->id)->get();
+                    $respuesta = Respuesta::where('id_intento',$intento->id)->where('id_pregunta',$claves_areas_preguntas[$i][$j]->pregunta->id)->get();
                     //Obtenemos todas las opciones de la pregunta
                     $opciones = $claves_areas_preguntas[$i][$j]->pregunta->opciones;
                     //Si existe respuesta procedemos a recorrer las opciones para ver cual es la seleccionada por parte del estudiante
@@ -206,7 +231,7 @@ class IntentoController extends Controller
                     $pregunta = $claves_areas_preguntas[$i][$j]->pregunta;
                     //Vamos a verificar si es texto corto, de ser asi a la pregunta le agregaremos la respuesta almacenada, en caso de existir 
                     if($i == 4){
-                        $respuesta = Respuesta::where('id_intento',1)->where('id_pregunta',$pregunta->id)->first();
+                        $respuesta = Respuesta::where('id_intento',$intento->id)->where('id_pregunta',$pregunta->id)->first();
                         //Por default el texto esta vacio
                         $pregunta['texto'] = "";
                         //Si existe ya una respuesta, obtenemos el texto de la respuesta y lo agregamos al objeto pregunta
@@ -223,7 +248,7 @@ class IntentoController extends Controller
                         $pregs = Pregunta::where('grupo_emparejamiento_id', $ultimo_id_gpo)->get();
                         
                         foreach($pregs as $preg){
-                            $respuesta = Respuesta::where('id_intento',1)->where('id_pregunta',$preg->id)->first();
+                            $respuesta = Respuesta::where('id_intento',$intento->id)->where('id_pregunta',$preg->id)->first();
                             //Por defecto la seleccionada es la opcion de "Seleccione" que posee este valor
                             $preg['seleccionada'] = "opcion_0";
                             
@@ -276,8 +301,9 @@ class IntentoController extends Controller
         //Se obtiene el estudiante logueado para almacenar sus respuestas
         $id_user = auth()->user()->id;
         $id_est=Estudiante::where('user_id',$id_user)->first()->id_est;
-        //Obtenemos el intento el cual se esta realizando
-        $intento = Intento::where('estudiante_id',$id_est)->where('fecha_final_intento', null)->first();
+        
+        //Obtenemos el intento el cual se esta realizando 
+        $intento = Intento::find( (int) $_GET['intento_id'] );
 
         //Si no hay ningún intento sin finalizar terminamos el proceso
         if(! $intento)
