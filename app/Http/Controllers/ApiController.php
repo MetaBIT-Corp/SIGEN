@@ -40,7 +40,8 @@ class ApiController extends Controller
     //Funcion que es llamada cuando finaliza el intento en el móvil
     public function finalizarIntentoMovil(Request $request){
         $respuesta = new Respuesta();
-
+        $es_encuesta=$request->es_encuesta;
+        
         //cantidad total de preguntas que vienen desde el móvil
         $total_preguntas = $request->total_preguntas;
 
@@ -58,16 +59,23 @@ class ApiController extends Controller
 
         //Verifica si todas las respuestas que venian del movil ya se guardaron en la base de datos mysql
         if($total_preguntas == count($num_actual)){
-            $intento = Intento::find($request->intento_id);
-            
-            //Lama al método calcular nota
-            $nota = $intento->calcularNota($request->intento_id);
+        	$intento = Intento::find($request->intento_id);
 
-            //Actualizar los datos del intento correspondiente
-            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
-            $intento->nota_intento = $nota;
-            $intento->fecha_final_intento = $fecha_hora_actual;
-            $intento->save();
+        	if($es_encuesta==1){
+        		//Actualizar los datos del intento correspondiente
+	            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+	            $intento->fecha_final_intento = $fecha_hora_actual;
+	            $intento->save();
+        	}else{
+        		//Lama al método calcular nota
+	            $nota = $intento->calcularNota($request->intento_id);
+
+	            //Actualizar los datos del intento correspondiente
+	            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+	            $intento->nota_intento = $nota;
+	            $intento->fecha_final_intento = $fecha_hora_actual;
+	            $intento->save();
+        	}
         }
     }
 
