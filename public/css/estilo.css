@@ -110,12 +110,9 @@ footer{
 }
 
 #carta{
-	position:;
-	background-color: rgba(50,100,200,0.9);
+	background-color:rgba(52,58,64,1);
 	border-radius: 10px;
 	padding:10px;
-	width: 30%;
-	margin:20px;
 }
 
 #h-carta{
@@ -134,12 +131,14 @@ footer{
 	color:rgb(248,248,248);
 	margin:0;
 	padding:0;
+	text-align: center;
 }
 
 #paginador-pregunta{
-	padding: ;
-	margin-top: 20px;
-	margin-bottom: 20px;
+	border: ;
+	clear: left;
+	padding: 20px;
+	margin-bottom: 5px;
 }
 
 .a-pregunta{
@@ -155,4 +154,17 @@ footer{
 
 	width: 40px;
 
+}
+
+.carta-div-float{
+	float: left;
+  width: 200px;
+  height: 50px;
+  margin: 1em;
+}
+
+.carta-info{
+	text-align: center;
+	border-bottom: solid rgba(80,80,80,1);
+	overflow: hidden;
 }

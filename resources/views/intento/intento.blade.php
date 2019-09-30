@@ -23,39 +23,48 @@
         <!--Se agrego la etiqueta form para persistencia-->
 
         <div id="carta" class="">
+            <div class="carta-info">
 
-            <p class="p-carta">Inicio de Intento:</p>
-            <input type="text" class="form-control-plaintext in-carta" id="fecha-inicio-intento" name="fecha-inicio-intento" value="{{$intento->fecha_inicio_intento}}" disabled>
+                <div class="carta-div-float">
+                    <p class="p-carta">Inicio de Intento:</p>
+                    <input type="text" class="form-control-plaintext in-carta" id="fecha-inicio-intento" name="fecha-inicio-intento" value="{{$intento->fecha_inicio_intento}}" disabled>
+                </div>
 
-            <p class="p-carta">Final de Intento:</p>
-            <input type="text" class="form-control-plaintext in-carta" id="fecha-final-intento" name="fecha-final-intento" disabled>
+                <div class="carta-div-float">
+                    <p class="p-carta">Final de Intento:</p>
+                    <input type="text" class="form-control-plaintext in-carta" id="fecha-final-intento" name="fecha-final-intento" disabled>
+                </div>
 
-            <p class="p-carta">Duración de Intento:</p>
-            <input type="text" class="form-control-plaintext in-carta" id="duracion-intento" name="duracion-intento" value="{{$evaluacion->duracion}}" disabled>
+                <div class="carta-div-float">
+                    <p class="p-carta">Duración de Intento:</p>
+                    <input type="text" class="form-control-plaintext in-carta" id="duracion-intento" name="duracion-intento" value="{{$evaluacion->duracion}}" disabled>
+                </div>
 
-            <hr>
+                <div class="carta-div-float">
+                    <p class="p-carta">Tiempo Restante:</p>
+                    <span class="in-carta" id="contador"></span>
+                </div>
+            
+            </div>
 
-            <p class="p-carta">Tiempo Restante:</p>
-            <span class="in-carta" id="contador"></span>
-
-            <hr>
-
-            <p class="p-carta">Preguntas:</p>
+            <p>{{$clave_de_intento->turno_id}}</p>    
 
             <?php $aux=1; ?>
 
             <div id="paginador-pregunta">
 
+                <p class="p-carta">Preguntas:</p><br>
+
                 @for($i=0;$i<$paginacion->total();$i++)
                     @if($i % $paginacion->perPage() == 0)
-                        <a href="/intento/prueba/8?page={{$aux}}#pregunta{{$i+1}}" class="a-pregunta">
+                        <a href="/intento/prueba/{{$clave_de_intento->turno_id}}?page={{$aux}}#pregunta{{$i+1}}" class="a-pregunta">
                             <div class="a-div">
                                 {{$i+1}}
                                 <?php $aux++; ?>
                             </div>
                         </a>
                     @else
-                        <a href="/intento/prueba/8?page={{$aux-1}}#pregunta{{$i+1}}" class="a-pregunta">
+                        <a href="/intento/prueba/{{$clave_de_intento->turno_id}}?page={{$aux-1}}#pregunta{{$i+1}}" class="a-pregunta">
                             <div class="a-div">
                                 {{$i+1}}
                                 <?php $aux-1 ?>
