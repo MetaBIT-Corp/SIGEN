@@ -25,7 +25,7 @@
 </li>
 <li class="breadcrumb-item">
 	@if(Request::get('id_gpo')==1)
-    	Listado de grupos emparejamiento
+    	Listado de Emparejamiento
         <label id="gpo-preg" data-control="0" data-token="{{ csrf_token() }}"></label>
     @else
     	Listado de preguntas
@@ -44,7 +44,7 @@
 </div>
     @else
 <div class="col-5 text-right">
-    <a class="btn" href="" id="add_gpo">
+    <a class="btn" href="#" data-toggle="modal" data-target="#createModal">
         <span class="icon-add text-primary">
         </span>
     </a>
@@ -180,28 +180,89 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Editar Titulo de Grupo Emparejamiento</h5>
+                <h5 class="modal-title">Editar Grupo de Emparejamiento</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <p></p>
-            </div>
+            <form action="" method="POST">
+                <div class="modal-body">
+                    <div class="form-group" style="display:none;">
+                        <label class="col-form-label" for="areaid">Area ID:</label>
+                        <input type="text" class="form-control" name="areaid" placeholder="ID de Pregunta" id="areaid" value="{{$area->id}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label" for="descripcion">Descripción del Grupo:</label>
+                        <input type="text" class="form-control" name="descripcion" placeholder="Inserte la Descripción" id="descripcion">
+                    </div>
+
+                </div>
+
+                <div class="alert alert-danger m-3" id="alerta">
+                    <ul id="ul-alert">
+                    </ul>
+                </div>
+
+                <div class="modal-footer">
+                    {{ csrf_field() }}
+                    <button type="submit" id="btn-agregar" class="btn btn-primary">Agregar Grupo de Emparejamiento</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 <!-- Fin de modal para edición de grupo emparejamiento -->
+
+<!-- Modal para la creación de grupo emparejamiento -->
+
+<div class="modal" id="createModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Nuevo Grupo de Emparejamiento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('crear-grupo-emparejamiento',$area->id)}}" method="POST">
+                <div class="modal-body">
+                    <div class="form-group" style="display:none;">
+                        <label class="col-form-label" for="areaid">Area ID:</label>
+                        <input type="text" class="form-control" name="areaid" placeholder="ID de Pregunta" id="areaid" value="{{$area->id}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label" for="descripcion">Descripción del Grupo:</label>
+                        <input type="text" class="form-control" name="descripcion" placeholder="Inserte la Descripción" id="descripcion">
+                    </div>
+
+                </div>
+
+                <div class="alert alert-danger m-3" id="alerta">
+                    <ul id="ul-alert">
+                    </ul>
+                </div>
+
+                <div class="modal-footer">
+                    {{ csrf_field() }}
+                    <button type="submit" id="btn-agregar" class="btn btn-primary">Agregar Grupo de Emparejamiento</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 <!--Scripts para datatables con Laravel-->
 @section("js")
-<script type="text/javascript" src="{{ asset('js/pregunta/pregunta.js') }}"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.js">
-</script>
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js">
-</script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js">
-</script>
+    <script type="text/javascript" src="{{ asset('js/pregunta/pregunta.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{asset('js/pregunta/grupo.js')}}"></script>
 @endsection
