@@ -451,9 +451,10 @@ class EvaluacionController extends Controller
             //si son de emparejamiento (item id 3) u otra modalidad, el tratamiento es el mismo
             foreach ($estudiantes as $estudiante) {
                 for( $i=1 ; $i<=$cant_intentos ; $i++){
+                    /*
                     //si no es de emparejamiento se barajean las preguntas dentro del grupo emparejamiento
                     if($tipo_item->id != 3){
-                        foreach ( $area->grupos_emparejamiento as $grupo) {
+                            $grupo = $area->grupos_emparejamiento->first(); 
                             $preguntas_all = $grupo->preguntas;
                             if($clave_area->numero_preguntas >= $preguntas_all->count()){
                                  $random_preguntas = $preguntas_all->shuffle();
@@ -469,12 +470,10 @@ class EvaluacionController extends Controller
                                     'numero_intento'=> $i
                                     ]);
                             }
-                            
-                        }
 
                     }
                     //si es de emparejamiento se barajean los grupos de emparejamiento
-                    else{
+                    else{*/
                         $grupos_emparejamientos = $area->grupos_emparejamiento;
                         if($clave_area->numero_preguntas >= $grupos_emparejamientos->count()){
                             $random_grupos_emparejamientos = $grupos_emparejamientos->shuffle();
@@ -496,7 +495,7 @@ class EvaluacionController extends Controller
                             }
                             
                         }
-                    }
+                    //}
                     
                 }
             }
@@ -524,16 +523,10 @@ class EvaluacionController extends Controller
         return $new_fecha;
     }
 
-    /**
-     * convertir a array.
-     * @param objeto
-     * @author Edwin Palacios
-     */
-    public function convertArray($objeto){
-        $array = array();
-        foreach ($objeto as $elemento) {
-            $array[]=$elemento;
-        }
-        return $array;
+    
+    public function random(){
+        $turnos = Turno::All();
+        $turno_random = $turnos->random(4);
+        return $turno_random->first();
     }
 }
