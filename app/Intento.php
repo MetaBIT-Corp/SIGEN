@@ -36,6 +36,7 @@ class Intento extends Model
     public function calcularNota($intento_id){
         $intento = Intento::find($intento_id); //Obtener el intento
         $estudiante_id = $intento->estudiante->id_est; //Obtener al estudiante que realizó el intento
+        $numero_intento = $intento->numero_intento; //Obtiene el numero de intento actual
         $nota = 0.0;
         $i=0;
 
@@ -59,8 +60,14 @@ class Intento extends Model
             //Obtener el peso de la pregunta
             $peso = $clave_area->peso;
 
+            //Recupera la cantidad de preguntas por estudiante en el intento actual del clave_area indicado
+            $cape_cantidad = Clave_Area_Pregunta_Estudiante::where('estudiante_id', $estudiante_id)
+                                                    ->where('clave_area_id', $clave_area->id)
+                                                    ->where('numero_intento', $numero_intento)
+                                                    ->get();
+
             //Cuenta la cantidad de preguntas que tiene el objeto clave_are
-            $cantidad_preguntas = count($clave_area->claves_areas_preguntas_estudiante);
+            $cantidad_preguntas = count($cape_cantidad);
 
             //Si la respuesta que seleccionó en la pregunta es correcta
             if($respuesta->id_opcion != null){
