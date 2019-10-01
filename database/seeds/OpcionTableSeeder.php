@@ -25,12 +25,12 @@ class OpcionTableSeeder extends Seeder
         Opcion::create([
             'pregunta_id'=>2,
             'opcion'=>'262',
-            'correcta'=>false
+            'correcta'=>true
         ]);
         Opcion::create([
             'pregunta_id'=>2,
             'opcion'=>'1000',
-            'correcta'=>true
+            'correcta'=>false
         ]);
         Opcion::create([
             'pregunta_id'=>3,
@@ -72,12 +72,12 @@ class OpcionTableSeeder extends Seeder
         Opcion::create([
             'pregunta_id'=>6,
             'opcion'=>'Google',
-            'correcta'=>false
+            'correcta'=>true
         ]);
         Opcion::create([
             'pregunta_id'=>6,
             'opcion'=>'Android Inc',
-            'correcta'=>true
+            'correcta'=>false
         ]);
         Opcion::create([
             'pregunta_id'=>7,
