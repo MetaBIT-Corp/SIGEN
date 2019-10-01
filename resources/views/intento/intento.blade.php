@@ -156,17 +156,18 @@
                                                 
                                                                     */
                                                 
-                                                                    $nums=range(0,count($valores[$i]['preguntas'])-1);
-                                                                    shuffle($nums);
+                                                                    /*$nums=range(0,count($valores[$i]['preguntas'])-1);
+                                                                    shuffle($nums);*/
                                                                 }}
                                                             
                                                             @endphp
                                                             
                                                             @for($m=0; $m< count($valores[$i]['preguntas']); $m++)
-                                                                 @for($n=0; $n< count($valores[$i]['preguntas']->opciones); $n++)
-                                                                 <!--For para recorer opciones-->
-                                                                <option value="opcion_{{ $valores[$i]['preguntas'][$nums[$m]]->opciones[$n]->id }}" @if($valores[$i]['preguntas'][$r]->seleccionada == "opcion_".$valores[$i]['preguntas'][$nums[$m]]->opciones[$n]->id) selected @endif>
-                                                                    {{ $valores[$i]['preguntas'][$nums[$m]]->opciones[$n]->opcion }}
+                                                            <!--For para recorer opciones-->
+                                                                 @for($n=0; $n<count($valores[$i]['preguntas'][$m]->opciones); $n++)
+                                                                 
+                                                                <option value="opcion_{{ $valores[$i]['preguntas'][$m]->opciones[$n]->id }}" @if($valores[$i]['preguntas'][$r]->seleccionada == "opcion_".$valores[$i]['preguntas'][$m]->opciones[$n]->id) selected @endif>
+                                                                    {{ $valores[$i]['preguntas'][$m]->opciones[$n]->opcion }}
                                                                 </option>
                                                                  @endfor
                                                             @endfor
