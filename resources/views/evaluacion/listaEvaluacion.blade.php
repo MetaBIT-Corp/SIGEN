@@ -253,7 +253,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Publicar</button>
+          <button type="submit" onclick="this.form.submit();this.disabled=true;" class="btn btn-primary">Publicar</button>
         </div>
       </form>
     </div>

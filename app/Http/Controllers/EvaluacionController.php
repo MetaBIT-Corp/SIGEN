@@ -480,8 +480,6 @@ class EvaluacionController extends Controller
                         }else{
                             $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
                         }
-                            
-                        $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
                         foreach ( $random_grupos_emparejamientos as $grupo) {
                             foreach ($grupo->preguntas as $pregunta) {
                                

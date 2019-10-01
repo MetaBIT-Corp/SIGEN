@@ -12,6 +12,7 @@ class ClaveAreaPreguntaTableSeeder extends Seeder
      */
     public function run()
     {
+        /*
         Clave_Area_Pregunta::create([
             'clave_area_id'=>1,
             'pregunta_id'=>1
@@ -87,5 +88,6 @@ class ClaveAreaPreguntaTableSeeder extends Seeder
             'clave_area_id'=>6,
             'pregunta_id'=>12
         ]);
+        */
     }
 }

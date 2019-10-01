@@ -11,8 +11,10 @@ class ClaveAreaTableSeeder extends Seeder
      */
     public function run()
     {
+
     	/*Son claves areas del area id 1 que pertenece a la materia MAT115
     	En cada area estan conteplados los 4 tipos de items solo con de una clave, si se desea agregar mas claves_areas de otros parciales se deben agregar seeders en area, pregunta y opcion y relacionarlas con las claves que estan creadas.*/
+        /*
         Clave_Area::create([
         	'area_id'=>1,//Opcion Multiple
         	'clave_id'=>1,
@@ -58,5 +60,6 @@ class ClaveAreaTableSeeder extends Seeder
         	'aleatorio'=>true,
         	'peso'=>25
         ]);
+        */
     }
 }
