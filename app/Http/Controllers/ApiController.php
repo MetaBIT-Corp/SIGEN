@@ -50,10 +50,10 @@ class ApiController extends Controller
         $respuesta->id_pregunta = $request->pregunta_id;        //pregunts
         
         //Verifica si la pregunta es respuesta corta
-        if($es_respuesta_corta==1){
+        if($es_respuesta_corta!=1){
             $respuesta->id_opcion = $request->opcion_id;            //opcion
         }
-        
+
         $respuesta->id_intento = $request->intento_id;          //intento 
         $respuesta->texto_respuesta = $request->texto_respuesta;//texto escrito en caso sea respues corta
 
@@ -67,7 +67,8 @@ class ApiController extends Controller
         if($total_preguntas == count($num_actual)){
         	$intento = Intento::find($request->intento_id);
 
-        	if($es_encuesta==1){
+        	//pergunta si es una encuesta
+            if($es_encuesta==1){
         		//Actualizar los datos del intento correspondiente
 	            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
 	            $intento->fecha_final_intento = $fecha_hora_actual;

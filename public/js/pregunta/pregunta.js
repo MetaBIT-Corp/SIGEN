@@ -44,11 +44,16 @@ $(document).ready(function() {
             //Centrar datos dentro de una columna target=3
             columnDefs: [{
                 'className': 'text-center',
-                'targets': 2
-            }, {
+                'targets': 2,
+                'width' : "20%"
+            },{
+                'targets':1,
+                'width' : "70%"
+            },{
                 "searchable": false,
                 "orderable": false,
-                "targets": 0
+                "targets": 0,
+                'width' : "10%"
             }]
         });
         table.on('order.dt search.dt', function() {

@@ -63,7 +63,7 @@ class IntentoController extends Controller
 
         //Variable que contiene el array a mostrar en la paginacion
         $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
-        // return dd($preguntas);
+        //return dd($preguntas);
         return view('intento.intento', compact('paginacion','evaluacion','intento','clave_de_intento'));
     }
 
@@ -389,11 +389,6 @@ class IntentoController extends Controller
                     $intento = Intento::find($id_intento)->first();
                 }
                 
-                
-                //metodo de calificar
-                $this->finalizarIntentoWeb($intento->id);
-                
-                
                 $respuestas = $intento->respuestas;
                 $clave = $intento->clave;
                 $turno = $clave->turno;
@@ -420,6 +415,8 @@ class IntentoController extends Controller
                 $estudiante = Estudiante::where('user_id',auth()->user()->id)->first();
                 $intento = Intento::where('estudiante_id',$estudiante->id_est)->where('fecha_final_intento', null)->first();
                 $id_intento = $intento->id;
+                //metodo de calificar
+                $this->finalizarIntentoWeb($id_intento);
             }
         }
         return redirect(URL::signedRoute('revision_evaluacion', ['id_intento' => $id_intento]));

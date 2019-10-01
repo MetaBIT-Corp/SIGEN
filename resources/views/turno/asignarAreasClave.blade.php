@@ -134,17 +134,19 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="{{ route('agregar_clave_area') }}" method="POST">
-        {{ csrf_field() }}
-        <input type="hidden" name="clave_area" value="" id="id_clave_area_add">
-        <input type="hidden" name="modalidad" value="" id="id_clave_area_add_emp">
-        <div class="modal-body" id="asignar-preguntas">
-          
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
-        </div>
+      <div class="modal-body">
+        <form action="{{ route('agregar_clave_area') }}" method="POST">
+          {{ csrf_field() }}
+          <input type="hidden" name="clave_area" value="" id="id_clave_area_add">
+          <input type="hidden" name="modalidad" value="" id="id_clave_area_add_emp">
+          <div id="asignar-preguntas">
+
+          </div>
+      </div>
+      <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+      </div>
       </form>
     </div>
   </div>

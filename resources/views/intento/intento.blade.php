@@ -156,16 +156,20 @@
                                                 
                                                                     */
                                                 
-                                                                    $nums=range(0,count($valores[$i]['preguntas'])-1);
-                                                                    shuffle($nums);
+                                                                    /*$nums=range(0,count($valores[$i]['preguntas'])-1);
+                                                                    shuffle($nums);*/
                                                                 }}
                                                             
                                                             @endphp
                                                             
                                                             @for($m=0; $m< count($valores[$i]['preguntas']); $m++)
-                                                                <option value="opcion_{{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id }}" @if($valores[$i]['preguntas'][$r]->seleccionada == "opcion_".$valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id) selected @endif>
-                                                                    {{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->opcion }}
+                                                            <!--For para recorer opciones-->
+                                                                 @for($n=0; $n<count($valores[$i]['preguntas'][$m]->opciones); $n++)
+                                                                 
+                                                                <option value="opcion_{{ $valores[$i]['preguntas'][$m]->opciones[$n]->id }}" @if($valores[$i]['preguntas'][$r]->seleccionada == "opcion_".$valores[$i]['preguntas'][$m]->opciones[$n]->id) selected @endif>
+                                                                    {{ $valores[$i]['preguntas'][$m]->opciones[$n]->opcion }}
                                                                 </option>
+                                                                 @endfor
                                                             @endfor
                                                         </select>
                                                     </td>
