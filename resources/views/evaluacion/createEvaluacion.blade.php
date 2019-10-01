@@ -93,7 +93,7 @@
           
           <div class="form-group">
              <button class="btn btn-primary">Guardar</button>
-             <a href="{{route('listado_evaluacion',$id)}}" class="btn btn-secondary"> Cancelar</a>
+             <a href="{{ URL::signedRoute('listado_evaluacion', ['id' => $id]) }}" class="btn btn-secondary"> Cancelar</a>
              
           </div>
 
