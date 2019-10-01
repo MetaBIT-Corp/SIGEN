@@ -159,9 +159,12 @@
                                                             @endphp
                                                             
                                                             @for($m=0; $m< count($valores[$i]['preguntas']); $m++)
-                                                                <option value="opcion_{{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id }}" @if($valores[$i]['preguntas'][$r]->seleccionada == "opcion_".$valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id) selected @endif>
-                                                                    {{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->opcion }}
+                                                                 @for($n=0; $n< count($valores[$i]['preguntas']->opciones); $n++)
+                                                                 <!--For para recorer opciones-->
+                                                                <option value="opcion_{{ $valores[$i]['preguntas'][$nums[$m]]->opciones[$n]->id }}" @if($valores[$i]['preguntas'][$r]->seleccionada == "opcion_".$valores[$i]['preguntas'][$nums[$m]]->opciones[$n]->id) selected @endif>
+                                                                    {{ $valores[$i]['preguntas'][$nums[$m]]->opciones[$n]->opcion }}
                                                                 </option>
+                                                                 @endfor
                                                             @endfor
                                                         </select>
                                                     </td>
