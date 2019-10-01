@@ -253,7 +253,7 @@ class EvaluacionController extends Controller
     public function publicar( Request $request){
         //dd($request->all());
         $turnos = $request->input('turnosnopublicos');
-        $notification = "info";
+        $notification = "warning";
         $message = "";
         if($turnos){
             foreach($turnos as $turno){
@@ -266,10 +266,19 @@ class EvaluacionController extends Controller
                 if($turno_publico->claves){
                     foreach ($turno_publico->claves as $clave) {
                         if(Clave_Area::where('clave_id', $clave->id)->exists()){
+
                             $areas_de_clave = Clave_Area::where('clave_id', $clave->id)->get();
                             $sumatoria_de_pesos = 0;
                             foreach ($areas_de_clave as $area_de_clave) {
                                 $sumatoria_de_pesos += $area_de_clave->peso;
+                                //verificamos si la clave_area es manual. es decir que no sean aleatorias
+                                if(!($area_de_clave->aleatorio)){
+                                    $preguntas_de_clave_area_pregunta = $area_de_clave->claves_areas_preguntas;
+                                    if($preguntas_de_clave_area_pregunta->count() == 0){
+                                        $message .= "Info: El turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno . " posee area(s) que no han sido asignadas preguntas, por favor verificar.";
+                                        return back()->with($notification,$message);
+                                    }
+                                }   
                             }
                             if($sumatoria_de_pesos<100){
                                 $message .= "Info: La sumatoria de pesos del turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno . " es de ". $sumatoria_de_pesos . ", menor al 100 requerido<br><br>";
@@ -287,7 +296,7 @@ class EvaluacionController extends Controller
                                 /*
                                 *
                                 **/
-
+                                $notification = "exito";
                                 $message .= "Info: Publicación exitosa del turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno ."<br><br>";
 
                                 $turno_publico->visibilidad = 1;
@@ -308,7 +317,7 @@ class EvaluacionController extends Controller
             }
             
         }else{
-            $notification = "info";
+            $notification = "warning";
             $message = "Info: no ha seleccionado ningún turno a publicar";
         }
         return back()->with($notification,$message); 
