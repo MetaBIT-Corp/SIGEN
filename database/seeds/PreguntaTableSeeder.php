@@ -155,6 +155,33 @@ class PreguntaTableSeeder extends Seeder
             'pregunta'=>'Cual es el sistema operativo más utilizado en los servidores'
         ]);
 
+        //preguntas extra de emparejamiento
+
+        Pregunta::create([
+            'grupo_emparejamiento_id'=>28,
+            'pregunta'=>'Derivada de 8'
+        ]);
+        Pregunta::create([
+            'grupo_emparejamiento_id'=>28,
+            'pregunta'=>'Derivada de x'
+        ]);
+        Pregunta::create([
+            'grupo_emparejamiento_id'=>28,
+            'pregunta'=>'Derivada de x al cuadrado'
+        ]);
+        Pregunta::create([
+            'grupo_emparejamiento_id'=>29,
+            'pregunta'=>'Integral de 8'
+        ]);
+        Pregunta::create([
+            'grupo_emparejamiento_id'=>29,
+            'pregunta'=>'Integral de x'
+        ]);
+        Pregunta::create([
+            'grupo_emparejamiento_id'=>29,
+            'pregunta'=>'Integral de x al cuadrado'
+        ]);
+
 
     }
 }

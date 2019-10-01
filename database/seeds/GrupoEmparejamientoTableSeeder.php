@@ -101,6 +101,18 @@ class GrupoEmparejamientoTableSeeder extends Seeder
         Grupo_Emparejamiento::create([
             'area_id'=>4,
         ]);
+
+        //Emparejamiento Extra
+        Grupo_Emparejamiento::create([
+            'area_id'=>3,
+            'descripcion_grupo_emp'=>'Derivadas'
+        ]);
+        
+        Grupo_Emparejamiento::create([
+            'area_id'=>3,
+            'descripcion_grupo_emp'=>'Integrales'
+        ]);
+        
         
     }
 }

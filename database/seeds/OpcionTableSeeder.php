@@ -437,6 +437,78 @@ class OpcionTableSeeder extends Seeder
             'correcta'=>true
         ]);
 
+        //Emparejamiento extra
+
+         Opcion::create([
+            'pregunta_id'=>34,
+            'opcion'=>'0',
+            'correcta'=>true
+        ]);
+
+          Opcion::create([
+            'pregunta_id'=>34,
+            'opcion'=>'8x',
+            'correcta'=>false
+        ]);
+
+          Opcion::create([
+            'pregunta_id'=>35,
+            'opcion'=>'1',
+            'correcta'=>true
+        ]);
+
+         Opcion::create([
+            'pregunta_id'=>35,
+            'opcion'=>'x al cuadrado',
+            'correcta'=>false
+        ]);
+
+           Opcion::create([
+            'pregunta_id'=>36,
+            'opcion'=>'x',
+            'correcta'=>true
+        ]);
+            Opcion::create([
+            'pregunta_id'=>36,
+            'opcion'=>'x al cubo',
+            'correcta'=>false
+        ]);
+
+            Opcion::create([
+            'pregunta_id'=>37,
+            'opcion'=>'8x',
+            'correcta'=>true
+        ]);
+
+        Opcion::create([
+            'pregunta_id'=>37,
+            'opcion'=>'0',
+            'correcta'=>false
+        ]);
+
+             Opcion::create([
+            'pregunta_id'=>38,
+            'opcion'=>'x al cuadrado',
+            'correcta'=>true
+        ]);
+
+             Opcion::create([
+            'pregunta_id'=>38,
+            'opcion'=>'1',
+            'correcta'=>false
+        ]);
+
+
+              Opcion::create([
+            'pregunta_id'=>39,
+            'opcion'=>'x al cubo',
+            'correcta'=>true
+        ]);
+               Opcion::create([
+            'pregunta_id'=>39,
+            'opcion'=>'x',
+            'correcta'=>false
+        ]);
 
     }
 }
