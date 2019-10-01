@@ -11,6 +11,7 @@ class GrupoEmparejamientoTableSeeder extends Seeder
      */
     public function run()
     {
+        //Emparejamiento
         Grupo_Emparejamiento::create([
         	'area_id'=>3,
         	'descripcion_grupo_emp'=>'Matematicas Reconocidas'
@@ -19,23 +20,87 @@ class GrupoEmparejamientoTableSeeder extends Seeder
         	'area_id'=>3,
         	'descripcion_grupo_emp'=>'Matematicos Fracasados'
         ]);
+        
+        //Opción múltiple
+        Grupo_Emparejamiento::create([
+            'area_id'=>1,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>1,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>1,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>1,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>1,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>1,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>1,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>1,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>1,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>1,
+        ]);
 
-        /*Grupos de Prueba (René).*/
+        //Opción múltiple
         Grupo_Emparejamiento::create([
-            'area_id'=>7,
-            'descripcion_grupo_emp'=>'Grupo Emparejamiento de Pruebas Opción Múltiple'
+            'area_id'=>2,
         ]);
         Grupo_Emparejamiento::create([
-            'area_id'=>8,
-            'descripcion_grupo_emp'=>'Grupo Emparejamiento de Pruebas Verdadero/Falso'
+            'area_id'=>2,
         ]);
         Grupo_Emparejamiento::create([
-            'area_id'=>9,
-            'descripcion_grupo_emp'=>'Grupo Emparejamiento de Pruebas Respuesta Corta'
+            'area_id'=>2,
         ]);
         Grupo_Emparejamiento::create([
-            'area_id'=>10,
-            'descripcion_grupo_emp'=>'Grupo Emparejamiento de Prueba'
+            'area_id'=>2,
         ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>2,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>2,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>2,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>2,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>2,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>2,
+        ]);
+
+        //Respuesta corta
+        Grupo_Emparejamiento::create([
+            'area_id'=>4,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>4,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>4,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>4,
+        ]);
+        Grupo_Emparejamiento::create([
+            'area_id'=>4,
+        ]);
+        
     }
 }

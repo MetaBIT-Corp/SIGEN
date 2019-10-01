@@ -208,4 +208,33 @@ class GrupoEmparejamientoController extends Controller
         Pregunta::find($request->idPregunta)->delete();
         return back();
     }
+
+    public function storeGE(Request $request)
+    {
+        $request_data = $request->all();
+
+        $rules = [
+            'descripcion'=> 'required'
+        ];
+
+        $messages = [
+
+            'descripcion.required' => 'Descripción del Grupo Emparejamiento no ingresada.'
+        ];
+
+        $validator = Validator::make($request_data, $rules, $messages);
+
+        if ($validator->fails()) {
+            return response::json(array('errors'=>$validator->getMessageBag()->toarray()));
+        }else{
+            $grupo = new Grupo_Emparejamiento;
+
+            $grupo->area_id = $request->areaid;
+            $grupo->descripcion_grupo_emp = $request->descripcion;
+
+            $grupo->save();
+        }
+
+        return response()->json(['grupo'=>$grupo]);
+    }
 }

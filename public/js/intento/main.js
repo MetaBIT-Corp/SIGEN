@@ -25,11 +25,31 @@ function paginacion(accion){
     var res_arr = location_url.split("=");
     
     var page = 0;
-
+    
     if(accion == 2)
         window.location.href = $("#finish_btn").attr('href');
     else if(accion == 0)
         window.location.href = res_arr[0] + "=" + (parseInt(res_arr[1], 10) - 1).toString();
     else
         window.location.href = res_arr[0] + "=" + (parseInt(res_arr[1], 10) + 1).toString();
+}
+
+function capturar_data_navigator(url){
+
+    var intento_id = $("#intento_id").val();
+    
+    var data = $("#quiz_form").serialize();
+    //Si no hay datos, procedemos a paginar, según acción del Estudiante
+    if(! data){
+        window.location.href = url;
+    }
+
+    var respuestas_val = data.replace(/&/g,"-");
+
+    $.get('/persistencia', {respuestas:respuestas_val,intento_id:intento_id}, function(response){
+        console.log("success");
+        //Luego de almacenar las respuestas procedemos a paginar
+        window.location.href = url;
+    });
+
 }
