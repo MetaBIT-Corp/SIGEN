@@ -43,11 +43,7 @@ class Intento extends Model
         foreach($intento->respuestas as $respuesta){
 
             //Si la respuesta que seleccionó en la pregunta es correcta
-<<<<<<< HEAD
             if($respuesta->opcion!=null){
-=======
-            if($respuesta->opcion != null){
->>>>>>> 71c1312d7353f23a09e9a602e818da115fb3112e
                 if($respuesta->opcion->correcta==1){
 
                     //Obtener la pregunta a la que pertenece la respuesta
@@ -106,14 +102,8 @@ class Intento extends Model
                     }
 
             }
-<<<<<<< HEAD
-            }
-=======
             
->>>>>>> 71c1312d7353f23a09e9a602e818da115fb3112e
-        }
-
         return $nota;
         
-    }
+    }}
 }
