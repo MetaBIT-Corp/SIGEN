@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
+    
     <head>
         @yield("head")
         <meta charset="utf-8">
@@ -45,13 +45,30 @@
             
             @if(auth()->check())
                 <div class="my-2 my-lg-2">
-                    <a href="" class="navbar-brand"><i class="fas fa-user"></i> 
-                        @yield("a_perfil"){{auth()->user()->name}}{{auth()->user()->lastname}}</a>
+
+                    <a href="" class="navbar-brand mr-4">
+                        <strong>Ciclo</strong>&nbsp;{{$ciclo_activo->num_ciclo}}&nbsp;|&nbsp;<strong>Año</strong>&nbsp;{{$ciclo_activo->anio}}
+                    </a>
+
+                    <a href="" class="navbar-brand mr-2"><i class="fas fa-user"></i>&nbsp;&nbsp;
+                        @yield("a_perfil"){{auth()->user()->name}} | 
+                        @switch(auth()->user()->role)
+                            @case(0)
+                                Administrador
+                            @break
+                            @case(1)
+                                Docente
+                            @break
+                            @case(2)
+                                Estudiante
+                            @break
+                        @endswitch
+                    </a>&nbsp;&nbsp;
 
                     <a class="navbar-brand" href="{{ route('logout') }}"
                         onclick="event.preventDefault();
                                  document.getElementById('logout-form').submit();">
-                        <i class="fas fa-sign-out-alt"></i>
+                        <i class="fas fa-sign-out-alt"></i>&nbsp;
                     {{ __('Salir') }}</a>
 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
