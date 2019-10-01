@@ -28,6 +28,12 @@
             </div>
           </div>
         </div>
+
+        <?php
+          $peso_total=0;
+          $total_preguntas = 0;
+          $areas_sin_preguntas = 0;
+        ?>
         
         <div class="card-body">
           <div class="table-responsive">
@@ -67,10 +73,13 @@
                   <!--El atributo cantidad_preguntas es un campo calculado en el modelo Clave_Area apartado de accessors-->
                   @if($clave_area->cantidad_preguntas!=0)
                     <td id="id_cantidad" class="text-center">{{ $clave_area->cantidad_preguntas }}</td>
+                    <?php $total_preguntas += $clave_area->cantidad_preguntas ?>
                   @else
                     <td id="id_cantidad" class="text-center">-</td>
+                    <?php $areas_sin_preguntas++ ?>
                   @endif
                   <td id="id_peso">{{ $clave_area->peso }}</td>
+                  <?php $peso_total += $clave_area->peso ?>
                   <td>
                     <button class="icon-delete btn btn-sm btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></button>
                     <button class="icon-edit btn btn-sm btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></button>
@@ -103,6 +112,14 @@
                  @endif
               </tbody>
             </table>
+
+            <div class="d-none">
+              <input type="text" id="peso_total" value="{{$peso_total}}">
+              <input type="text" id="total_preguntas" value="{{$total_preguntas}}">
+              <input type="text" id="visibilidad" value="{{$turno->visibilidad}}">
+              <input type="text" id="areas_sin_preguntas" value="{{$areas_sin_preguntas}}">
+            </div>
+
           </div>
         </div>
       </div>

@@ -80,7 +80,7 @@ class Intento extends Model
                 //Verifica si la pregunta pertenece a modalidad de respuesta corta
                 if($modalidad==4){
                     $txt_respuesta = strtolower($respuesta->texto_respuesta);
-                    $txt_opcion = strtolower($respuesta->pregunta->opcion->opcion);
+                    $txt_opcion = strtolower($respuesta->pregunta->opciones[0]->opcion);
                     
                     //Compara la respuesta del usuario con la respuesta correcta
                     if(strcmp($txt_respuesta, $txt_opcion) == 0){
