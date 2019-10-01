@@ -1,8 +1,10 @@
 @extends("turno.base")
 
 @section("nombre_vista") Editar turno @endsection
+
+@section("div-form")<div class="col-md-8">@endsection
    
-@section("titulo_card") Editar turno @endsection
+@section("titulo_card") Editar Turno @endsection
 
 @section("formulario")
 <form action="/evaluacion/{{ $turno->evaluacion_id }}/turnos/{{ $turno->id }}" method="post">
@@ -50,7 +52,7 @@
   </div><br>
   <div class="row offset-1">
      <div class="form-group">
-         <button type="submit" class="btn btn-primary">Guardar</button>                 
+         <button type="submit" class="btn btn-primary" onClick="this.disabled=true;">Guardar</button>                 
      </div>
      <div class="form-group offset-1">
         <a class="btn btn-secondary" href="{{ URL::signedRoute('listado_turnos', ['id' => $turno->evaluacion_id]) }}">Cancelar</a> 
@@ -58,6 +60,34 @@
   </div>
   <input type="hidden" name="iniciado" value="{{ $turno->iniciado }}">
 </form>
+@endsection
+
+@section("informacion_turno")
+
+<div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-header border-dark">
+         <h4><b>Información</b></h4>
+      </div>
+      <div class="card-body">
+        <strong>Areas Asignadas:</strong>
+        <p id="areas_s">{{count($claves[0]->clave_areas)}}</p>
+        <strong>Preguntas Asignadas:</strong>
+        <p id="total_preguntas_s"></p>
+        <strong>Peso Asignado:</strong>
+        <p id="peso_s"></p>
+        <strong>Estado del Turno:</strong><br><br>
+        <div id="div-info-estado">
+          <strong><p id="estado_s"></p></strong>
+          <p id="peso_info" hidden>* Turno debe poseer peso igual a 100</p>
+          <p id="preguntas_info" hidden>* Todas las Áreas deben tener asignadas una o más preguntas</p>
+        </div>
+        
+        
+      </div>
+    </div>
+  </div>
+
 @endsection
 
 @section('clave-area')
