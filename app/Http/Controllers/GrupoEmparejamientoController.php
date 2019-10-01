@@ -177,7 +177,8 @@ class GrupoEmparejamientoController extends Controller
                 $count = Opcion::where('pregunta_id',$request->idPregunta)->where('correcta',0)->count();
                 if($count!=0){
                     //Update
-                    Opcion::where('pregunta_id',$request->idPregunta)->where('correcta',0)->update(['opcion'=>$request->opcionincorrecta]);
+                    $opcion_incorrecta = Opcion::where('pregunta_id',$request->idPregunta)->where('correcta',0)->update(['opcion'=>$request->opcionincorrectaedit]);
+                    return response()->json(['pregunta'=>$pregunta, 'opcion'=>$opcion, 'opcion_incorrecta'=>$opcion_incorrecta]);
                 }else{
                     //Create
                     $opcion_incorrecta = new Opcion;
