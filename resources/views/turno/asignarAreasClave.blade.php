@@ -77,10 +77,10 @@
                     @if($clave_area->aleatorio)
                       <a class="icon-list btn btn-sm btn-success"
                         @if($clave_area->area->tipo_item_id==3)
-                          href="{{ URL::signedRoute('pregunta.index', ['id_area' => $clave_area->area->id ,'id_gpo'=>true]) }}" 
+                          href="{{ URL::signedRoute('getPreguntas', ['id_area' => $clave_area->area->id ,'id_gpo'=>true]) }}" 
                           title="Ver grupos de esta área"
                         @else 
-                          href="{{ URL::signedRoute('pregunta.index', ['id_area' => $clave_area->area->id ,'id_gpo'=>false]) }}" 
+                          href="{{ URL::signedRoute('getPreguntas', ['id_area' => $clave_area->area->id ,'id_gpo'=>false]) }}" 
                           title="Ver preguntas de esta área"
                         @endif>
                       </a>

@@ -25,7 +25,7 @@ function paginacion(accion){
     var res_arr = location_url.split("=");
     
     var page = 0;
-
+    
     if(accion == 2)
         window.location.href = $("#finish_btn").attr('href');
     else if(accion == 0)
