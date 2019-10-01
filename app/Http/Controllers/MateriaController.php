@@ -89,7 +89,6 @@ class MateriaController extends Controller
             ->join('ciclo', 'ciclo.id_ciclo', '=', 'materia_ciclo.id_ciclo')
             ->where('ciclo.estado', '=', 1)
             ->select('cat_mat_materia.*', 'materia_ciclo.*','carga_academica.*','ciclo.*','detalle_insc_est.*')->get();
-            //dd($materias);
         return $materias;
     }
 }
