@@ -21,7 +21,7 @@ function listarPregntas(){
       $('#listar-preguntas').html(html_preguntas);
 
     }else{
-      html_preguntas = '<strong><h3>Esta clave no contiene preguntas</h3></strong>';
+      html_preguntas = '<strong><h3>No hay preguntas asignadas</h3></strong>';
       $('#listar-preguntas').html(html_preguntas);
     }
 
@@ -47,7 +47,7 @@ function listarPregntasEmparejamiento(){
       $('#listar-preguntas').html(html_preguntas);
 
     }else{
-      html_preguntas = '<strong><h3>Esta clave no contiene preguntas</h3></strong>';
+      html_preguntas = '<strong><h3>No hay preguntas asignadas</h3></strong>';
       $('#listar-preguntas').html(html_preguntas);
     }
 
