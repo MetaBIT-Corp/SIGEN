@@ -37,11 +37,14 @@ class Intento extends Model
         $intento = Intento::find($intento_id); //Obtener el intento
         $estudiante_id = $intento->estudiante->id_est; //Obtener al estudiante que realizó el intento
         $nota = 0.0;
+        $i=0;
 
+        //dd($intento->respuestas);
         foreach($intento->respuestas as $respuesta){
 
             //Si la respuesta que seleccionó en la pregunta es correcta
-            if($respuesta->opcion->correcta==1){
+            if($respuesta->opcion!=null){
+                if($respuesta->opcion->correcta==1){
 
                 //Obtener la pregunta a la que pertenece la respuesta
                 $pregunta_id = $respuesta->pregunta->id;
@@ -76,6 +79,7 @@ class Intento extends Model
                     //Calcula la ponderación de la pregunta
                     $nota += ($peso/$cantidad_preguntas)/10;
                 }
+            }
             }
         }
 
