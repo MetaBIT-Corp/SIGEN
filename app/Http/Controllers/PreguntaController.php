@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Pregunta;
 use App\Area;
 use App\Grupo_Emparejamiento;
+use App\Opcion;
 class PreguntaController extends Controller
 {
     /**
@@ -83,11 +84,27 @@ class PreguntaController extends Controller
         $gpo->descripcion_grupo_emp="";
         $gpo->save();
 
-        
+           
         $pregunta=new Pregunta();
         $pregunta->grupo_emparejamiento_id=$gpo->id;
         $pregunta->pregunta=$request->pregunta;
         $pregunta->save();
+
+        $area=Area::find($gpo->area_id);
+        if((int)$area->tipo_item->id==2){
+            $opcion= new Opcion();
+            $opcion->pregunta_id=$pregunta->id;
+            $opcion->opcion="Verdadero";
+            $opcion->correcta=true;
+            $opcion->save();
+
+            $opcion= new Opcion();
+            $opcion->pregunta_id=$pregunta->id;
+            $opcion->opcion="Falso";
+            $opcion->correcta=false;
+            $opcion->save();
+
+        }     
         return response()->json(['success'=>'Se ha creado la pregunta exitosamente.']);
     }
 
