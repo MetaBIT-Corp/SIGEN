@@ -22,6 +22,11 @@
         <!--Card que contiene a cada pregunta-->
         <!--Se agrego la etiqueta form para persistencia-->
 
+
+        @if($intento->user_id != null)
+
+        @else
+
         <div id="carta" class="">
             <div class="carta-info">
 
@@ -79,6 +84,8 @@
             </div>
 
         </div>
+
+        @endif
 
         <form id='quiz_form'>
             <input type="hidden" id="intento_id" value="{{ $intento->id }}">
@@ -188,6 +195,12 @@
                     <div class="offset-9">{{ $paginacion->links('vendor.pagination.simple-bootstrap-4') }}</div>
                 </div>
             </div>
+
+            @if($intento->user_id != null)
+
+            <input type="button" onclick="capturar_data(2)" class="page-link bg-danger text-white btn-md" value="Terminar"/>
+
+            @endif
         </form>
 
     @endsection

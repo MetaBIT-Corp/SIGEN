@@ -53,9 +53,9 @@
 				<td  style="text-align: center;">{{$opcion->opcion}}</td>
 				<td>
 					
-					<a href="#" class="mr-2 btn-editar btn" id="btn_editar" data-id="{{$opcion->id}}" data-opcion="{{$opcion->opcion}}" data-tipo="{{$tipo_opcion}}" data-toggle="modal" data-target="#editModal"><span class="icon-edit"></span></a>
+					<a href="#" class="mr-2 btn-editar btn-sm" id="btn_editar" data-id="{{$opcion->id}}" data-opcion="{{$opcion->opcion}}" data-tipo="{{$tipo_opcion}}" data-toggle="modal" data-target="#editModal"><span class="icon-edit"></span></a>
 					
-					<a href="" class="ml-2 btn-eliminar btn" id="btn_eliminar" data-id="{{$opcion->id}}" data-toggle="modal" data-target="#deleteModal"><span class="icon-delete"></span></a>
+					<a href="" class="ml-2 btn-eliminar btn-sm" id="btn_eliminar" data-id="{{$opcion->id}}" data-toggle="modal" data-target="#deleteModal"><span class="icon-delete"></span></a>
 
 				</td>
 			</tr>

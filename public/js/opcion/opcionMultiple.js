@@ -105,8 +105,18 @@ $(document).ready(function() {
         inputI.setAttribute('value',indice);
         contador.setAttribute('value',fila.rowIndex-2);
 
-        if (contador.value>=3) {
-            $('#enviar').attr('disabled',false)
+        if(($('#id_dcn').val())!=""){
+
+            if (contador.value>=2) {
+                $('#enviar').attr('disabled',false)
+            }
+
+        }else{
+
+            if (contador.value>=3) {
+                $('#enviar').attr('disabled',false)
+            }
+
         }
 
     });

@@ -23,7 +23,7 @@
         <span class="icon-edit">
         </span>
     </a>
-    <a class="btn-eliminar btn btn-sm ml-2" id="btn_eliminar" data-id="{{ $id }}" data-gpo="{{ $grupo_emparejamiento_id }}" data-target="#modal1" data-toggle="modal" title="Eliminar Area" href="">
+    <a class="btn-eliminar btn btn-sm ml-2" id="btn_eliminar" data-id="{{ $id }}" data-gpo="{{ $grupo_emparejamiento_id }}" data-target="#modal1" data-toggle="modal" title="Eliminar Pregunta" href="">
         <span class="icon-delete">
         </span>
     </a>
