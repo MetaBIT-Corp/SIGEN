@@ -180,7 +180,7 @@ class PreguntaController extends Controller
         if($pregunta->clave_area_preg_est()->count()!=0){
             $message=['error'=>'La pregunta no puede ser eliminada porque esta siendo utilizada en una evaluacion.','type'=>1];
         }else{
-            $message=$message=['success'=>'La pregunta fue eliminada exitosamente.','type'=>2];
+            $message=['success'=>'La pregunta fue eliminada exitosamente.','type'=>2];
             $gpo=$pregunta->grupo_emp;
             $gpo->delete();
         }

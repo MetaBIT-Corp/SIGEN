@@ -11,6 +11,7 @@ use App\Area;
 use App\Grupo_Emparejamiento;
 use App\Pregunta;
 use App\Opcion;
+use App\Clave_Area_Pregunta;
 
 class GrupoEmparejamientoController extends Controller
 {
@@ -262,5 +263,25 @@ class GrupoEmparejamientoController extends Controller
         }
 
         return response()->json(['grupo'=>$grupo]);
+    }
+
+    public function destroyGE(Request $request)
+    {
+        $pregunta = Pregunta::where('grupo_emparejamiento_id',$request->grupoiddelete)->first();
+        if($pregunta){
+            $clave_area_pregunta = Clave_Area_Pregunta::where('pregunta_id',$pregunta->id)->count();
+            if($clave_area_pregunta>0){
+                $message=['error'=>'El grupo no puede ser eliminado por que ya fue publicado en una encuesta.','type'=>1];            
+            }else{
+                
+            }
+        }else{
+            Grupo_Emparejamiento::where('id',$request->grupoiddelete)->delete();
+                $message=['success'=>'El grupo fue eliminado.','type'=>2];
+        }
+
+        
+
+        return response()->json($message);
     }
 }
