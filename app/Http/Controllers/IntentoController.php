@@ -418,10 +418,16 @@ class IntentoController extends Controller
         if(auth()->check()){
             if(auth()->user()->IsStudent){
                 $estudiante = Estudiante::where('user_id',auth()->user()->id)->first();
-                $intento = Intento::where('estudiante_id',$estudiante->id_est)->where('fecha_final_intento', null)->first();
-                $id_intento = $intento->id;
-                //metodo de calificar
-                $this->finalizarIntentoWeb($id_intento);
+                if(Intento::where('estudiante_id',$estudiante->id_est)->where('fecha_final_intento', null)->exists()){
+                    $intento = Intento::where('estudiante_id',$estudiante->id_est)->where('fecha_final_intento', null)->first();
+                    $id_intento = $intento->id;
+                    //metodo de calificar
+                    $this->finalizarIntentoWeb($id_intento);
+                }
+            }
+
+            if(Intento::where('user_id',auth()->user()->id)->where('fecha_final_intento', null)->exists()){
+                return redirect('encuestas');
             }
         }
         return redirect(URL::signedRoute('revision_evaluacion', ['id_intento' => $id_intento]));
