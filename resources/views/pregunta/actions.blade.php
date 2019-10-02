@@ -4,7 +4,7 @@
         <span class="icon-list">
         </span>
     </a>
-    <a class="btn-editar btn btn-sm" style="cursor: pointer;" id="btn_editar"title="Editar Grupo Emparejamiento" data-toggle="modal" data-target="#editModal">
+    <a class="btn-editar btn btn-sm" style="cursor: pointer;" id="btn_editar" title="Editar Grupo Emparejamiento" data-descripcion="{{$descripcion_grupo_emp}}" data-id-grupo="{{$id}}" data-toggle="modal" data-target="#editmodal">
         <span class="icon-edit">
         </span>
     </a>

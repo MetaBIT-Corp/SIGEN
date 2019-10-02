@@ -185,7 +185,7 @@
                 </div>
                 <form action="{{ route('crear-grupo-emparejamiento',$area->id)}}" method="POST">
                     <div class="modal-body">
-                        <div class="form-group" style="display:;">
+                        <div class="form-group" style="display:none;">
                             <label class="col-form-label" for="areaid">Area ID:</label>
                             <input type="text" class="form-control" name="areaid" placeholder="ID de Pregunta" id="areaid" value="{{$area->id}}">
                         </div>
@@ -205,6 +205,48 @@
                     <div class="modal-footer">
                         {{ csrf_field() }}
                         <button type="submit" id="btn-agregar" class="btn btn-primary">Agregar Grupo de Emparejamiento</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para la Edición de grupo emparejamiento -->
+
+    <div class="modal" id="editmodal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Crear Nuevo Grupo de Emparejamiento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('editar-grupo-emparejamiento',$area->id)}}" method="POST">
+                    <div class="modal-body">
+                        <div class="form-group" style="display:none;">
+                            <label class="col-form-label" for="areaidedit">Area ID:</label>
+                            <input type="text" class="form-control" name="areaidedit" placeholder="ID de Pregunta" id="areaidedit" value="{{$area->id}}">
+                            <label class="col-form-label" for="grupoid">Grupo ID:</label>
+                            <input type="text" class="form-control" name="grupoid" placeholder="ID de Grupo" id="grupoid">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-form-label" for="descripcionedit">Descripción del Grupo:</label>
+                            <input type="text" class="form-control" name="descripcionedit" placeholder="Inserte la Descripción" id="descripcionedit">
+                        </div>
+
+                    </div>
+
+                    <div class="alert alert-danger m-3" id="alertaedit">
+                        <ul id="ul-alert-edit">
+                        </ul>
+                    </div>
+
+                    <div class="modal-footer">
+                        {{ csrf_field() }}
+                        <button type="submit" id="btn-edit-ge" class="btn btn-primary">Agregar Grupo de Emparejamiento</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                
                     </div>
                 </form>

@@ -239,4 +239,28 @@ class GrupoEmparejamientoController extends Controller
 
         return response()->json(['grupo'=>$grupo]);
     }
+
+    public function editGE(Request $request)
+    {
+        $request_data = $request->all();
+
+        $rules = [
+            'descripcionedit'=> 'required'
+        ];
+
+        $messages = [
+
+            'descripcionedit.required' => 'Descripción del Grupo Emparejamiento no ingresada.'
+        ];
+
+        $validator = Validator::make($request_data, $rules, $messages);
+
+        if ($validator->fails()) {
+            return response::json(array('errors'=>$validator->getMessageBag()->toarray()));
+        }else{
+            $grupo = Grupo_Emparejamiento::where('id',$request->grupoid)->update(['descripcion_grupo_emp'=>$request->descripcionedit]);            
+        }
+
+        return response()->json(['grupo'=>$grupo]);
+    }
 }
