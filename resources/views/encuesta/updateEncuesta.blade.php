@@ -42,6 +42,12 @@
               </div>
             @endif
 
+            @if (session('warning'))
+              <div class="alert alert-warning">
+                {{session('warning')}}
+              </div>
+            @endif
+
             <div class="row">
               <div class="col-md-2 "></div>
               <div class="col-md-8">
@@ -134,4 +140,5 @@
     <script src="/js/encuesta/areaclave.js"></script>
     <script src="/js/clave/cargarPreguntas.js"> </script>
     <script src="/js/clave/operacionesClaveArea.js"> </script>
+    <script type="text/javascript" src="{{ asset('js/encuesta/fecha.js') }}"></script>
 @endsection

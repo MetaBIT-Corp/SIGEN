@@ -53,6 +53,11 @@
         <span class="icon-options"></span>
       </a>
       @endif
+      @if($mat_con_eva->hayEvaluaciones($materia->id_cat_mat))
+        <button class="btn btn-sm" style="float:right;" title="Hay evaluaciones próximas">
+          <span class="icon-star"></span>
+        </button>
+      @endif
 
     </div>
 </div>
@@ -88,6 +93,11 @@
       <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('getAreaIndex', ['id' => $materia->id_cat_mat]) }}">
         <span class="icon-options"></span>
       </a>
+      @endif
+      @if($mat_con_eva->hayEvaluaciones($materia->id_cat_mat))
+        <button class="btn btn-sm" style="float:right;" title="Hay evaluaciones próximas">
+          <span class="icon-star"></span>
+        </button>
       @endif
 
     </div>
@@ -126,6 +136,11 @@
       <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('getAreaIndex', ['id' => $materia->id_cat_mat]) }}">
         <span class="icon-options"></span>
       </a>
+      @endif
+      @if($mat_con_eva->hayEvaluaciones($materia->id_cat_mat))
+        <button class="btn btn-sm" style="float:right;" title="Hay evaluaciones próximas">
+          <span class="icon-star"></span>
+        </button>
       @endif
     </div>
 </div>
@@ -215,6 +230,11 @@
         <span class="icon-options"></span>
       </a>
       @endif
+      @if($mat_con_eva->hayEvaluaciones($materia->id_cat_mat))
+        <button class="btn btn-sm" style="float:right;" title="Hay evaluaciones próximas">
+          <span class="icon-star"></span>
+        </button>
+      @endif
 
     </div>
 </div>
@@ -260,6 +280,12 @@
       </a>
       @endif
 
+      @if($mat_con_eva->hayEvaluaciones($materia->id_cat_mat))
+        <button class="btn btn-sm" style="float:right;" title="Hay evaluaciones próximas">
+          <span class="icon-star"></span>
+        </button>
+      @endif
+
     </div>
 </div>
 </td>
@@ -303,6 +329,12 @@
       <a class="btn btn-option btn-sm" title="Areas" href="{{ URL::signedRoute('getAreaIndex', ['id' => $materia->id_cat_mat]) }}">
         <span class="icon-options"></span>
       </a>
+      @endif
+
+      @if($mat_con_eva->hayEvaluaciones($materia->id_cat_mat))
+        <button class="btn btn-sm" style="float:right;" title="Hay evaluaciones próximas">
+          <span class="icon-star"></span>
+        </button>
       @endif
     </div>
 </div>

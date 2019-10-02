@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\Materia;
 
 class MateriaController extends Controller
 {
@@ -20,7 +21,9 @@ class MateriaController extends Controller
     public function listar()
     {
         $id = auth()->user()->id;
-
+        $mat_con_eva = new Materia();
+        //dd($mat_con_eva->hayEvaluaciones(1));
+        
         switch (auth()->user()->role) {
             case 0:
                 $materias = array();
@@ -41,7 +44,7 @@ class MateriaController extends Controller
 
                 krsort($materias);
 
-                return view("materia.listadoMateria", compact("materias", "ciclos"));
+                return view("materia.listadoMateria", compact("materias", "ciclos", "mat_con_eva"));
                 break;
 
             case 1:
@@ -63,12 +66,12 @@ class MateriaController extends Controller
                         ->where('ciclo.id_ciclo', '=', $ciclo->id_ciclo)
                         ->select('cat_mat_materia.*', 'materia_ciclo.*','carga_academica.id_carg_aca')->get();
                 }
-                return view("materia.listadoMateria", compact("materias", "ciclos"));
+                return view("materia.listadoMateria", compact("materias", "ciclos", "mat_con_eva"));
                 break;
             case 2:
                 $ciclo    = DB::table("ciclo")->where("estado", "=", 1)->get();
                 $materias = MateriaController::materiasEstudiante($id);
-                return view("materia.listadoMateria", compact("materias", "ciclo"));
+                return view("materia.listadoMateria", compact("materias", "ciclo", "mat_con_eva"));
                 break;
         }
     }

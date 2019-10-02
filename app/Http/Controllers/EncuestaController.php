@@ -37,15 +37,15 @@ class EncuestaController extends Controller
             
             'title' => ['required', 'string','min:5','max:191'],
             'description' => ['required'],
-            'fecha_inicio' => ['required', 'date', 
+            'fecha_inicio' => ['required', 
                 function ($attribute, $value, $fail) {
-                    $fecha_actual = Carbon::now('America/Denver')->format('m/d/Y g:i A');
+                    $fecha_actual = Carbon::now('America/Denver')->format('d/m/Y g:i A');
                     if (($value < $fecha_actual)) {
                         $fail($fecha_actual.'La fecha inicial debe ser mayor a la actual.' );
                     }
                 },
             ],
-            'fecha_final' => ['required' , 'date', 'after:fecha_inicio'],
+            'fecha_final' => ['required'],
         ];
         /* Mensaje de Reglas de Validación */
         $messages = [
@@ -55,7 +55,7 @@ class EncuestaController extends Controller
             'description.required' => 'Debe de ingresar una descripción para la encuesta',
             'fecha_inicio.required' => 'Debe de indicar la fecha de inicio del periodo de disponibilidad',
             'fecha_final.required' => 'Debe de indicar la fecha de Fin del periodo de disponibilidad',
-            'fecha_final.after' => 'La fecha final debe ser mayor a la fecha inicial ',
+            
         ];
         
         $this->validate($request,$rules,$messages);
@@ -64,16 +64,20 @@ class EncuestaController extends Controller
         $encuesta->titulo_encuesta= $request->input('title');
         $encuesta->id_docente= $docente->id_pdg_dcn;
         $encuesta->fecha_inicio_encuesta= DateTime::createFromFormat(
-            'm/d/Y H:i A', 
+            'd/m/Y H:i A', 
             $request->input('fecha_inicio'))->format('Y-m-d H:i:s');
         $encuesta->fecha_final_encuesta=DateTime::createFromFormat(
-            'm/d/Y H:i A', 
+            'd/m/Y H:i A', 
             $request->input('fecha_final'))->format('Y-m-d H:i:s');
+        if($encuesta->fecha_inicio_encuesta >= $encuesta->fecha_final_encuesta){
+            return back()->with('warning', 'La fecha final debe ser mayor a la inicial');
+        }
+        if($encuesta->fecha_inicio_encuesta <= Carbon::now('America/Denver')->format('Y-m-d H:i:s')){
+            return back()->with('warning', 'La fecha inicial debe ser mayor a la actual');
+        }
         $encuesta->descripcion_encuesta=$request->input('description');
         $encuesta->visible=0;
 
-        
-            
 
         if(isset($request->all()['visible']))
             $encuesta->visible = 1;
@@ -98,10 +102,10 @@ class EncuestaController extends Controller
         $claves = Clave::where('encuesta_id', $id)->get();
 
         $encuesta->fecha_inicio_encuesta= DateTime::createFromFormat(
-            'Y-m-d H:i:s',$encuesta->fecha_inicio_encuesta)->format('m/d/Y g:i A');
+            'Y-m-d H:i:s',$encuesta->fecha_inicio_encuesta)->format('d/m/Y g:i A');
         $encuesta->fecha_final_encuesta=DateTime::createFromFormat(
-            'Y-m-d H:i:s',$encuesta->fecha_final_encuesta)->format('m/d/Y g:i A');
-        $fecha_actual = Carbon::now('America/Denver')->format('m/d/Y g:i A');
+            'Y-m-d H:i:s',$encuesta->fecha_final_encuesta)->format('d/m/Y g:i A');
+        $fecha_actual = Carbon::now('America/Denver')->format('d/m/Y g:i A');
 
         $se_puede_editar=true;
         if($encuesta->fecha_inicio_encuesta<=$fecha_actual){
@@ -126,15 +130,15 @@ class EncuestaController extends Controller
             
             'title' => ['required', 'string','min:5','max:191'],
             'description' => ['required'],
-            'fecha_inicio' => ['required', 'date', 
+            'fecha_inicio' => ['required', 
                 function ($attribute, $value, $fail) {
-                    $fecha_actual = Carbon::now('America/Denver')->format('m/d/Y g:i A');
+                    $fecha_actual = Carbon::now('America/Denver')->format('d/m/Y g:i A');
                     if (($value < $fecha_actual)) {
                         $fail($fecha_actual.'La fecha inicial debe ser mayor a la actual.' );
                     }
                 },
             ],
-            'fecha_final' => ['required' , 'date', 'after:fecha_inicio'],
+            'fecha_final' => ['required' ],
         ];
         /* Mensaje de Reglas de Validación */
         $messages = [
@@ -144,14 +148,14 @@ class EncuestaController extends Controller
             'description.required' => 'Debe de ingresar una descripción para la encuesta',
             'fecha_inicio.required' => 'Debe de indicar la fecha de inicio del periodo de disponibilidad',
             'fecha_final.required' => 'Debe de indicar la fecha de Fin del periodo de disponibilidad',
-            'fecha_final.after' => 'La fecha final debe ser mayor a la fecha inicial ',
+           
         ];
         }else{
              $rules =[
             
             'title' => ['required', 'string','min:5','max:191'],
             'description' => ['required','max:191'],
-            'fecha_final' => ['required' , 'date', 'after:fecha_inicio'],
+            'fecha_final' => ['required' ],
         ];
         /* Mensaje de Reglas de Validación */
         $messages = [
@@ -160,7 +164,6 @@ class EncuestaController extends Controller
             'title.min' => 'El título debe contener como mínimo 5 caracteres',
             'description.required' => 'Debe de ingresar una descripción para la encuesta',
             'fecha_final.required' => 'Debe de indicar la fecha de Fin del periodo de disponibilidad',
-            'fecha_final.after' => 'La fecha final debe ser mayor a la fecha inicial ',
             'description.max' => 'Ha excedido el tamaño máximo de la descripción'
         ];
         }
@@ -173,12 +176,18 @@ class EncuestaController extends Controller
         $encuesta->titulo_encuesta= $request->input('title');
         if($request->input('se_puede_editar')){
             $encuesta->fecha_inicio_encuesta= DateTime::createFromFormat(
-            'm/d/Y H:i A', 
+            'd/m/Y H:i A', 
             $request->input('fecha_inicio'))->format('Y-m-d H:i:s');
         }
         $encuesta->fecha_final_encuesta=DateTime::createFromFormat(
-            'm/d/Y H:i A', 
+            'd/m/Y H:i A', 
             $request->input('fecha_final'))->format('Y-m-d H:i:s');
+        if($encuesta->fecha_inicio_encuesta >= $encuesta->fecha_final_encuesta){
+            return back()->with('warning', 'La fecha final debe ser mayor a la inicial');
+        }
+        if($encuesta->fecha_inicio_encuesta <= Carbon::now('America/Denver')->format('Y-m-d H:i:s')){
+            return back()->with('warning', 'La fecha inicial debe ser mayor a la actual');
+        }
         $encuesta->descripcion_encuesta=$request->input('description');
 
         $encuesta->save();
