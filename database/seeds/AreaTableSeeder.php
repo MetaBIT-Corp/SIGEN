@@ -40,13 +40,11 @@ class AreaTableSeeder extends Seeder
 
         //Area de Encuesta
         Area::create([
-            'id_cat_mat'=>1,
             'id_pdg_dcn'=>1,
             'tipo_item_id'=>1,
             'titulo'=>'Grupos de Discucion'
         ]);
         Area::create([
-            'id_cat_mat'=>1,
             'id_pdg_dcn'=>1,
             'tipo_item_id'=>1,
             'titulo'=>'Numero de equipos'
