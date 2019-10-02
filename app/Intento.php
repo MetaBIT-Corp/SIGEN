@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Clave_Area_Pregunta_Estudiante;
 use App\Intento;
 use App\Clave;
+use Illuminate\Support\Facades\DB;
+use App\Clave_Area;
 
 class Intento extends Model
 {
@@ -38,7 +40,7 @@ class Intento extends Model
         $estudiante_id = $intento->estudiante->id_est; //Obtener al estudiante que realizó el intento
         $numero_intento = $intento->numero_intento; //Obtiene el numero de intento actual
         $nota = 0.0;
-        $i=0;
+        $clave_id = $intento->clave_id;
 
         //dd($intento->respuestas);
         foreach($intento->respuestas as $respuesta){
@@ -46,13 +48,14 @@ class Intento extends Model
             //Obtener la pregunta a la que pertenece la respuesta
             $pregunta_id = $respuesta->pregunta->id;
 
-            //Consulta para obtener el objeto clave_area_pregunta_estudiante al que pertenece la pregunta
-            $cape = Clave_Area_Pregunta_Estudiante::where('estudiante_id', $estudiante_id)
-                                                    ->where('pregunta_id', $pregunta_id)
-                                                    ->first();
-    
-            //Obtener la clave_aera a la que pertenece la pregunta
-            $clave_area = $cape->clave_area;
+            $clave_area_db = DB::table('clave_area as ca')
+                            ->where('clave_id', $clave_id)
+                            ->join('clave_area_pregunta_estudiantes as cape', 'cape.clave_area_id', '=', 'ca.id')
+                            ->where('cape.pregunta_id', $pregunta_id)
+                            ->select('ca.id')
+                            ->first();
+
+            $clave_area = Clave_Area::find($clave_area_db->id);
 
             //Obtener la modalidad a la que pertecene la pregunta
             $modalidad = $clave_area->area->tipo_item_id;
@@ -66,20 +69,21 @@ class Intento extends Model
                                                     ->where('numero_intento', $numero_intento)
                                                     ->get();
 
-            //dd(count($cape_cantidad), $estudiante_id, $clave_area->id, $numero_intento);
+            //dd(count($cape_cantidad), $estudiante_id, $clave_area->id, $numero_intento, $peso);
             //Cuenta la cantidad de preguntas que tiene el objeto clave_are
             $cantidad_preguntas = count($cape_cantidad);
 
             //Si la respuesta que seleccionó en la pregunta es correcta
-            if($respuesta->id_opcion != null){
+            if($respuesta->opcion != null){
                 if($respuesta->opcion->correcta==1){
-                    
+
                    //Calcula la ponderación de la pregunta
                     $nota += ($peso/$cantidad_preguntas)/10;
                 }
             }else{
                 //Verifica si la pregunta pertenece a modalidad de respuesta corta
                 if($modalidad==4){
+
                     $txt_respuesta = strtolower($respuesta->texto_respuesta);
                     $txt_opcion = strtolower($respuesta->pregunta->opciones[0]->opcion);
                     
@@ -94,7 +98,7 @@ class Intento extends Model
             }
         }
 
-        return $nota;
-        
+        return $nota;   
     }
+    
 }
