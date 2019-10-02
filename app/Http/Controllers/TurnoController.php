@@ -208,6 +208,7 @@ class TurnoController extends Controller
         
         $turno = Turno::find($turno_id);
         $turno['iniciado'] = false;
+        $visibilidad = $turno->visibilidad;
         
         if(!Carbon::parse($turno->fecha_inicio_turno)->gt(Carbon::parse($fecha_hora_actual)))
             $turno['iniciado'] = true;
@@ -228,7 +229,7 @@ class TurnoController extends Controller
 
         $encuesta = false;
 
-        return view('turno.edit', compact('turno', 'id', 'claves', 'clave','evaluacion','carga','materiac','areas','id_areas','peso_turno','encuesta'));
+        return view('turno.edit', compact('turno', 'id', 'claves', 'clave','evaluacion','carga','materiac','areas','id_areas','peso_turno','encuesta', 'visibilidad'));
     }
 
     /**

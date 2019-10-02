@@ -93,6 +93,7 @@ class EncuestaController extends Controller
     public function getUpdate($id){
 
         $encuesta = Encuesta::find($id);
+        $visibilidad = $encuesta->visible;
 
         $claves = Clave::where('encuesta_id', $id)->get();
 
@@ -114,7 +115,7 @@ class EncuestaController extends Controller
         $areas = Area::where("id_pdg_dcn",$docente->id_pdg_dcn)->where('id_cat_mat',null)->get();
         $id_areas = Clave_Area::where('clave_id',$clave->id)->pluck('area_id')->toArray();
 
-        return view('encuesta.updateEncuesta')->with(compact('encuesta','se_puede_editar', 'claves','areas','id_areas','clave'));
+        return view('encuesta.updateEncuesta')->with(compact('encuesta','se_puede_editar', 'claves','areas','id_areas','clave', 'visibilidad'));
 
     }
 

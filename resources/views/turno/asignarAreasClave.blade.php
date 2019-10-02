@@ -10,7 +10,7 @@
               <i class="fas fa-table"></i>
               Listado de Docentes | Materia
             </div>
-            @if($turno->visibilidad != 1)
+            @if($visibilidad != 1)
             <div class="col-4" style="text-align: right;">
               <strong class="mb-3">Asignar Área</strong>
 
@@ -83,7 +83,7 @@
                   <td id="id_peso">{{ $clave_area->peso }}</td>
                   <?php $peso_total += $clave_area->peso ?>
                   <td>
-                    @if($turno->visibilidad != 1)
+                    @if($visibilidad != 1)
                       <button class="icon-delete btn btn-sm btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></button>
                       <button class="icon-edit btn btn-sm btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></button>
                     @endif
@@ -100,11 +100,11 @@
                     @else
                       @if($clave_area->area->tipo_item_id==3)
                         <button class="icon-list btn btn-sm btn-success" href="#" title="Ver preguntas agregadas" data-preguntas-emp="{{ $clave_area->id }}"></button>
-                        @if($turno->visibilidad != 1)
+                        @if($visibilidad != 1)
                             <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area-emp="{{ $clave_area->id }}"></button>
                         @endif
                       @else
-                        @if($turno->visibilidad != 1)  
+                        @if($visibilidad != 1)  
                           <button class="icon-list btn btn-sm btn-success" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
                         @endif
                         <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></button>
@@ -124,7 +124,7 @@
             <div class="d-none">
               <input type="text" id="peso_total" value="{{$peso_total}}">
               <input type="text" id="total_preguntas" value="{{$total_preguntas}}">
-              <input type="text" id="visibilidad" value="{{$turno->visibilidad}}">
+              <input type="text" id="visibilidad" value="{{$visibilidad}}">
               <input type="text" id="areas_sin_preguntas" value="{{$areas_sin_preguntas}}">
             </div>
 
