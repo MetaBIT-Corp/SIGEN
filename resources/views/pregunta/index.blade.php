@@ -254,6 +254,44 @@
         </div>
     </div>
 
+    <!-- Modal para la Edición de grupo emparejamiento -->
+
+    <div class="modal" id="deletemodal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Eliminar Grupo de Emparejamiento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('eliminar-grupo-emparejamiento',$area->id)}}" method="POST">
+                    <div class="modal-body">
+                        <div class="form-group" style="display:none;">
+                            <label class="col-form-label" for="areaiddelete">Area ID:</label>
+                            <input type="text" class="form-control" name="areaiddelete" placeholder="ID de Pregunta" id="areaiddelete" value="{{$area->id}}">
+                            <label class="col-form-label" for="grupoiddelete">Grupo ID:</label>
+                            <input type="text" class="form-control" name="grupoiddelete" placeholder="ID de Grupo" id="grupoiddelete">
+                        </div>
+
+                        <div class="form-group">
+                            <strong>¿Esta seguro que desea eliminar la pregunta?</strong><br><br>
+                            <p class="ml-3 mr-3 mb-0 text-justify">Se eliminarán las preguntas y opciones asociadas con el grupo.</p>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        {{ csrf_field() }}
+                        <button type="submit" id="btn-delete-ge" class="btn btn-danger">Eliminar Grupo de Emparejamiento</button>
+                        <button type="button" id="salir_delete" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 @endsection
 
 <!--Scripts para datatables con Laravel-->

@@ -119,6 +119,70 @@ $(document).ready(function(){
         }).fail(function(xhr, status, e) {
             console.log(e)
         })
-    })
+    });
+
+    $('#deletemodal').on('show.bs.modal', function(event){
+
+        var link = $(event.relatedTarget)
+
+        var id_grupo = link.data('id-grupo-delete')
+
+        var modal = $(this)
+
+        modal.find('.modal-body #grupoiddelete').val(id_grupo)
+
+    });
+
+    
+
+    function exito(datos) {
+            $("#message-success").removeAttr("hidden");
+            $("#text-success").text(datos.success);
+            setTimeout(function() {
+                $("#message-success").attr('hidden', true);
+            }, 4000);
+            //Para mover al inicio de la pagina el control
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'slow');
+        }
+
+    $('#btn-delete-ge').click(function(e){
+
+        e.preventDefault()
+
+        var form = $(this).parents('form')
+        var url = form.attr('action')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: form.serialize(),
+            dataType: "json"
+        }).done(function(datos){
+
+            $("#salir_delete").click();
+            $("#btn-delete-ge").removeAttr("disabled");
+            // table.draw();
+            //Mostrando mensaje de exito
+            if (datos.type == 2) {
+                location.reload(true)
+                exito(datos);
+            }else{
+                $("#message-error").removeAttr("hidden");
+                $("#text-error").text(datos.error);
+                setTimeout(function() {
+                    $("#message-error").attr('hidden', true);
+                }, 4000);
+                //Para mover al inicio de la pagina el control
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 'slow');
+            }
+
+        }).fail(function(xhr, status, e) {
+            console.log(e)
+        })
+    });
 
 });

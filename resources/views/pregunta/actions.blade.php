@@ -8,7 +8,7 @@
         <span class="icon-edit">
         </span>
     </a>
-    <a class="btn-eliminar btn btn-sm ml-2" id="btn_eliminar" data-name="" title="Eliminar Grupo Emparejamiento" href="">
+    <a class="btn-eliminar btn btn-sm ml-2" style="cursor: pointer;" id="btn_eliminar" title="Eliminar Grupo Emparejamiento" data-id-grupo-delete="{{$id}}" data-toggle="modal" data-target="#deletemodal">
         <span class="icon-delete">
         </span>
     </a>

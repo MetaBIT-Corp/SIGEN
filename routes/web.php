@@ -105,6 +105,7 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::post('grupo/{grupo_id}/edit','GrupoEmparejamientoController@updateGE')->name('editar-grupo');
     Route::post('area/{id}/grupo-store','GrupoEmparejamientoController@storeGE')->name('crear-grupo-emparejamiento');
     Route::post('area/{id}/grupo-edit','GrupoEmparejamientoController@editGE')->name('editar-grupo-emparejamiento');
+    Route::post('area/{id}/grupo-delete/','GrupoEmparejamientoController@destroyGE')->name('eliminar-grupo-emparejamiento');
 
 
      //URL's para  evaluacion
