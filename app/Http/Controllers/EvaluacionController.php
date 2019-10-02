@@ -441,7 +441,11 @@ class EvaluacionController extends Controller
         //si son manuales es 0
         if($clave_area->aleatorio==0){
             //si son de emparejamiento (item id 3) u otra modalidad, el tratamiento es el mismo si es manual
-            $clave_areas_preguntas = $clave_area->claves_areas_preguntas->shuffle();
+            if($area->tipo_item_id == 3){
+                $clave_areas_preguntas = $clave_area->claves_areas_preguntas;
+            }else{
+               $clave_areas_preguntas = $clave_area->claves_areas_preguntas->shuffle(); 
+            }
             foreach ($clave_areas_preguntas as $clave_area_pregunta) {
                 foreach ($estudiantes as $estudiante) {
                    for( $i=1 ; $i<=$cant_intentos ; $i++){
@@ -484,11 +488,25 @@ class EvaluacionController extends Controller
                     //si es de emparejamiento se barajean los grupos de emparejamiento
                     else{*/
                         $grupos_emparejamientos = $area->grupos_emparejamiento;
-                        if($clave_area->numero_preguntas >= $grupos_emparejamientos->count()){
-                            $random_grupos_emparejamientos = $grupos_emparejamientos->shuffle();
+                        if($area->tipo_item_id == 3){
+
+                            if($clave_area->numero_preguntas >= $grupos_emparejamientos->count()){
+                            $random_grupos_emparejamientos = $grupos_emparejamientos;
+                            }else{
+                                $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
+                                $random_grupos_emparejamientos = $random_grupos_emparejamientos->orderBy('id', 'asc');
+                            }
+
                         }else{
-                            $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
+
+                            if($clave_area->numero_preguntas >= $grupos_emparejamientos->count()){
+                            $random_grupos_emparejamientos = $grupos_emparejamientos->shuffle();
+                            }else{
+                                $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
+                            }
+                            
                         }
+                        
                         foreach ( $random_grupos_emparejamientos as $grupo) {
                             foreach ($grupo->preguntas as $pregunta) {
                                
