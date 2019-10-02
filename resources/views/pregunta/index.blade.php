@@ -13,7 +13,7 @@
         </a>
     </li>
     <li class="breadcrumb-item">
-    	<a href="{{ URL::signedRoute('getAreaIndex',['materia_id'=>$area->materia->id_cat_mat]) }}" id="id-area" data-area="{{ $area->id }}">
+    	<a @if($area->materia!=null)href="{{ URL::signedRoute('getAreaIndex',['materia_id'=>$area->materia->id_cat_mat]) }}"  @else href="{{ route('areas_encuestas') }}" @endif id="id-area" data-area="{{ $area->id }}">
             Áreas
         </a>
     </li>
@@ -105,6 +105,7 @@
                         </span>
                     </button>
                 </div>
+
 
                 <form id="form-edit" method="POST">
                     @csrf

@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    
     $(function() {
         var control=$("#gpo-preg").data("control");
         var token =$("#gpo-preg").data('token');
