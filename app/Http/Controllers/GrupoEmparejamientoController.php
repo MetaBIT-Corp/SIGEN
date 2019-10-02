@@ -24,6 +24,7 @@ class GrupoEmparejamientoController extends Controller
 
         $grupo = Grupo_Emparejamiento::where("id",$grupo_id)->first();
         $preguntas = Pregunta::where("grupo_emparejamiento_id",$grupo->id)->get();
+        $area = Area::where("id",$grupo->area_id)->first();
 
         $indice=0;
 
@@ -40,9 +41,9 @@ class GrupoEmparejamientoController extends Controller
         // dd($opciones_incorrectas);
 
         if(isset($opciones)){
-            return view('grupo.index',['grupo'=>$grupo,'preguntas'=>$preguntas,'opciones'=>$opciones,'opciones_incorrectas'=>$opciones_incorrectas]);
+            return view('grupo.index',['grupo'=>$grupo,'preguntas'=>$preguntas,'opciones'=>$opciones,'opciones_incorrectas'=>$opciones_incorrectas,'area'=>$area]);
         }else{
-            return view('grupo.index',['grupo'=>$grupo]);
+            return view('grupo.index',['grupo'=>$grupo,'area'=>$area]);
         }
 
     }

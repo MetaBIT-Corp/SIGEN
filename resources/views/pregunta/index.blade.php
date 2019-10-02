@@ -184,7 +184,7 @@
                 </div>
                 <form action="{{ route('crear-grupo-emparejamiento',$area->id)}}" method="POST">
                     <div class="modal-body">
-                        <div class="form-group" style="display:none;">
+                        <div class="form-group" style="display:;">
                             <label class="col-form-label" for="areaid">Area ID:</label>
                             <input type="text" class="form-control" name="areaid" placeholder="ID de Pregunta" id="areaid" value="{{$area->id}}">
                         </div>

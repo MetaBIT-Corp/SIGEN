@@ -1,25 +1,25 @@
 @extends("../layouts.plantilla")
+
 @section("ol_breadcrumb")
-<li class="breadcrumb-item">
-    <a href="{{ route('materias') }}">
-        Materias
-    </a>
-</li>
-<li class="breadcrumb-item">
-	<a href="#">
-        Áreas
-    </a>
-</li>
-<li class="breadcrumb-item">
-	<a href="#">
-        Preguntas
-    </a>
-</li>
-<li class="breadcrumb-item">
-    Opciones
-</li>
 
-
+	<li class="breadcrumb-item">
+		<a href="{{ route('materias') }}">
+			Materias
+		</a>
+	</li>
+	<li class="breadcrumb-item">
+		<a href="{{ URL::signedRoute('getAreaIndex', ['id' => $area->id_cat_mat]) }}">
+			Áreas
+		</a>
+	</li>
+	<li class="breadcrumb-item">
+		<a href="{{ URL::signedRoute('getPreguntas', ['id' => $area->id]) }}">
+			Preguntas
+		</a>
+	</li>
+	<li class="breadcrumb-item">
+	    Opciones
+	</li>
 
 @endsection
 

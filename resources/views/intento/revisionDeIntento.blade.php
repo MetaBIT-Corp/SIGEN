@@ -65,16 +65,24 @@
 													
 										            <input disabled="true" aria-describedby="emailHelp" name="pregunta_{{ $valores[$i]['pregunta']->id }}" class="form-control" id="exampleInputEmail1" placeholder="Ingrese respuesta" type="text" 
 										            @if($valores[$i]['pregunta']->texto != "") 
-										            	value="{{ $valores[$i]['pregunta']->texto }}" 
+										            	 value="{{ $valores[$i]['pregunta']->texto }}"
 										            @endif
 
 													@foreach($respuestas as $respuesta)
 														@if($respuesta->id_pregunta == $valores[$i]['pregunta']->id)
 															
+															@if($respuesta->texto_respuesta == $valores[$i]['opciones'][0]->opcion)
+															    style="background-color: #9FF189;"
+															@else
+																style="background-color: #F37F7F;"
+															@endif
+															
 														@endif
 													@endforeach
 
+
 										            >
+
 										            </input>
 										            
 										            
@@ -146,46 +154,37 @@
 		                                        shuffle($nums);
 		                                    }}
 		                                @endphp
-		                            <select disabled="true" class="custom-select col-12" id="{{ $valores[$i]['preguntas'][$r]->id }}" name="pregunta_{{ $valores[$i]['preguntas'][$r]->id }}"
-		                            @foreach($respuestas as $respuesta)
+		                            <select disabled="true" class="custom-select col-12" id="{{ $valores[$i]['preguntas'][$r]->id }}" name="pregunta_{{ $valores[$i]['preguntas'][$r]->id }}" 
+		                            //recorremos las respuestas
+									@foreach($respuestas as $respuesta)
 										@if($respuesta->id_pregunta == $valores[$i]['preguntas'][$r]->id)
-											@for($p=0;$p<count($valores[$i]['preguntas']);$p++)
-											@if($respuesta->id_opcion== $valores[$i]['preguntas'][$nums[$p]]->opciones[0]->id 
-												&& $respuesta->id_pregunta  == $valores[$i]['preguntas'][$r]->id)
-												@if($valores[$i]['preguntas'][$nums[$p]]->opciones[0]->correcta)
-													style="background-color: #9FF189;"
-												@else
-													style="background-color: #F37F7F;"
-												@endif
-											@endif
+											@for($e=0;$e<count($valores[$i]['preguntas']);$e++)
+												@for($j=0; $j<count($valores[$i]['preguntas'][$e]->opciones); $j++)
+													@if($valores[$i]['preguntas'][$e]->opciones[$j]->id == $respuesta->id_opcion )
+														@if($valores[$i]['preguntas'][$e]->opciones[$j]->correcta && $valores[$i]['preguntas'][$e]->opciones[$j]->pregunta_id == $valores[$i]['preguntas'][$r]->id)
+															style="background-color: #9FF189;"
+														@else
+															style="background-color: #F37F7F;"
+														@endif
+													@endif
+												@endfor
 											@endfor
 										@endif
-									@endforeach 
-
+									@endforeach
 		                            	>
 		                                <option value="opcion_0" @if($valores[$i]['preguntas'][$r]->seleccionada == "opcion_0") selected @endif>
 		                                    Seleccione
 		                                </option>
 		                                
-		                                @for($m=0;$m<count($valores[$i]['preguntas']);$m++)
-
-		                                <option  se value="opcion_{{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id }}" @if($valores[$i]['preguntas'][$r]->seleccionada == "opcion_".$valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id) selected @endif
-		                                	@foreach($respuestas as $respuesta)
-										@if($respuesta->id_pregunta == $valores[$i]['preguntas'][$r]->id)
-											
-											@if($respuesta->id_opcion== $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->id )
-												@if($valores[$i]['preguntas'][$nums[$m]]->opciones[0]->correcta)
-													selected="true"
-												@endif
-											@endif
-											
-										@endif
-									@endforeach
-		                                	>
-		                                    {{ $valores[$i]['preguntas'][$nums[$m]]->opciones[0]->opcion }}
-		                                </option>
-
-		                                @endfor
+		                               @for($m=0; $m< count($valores[$i]['preguntas']); $m++)
+                                        <!--For para recorer opciones-->
+                                             @for($n=0; $n<count($valores[$i]['preguntas'][$m]->opciones); $n++)
+                                             
+                                            <option value="opcion_{{ $valores[$i]['preguntas'][$m]->opciones[$n]->id }}" @if($valores[$i]['preguntas'][$r]->seleccionada == "opcion_".$valores[$i]['preguntas'][$m]->opciones[$n]->id) selected @endif>
+                                                {{ $valores[$i]['preguntas'][$m]->opciones[$n]->opcion }}
+                                            </option>
+                                             @endfor
+                                        @endfor
 		                            </select>
 		                        </tr>
 		                        @endfor

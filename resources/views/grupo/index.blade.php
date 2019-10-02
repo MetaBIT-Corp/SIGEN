@@ -6,6 +6,29 @@
 	<link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
 @endsection
 
+@section("ol_breadcrumb")
+
+	<li class="breadcrumb-item">
+		<a href="{{ route('materias') }}">
+			Materias
+		</a>
+	</li>
+	<li class="breadcrumb-item">
+		<a href="{{ URL::signedRoute('getAreaIndex', ['id' => $area->id_cat_mat]) }}">
+			Áreas
+		</a>
+	</li>
+	<li class="breadcrumb-item">
+		<a href="{{ URL::signedRoute('getPreguntas', ['id' => $area->id, 'id_gpo'=>true]) }}">
+			Preguntas
+		</a>
+	</li>
+	<li class="breadcrumb-item">
+	    Opciones
+	</li>
+
+@endsection
+
 @section('main')
 
 <?php $contador=1; ?>
