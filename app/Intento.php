@@ -66,13 +66,14 @@ class Intento extends Model
                                                     ->where('numero_intento', $numero_intento)
                                                     ->get();
 
+            //dd(count($cape_cantidad), $estudiante_id, $clave_area->id, $numero_intento);
             //Cuenta la cantidad de preguntas que tiene el objeto clave_are
             $cantidad_preguntas = count($cape_cantidad);
 
             //Si la respuesta que seleccionó en la pregunta es correcta
             if($respuesta->id_opcion != null){
                 if($respuesta->opcion->correcta==1){
-        
+                    
                    //Calcula la ponderación de la pregunta
                     $nota += ($peso/$cantidad_preguntas)/10;
                 }
