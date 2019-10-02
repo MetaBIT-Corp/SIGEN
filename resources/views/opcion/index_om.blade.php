@@ -100,7 +100,7 @@
 			<input type="text" class="form-control" name="pregunta_id" placeholder="ID de Pregunta" id="pregunta_id" value="{{$pregunta->id}}">
 			<label class="col-form-label" for="indiceco">Opción Correcta:</label>
 			<input type="text" class="form-control" name="indiceco" value= "{{$indiceCorrecta}}" id="indiceco">
-			<label class="col-form-label" for="id_dcn">ID Mat:</label>
+			<label class="col-form-label" for="id_dcn">ID DCN:</label>
 			<input type="text" class="form-control" name="id_dcn" value= "{{$area->id_pdg_dcn}}" id="id_dcn">
 
 		</div>
@@ -116,7 +116,7 @@
 			</button>
 		</div>
 		<div class="d-flex justify-content-begin m-3" id="sugerencia">
-			<br><br><br><p id="infoP">*Las preguntas de Opción Múltiple no pueden tener menos de tres opciones</p>
+			<br><br><br><p id="infoP">*La Cantidad de Opciones ingresadas no alcanzan el mínimo.</p>
 		</div>
 
 		@if(count($errors)>0)

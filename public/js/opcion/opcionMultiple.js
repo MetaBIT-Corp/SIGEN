@@ -48,22 +48,43 @@ $(document).ready(function() {
 
         var btnDel = document.getElementsByClassName("btnDel");
 
-        if (contador<=3) {
+        if(($('#id_dcn').val())!=""){
 
-            for (i = 0; i < btnDel.length; i++) {
-                btnDel[i].style.color = "white";
-                btnDel[i].style.pointerEvents = "none";
-                btnDel[i].style.background = "grey";
+            if (contador<=2) {
+
+                for (i = 0; i < btnDel.length; i++) {
+                    btnDel[i].style.color = "white";
+                    btnDel[i].style.pointerEvents = "none";
+                    btnDel[i].style.background = "grey";
+                }
+
+            }else{
+
+                document.getElementById("infoP").style.display="none";
+
+                for (i = 0; i < btnDel.length; i++) {
+                    btnDel[i].style.color = "white";
+                }
+
             }
+        }else{
+            if (contador<=3) {
 
-        } else{
+                for (i = 0; i < btnDel.length; i++) {
+                    btnDel[i].style.color = "white";
+                    btnDel[i].style.pointerEvents = "none";
+                    btnDel[i].style.background = "grey";
+                }
 
-            document.getElementById("infoP").style.display="none";
+            }else{
 
-            for (i = 0; i < btnDel.length; i++) {
-                btnDel[i].style.color = "white";
+                document.getElementById("infoP").style.display="none";
+
+                for (i = 0; i < btnDel.length; i++) {
+                    btnDel[i].style.color = "white";
+                }
+
             }
-
         }
         
     });
