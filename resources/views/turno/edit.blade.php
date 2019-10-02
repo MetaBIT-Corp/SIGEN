@@ -52,7 +52,7 @@
   </div><br>
   <div class="row offset-1">
      <div class="form-group">
-         <button type="submit" class="btn btn-primary" onClick="this.disabled=true;">Guardar</button>                 
+         <button type="submit" class="btn btn-primary">Guardar</button>                 
      </div>
      <div class="form-group offset-1">
         <a class="btn btn-secondary" href="{{ URL::signedRoute('listado_turnos', ['id' => $turno->evaluacion_id]) }}">Cancelar</a> 
