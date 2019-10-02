@@ -10,6 +10,7 @@
               <i class="fas fa-table"></i>
               Listado de Docentes | Materia
             </div>
+            @if($turno->visibilidad != 1)
             <div class="col-4" style="text-align: right;">
               <strong class="mb-3">Asignar Área</strong>
 
@@ -26,6 +27,7 @@
               @endif
               
             </div>
+            @endif
           </div>
         </div>
 
@@ -81,8 +83,10 @@
                   <td id="id_peso">{{ $clave_area->peso }}</td>
                   <?php $peso_total += $clave_area->peso ?>
                   <td>
-                    <button class="icon-delete btn btn-sm btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></button>
-                    <button class="icon-edit btn btn-sm btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></button>
+                    @if($turno->visibilidad != 1)
+                      <button class="icon-delete btn btn-sm btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></button>
+                      <button class="icon-edit btn btn-sm btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></button>
+                    @endif
                     @if($clave_area->aleatorio)
                       <a class="icon-list btn btn-sm btn-success"
                         @if($clave_area->area->tipo_item_id==3)
@@ -96,9 +100,13 @@
                     @else
                       @if($clave_area->area->tipo_item_id==3)
                         <button class="icon-list btn btn-sm btn-success" href="#" title="Ver preguntas agregadas" data-preguntas-emp="{{ $clave_area->id }}"></button>
-                        <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area-emp="{{ $clave_area->id }}"></button>
+                        @if($turno->visibilidad != 1)
+                            <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area-emp="{{ $clave_area->id }}"></button>
+                        @endif
                       @else
-                        <button class="icon-list btn btn-sm btn-success" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
+                        @if($turno->visibilidad != 1)  
+                          <button class="icon-list btn btn-sm btn-success" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
+                        @endif
                         <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></button>
                       @endif
                     @endif
