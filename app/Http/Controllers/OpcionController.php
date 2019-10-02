@@ -137,15 +137,30 @@ class OpcionController extends Controller
 
                 for ($i=0; $i < $indice ; $i++) {
 
-                    $new_rules = array(
-                        'contador'=>'required|numeric|gte:3',
-                        'opcion'.$i=>'required');
+                    if($request->id_dcn!=""){
 
-                    $new_messages = array(
-                        'opcion'.$i.'.required' => 'Texto de Opción no fue ingresado.',
-                        'contador.gte'=>'Cantidad de Opciones ingresadas muy baja. Debe ingresar tres opciones como mínimo.'
+                        $new_rules = array(
+                            'contador'=>'required|numeric|gte:2',
+                            'opcion'.$i=>'required');
 
-                    );
+                        $new_messages = array(
+                            'opcion'.$i.'.required' => 'Texto de Opción no fue ingresado.',
+                            'contador.gte'=>'Cantidad de Opciones ingresadas muy baja. Debe ingresar dos opciones como mínimo.'
+
+                        );
+                    }else{
+
+                        $new_rules = array(
+                            'contador'=>'required|numeric|gte:3',
+                            'opcion'.$i=>'required');
+
+                        $new_messages = array(
+                            'opcion'.$i.'.required' => 'Texto de Opción no fue ingresado.',
+                            'contador.gte'=>'Cantidad de Opciones ingresadas muy baja. Debe ingresar tres opciones como mínimo.'
+
+                        );
+
+                    }
 
                     $rules=array_merge($rules, $new_rules);
                     $messages=array_merge($messages,$new_messages);

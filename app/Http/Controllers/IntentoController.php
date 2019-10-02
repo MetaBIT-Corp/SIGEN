@@ -63,6 +63,10 @@ class IntentoController extends Controller
 
         //Variable que contiene el array a mostrar en la paginacion
         $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
+
+
+
+
         //return dd($preguntas);
         return view('intento.intento', compact('paginacion','evaluacion','intento','clave_de_intento'));
     }
@@ -84,9 +88,9 @@ class IntentoController extends Controller
 
         //Variable que contiene el array a mostrar en la paginacion
         //Falta definir si se paginaran las encuestas OJO
-        $paginacion = $this->paginacion($request, 10, $preguntas);
+        $paginacion = $this->paginacion($request, 100, $preguntas);
 
-        return view('intento.intento', compact('paginacion'));
+        return view('intento.intento', compact('paginacion','intento'));
     }
 
     /**

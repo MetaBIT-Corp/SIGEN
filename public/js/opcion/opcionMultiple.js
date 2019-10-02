@@ -48,22 +48,43 @@ $(document).ready(function() {
 
         var btnDel = document.getElementsByClassName("btnDel");
 
-        if (contador<=3) {
+        if(($('#id_dcn').val())!=""){
 
-            for (i = 0; i < btnDel.length; i++) {
-                btnDel[i].style.color = "white";
-                btnDel[i].style.pointerEvents = "none";
-                btnDel[i].style.background = "grey";
+            if (contador<=2) {
+
+                for (i = 0; i < btnDel.length; i++) {
+                    btnDel[i].style.color = "white";
+                    btnDel[i].style.pointerEvents = "none";
+                    btnDel[i].style.background = "grey";
+                }
+
+            }else{
+
+                document.getElementById("infoP").style.display="none";
+
+                for (i = 0; i < btnDel.length; i++) {
+                    btnDel[i].style.color = "white";
+                }
+
             }
+        }else{
+            if (contador<=3) {
 
-        } else{
+                for (i = 0; i < btnDel.length; i++) {
+                    btnDel[i].style.color = "white";
+                    btnDel[i].style.pointerEvents = "none";
+                    btnDel[i].style.background = "grey";
+                }
 
-            document.getElementById("infoP").style.display="none";
+            }else{
 
-            for (i = 0; i < btnDel.length; i++) {
-                btnDel[i].style.color = "white";
+                document.getElementById("infoP").style.display="none";
+
+                for (i = 0; i < btnDel.length; i++) {
+                    btnDel[i].style.color = "white";
+                }
+
             }
-
         }
         
     });
@@ -105,8 +126,18 @@ $(document).ready(function() {
         inputI.setAttribute('value',indice);
         contador.setAttribute('value',fila.rowIndex-2);
 
-        if (contador.value>=3) {
-            $('#enviar').attr('disabled',false)
+        if(($('#id_dcn').val())!=""){
+
+            if (contador.value>=2) {
+                $('#enviar').attr('disabled',false)
+            }
+
+        }else{
+
+            if (contador.value>=3) {
+                $('#enviar').attr('disabled',false)
+            }
+
         }
 
     });

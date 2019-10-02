@@ -18,21 +18,16 @@
         </a>
     </li>
     <li class="breadcrumb-item">
-    	<a>
-            {{ $area->titulo }}
-        </a>
-    </li>
-    <li class="breadcrumb-item">
     	@if(Request::get('id_gpo')==1)
-        	Listado de Emparejamiento
+        	Grupo de Emparejamiento
             <label id="gpo-preg" data-control="0" data-token="{{ csrf_token() }}"></label>
         @else
-        	Listado de preguntas
+        	Preguntas
             <label id="gpo-preg" data-control="1" data-token="{{ csrf_token() }}"></label>
         @endif
     </li>
     @if(Request::get('id_gpo')==0)
-        <div class="col-5 text-right">
+        <div class="col-9 text-right">
             <a class="btn" href="javascript:void(0)" data-target="#modal" data-toggle="modal" id="add_pregunta">
                 <span class="icon-add text-primary">
                 </span>
@@ -42,7 +37,7 @@
             </strong>
         </div>
     @else
-        <div class="col-5 text-right">
+        <div class="col-9 text-right">
             <a class="btn" href="#" data-toggle="modal" data-target="#createModal">
                 <span class="icon-add text-primary">
                 </span>
