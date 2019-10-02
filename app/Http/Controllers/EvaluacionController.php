@@ -172,7 +172,7 @@ class EvaluacionController extends Controller
                         $turnos_activos = false;
                         if($evaluacion->turnos){
                             foreach ($evaluacion->turnos as $turno) {
-                                if($turno->visibilidad==1 && 
+                                if($turno->visibilidad==1 &&
                                     $turno->fecha_final_turno > $fecha_hora_actual){
                                     $turnos_activos = true;
                                 }
@@ -186,7 +186,7 @@ class EvaluacionController extends Controller
                 
             }
         }
-    	return view('evaluacion.listaEvaluacion')->with(compact('evaluaciones','id_carga'));
+    	return view('evaluacion.listaEvaluacion')->with(compact('evaluaciones','id_carga','fecha_hora_actual'));
 
     }
 

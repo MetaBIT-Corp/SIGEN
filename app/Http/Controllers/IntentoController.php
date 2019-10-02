@@ -391,7 +391,7 @@ class IntentoController extends Controller
                 if($id_intento==0){
                     $intento = Intento::where('estudiante_id',$estudiante->id_est)->where('fecha_final_intento', null)->first();
                 }else{
-                    $intento = Intento::find($id_intento)->first();
+                    $intento = Intento::find($id_intento);
                 }
                 
                 $respuestas = $intento->respuestas;

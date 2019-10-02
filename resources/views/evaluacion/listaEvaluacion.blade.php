@@ -147,7 +147,7 @@
             <h4 class="ml-2 mb-3" style="color: gray">{{$evaluacion->nombre_evaluacion}}</h4>
             <div class="row">
               @foreach($evaluacion->turnos as $turno) <!-- recorrecomos los turnos por evaluacion -->
-                @if($turno->visibilidad == 1)
+                @if($turno->visibilidad == 1 && $turno->fecha_final_turno > $fecha_hora_actual)
                   <div class="col-md-6">
               		  <span class="list-group-item  flex-column align-items-start mb-3">
               		    <div class="d-flex w-100 justify-content-between">
