@@ -1,45 +1,48 @@
 $(document).ready(function(){
 
-	var fecha_inicio_intento = new Date($('#fecha-inicio-intento').attr('value'))
-	var fecha_final_intento = new Date()
-	var duracion = parseInt($('#duracion-intento').attr('value'))
+	if($('#encuesta').val()!=1){
 
-	fecha_final_intento.setTime(fecha_inicio_intento.getTime() + (duracion * 60 * 1000))
+		var fecha_inicio_intento = new Date($('#fecha-inicio-intento').attr('value'))
+		var fecha_final_intento = new Date()
+		var duracion = parseInt($('#duracion-intento').attr('value'))
 
-	var fecha = fecha_final_intento.getFullYear()+'-'+('0'+(fecha_final_intento.getMonth()+1)).slice(-2)+'-'+fecha_final_intento.getDate()
-	var hora = fecha_final_intento.getHours() + ":" + fecha_final_intento.getMinutes() + ":" + fecha_final_intento.getSeconds()
-	var fecha_final_intento_formateada = fecha+' '+hora
-	$('#fecha-final-intento').attr('value',fecha_final_intento_formateada)
+		fecha_final_intento.setTime(fecha_inicio_intento.getTime() + (duracion * 60 * 1000))
 
-	// Declarando la Fecha final del conteo.
-	var fecha_fin_conteo = fecha_final_intento.getTime();	//Obteniendo el valor entero. Tiempo desde 01/01/1970
+		var fecha = fecha_final_intento.getFullYear()+'-'+('0'+(fecha_final_intento.getMonth()+1)).slice(-2)+'-'+fecha_final_intento.getDate()
+		var hora = fecha_final_intento.getHours() + ":" + fecha_final_intento.getMinutes() + ":" + fecha_final_intento.getSeconds()
+		var fecha_final_intento_formateada = fecha+' '+hora
+		$('#fecha-final-intento').attr('value',fecha_final_intento_formateada)
 
-	// Actualizando la cuenta cada segundo.
-	var x = setInterval(function() {
+		// Declarando la Fecha final del conteo.
+		var fecha_fin_conteo = fecha_final_intento.getTime();	//Obteniendo el valor entero. Tiempo desde 01/01/1970
 
-		// Obteniedo fecha y hora actuales
-		var ahora = new Date().getTime()
+		// Actualizando la cuenta cada segundo.
+		var x = setInterval(function() {
 
-		// Encontrando la distancia de tiempo entre el momento actual y la fecha final.
-		var distancia = fecha_fin_conteo - ahora
+			// Obteniedo fecha y hora actuales
+			var ahora = new Date().getTime()
 
-		// Cálculo de tiempo para hora, minutos y segundos
-		var horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-		var minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60))
-		var segundos = Math.floor((distancia % (1000 * 60)) / 1000)
+			// Encontrando la distancia de tiempo entre el momento actual y la fecha final.
+			var distancia = fecha_fin_conteo - ahora
 
-		// Desplegando el resultado en el contador del HTML
-		document.getElementById("contador").innerHTML =horas + ":"+ minutos + ":" + segundos
+			// Cálculo de tiempo para hora, minutos y segundos
+			var horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+			var minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60))
+			var segundos = Math.floor((distancia % (1000 * 60)) / 1000)
 
-		// If the count down is finished, write some text
-		if (distancia < 0) {
-			clearInterval(x)
-			document.getElementById("contador").innerHTML = "Finalizado"
-			// $(location).attr('href', '/calificar/')
+			// Desplegando el resultado en el contador del HTML
+			document.getElementById("contador").innerHTML =horas + ":"+ minutos + ":" + segundos
 
-			capturar_data(2)
-		}
-	}, 1000)
+			// If the count down is finished, write some text
+			if (distancia < 0) {
+				clearInterval(x)
+				document.getElementById("contador").innerHTML = "Finalizado"
+				// $(location).attr('href', '/calificar/')
+
+				capturar_data(2)
+			}
+		}, 1000)
+	}
 
 
 	function capturar_data(accion){
