@@ -246,10 +246,7 @@ class IntentoController extends Controller
                                 $preg['seleccionada'] = "opcion_".$respuesta->id_opcion;
                         }
                         
-                        $preguntas[] = ['descripcion_gpo'=>Grupo_Emparejamiento::where('id',$ultimo_id_gpo)->first()->descripcion_grupo_emp,'tipo_item' => $claves_areas_preguntas[$i][1], 'preguntas' => $pregs];
-                        //echo "$ultimo_id_gpo -";
-                        dd($gpos);
-                       
+                        $preguntas[] = ['descripcion_gpo'=>Grupo_Emparejamiento::where('id',$ultimo_id_gpo)->first()->descripcion_grupo_emp,'tipo_item' => $claves_areas_preguntas[$i][1], 'preguntas' => $pregs];                   
                     }
 
                 }
