@@ -1,8 +1,10 @@
 @extends("turno.base")
 
 @section("nombre_vista") Crear turno @endsection
+
+@section("div-form")<div class="col-md-12">@endsection
    
-@section("titulo_card") Crear turno @endsection
+@section("titulo_card") Crear Turno @endsection
 
 @section("formulario")
 <form action="/evaluacion/{{ $id }}/turnos" method="post">

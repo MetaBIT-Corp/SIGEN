@@ -10,6 +10,7 @@
               <i class="fas fa-table"></i>
               Listado de Docentes | Materia
             </div>
+            @if($turno->visibilidad != 1)
             <div class="col-4" style="text-align: right;">
               <strong class="mb-3">Asignar Área</strong>
 
@@ -26,8 +27,15 @@
               @endif
               
             </div>
+            @endif
           </div>
         </div>
+
+        <?php
+          $peso_total=0;
+          $total_preguntas = 0;
+          $areas_sin_preguntas = 0;
+        ?>
         
         <div class="card-body">
           <div class="table-responsive">
@@ -67,13 +75,18 @@
                   <!--El atributo cantidad_preguntas es un campo calculado en el modelo Clave_Area apartado de accessors-->
                   @if($clave_area->cantidad_preguntas!=0)
                     <td id="id_cantidad" class="text-center">{{ $clave_area->cantidad_preguntas }}</td>
+                    <?php $total_preguntas += $clave_area->cantidad_preguntas ?>
                   @else
                     <td id="id_cantidad" class="text-center">-</td>
+                    <?php $areas_sin_preguntas++ ?>
                   @endif
                   <td id="id_peso">{{ $clave_area->peso }}</td>
+                  <?php $peso_total += $clave_area->peso ?>
                   <td>
-                    <button class="icon-delete btn btn-sm btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></button>
-                    <button class="icon-edit btn btn-sm btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></button>
+                    @if($turno->visibilidad != 1)
+                      <button class="icon-delete btn btn-sm btn-danger" href="#" title="Eliminar Área" data-eliminar-ca="{{ $clave_area->id }}"></button>
+                      <button class="icon-edit btn btn-sm btn-primary" href="#" title="Editar Área" data-editar-ca="{{ $clave_area->id }}" data-aleatorio="{{ $clave_area->aleatorio }}"></button>
+                    @endif
                     @if($clave_area->aleatorio)
                       <a class="icon-list btn btn-sm btn-success"
                         @if($clave_area->area->tipo_item_id==3)
@@ -87,9 +100,13 @@
                     @else
                       @if($clave_area->area->tipo_item_id==3)
                         <button class="icon-list btn btn-sm btn-success" href="#" title="Ver preguntas agregadas" data-preguntas-emp="{{ $clave_area->id }}"></button>
-                        <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area-emp="{{ $clave_area->id }}"></button>
+                        @if($turno->visibilidad != 1)
+                            <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area-emp="{{ $clave_area->id }}"></button>
+                        @endif
                       @else
-                        <button class="icon-list btn btn-sm btn-success" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
+                        @if($turno->visibilidad != 1)  
+                          <button class="icon-list btn btn-sm btn-success" href="#" title="Ver preguntas agregadas" data-preguntas="{{ $clave_area->id }}"></button>
+                        @endif
                         <button class="icon-add-solid btn btn-sm btn-info" title="Agregar preguntas" data-id-clave-area="{{ $clave_area->id }}"></button>
                       @endif
                     @endif
@@ -103,6 +120,14 @@
                  @endif
               </tbody>
             </table>
+
+            <div class="d-none">
+              <input type="text" id="peso_total" value="{{$peso_total}}">
+              <input type="text" id="total_preguntas" value="{{$total_preguntas}}">
+              <input type="text" id="visibilidad" value="{{$turno->visibilidad}}">
+              <input type="text" id="areas_sin_preguntas" value="{{$areas_sin_preguntas}}">
+            </div>
+
           </div>
         </div>
       </div>

@@ -253,7 +253,7 @@ class EvaluacionController extends Controller
     public function publicar( Request $request){
         //dd($request->all());
         $turnos = $request->input('turnosnopublicos');
-        $notification = "info";
+        $notification = "warning";
         $message = "";
         if($turnos){
             foreach($turnos as $turno){
@@ -266,10 +266,19 @@ class EvaluacionController extends Controller
                 if($turno_publico->claves){
                     foreach ($turno_publico->claves as $clave) {
                         if(Clave_Area::where('clave_id', $clave->id)->exists()){
+
                             $areas_de_clave = Clave_Area::where('clave_id', $clave->id)->get();
                             $sumatoria_de_pesos = 0;
                             foreach ($areas_de_clave as $area_de_clave) {
                                 $sumatoria_de_pesos += $area_de_clave->peso;
+                                //verificamos si la clave_area es manual. es decir que no sean aleatorias
+                                if(!($area_de_clave->aleatorio)){
+                                    $preguntas_de_clave_area_pregunta = $area_de_clave->claves_areas_preguntas;
+                                    if($preguntas_de_clave_area_pregunta->count() == 0){
+                                        $message .= "Info: El turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno . " posee area(s) que no han sido asignadas preguntas, por favor verificar.";
+                                        return back()->with($notification,$message);
+                                    }
+                                }   
                             }
                             if($sumatoria_de_pesos<100){
                                 $message .= "Info: La sumatoria de pesos del turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno . " es de ". $sumatoria_de_pesos . ", menor al 100 requerido<br><br>";
@@ -287,7 +296,7 @@ class EvaluacionController extends Controller
                                 /*
                                 *
                                 **/
-
+                                $notification = "exito";
                                 $message .= "Info: Publicación exitosa del turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno ."<br><br>";
 
                                 $turno_publico->visibilidad = 1;
@@ -308,7 +317,7 @@ class EvaluacionController extends Controller
             }
             
         }else{
-            $notification = "info";
+            $notification = "warning";
             $message = "Info: no ha seleccionado ningún turno a publicar";
         }
         return back()->with($notification,$message); 
@@ -432,7 +441,11 @@ class EvaluacionController extends Controller
         //si son manuales es 0
         if($clave_area->aleatorio==0){
             //si son de emparejamiento (item id 3) u otra modalidad, el tratamiento es el mismo si es manual
-            $clave_areas_preguntas = $clave_area->claves_areas_preguntas->shuffle();
+            if($area->tipo_item_id == 3){
+                $clave_areas_preguntas = $clave_area->claves_areas_preguntas;
+            }else{
+               $clave_areas_preguntas = $clave_area->claves_areas_preguntas->shuffle(); 
+            }
             foreach ($clave_areas_preguntas as $clave_area_pregunta) {
                 foreach ($estudiantes as $estudiante) {
                    for( $i=1 ; $i<=$cant_intentos ; $i++){
@@ -475,11 +488,25 @@ class EvaluacionController extends Controller
                     //si es de emparejamiento se barajean los grupos de emparejamiento
                     else{*/
                         $grupos_emparejamientos = $area->grupos_emparejamiento;
-                        if($clave_area->numero_preguntas >= $grupos_emparejamientos->count()){
-                            $random_grupos_emparejamientos = $grupos_emparejamientos->shuffle();
+                        if($area->tipo_item_id == 3){
+
+                            if($clave_area->numero_preguntas >= $grupos_emparejamientos->count()){
+                            $random_grupos_emparejamientos = $grupos_emparejamientos;
+                            }else{
+                                $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
+                                $random_grupos_emparejamientos = $random_grupos_emparejamientos->orderBy('id', 'asc');
+                            }
+
                         }else{
-                            $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
+
+                            if($clave_area->numero_preguntas >= $grupos_emparejamientos->count()){
+                            $random_grupos_emparejamientos = $grupos_emparejamientos->shuffle();
+                            }else{
+                                $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
+                            }
+                            
                         }
+                        
                         foreach ( $random_grupos_emparejamientos as $grupo) {
                             foreach ($grupo->preguntas as $pregunta) {
                                

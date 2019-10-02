@@ -193,7 +193,7 @@ class IntentoController extends Controller
         /*Variable que controla que no se vuelvan a recuperar las preguntas de un grupo
         de emparejamiento*/
         $ultimo_id_gpo = 0;
-        //dd($claves_areas_preguntas);
+        
         for ($i = 0; $i < count($claves_areas_preguntas); $i++) {
             for ($j = 0; $j < count($claves_areas_preguntas[$i][0]); $j++) {
 

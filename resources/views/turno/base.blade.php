@@ -57,22 +57,29 @@
   </div>
 @endif
        
- <div class="col-md-12"> 
-  <div class="card">
-      <div class="card-header">
-        <h4><b>@yield("titulo_card")</b></h4>
+ <div class="row">
+  @yield("div-form")
+  <div class="card h-100">
+    <div class="card-header border-dark">
+      <h4><b>@yield("titulo_card")</b></h4>
+    </div>
+    <div class="card-body">
+      <div class="offset-2 col-md-12">
+        @yield("formulario")
       </div>
-      <div class="card-body">
-          <div class="offset-2 col-md-8">
-           @yield("formulario")
-       </div>
-      </div>
+    </div>
   </div>    
-</div><br>
+  </div><br>
+
+  @yield("informacion_turno")
+
+</div>
 
 <div class="col-md-12">
   @yield('clave-area')
 </div>    
+
+
 @endsection
 
 @endsection
