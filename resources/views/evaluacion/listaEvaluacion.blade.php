@@ -46,6 +46,13 @@
               </div>
             @endif
 
+            <!--Mostrará mensaje de error -->
+            @if (session('warning'))
+              <div class="alert alert-warning">
+               {!!session('warning')!!}
+              </div>
+            @endif
+
   <div id="wrapper">
   <div id="content-wrapper">
     <div class="container-fluid">

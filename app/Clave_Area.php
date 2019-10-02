@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Clave_Area extends Model
 {
@@ -57,10 +58,23 @@ class Clave_Area extends Model
 
     /*El campo calculado mostrará la cantidad de preguntas agregadas si es modalidad manual en caso contrario mostrará la cantidad especificada en el objeto*/
     public function getCantidadPreguntasAttribute(){
-        if($this->aleatorio)
+        if($this->aleatorio){
             return $this->numero_preguntas;
-        else
-            return count($this->claves_areas_preguntas);
+        }else{
+            if($this->area->tipo_item_id==3){
+                $cantidad = DB::table('clave_area_pregunta as cap')
+                                    ->where('cap.clave_area_id', $this->id)
+                                    ->join('pregunta as p', 'p.id', '=', 'cap.pregunta_id')
+                                    ->join('grupo_emparejamiento as grupo', 'grupo.id', '=', 'p.grupo_emparejamiento_id')
+                                    ->select('grupo.descripcion_grupo_emp')
+                                    ->distinct()
+                                    ->get();
+                                
+                return count($cantidad);
+            }{
+                return count($this->claves_areas_preguntas);
+            }
+        }
     }
 
 }
