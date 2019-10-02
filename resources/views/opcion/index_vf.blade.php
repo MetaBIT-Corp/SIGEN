@@ -8,9 +8,16 @@
 		</a>
 	</li>
 	<li class="breadcrumb-item">
-		<a href="{{ URL::signedRoute('getAreaIndex', ['id' => $area->id_cat_mat]) }}">
-			Áreas
-		</a>
+
+		@if($area->id_cat_mat)
+			<a href="{{ URL::signedRoute('getAreaIndex', ['id' => $area->id_cat_mat]) }}">
+				Áreas
+			</a>
+		@else
+			<a href="{{ route('areas_encuestas') }}">
+				Áreas
+			</a>
+		@endif
 	</li>
 	<li class="breadcrumb-item">
 		<a href="{{ URL::signedRoute('getPreguntas', ['id' => $area->id]) }}">

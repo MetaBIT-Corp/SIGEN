@@ -25,7 +25,15 @@
 
         @if($intento->user_id != null)
 
+            <!-- ES ENCUESTA -->
+
+            <input type="text" id="encuesta" style="display: none;" value="1">
+
         @else
+
+            <!-- ES ENCUESTA -->
+
+            <input type="text" id="encuesta" style="display: none;" value="0">
 
         <div id="carta" class="">
             <div class="carta-info">
@@ -193,14 +201,11 @@
                 <div class="card-footer">
                     <!--Botones de control para paginacion-->
                     <div class="offset-9">{{ $paginacion->links('vendor.pagination.simple-bootstrap-4') }}</div>
+                    @if($intento->user_id != null)
+                        <input type="button" onclick="capturar_data(2)" style="float: right;" class="page-link bg-danger text-white btn-md col-md-2" value="Terminar"/>
+                    @endif
                 </div>
             </div>
-
-            @if($intento->user_id != null)
-
-            <input type="button" onclick="capturar_data(2)" class="page-link bg-danger text-white btn-md" value="Terminar"/>
-
-            @endif
         </form>
 
     @endsection
