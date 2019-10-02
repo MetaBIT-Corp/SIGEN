@@ -7,6 +7,7 @@ function capturar_data(accion){
     var intento_id = $("#intento_id").val();
     
     var data = $("#quiz_form").serialize();
+    
     //Si no hay datos, procedemos a paginar, según acción del Estudiante
     if(! data)
         paginacion(accion);

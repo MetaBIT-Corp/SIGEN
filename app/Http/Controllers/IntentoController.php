@@ -59,7 +59,7 @@ class IntentoController extends Controller
         
         //Obtener las preguntas segun la clave asignada aleatoriamente
         //Se envia el tipo 0 para evaluaciones
-        $preguntas = $this->obtenerPreguntas($clave_de_intento,0,$id_est,$intento->numero_intento);
+        $preguntas = $this->obtenerPreguntas($clave_de_intento,0,$id_est,$intento->numero_intento,$intento);
 
         //Variable que contiene el array a mostrar en la paginacion
         $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
@@ -84,7 +84,7 @@ class IntentoController extends Controller
 
         //Se obtienen las preguntas segun la clave
         //Se envia el tipo=1 para encuestas
-        $preguntas = $this->obtenerPreguntas($clave_de_intento,1);
+        $preguntas = $this->obtenerPreguntas($clave_de_intento,1, null,null, $intento);
 
         //Variable que contiene el array a mostrar en la paginacion
         //Falta definir si se paginaran las encuestas OJO
@@ -146,13 +146,13 @@ class IntentoController extends Controller
      * @param int ID del estudiante logueado
      * @return Array Compuesto por el id del tipo de item,pregunta y sus opciones.
      */
-    private function obtenerPreguntas($clave,$tipo, $estudiante=null,$num_intento=null)
+    private function obtenerPreguntas($clave,$tipo, $estudiante=null,$num_intento=null,$intento)
     {
         //Recupera en un array las areas que conforman la clave (Registros de la relacion entre clave y area)
         $claves_areas = $clave->clave_areas;
     
         //Obtenemos el intento con el cual obtendremos las respuestas del Estudiante
-        $intento = Intento::where('clave_id',$clave->id)->where('estudiante_id',$estudiante)->first();
+        //$intento = Intento::where('clave_id',$clave->id)->where('estudiante_id',$estudiante)->first();
 
         /*Recupera los objetos clave_area_pregunta de cada clave_area y lo guarda en un array donde cada elemento del array tendra la siguiente estructura:
 
@@ -290,7 +290,7 @@ class IntentoController extends Controller
     public function persistence(){
         //Se obtiene el estudiante logueado para almacenar sus respuestas
         $id_user = auth()->user()->id;
-        $id_est=Estudiante::where('user_id',$id_user)->first()->id_est;
+        //$id_est=Estudiante::where('user_id',$id_user)->first()->id_est;
         
         //Obtenemos el intento el cual se esta realizando 
         $intento = Intento::find( (int) $_GET['intento_id'] );
@@ -408,7 +408,7 @@ class IntentoController extends Controller
 
                 //Obtener las preguntas segun la clave asignada aleatoriamente
                 //Se envia el tipo 0 para evaluaciones
-                $preguntas = $this->obtenerPreguntas($intento->clave,0,$estudiante->id_est,$intento->numero_intento);
+                $preguntas = $this->obtenerPreguntas($intento->clave,0,$estudiante->id_est,$intento->numero_intento,$intento);
 
                 //Variable que contiene el array a mostrar en la paginacion
                 $paginacion = $this->paginacionRevision( 100, $preguntas);
@@ -431,6 +431,9 @@ class IntentoController extends Controller
             }
 
             if(Intento::where('user_id',auth()->user()->id)->where('fecha_final_intento', null)->exists()){
+                $intento_encuesta = Intento::where('user_id',auth()->user()->id)->where('fecha_final_intento', null)->first();
+                $intento_encuesta->fecha_final_intento = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+                $intento_encuesta->save();
                 return redirect('encuestas');
             }
         }

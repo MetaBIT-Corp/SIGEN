@@ -105,19 +105,21 @@ class UsersTableSeeder extends Seeder
         ]);
 
         Estudiante::create([
-            'user_id'=>7,
+            'user_id'=>8,
             'carnet'=>'OG16003',
             'nombre'=>'Diego Ochoa',
             'activo'=>1,
             'anio_ingreso'=>2016
         ]);
+
         Estudiante::create([
-            'user_id'=>8,
+            'user_id'=>7,
             'carnet'=>'FB16005',
             'nombre'=>'Jose Montano',
             'activo'=>1,
             'anio_ingreso'=>2016
         ]);
+        
 
         //Estudiantes Para Pruebas
         User::create([
