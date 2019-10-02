@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Collection;
 use DB;
 
 class EvaluacionController extends Controller
@@ -494,7 +495,7 @@ class EvaluacionController extends Controller
                             $random_grupos_emparejamientos = $grupos_emparejamientos;
                             }else{
                                 $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
-                                $random_grupos_emparejamientos = $random_grupos_emparejamientos->orderBy('id', 'asc');
+                                $random_grupos_emparejamientos = $random_grupos_emparejamientos->sortBy('id');
                             }
 
                         }else{
@@ -504,7 +505,7 @@ class EvaluacionController extends Controller
                             }else{
                                 $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
                             }
-                            
+
                         }
                         
                         foreach ( $random_grupos_emparejamientos as $grupo) {
