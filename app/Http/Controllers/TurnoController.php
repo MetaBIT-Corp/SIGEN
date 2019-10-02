@@ -341,7 +341,7 @@ class TurnoController extends Controller
         $turno_duplicado->fecha_final_turno = $turno->fecha_final_turno;
         $turno_duplicado->contraseña = $turno->contraseña;
         $turno_duplicado->evaluacion_id = $turno->evaluacion_id;
-        $turno_duplicado->visibilidad = $turno->visibilidad;
+        $turno_duplicado->visibilidad = 0;
         $turno_duplicado->save();
 
         //Obteniendo clave del turno

@@ -150,21 +150,28 @@ class IntentoController extends Controller
         //Obtenemos el intento con el cual obtendremos las respuestas del Estudiante
         $intento = Intento::where('clave_id',$clave->id)->where('estudiante_id',$estudiante)->first();
 
-        /*Recupera los objetos clave_area_pregunta de cada clave_area y lo guarda en un array
-        se le pone como clave a cada posicion del array el id del tipo de item
+        /*Recupera los objetos clave_area_pregunta de cada clave_area y lo guarda en un array donde cada elemento del array tendra la siguiente estructura:
+
+         array[
+            0=> Collection {} ---->  N objetos clave_area_pregunta_estudiante
+            1=> int ----> id del tipo de item
+         ]
          */
+
+        $conta=0;
         if($tipo==0){
             foreach ($claves_areas as $clave_area) {
-                $claves_areas_preguntas[$clave_area->area->tipo_item->id] = $clave_area->claves_areas_preguntas_estudiante()->where('estudiante_id',$estudiante)
-                    ->where('numero_intento',$num_intento)->get();
+                $claves_areas_preguntas[$conta] = [$clave_area->claves_areas_preguntas_estudiante()->where('estudiante_id',$estudiante)
+                    ->where('numero_intento',$num_intento)->get(),$clave_area->area->tipo_item->id];
+                $conta++;
             }
         }else{
             foreach ($claves_areas as $clave_area) {
-                $claves_areas_preguntas[$clave_area->area->tipo_item->id] = $clave_area->claves_areas_preguntas;
+                $claves_areas_preguntas[$conta] = [$clave_area->claves_areas_preguntas,$clave_area->area->tipo_item->id];
+                $conta++;
             }
         }
-        
-        //dd($claves_areas_preguntas);
+
         /*Se recorre el array de claves_areas_preguntas, el primer bucle recorre los clave_area
         basandose siempre en el id del tipo de item, luego el segundo bucle se utiliza para recorrer
         cada clave_area_pregunta y obtener la pregunta en si.
@@ -186,16 +193,16 @@ class IntentoController extends Controller
         /*Variable que controla que no se vuelvan a recuperar las preguntas de un grupo
         de emparejamiento*/
         $ultimo_id_gpo = 0;
-
-        for ($i = 1; $i <= count($claves_areas_preguntas); $i++) {
-            for ($j = 0; $j < count($claves_areas_preguntas[$i]); $j++) {
+        //dd($claves_areas_preguntas);
+        for ($i = 0; $i < count($claves_areas_preguntas); $i++) {
+            for ($j = 0; $j < count($claves_areas_preguntas[$i][0]); $j++) {
 
                 //Si no pertence a un grupo de emparejamiento crea un array con cierta estructura
-                if ($i!=3) {
+                if ($claves_areas_preguntas[$i][1]!=3) {
                     //Al estar recorriendo una pregunta, hacemos una consulta para ver si existe una respuesta para el intento que se esta realizado
-                    $respuesta = Respuesta::where('id_intento',$intento->id)->where('id_pregunta',$claves_areas_preguntas[$i][$j]->pregunta->id)->get();
+                    $respuesta = Respuesta::where('id_intento',$intento->id)->where('id_pregunta',$claves_areas_preguntas[$i][0][$j]->pregunta->id)->get();
                     //Obtenemos todas las opciones de la pregunta
-                    $opciones = $claves_areas_preguntas[$i][$j]->pregunta->opciones;
+                    $opciones = $claves_areas_preguntas[$i][0][$j]->pregunta->opciones;
                     //Si existe respuesta procedemos a recorrer las opciones para ver cual es la seleccionada por parte del estudiante
                     if(count($respuesta)){
                     
@@ -209,9 +216,9 @@ class IntentoController extends Controller
                                 $opcion['seleccionada'] = true;
                         }
                     }
-                    $pregunta = $claves_areas_preguntas[$i][$j]->pregunta;
+                    $pregunta = $claves_areas_preguntas[$i][0][$j]->pregunta;
                     //Vamos a verificar si es texto corto, de ser asi a la pregunta le agregaremos la respuesta almacenada, en caso de existir 
-                    if($i == 4){
+                    if($claves_areas_preguntas[$i][1] == 4){
                         $respuesta = Respuesta::where('id_intento',$intento->id)->where('id_pregunta',$pregunta->id)->first();
                         //Por default el texto esta vacio
                         $pregunta['texto'] = "";
@@ -220,11 +227,12 @@ class IntentoController extends Controller
                             $pregunta['texto'] = $respuesta->texto_respuesta;
                     }
                     
-                    $preguntas[] = ['tipo_item' => $i, 'pregunta' => $pregunta, 'opciones' => $opciones];
+                    $preguntas[] = ['tipo_item' => $claves_areas_preguntas[$i][1], 'pregunta' => $pregunta, 'opciones' => $opciones];
                 } else {
-                    if ($ultimo_id_gpo != $claves_areas_preguntas[$i][$j]->pregunta->grupo_emparejamiento_id) {
+                    if ($ultimo_id_gpo != $claves_areas_preguntas[$i][0][$j]->pregunta->grupo_emparejamiento_id) {
                         
-                        $ultimo_id_gpo = $claves_areas_preguntas[$i][$j]->pregunta->grupo_emparejamiento_id;
+                        $ultimo_id_gpo = $claves_areas_preguntas[$i][0][$j]->pregunta->grupo_emparejamiento_id;
+
                         //Obtenemos las preguntas para recorrerlas y sacar para cada una su opcion seleccionada como respuesta
                         $pregs = Pregunta::where('grupo_emparejamiento_id', $ultimo_id_gpo)->get();
                         
@@ -238,15 +246,15 @@ class IntentoController extends Controller
                                 $preg['seleccionada'] = "opcion_".$respuesta->id_opcion;
                         }
                         
-                        $preguntas[] = ['descripcion_gpo'=>Grupo_Emparejamiento::where('id',$ultimo_id_gpo)->first()->descripcion_grupo_emp,'tipo_item' => $i, 'preguntas' => $pregs];
-
+                        $preguntas[] = ['descripcion_gpo'=>Grupo_Emparejamiento::where('id',$ultimo_id_gpo)->first()->descripcion_grupo_emp,'tipo_item' => $claves_areas_preguntas[$i][1], 'preguntas' => $pregs];
+                        //echo "$ultimo_id_gpo -";
+                        dd($gpos);
+                       
                     }
 
                 }
             }
         }
-        //$preguntas=Pregunta::paginate(4);
-        //dd($preguntas);
         return $preguntas;
     }
 
