@@ -101,8 +101,8 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::get('area/{id}/pregunta/{id_preg}','PreguntaController@show')->name('showPregunta');
     Route::put('/area/{id}/pregunta/{pregunta}','PreguntaController@update');
     Route::delete('/area/{id}/pregunta/{pregunta}','PreguntaController@destroy');
-    Route::post('grupo/{grupo_id}/edit','GrupoEmparejamientoController@updateGE')->name('editar-grupo');
 
+    Route::post('grupo/{grupo_id}/edit','GrupoEmparejamientoController@updateGE')->name('editar-grupo');
     Route::post('area/{id}/grupo-store','GrupoEmparejamientoController@storeGE')->name('crear-grupo-emparejamiento');
 
 

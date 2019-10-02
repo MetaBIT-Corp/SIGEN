@@ -58,22 +58,22 @@ class OpcionController extends Controller
             /*Tipo Item: Opción Múltiple*/
             case 1:
                 // echo $opcionCorrecta;
-                return view('opcion.index_om',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion]);
+                return view('opcion.index_om',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion,'area'=>$area]);
             break;
 
             /*Tipo Item: Verdadero/Falso*/
             case 2:
-                return view('opcion.index_vf',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion]);
+                return view('opcion.index_vf',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion,'area'=>$area]);
             break;
 
             /*Tipo Item: Grupo Emparejamiento*/
             case 3:
-                return view('opcion.index_ge',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion]);
+                return view('opcion.index_ge',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion,'area'=>$area]);
             break;
 
             /*Tipo Item: Respuesta Corta*/
             case 4:            
-                return view('opcion.index_rc',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion]);            
+                return view('opcion.index_rc',['opciones'=>$opciones,'pregunta'=>$pregunta,'tipo_opcion'=>$tipo_opcion,'area'=>$area]);            
             break;
 
         }

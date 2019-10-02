@@ -14,14 +14,14 @@
 		</a>
 	</li>
 	<li class="breadcrumb-item">
-		<a href="#">
-	        Áreas
-	    </a>
+		<a href="{{ URL::signedRoute('getAreaIndex', ['id' => $area->id_cat_mat]) }}">
+			Áreas
+		</a>
 	</li>
 	<li class="breadcrumb-item">
-		<a href="#">
-	        Preguntas
-	    </a>
+		<a href="{{ URL::signedRoute('getPreguntas', ['id' => $area->id]) }}">
+			Preguntas
+		</a>
 	</li>
 	<li class="breadcrumb-item">
 	    Opciones
