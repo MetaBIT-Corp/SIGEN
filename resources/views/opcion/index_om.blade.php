@@ -48,13 +48,22 @@
 		<table class="table table-hover" style="text-align: center;">
 
 			<thead>
-				<tr><th colspan="4" style="text-align: right; color: rgb(100,180,10);">Pregunta de Opción Múltiple</th></tr>
-				<tr><th colspan="4" style="text-align: left; font-size: 1.3em;">Opciones de Pregunta</th></tr>
+
+				@if($area->id_cat_mat)
+					<tr><th colspan="4" style="text-align: right; color: rgb(100,180,10);">Pregunta de Opción Múltiple</th></tr>
+					<tr><th colspan="4" style="text-align: left; font-size: 1.3em;">Opciones de Pregunta</th></tr>
+				@else
+					<tr><th colspan="3" style="text-align: right; color: rgb(100,180,10);">Pregunta de Opción Múltiple</th></tr>
+					<tr><th colspan="3" style="text-align: left; font-size: 1.3em;">Opciones de Pregunta</th></tr>
+				@endif
+				
 				<tr class="table-primary">
 					<th scope="col">N°</th>
 					<th scope="col">Opción</th>
-					<th scope="col">Correcta</th>
-					<th scope="col">Opciones</th>
+					@if($area->id_cat_mat)
+						<th scope="col">Correcta</th>
+					@endif
+					<th scope="col">Acciones</th>
 				</tr>
 			</thead>
 
@@ -67,23 +76,27 @@
 						<th scope="row"><?php echo $contador; ?></th>
 						<td  style="text-align: left;">{{$opcion->opcion}}</td>
 
-						<?php if($opcion->correcta==1): ?>
+						@if($area->id_cat_mat)
+
+							<?php if($opcion->correcta==1): ?>
+								
+								<td><input type="radio" disabled="" checked=""></td>
+
+								<?php $indiceCorrecta = $contador; ?>
 							
-							<td><input type="radio" disabled="" checked=""></td>
+							<?php else: ?>
 
-							<?php $indiceCorrecta = $contador; ?>
-						
-						<?php else: ?>
+								<td><input type="radio" disabled=""></td>
+							
+							<?php endif ?>
 
-							<td><input type="radio" disabled=""></td>
-						
-						<?php endif ?>
+						@endif
 						
 						<td>
 							
-							<a href="#" class="mr-2 btn-editar btn-sm" id="btn_editar" data-id="{{$opcion->id}}" data-opcion="{{$opcion->opcion}}" data-correcta="{{$opcion->correcta}}" data-tipo="{{$tipo_opcion}}" data-toggle="modal" data-target="#editModal"><span class="icon-edit"></span></a>
+							<a href="#" class="mr-2 btn-editar btn-sm" id="btn_editar" title="Editar Opción" data-id="{{$opcion->id}}" data-opcion="{{$opcion->opcion}}" data-correcta="{{$opcion->correcta}}" data-tipo="{{$tipo_opcion}}" data-toggle="modal" data-target="#editModal"><span class="icon-edit"></span></a>
 							
-							<a href="#" class="ml-2 btnDel btn-eliminar btn-sm" id="btn_eliminar" data-id="{{$opcion->id}}" data-toggle="modal" data-target="#deleteModal"><span class="icon-delete"></span></a>
+							<a href="#" class="ml-2 btnDel btn-eliminar btn-sm" id="btn_eliminar" title="Eliminar Opción" data-id="{{$opcion->id}}" data-toggle="modal" data-target="#deleteModal"><span class="icon-delete"></span></a>
 
 						</td>
 
@@ -162,16 +175,31 @@
 							<label class="col-form-label" for="opcion">Opción:</label>
 							<input type="text" class="form-control" name="opcion" placeholder="Inserte el texto de la Opción" id="opcion">
 						</div>
-						<div class="form-group">
-							<div class="custom-control custom-radio">
-								<input type="radio" id="correctaSi" name="correcta" class="custom-control-input" value="1">
-								<label class="custom-control-label" for="correctaSi">Es correcta</label>
+
+						@if($area->id_cat_mat)
+							<div class="form-group">
+								<div class="custom-control custom-radio">
+									<input type="radio" id="correctaSi" name="correcta" class="custom-control-input" value="1">
+									<label class="custom-control-label" for="correctaSi">Es correcta</label>
+								</div>
+								<div class="custom-control custom-radio">
+									<input type="radio" id="correctaNo" name="correcta" class="custom-control-input" value="0" checked="">
+									<label class="custom-control-label" for="correctaNo">No es correcta</label>
+								</div>
 							</div>
-							<div class="custom-control custom-radio">
-								<input type="radio" id="correctaNo" name="correcta" class="custom-control-input" value="0" checked="">
-								<label class="custom-control-label" for="correctaNo">No es correcta</label>
+						@else
+							<div class="form-group" style="display: none">
+								<div class="custom-control custom-radio">
+									<input type="radio" id="correctaSi" name="correcta" class="custom-control-input" value="1">
+									<label class="custom-control-label" for="correctaSi">Es correcta</label>
+								</div>
+								<div class="custom-control custom-radio">
+									<input type="radio" id="correctaNo" name="correcta" class="custom-control-input" value="0" checked="">
+									<label class="custom-control-label" for="correctaNo">No es correcta</label>
+								</div>
 							</div>
-						</div>
+
+						@endif
 						{{ csrf_field() }}
 
 						<button type="submit" class="btn btn-primary">Agregar</button>
@@ -212,16 +240,29 @@
 							<label class="col-form-label" for="opcion">Opción:</label>
 							<input type="text" class="form-control" name="opcion" placeholder="Inserte el texto de la Opción" id="opcion" required="required">
 						</div>
-						<div class="form-group">
-							<div class="custom-control custom-radio">
-								<input type="radio" id="correctaSiEdit" name="correctaEdit" class="custom-control-input" value="1">
-								<label class="custom-control-label" for="correctaSiEdit">Es correcta</label>
+						@if($area->id_cat_mat)
+							<div class="form-group">
+								<div class="custom-control custom-radio">
+									<input type="radio" id="correctaSiEdit" name="correctaEdit" class="custom-control-input" value="1">
+									<label class="custom-control-label" for="correctaSiEdit">Es correcta</label>
+								</div>
+								<div class="custom-control custom-radio">
+									<input type="radio" id="correctaNoEdit" name="correctaEdit" class="custom-control-input" value="0">
+									<label class="custom-control-label" for="correctaNoEdit">No es correcta</label>
+								</div>
 							</div>
-							<div class="custom-control custom-radio">
-								<input type="radio" id="correctaNoEdit" name="correctaEdit" class="custom-control-input" value="0">
-								<label class="custom-control-label" for="correctaNoEdit">No es correcta</label>
+						@else
+							<div class="form-group d-none">
+								<div class="custom-control custom-radio">
+									<input type="radio" id="correctaSiEdit" name="correctaEdit" class="custom-control-input" value="1">
+									<label class="custom-control-label" for="correctaSiEdit">Es correcta</label>
+								</div>
+								<div class="custom-control custom-radio">
+									<input type="radio" id="correctaNoEdit" name="correctaEdit" class="custom-control-input" value="0">
+									<label class="custom-control-label" for="correctaNoEdit">No es correcta</label>
+								</div>
 							</div>
-						</div>
+						@endif
 						
 						{{ csrf_field() }}
 
