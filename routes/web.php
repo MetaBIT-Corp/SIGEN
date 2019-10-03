@@ -14,53 +14,39 @@ use App\Area;
 */
 
 //Rutas de pruebas
+Auth::routes();
+Route::get('/', function () {
+    return view('layouts.plantilla');
+});
+Route::get('/home', 'HomeController@index')->name('home');
 
-/*----------------------------Rutas de prueba para agregar preguntas a la clave------------------------------------*/
-#Route::post('turno/{id_turno}/claves', 'ClaveController@asignarPreguntas')->name('agregar_clave_area');
+//Rutas relacionadas con Clave Area
 Route::get('random/', 'EvaluacionController@random');
-
 Route::post('turno/claves', 'ClaveController@asignarPreguntas')->name('agregar_clave_area');
 Route::post('clave-area/editar/', 'ClaveController@editarClaveArea')->name('editar_clave_area');
 Route::post('clave-area/eliminar/', 'ClaveController@eliminarClaveArea')->name('eliminar_clave_area');
 Route::get('clave-area/{clave_area_id}/preguntas','ClaveAreaController@listarPreguntas')->name('preguntas_por_area')->middleware('signed');
-Route::get('intento/{intento_id}/respuestas','IntentoController@calcularNota');
-/*-----------------------------------------------------------------------------------------------------------------*/
 
-Route::get('intento/', function() {
-	echo "<a href='intento/prueba/1?page=1'>Link para iniciar intento</a>";
-});
-    
+//Rutas relacionadas con Intento y Encuesta (Resolucion de encuesta y evaluacion)
 Route::get('persistencia/', 'IntentoController@persistence');
 Route::get('calificar/', 'IntentoController@calificacionEvaluacion')->name('calificar_evaluacion');
-Route::get('intento/prueba/{id_intento}','IntentoController@iniciarEvaluacion')->name('prueba');
-Route::get('encuesta/prueba/{id_clave}','IntentoController@iniciarEncuesta')->name('prueba_encuesta');
+Route::get('intento/{id_intento}','IntentoController@iniciarEvaluacion')->name('prueba');
+Route::get('encuesta/{id_clave}','IntentoController@iniciarEncuesta')->name('prueba_encuesta');
 Route::get('intento/revision/{id_intento}','IntentoController@revisionEvaluacion')->name('revision_evaluacion')->middleware('signed');
+Route::get('intento/{intento_id}/respuestas','IntentoController@calcularNota');
 
-
-Route::get('/', function () {
-    return view('layouts.plantilla');
-});
-
-
-//Rutas Funcionales
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
+//Rutas relacionadas con materias
 Route::get('/materias', 'MateriaController@listar')->name('materias');
-
 Route::get('/materias/listado_estudiante/{id}', 'EstudianteController@index')->name('listado_estudiante')->middleware('signed'); 
-//se envia como parametro o el id de materia ciclo 
 Route::get('/materia/estudiante/{id}/{id_mat}', 'EstudianteController@show')->name('detalle_estudiante')->middleware('signed');
-
 Route::get('docentes-ciclo/{id_mat_ci}', 'DocenteController@docentes_materia_ciclo')->name('docentes_materia_ciclo')->middleware('signed');
-
 Route::get('materia/listado-evaluacion/{id}','EvaluacionController@listado')->name('listado_evaluacion')->middleware('signed');
+
+//Rutas relacionadas con encuestas
 Route::get('/encuestas','EncuestaController@listado_publico')->name('encuestas'); 
-Route::post('/encuesta/prueba/','EncuestaController@acceso')->name('acceso_encuesta');
+Route::post('/encuesta','EncuestaController@acceso')->name('acceso_encuesta');
 
     
-
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
 Route::group(['middleware' => 'admin'], function(){
 
@@ -69,19 +55,18 @@ Route::group(['middleware' => 'admin'], function(){
 //Aqui iran las rutas a las que tiene acceso solo el Docente
 Route::group(['middleware' => 'teacher'], function(){
 
+    //Rutas relacionadas con Evaluacion
     Route::get('/evaluacion/{id}', 'EvaluacionController@show')->name('detalle_evaluacion');
-
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
 
-    //URL's para Turno
+    //Rutas relacionadas con Turno
     Route::get('/evaluacion/{id}/turnos', 'TurnoController@index')->name('listado_turnos')->middleware('signed');
     Route::get('/evaluacion/{id}/turnos/create', 'TurnoController@create')->name('crear_turno')->middleware('signed');
     Route::get('/evaluacion/{id}/turnos/{turno_id}/edit', 'TurnoController@edit')->name('editar_turno')->middleware('signed');
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController')->except(['index','create','edit']);
     Route::get('/evaluacion/{id}/{id_turno}','TurnoController@duplicarTurno')->name('duplicar');
 
-
-    //URL's para Area
+    //Rutas relacionadas con Area
     Route::get('/materia/{id}/areas/create','AreaController@create')->name('crear_area')->middleware('signed');
     Route::post('materia/{id}/areas','AreaController@store')->name('storeArea');
     Route::get('materia/{id}/areas','AreaController@index')->name('getAreaIndex')->middleware('signed');
@@ -93,8 +78,7 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::post('areas/encuestas', 'AreaController@indexEncuesta')->name('post_areas_encuestas');
 
     
-    //URL's para Pregunta
-    //Route::resource('area/{id}/pregunta','PreguntaController')->except(['update']);
+    //Rutas relacionadas con Pregunta
     Route::get('area/{id}/pregunta','PreguntaController@index')->name('getPreguntas')->middleware('signed');
     Route::post('area/{id}/pregunta','PreguntaController@index')->name('postPregunta');
     Route::post('area/{id}/pregunta/create','PreguntaController@store')->name('postPregunta');
@@ -102,6 +86,7 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::put('/area/{id}/pregunta/{pregunta}','PreguntaController@update');
     Route::delete('/area/{id}/pregunta/{pregunta}','PreguntaController@destroy');
 
+    //Rutas relacionadas con Grupo Emparejamiento CRUD
     Route::post('grupo/{grupo_id}/edit','GrupoEmparejamientoController@updateGE')->name('editar-grupo');
     Route::post('area/{id}/grupo-store','GrupoEmparejamientoController@storeGE')->name('crear-grupo-emparejamiento');
     Route::post('area/{id}/grupo-edit','GrupoEmparejamientoController@editGE')->name('editar-grupo-emparejamiento');
