@@ -44,7 +44,7 @@ Route::get('materia/listado-evaluacion/{id}','EvaluacionController@listado')->na
 
 //Rutas relacionadas con encuestas
 Route::get('/encuestas','EncuestaController@listado_publico')->name('encuestas'); 
-Route::post('/encuesta','EncuestaController@acceso')->name('acceso_encuesta');
+Route::post('/encuestas','EncuestaController@acceso')->name('acceso_encuesta');
 
     
 //Aqui iran las rutas a las que tiene acceso solo el Administrador

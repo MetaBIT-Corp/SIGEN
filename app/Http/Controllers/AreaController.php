@@ -171,8 +171,6 @@ class AreaController extends Controller
         $area=Area::where('id',(int)$data["id_area"])->first();
         $area->titulo=$data["titulo"];
         $area->save();
-
-        $id_mat=$area->materia->id_cat_mat;
         return response()->json(['success'=>'El area fue modificada exitosamente']);
     }
 
