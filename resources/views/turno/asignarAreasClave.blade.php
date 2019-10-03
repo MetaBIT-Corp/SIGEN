@@ -45,7 +45,9 @@
                   <th>#</th>
                   <th>Modalidad</th>
                   <th>Cantidad de preguntas</th>
-                  <th>Peso</th>
+                  @if(!$encuesta)
+                    <th>Peso</th>
+                  @endif
                   <th>Opciones</th>
                 </tr>
               </thead>
@@ -54,7 +56,9 @@
                   <th>#</th>
                   <th>Modalidad</th>
                   <th>Cantidad de preguntas</th>
-                  <th>Peso</th>
+                  @if(!$encuesta)
+                    <th>Peso</th>
+                  @endif
                   <th>Opciones</th>
                 </tr>
               </tfoot>
@@ -80,7 +84,9 @@
                     <td id="id_cantidad" class="text-center">-</td>
                     <?php $areas_sin_preguntas++ ?>
                   @endif
-                  <td id="id_peso">{{ $clave_area->peso }}</td>
+                  @if(!$encuesta)
+                    <td id="id_peso">{{ $clave_area->peso }}</td>
+                  @endif
                   <?php $peso_total += $clave_area->peso ?>
                   <td>
                     @if($visibilidad != 1)
