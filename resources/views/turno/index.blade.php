@@ -32,12 +32,14 @@
               <i class="fas fa-table"></i>
               Listado de Turnos | <b>{{ $nombre_evaluacion }}</b></div>
             <div class="card-body">
-            <div class="row">
-                <a id="btn_add" class="btn btn-sm" href="{{ URL::signedRoute('crear_turno', ['id' => $evaluacion_id]) }}" title="Agregar">
-                    <span class="icon-add"></span>
-                </a>
-                <b id="b_add">Agregar turno</b>
-            </div>
+            @if(auth()->user()->IsTeacher)
+              <div class="row">
+                  <a id="btn_add" class="btn btn-sm" href="{{ URL::signedRoute('crear_turno', ['id' => $evaluacion_id]) }}" title="Agregar">
+                      <span class="icon-add"></span>
+                  </a>
+                  <b id="b_add">Agregar turno</b>
+              </div>
+            @endif
               <div class="table-responsive">
                 <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
                   <thead>
@@ -46,7 +48,9 @@
                       <th>Fecha/Hora de inicio</th>
                       <th>Fecha/Hora de fin</th>
                       <th>Visible</th>
-                      <th>Acciones</th>
+                      @if(auth()->user()->IsTeacher)
+                        <th>Acciones</th>
+                      @endif
                     </tr>
                   </thead>
                   <tbody>
@@ -58,23 +62,25 @@
                                 <td>{{ $turno->fecha_inicio_turno }}</td>
                                 <td>{{ $turno->fecha_final_turno }}</td>
                                 <td><input type="checkbox" @if($turno->visibilidad) checked @endif disabled></td>
-                                <td>
-                                    @if($turno->acciones)
-                                      <a  class="btn btn-sm btn-secondary" title="Duplicar Turno" href="{{ URL::signedRoute('duplicar', ['id' => $evaluacion_id, 'turno_id' =>$turno->id ]) }}">
-                                           <span class="icon-copy"></span>
-                                       </a>
-                                       <a id="btn_editar" class="btn btn-sm" title="Editar" href="{{ URL::signedRoute('editar_turno', ['id' => $evaluacion_id, 'turno_id' =>$turno->id ]) }}">
-                                           <span class="icon-edit"></span>
-                                       </a>
-                                          @if($turno->accion_delete)
-                                               <a id="btn_eliminar" class="btn btn-sm" title="Eliminar" onclick="modal('{{ $turno->id }}', '{{ $evaluacion_id }}','{{ $turno->fecha_inicio_turno }}', '{{ $turno->fecha_final_turno }}')">
-                                                   <span class="icon-delete"></span>
-                                               </a>
-                                          @endif
-                                    @else 
-                                        No acciones 
-                                    @endif
-                                </td>
+                                @if(auth()->user()->IsTeacher)
+                                  <td>
+                                      @if($turno->acciones)
+                                        <a  class="btn btn-sm btn-secondary" title="Duplicar Turno" href="{{ URL::signedRoute('duplicar', ['id' => $evaluacion_id, 'turno_id' =>$turno->id ]) }}">
+                                             <span class="icon-copy"></span>
+                                         </a>
+                                         <a id="btn_editar" class="btn btn-sm" title="Editar" href="{{ URL::signedRoute('editar_turno', ['id' => $evaluacion_id, 'turno_id' =>$turno->id ]) }}">
+                                             <span class="icon-edit"></span>
+                                         </a>
+                                            @if($turno->accion_delete)
+                                                 <a id="btn_eliminar" class="btn btn-sm" title="Eliminar" onclick="modal('{{ $turno->id }}', '{{ $evaluacion_id }}','{{ $turno->fecha_inicio_turno }}', '{{ $turno->fecha_final_turno }}')">
+                                                     <span class="icon-delete"></span>
+                                                 </a>
+                                            @endif
+                                      @else 
+                                          No acciones 
+                                      @endif
+                                  </td>
+                                @endif
                             </tr>
                         @endforeach
                      @else

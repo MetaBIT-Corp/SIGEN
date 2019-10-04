@@ -107,19 +107,19 @@
                       </a>
                         
                         @if(auth()->user()->IsTeacher)
-                       <a class="btn btn-option btn-sm mb-1" title="Editar Evaluación" href="
-                        {{ URL::signedRoute('gu_evaluacion', ['id_eva' => $evaluacion->id]) }}">
-                        <span class="icon-edit"></span>
-                       </a>
+                         <a class="btn btn-option btn-sm mb-1" title="Editar Evaluación" href="
+                          {{ URL::signedRoute('gu_evaluacion', ['id_eva' => $evaluacion->id]) }}">
+                          <span class="icon-edit"></span>
+                         </a>
 
-                       <a class="btn btn-danger btn-sm mb-1" title="Deshabilitar Evaluación" href="#" data-deshabilitar-evaluacion="{{ $evaluacion->id }}">
-                        <span class="icon-minus-circle"></span>
-                       </a>
-                      <!-- Opcion de publicar evaluacion-->
-                       <a class="btn btn-option btn-sm mb-1" title="Publicar Evaluación" href="#" data-id-evaluacion="{{ $evaluacion->id}}">
-                        <span class="icon-upload"></span>
-                       </a>
-                       <!-- Opcion de publicar evaluacion-->
+                         <a class="btn btn-danger btn-sm mb-1" title="Deshabilitar Evaluación" href="#" data-deshabilitar-evaluacion="{{ $evaluacion->id }}">
+                          <span class="icon-minus-circle"></span>
+                         </a>
+                        <!-- Opcion de publicar evaluacion-->
+                         <a class="btn btn-option btn-sm mb-1" title="Publicar Evaluación" href="#" data-id-evaluacion="{{ $evaluacion->id}}">
+                          <span class="icon-upload"></span>
+                         </a>
+                         <!-- Opcion de publicar evaluacion-->
                        @endif
                        
                        <a class="btn btn-sm btn-option mb-1" title="Listado de turnos" href="{{ URL::signedRoute('listado_turnos', ['id' => $evaluacion->id]) }}">

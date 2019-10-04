@@ -3,8 +3,12 @@
 @section("body")
 
 @section("ol_breadcrumb")
+  @if($id_materia)
     <li class="breadcrumb-item"><a href="/materias">Materia</a></li>
     <li class="breadcrumb-item"><a href="{{ URL::signedRoute('getAreaIndex', ['id' => $id_materia]) }}">Listado de áreas</a></li>
+  @else
+    <li class="breadcrumb-item"><a href="/areas/encuestas">Listado de áreas</a></li>
+  @endif  
     <li class="breadcrumb-item">@yield("nombre_vista")</li>
 @endsection 
 

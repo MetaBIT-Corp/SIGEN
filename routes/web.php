@@ -60,7 +60,6 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
 
     //Rutas relacionadas con Turno
-    Route::get('/evaluacion/{id}/turnos', 'TurnoController@index')->name('listado_turnos')->middleware('signed');
     Route::get('/evaluacion/{id}/turnos/create', 'TurnoController@create')->name('crear_turno')->middleware('signed');
     Route::get('/evaluacion/{id}/turnos/{turno_id}/edit', 'TurnoController@edit')->name('editar_turno')->middleware('signed');
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController')->except(['index','create','edit']);
@@ -139,5 +138,6 @@ Route::group(['middleware' => 'student'], function(){
 
 //Aqui iran las rutas a las que tiene acceso solamente el docente y el admin
 Route::group(['middleware' => 'admin_teacher'], function(){
+    Route::get('/evaluacion/{id}/turnos', 'TurnoController@index')->name('listado_turnos')->middleware('signed');
     Route::get('/listado-encuesta','EncuestaController@listado')->name('listado_encuesta')->middleware('signed');
 });
