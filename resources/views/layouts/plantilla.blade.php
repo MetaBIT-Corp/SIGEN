@@ -101,14 +101,15 @@
                                     </a>
                                 </li>
                                 @endif
-                                <li class="nav-item first-one">
+                                
+                                 @if(auth()->check())
+                                 <li class="nav-item first-one">
                                     <a class="nav-link " href="{{route('encuestas')}}">
                                         <span data-feather="home"></span>
                                         Encuestas Disponibles
                                         <span class="arrow-sidebar" data-feather="chevron-right"></span>
                                     </a>
                                 </li>
-                                 @if(auth()->check())
                                  @if(auth()->user()->IsTeacher)
                                 <li class="nav-item first-one">
                                     <a class="nav-link " href="

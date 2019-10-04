@@ -216,7 +216,7 @@ class EncuestaController extends Controller
     public function listado_publico(){
         $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
         $encuestas = Encuesta::where('visible',1)
-                        ->where('fecha_inicio_encuesta','<=', $fecha_hora_actual)
+                        ->where('fecha_final_encuesta','>=', $fecha_hora_actual)
                         ->get();
         foreach ($encuestas as $encuesta) {
             $encuesta->fecha_inicio_encuesta = $this->convertirFechaS($encuesta->fecha_inicio_encuesta);
@@ -320,17 +320,26 @@ class EncuestaController extends Controller
         return back()->with($notification,$message); 
     }
     public function acceso(Request $request){
-        
+        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
         $id_clave = $request->input('id_clave');
-        //dd($id_clave);
+        $id_encuesta_acceso = $request->input('id_encuesta_acceso');
+        //dd($request->all());
         /*VALIDACIONES
         *
         *
         */
-        return redirect()->action(
+        if(Encuesta::find($id_encuesta_acceso)->exists()){
+            $encuesta = Encuesta::find($id_encuesta_acceso);
+            if($encuesta->fecha_inicio_encuesta <= $fecha_hora_actual &&
+                $encuesta->fecha_final_encuesta > $fecha_hora_actual){
+                return redirect()->action(
                         'IntentoController@iniciarEncuesta', 
                         ['id_clave' => $id_clave ]
                     );
+            }
+        }
+        
+        return back()->with('warning','Advertencia: La encuesta aún no se encuentra disponible');
     }
     /**
      * Funcion para convertir la fecha de formato que no tenga hasta los segundos

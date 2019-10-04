@@ -21,6 +21,13 @@
     {!!session('error')!!}
   </div>
 @endif
+
+@if (session('warning'))
+  <div class="alert alert-warning">
+    {!!session('warning')!!}
+  </div>
+@endif
+
     <div id="wrapper">
     <div id="content-wrapper">
       <div class="container-fluid">
@@ -46,7 +53,7 @@
                       <small>Autor: {{$encuesta->docente->nombre_docente}} </small>
                       <br><br>
                       <button type="button" class="btn btn-info mt-1 mb-1" data-acceder-encuesta="{{$encuesta->IdClave}}"
-                        data-descripcion-encuesta="{{$encuesta->descripcion_encuesta}}" data-titulo-encuesta="{{$encuesta->titulo_encuesta}}">Acceder</button>
+                        data-descripcion-encuesta="{{$encuesta->descripcion_encuesta}}" data-titulo-encuesta="{{$encuesta->titulo_encuesta}}" data-id-encuesta="{{$encuesta->id}}">Acceder</button>
               		  </span>
                     
                   </div>
@@ -99,6 +106,7 @@
               <form action="{{ route('acceso_encuesta')}}" method="POST">
                 {{ csrf_field() }}
                 <input type="hidden" id="id_clave_acceso" value="" name="id_clave">
+                <input type="hidden" id="id_encuesta_acceso" value="" name="id_encuesta_acceso">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="submit" class="btn btn-primary">Acceder</button>
               </form>
@@ -122,6 +130,7 @@
       $('[data-acceder-encuesta]').on('click', function(){
           var indicaciones = "<strong>Indicaciones: </strong>";
           $('#id_clave_acceso').attr('value', $(this).data('acceder-encuesta'));
+          $('#id_encuesta_acceso').attr('value', $(this).data('id-encuesta'));
           $('#descripcion_acceso').html( indicaciones.concat($(this).data('descripcion-encuesta')));
           $('#titulo_acceso').html( $(this).data('titulo-encuesta'));
           
