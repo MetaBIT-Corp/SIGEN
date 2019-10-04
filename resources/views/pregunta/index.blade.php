@@ -37,7 +37,7 @@
             </strong>
         </div>
     @else
-        <div class="col-9 text-right">
+        <div class="col text-right">
             <a class="btn" href="#" data-toggle="modal" data-target="#createModal">
                 <span class="icon-add text-primary">
                 </span>
@@ -119,11 +119,11 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <input class="btn btn-primary" id="modificar" type="button" value="Modificar"/>
                         <button class="btn btn-secondary" data-dismiss="modal" id="salir" type="button"
                         onclick="$('#validacion').attr('hidden',true);">
                             Salir
                         </button>
-                        <input class="btn btn-primary" id="modificar" type="button" value="Modificar"/>
                     </div>
                 </form>
             </div>

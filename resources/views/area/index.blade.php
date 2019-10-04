@@ -106,10 +106,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <input class="btn btn-primary" id="modificar" type="button" value="Modificar"/>
                         <button class="btn btn-secondary" data-dismiss="modal" id="salir" type="button" onclick="$('#validacion').attr('hidden',true);">
                             Salir
                         </button>
-                        <input class="btn btn-primary" id="modificar" type="button" value="Modificar"/>
                     </div>
                 </form>
             </div>
@@ -143,10 +143,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <input class="btn btn-danger" id="eliminar" type="button" value="Eliminar"/>
                         <button class="btn btn-secondary" data-dismiss="modal" id="salir_eli" type="button">
                             Salir
                         </button>
-                        <input class="btn btn-danger" id="eliminar" type="button" value="Eliminar"/>
                     </div>
                 </form>
             </div>
