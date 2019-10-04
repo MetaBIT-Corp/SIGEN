@@ -68,14 +68,14 @@
 
                 @for($i=0;$i<$paginacion->total();$i++)
                     @if($i % $paginacion->perPage() == 0)
-                        <button onclick="capturar_data_navigator('/intento/prueba/{{$clave_de_intento->turno_id}}?page={{$aux}}#pregunta{{$i+1}}')" class="a-pregunta btn btn-link text-align-center text-align-center mb-1">
+                        <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux}}#pregunta{{$i+1}}')" class="a-pregunta btn btn-link text-align-center text-align-center mb-1">
                             <div class="a-div mb-2 text-align-center">
                                 {{$i+1}}
                                 <?php $aux++; ?>
                             </div>
                         </button>
                     @else
-                        <button onclick="capturar_data_navigator('/intento/prueba/{{$clave_de_intento->turno_id}}?page={{$aux-1}}#pregunta{{$i+1}}')" class="a-pregunta btn btn-link text-align-center mb-1">
+                        <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux-1}}#pregunta{{$i+1}}')" class="a-pregunta btn btn-link text-align-center mb-1">
                             <div class="a-div text-align-center mb-2">
                                 {{$i+1}}
                                 <?php $aux-1 ?>
