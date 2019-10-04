@@ -8,7 +8,7 @@
           <div class="row">
             <div class="col-8">
               <i class="fas fa-table"></i>
-              Listado de Docentes | Materia
+              Listado áreas asignadas
             </div>
             @if($visibilidad != 1)
             <div class="col-4" style="text-align: right;">
