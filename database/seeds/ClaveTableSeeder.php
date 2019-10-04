@@ -12,7 +12,7 @@ class ClaveTableSeeder extends Seeder
     public function run()
     {
     	//Claves de evaluacion de MAT115 con id 1 Turno id 1
-        Clave::create([
+        /*Clave::create([
         	'turno_id'=>1,
         	'numero_clave'=>1,
         ]);
@@ -53,11 +53,11 @@ class ClaveTableSeeder extends Seeder
         	'numero_clave'=>1,
         ]);
 
-        /*Clave de Prueba (René).*/
+        /*Clave de Prueba (René).
         Clave::create([
             'turno_id'=>6,
             'numero_clave'=>1,
-        ]);
+        ]);*/
 
     }
 }

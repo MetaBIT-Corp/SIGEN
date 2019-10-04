@@ -359,7 +359,7 @@ class EvaluacionController extends Controller
                         'IntentoController@iniciarEvaluacion', 
                         ['id_intento' => $turno_a_acceder->id]
                     );*/
-                    return redirect('intento/prueba/'.$turno_a_acceder->id.'?page=1');
+                    return redirect('intento/'.$turno_a_acceder->id.'?page=1');
                 }else{
                     $notification = "error";
                     $message = "Error: La contraseña no es valida";
