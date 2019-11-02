@@ -22,6 +22,7 @@ use App\Grupo_Emparejamiento;
 use App\CargaAcademica;
 use App\User;
 use App\Respuesta;
+use DateTime;
 
 class ApiController extends Controller
 {
@@ -94,12 +95,17 @@ class ApiController extends Controller
      */
     public function turnosPorEvaluacion($id){
         $turnos = Turno::where('evaluacion_id', $id)->get();
+        //recorremos turnos para dar formato a fecha d/m/Y h:i A
+        foreach ($turnos as $turno) {
+            $turno->fecha_inicio_turno = DateTime::createFromFormat('Y-m-d H:i:s',$turno->fecha_inicio_turno)->format('d/m/Y h:i A');
+            $turno->fecha_final_turno = DateTime::createFromFormat('Y-m-d H:i:s',$turno->fecha_final_turno)->format('d/m/Y h:i A');
+        }
         $data = ['turnos'=>$turnos];
         return $data;
     }
 
     /**
-     * Metodo que devuelve las evaluaicones y turnos disponibles (MOVIL)..
+     * Metodo que devuelve las evaluaciones y turnos disponibles (MOVIL)..
      * @author Edwin Palacios
      * @param id_carga que corresponde al id de la carga academica del estudiante
      * @return Json que contiene las evaluaciones y turnos disponibles.

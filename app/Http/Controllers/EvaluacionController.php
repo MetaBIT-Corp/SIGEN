@@ -540,7 +540,7 @@ class EvaluacionController extends Controller
     }
 
     /**
-     * Funcion para convertir la fecha de formato letra a 2019-09-23 23:24:12.
+     * Funcion para convertir la fecha de formato letra a formato como guarda en la base de datos 2019-09-23 23:24:12.
      * @param fecha
      * @author Edwin Palacios
      */
