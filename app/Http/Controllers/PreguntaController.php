@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Pregunta;
 use App\Area;
@@ -185,5 +186,39 @@ class PreguntaController extends Controller
             $gpo->delete();
         }
         return response()->json($message);
+    }
+
+    /**
+     * Funcion encargada de retornar la plantilla Excel para posteiormente importar preguntas, usando la plantilla, segun modalidad del area.
+     * @return type
+     */
+    public function downloadExcel($modalidad_area,$id_area){
+
+        //Se busca el area para concatenarla al nombre del area al documento
+        $area=Area::find($id_area);
+
+        //Condicional que controla que plantilla enviar segun modalidad del area
+        $nombre_descarga="";
+        $ruta='plantillaExcel/PlantillaImportarPreguntas.xlsx';
+
+        //Segun la modalidad del area asignara un nombre de descarga ya que 3 de las modalidades
+        //comparten el mismo formato de descarga.
+        //A diferencia de la modalidad de emparejamiento es otra plantilla
+        switch ($modalidad_area) {
+            case 1:
+                $nombre_descarga=str_replace(" ","_",$area->titulo)."_SIGEN_Opcion_Multiple.xlsx";
+                break;
+            case 2:
+                $nombre_descarga=str_replace(" ","_",$area->titulo)."_SIGEN_Falso_Verdadero.xlsx";
+                break;
+            case 3:
+                $nombre_descarga=str_replace(" ","_",$area->titulo)."_SIGEN_Emparejamiento.xlsx";
+                $ruta='plantillaExcel/PlantillaImportarPreguntasGpo.xlsx';
+                break;
+            case 4:
+                $nombre_descarga=trim($area->titulo," ")."_SIGEN_Texto_Corto.xlsx";
+                break;
+        }
+        return Storage::download($ruta,$nombre_descarga);
     }
 }
