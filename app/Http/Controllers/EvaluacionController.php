@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection;
 use DB;
+use Mail;
 
 class EvaluacionController extends Controller
 {
@@ -348,6 +349,7 @@ class EvaluacionController extends Controller
                                 $turno_publico->fecha_inicio_turno= $this->restablecerFecha($turno_publico->fecha_inicio_turno);
                                 $turno_publico->fecha_final_turno=  $this->restablecerFecha($turno_publico->fecha_final_turno);
                                 $turno_publico->save();
+                                $this->enviarCorreo($turno_publico);
                             }
                             
 
@@ -597,6 +599,50 @@ class EvaluacionController extends Controller
             $message = "Error: No ha ingresado la contraseña";
             return back()->with($notification,$message);
         }
+    }
+
+
+    /**
+     * Funcion para enviar correo de notificación de una nueva evaluación a todos los 
+     * estudiantes inscritos en una evaluación
+     * @param $turno: el turno a publicar
+     * @author Edwin Palacios
+     */
+    public function enviarCorreo($turno){
+        $estudiantes = $this->getEstudiantesMateria($turno->id);
+        if($estudiantes->count()>0){
+            $evaluacion = $turno->evaluacion;
+            $periodo = "Periodo de disponibilidad: Desde " . 
+                        $this->convertirFecha($turno->fecha_inicio_turno) . 
+                        " Hasta: " . 
+                        $this->convertirFecha($turno->fecha_final_turno);
+            $data = [
+                "periodo" => $periodo,
+                "descripcion" => $evaluacion->descripcion_evaluacion,
+                "titulo" => $evaluacion->nombre_evaluacion
+            ];
+
+            foreach ($estudiantes as $estudiante) {
+                $usuario = User::find($estudiante->user_id);
+                $this->emailSend($data,$usuario->email,"SIGEN: Nueva Evaluacíón");
+            }
+        }
+    }
+
+    /**
+     * Funcion para enviar correo al publicar una evaluacion
+     * @param $data: son los parametros para emplear la plantilla, se necesita: nombre de evaluacion, fechas de turno y materia
+     * @param $correo: correo al que se enviará la notificación
+     * @param $asunto: asunto del correo
+     * @author Edwin Palacios
+     */
+    public function emailSend($data,$correo,$asunto){
+        Mail::send('evaluacion.emailPublicar', $data , function($msj) use($asunto,$correo){
+            $msj->from("sigen.fia.eisi@gmail.com","Sigen");
+            $msj->subject($asunto);
+            $msj->to($correo);
+        });
+        return redirect()->back();
     }
 
     /**
