@@ -67,10 +67,11 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="exampleInputEmail1">Fecha y Hora de inicio:</label>
-                          <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                          <div class="input-group date"  data-target-input="nearest" @if($se_puede_editar) id="datetimepicker1" @endif>
                               <input id="datetimepicker1input" type="text" name="fecha_inicio" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="dd/mm/yyyy hh:mm A" value="{{ old('fecha_inicio',$encuesta->fecha_inicio_encuesta) }}" 
-                              @if(!$se_puede_editar)
-                              readonly="true" 
+                              @if($se_puede_editar)
+                              @else 
+                              readonly="true"
                               @endif
                               />
                               <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">

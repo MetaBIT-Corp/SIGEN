@@ -40,9 +40,14 @@
       </div>
     @endif
 
-    @if (session('warning'))
-      <div class="alert alert-warning">
-        {{session('warning')}}
+    @if (session('danger'))
+      <div class="alert alert-danger">
+        <ul>
+          <li>
+            {{session('danger')}}
+          </li>
+        
+        </ul>
       </div>
     @endif
     
@@ -64,7 +69,7 @@
                 <div class="form-group">
                   <label for="exampleInputEmail1">Fecha y Hora de inicio:</label>
                     <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                        <input id="datetimepicker1input" type="text" name="fecha_inicio" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="dd/mm/yyyy hh:mm A" value="{{ old('fecha_inicio') }}" />
+                        <input id="datetimepicker1input" type="text" name="fecha_inicio" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="dd/mm/yyyy hh:mm A" value="{{ old('fecha_inicio') }}"/>
                         <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
