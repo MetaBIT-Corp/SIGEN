@@ -28,23 +28,48 @@
     </li>
     @if(Request::get('id_gpo')==0)
         <div class="col-9 text-right">
-            <a class="btn" href="javascript:void(0)" data-target="#modal" data-toggle="modal" id="add_pregunta">
-                <span class="icon-add text-primary">
-                </span>
+            <div class="btn-group" role="group" aria-label="Basic example">
+
+            <!--Boton para agregar pregunta-->    
+            <a class="btn btn-secondary" href="javascript:void(0)" data-target="#modal" data-toggle="modal" id="add_pregunta" title="Agregar Pregunta">
+                <h6 class="mb-0"><span class="icon-add-solid">
+                </span></h6>
             </a>
-            <strong>
-                Agregar Pregunta
-            </strong>
+
+            <!--Icono para descargar plantilla-->
+            <a class="btn btn-secondary" href="{{ URL::signedRoute('dExcel',[$area->tipo_item->id,$area->id]) }}" title="Descargar Plantilla Excel">
+                <h6 class="mb-0"><span class="icon-download">
+                </span></h6>
+            </a>
+
+            <!--Icono para importar preguntas-->
+            <a class="btn btn-secondary" href="" title="Importar Preguntas">
+                <h6 class="mb-0"><span class="icon-importExcel">
+                </span></h6>
+            </a>
+        </div>
         </div>
     @else
+    <!--Dropdown agregado para ver como queda mejor-->
         <div class="col text-right">
-            <a class="btn" href="#" data-toggle="modal" data-target="#createModal">
-                <span class="icon-add text-primary">
-                </span>
-            </a>
-            <strong>
-                Agregar Grupo
-            </strong>
+            <div class="btn-group dropleft" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle dropleft" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Acciones
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+      
+                    <a class="btn btn-sm dropdown-item" href="#" data-toggle="modal" data-target="#createModal">
+                        <span class="icon-add text-primary"></span>
+                    </a>
+                    <!--Icono para descargar plantilla-->
+                    <a class="btn dropdown-item" href="{{ URL::signedRoute('dExcel',[$area->tipo_item->id,$area->id]) }}" title="Descargar Plantilla">
+                        <span class="icon-download"></span>
+                    </a>
+                    <a class="btn bt-lg dropdown-item" href="" title="Importar Preguntas">
+                        <span class="icon-excel"></span>
+                    </a>
+                </div>
+            </div>
         </div>
     @endif
 
@@ -86,6 +111,7 @@
             </thead>
         </table>
     </div>
+
 <!-- Modal -->
     <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="modal" role="dialog" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered" role="document">
