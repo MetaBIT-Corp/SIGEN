@@ -8,6 +8,18 @@
   <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.css')}}">
   <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
 
+  <style media="screen">
+    #preview{
+      width: 420px;
+      margin: 0 auto;
+    }
+
+    img{
+      max-width: 250px;
+      height: auto;
+    }
+  </style>
+
 @endsection
 
 @section("body")
@@ -51,7 +63,7 @@
             <div class="row">
               <div class="col-md-2 "></div>
               <div class="col-md-8">
-                <form action="" method="POST">
+                <form action="" method="POST" enctype="multipart/form-data">
                   {{ csrf_field() }}
                   <div class="form-group">
                     <label for="title">Título</label>
@@ -112,10 +124,21 @@
                     </div>
                   </div>
                 -->
+                  <div class="form-group">
+                    <label for="img_encuesta">Cambiar imagen</label><br>
+                     <input  name="img_encuesta" type="file" accept="image/*" id="img_encuesta" onchange="validarFile(this);">
+                  </div>
                   <input type="hidden" name="se_puede_editar" value="{{$se_puede_editar}}">
                   <div class="form-group">
                      <button class="btn btn-primary mb-3">Editar</button>
                      <a href="{{ URL::signedRoute('listado_encuesta')}}" class="btn btn-secondary mb-3"> Cancelar</a>
+                  </div>
+
+                  <hr>
+                  <div id="preview">
+                    @if($encuesta->ruta)
+                    <img src="/images/{{$encuesta->ruta}}">
+                    @endif
                   </div>
                 </form>
               </div>
@@ -142,4 +165,5 @@
     <script src="/js/clave/cargarPreguntas.js"> </script>
     <script src="/js/clave/operacionesClaveArea.js"> </script>
     <script type="text/javascript" src="{{ asset('js/encuesta/fecha.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/encuesta/image.js') }}"></script>
 @endsection

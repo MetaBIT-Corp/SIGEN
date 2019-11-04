@@ -98,8 +98,14 @@ class EncuestaController extends Controller
         $encuesta->visible=0;
 
 
-        if(isset($request->all()['visible']))
+        if(isset($request->all()['visible'])){
             $encuesta->visible = 1;
+        }
+        if($archivo = $request->file('img_encuesta')){
+            $nombre_archivo = $archivo->getClientOriginalName();
+            $archivo->move('images',$nombre_archivo);
+            $encuesta->ruta = $nombre_archivo;
+        }
         $encuesta->save();
 
         //creacion de clave
@@ -217,6 +223,11 @@ class EncuestaController extends Controller
             return back()->with('warning', 'La fecha final debe ser mayor a la inicial')->withInput();
         }
         $encuesta->descripcion_encuesta=$request->input('description');
+        if($archivo = $request->file('img_encuesta')){
+            $nombre_archivo = $archivo->getClientOriginalName();
+            $archivo->move('images',$nombre_archivo);
+            $encuesta->ruta = $nombre_archivo;
+        }
 
         $encuesta->save();
         //return back()->with('notification','Se registró exitosamente');
