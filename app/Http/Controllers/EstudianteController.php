@@ -9,6 +9,7 @@ use App\CicloMateria;
 use App\CargaAcademica;
 use App\Ciclo;
 use App\Materia;
+use App\Evaluacion;
 use DB;
 
 class EstudianteController extends Controller
@@ -38,27 +39,6 @@ class EstudianteController extends Controller
         
         return view("estudiante/listadoEstudiante",compact("estudiantes", "id_mat_ci","materia"));
     
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -114,37 +94,52 @@ class EstudianteController extends Controller
         return view('estudiante.detalleEstudiante',compact('mat_ci_valido'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+    public function estudiantesEnEvaluacion($evaluacion_id){
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        $evaluacion = Evaluacion::findOrFail($evaluacion_id);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $estudiantes = DB::table('evaluacion as ev')
+                            ->where('ev.id', $evaluacion_id)
+                            ->join('carga_academica as ca', 'ev.id_carga', '=', 'ca.id_carg_aca')
+                            ->join('detalle_insc_est as die', 'ca.id_carg_aca', '=', 'die.id_carg_aca')
+                            ->join('estudiante as es', 'die.id_est', '=', 'es.id_est')
+                            ->select('es.id_est', 'es.carnet', 'es.nombre')
+                            ->orderBy('es.carnet', 'asc')
+                            ->get();
+
+        $estudiantes->pluck('inicio');
+        $estudiantes->pluck('final');
+        $estudiantes->pluck('nota');
+        $estudiantes->pluck('estado'); // 0: No iniciado; 1: Iniciado; 2: Finalizado
+
+        foreach($estudiantes as $estudiante){
+            $intento = DB::table('turno as t')
+                            ->where('t.evaluacion_id', $evaluacion_id)
+                            ->join('clave as c', 'c.turno_id', '=', 't.id')
+                            ->join('intento as i', 'i.clave_id', '=', 'c.id')
+                            ->where('i.estudiante_id', $estudiante->id_est)
+                            ->select('i.fecha_inicio_intento', 'i.fecha_final_intento', 'i.nota_intento')
+                            ->get();
+
+            if(count($intento) > 0){
+                $estudiante->inicio = $intento[0]->fecha_inicio_intento;
+                $estudiante->final = $intento[0]->fecha_final_intento;
+                $estudiante->nota = $intento[0]->nota_intento;
+                
+                if($intento[0]->fecha_inicio_intento && $intento[0]->fecha_final_intento){
+                    $estudiante->estado = 2;
+                }else{
+                    $estudiante->estado = 1;
+                }
+
+            }else{
+                $estudiante->inicio = ' - ';
+                $estudiante->final =  ' - ';
+                $estudiante->nota =  ' - ';
+                $estudiante->estado = 0;
+            }
+        }
+
+        return view('estudiante.estudiantesEnEvaluacion')->with(compact('estudiantes'));
     }
 }

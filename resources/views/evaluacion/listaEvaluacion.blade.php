@@ -39,14 +39,14 @@
               </div>
             @endif
 
-            <!--Mostrará mensaje de error -->
+            <!--Mostrará mensaje de informacion -->
             @if (session('info'))
               <div class="alert alert-info">
                {!!session('info')!!}
               </div>
             @endif
 
-            <!--Mostrará mensaje de error -->
+            <!--Mostrará mensaje de advertencia -->
             @if (session('warning'))
               <div class="alert alert-warning">
                {!!session('warning')!!}
