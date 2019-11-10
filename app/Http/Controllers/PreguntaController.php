@@ -218,8 +218,8 @@ class PreguntaController extends Controller
                 $nombre_descarga=str_replace(" ","_",$area->titulo)."_SIGEN_Falso_Verdadero.xlsx";
                 break;
             case 3:
-                $ruta.='ImportarPreguntasGpo.xlsx';
-                $nombre_descarga=str_replace(" ","_",$area->titulo)."_SIGEN_Emparejamiento.xlsx";
+                $ruta.='ImportarPreguntasGpo.xlsm';
+                $nombre_descarga=str_replace(" ","_",$area->titulo)."_SIGEN_Emparejamiento.xlsm";
                 break;
             case 4:
                 $ruta.='ImportarPreguntasTextoCorto.xlsx';
@@ -255,8 +255,12 @@ class PreguntaController extends Controller
             //Se carga el archivo que subio el archivo para poder acceder a los datos
             $spreadsheet = IOFactory::load(storage_path($path = "app\\".str_replace("/","\\",$ruta)));
 
-            //Todas las filas se convierten en un array que puede ser accedido por las letras de las columnas de archivo excel
-            $data = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+            //A la modalidad de emparejamiento se le dara otro tratamiento
+            if($modalidad_area!=3){
+                //Todas las filas se convierten en un array que puede ser accedido por las letras de las columnas de archivo excel
+                $data = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+            }
+
         }catch(Exception $e){
             return response()->json($message);
         }
@@ -264,8 +268,7 @@ class PreguntaController extends Controller
         //Condicional segun modalidad del area, se procedera de manera diferente en la importacion
         switch ($modalidad_area) {
             case 1:
-
-            //dd($data);
+                //Validacion de plantilla
                 if($spreadsheet->getActiveSheet()->getCell('I1')=="1OP"){
                     for ($i=5; $i <=count($data) ; $i++) {
                         if($data[$i]["A"]!=null&&$data[$i]["B"]!=null&&$data[$i]["C"]!=null&&$data[$i]["D"]!=null){
@@ -305,7 +308,7 @@ class PreguntaController extends Controller
                 }
                 break;
             case 2:
-                //Se verifica el codigo de plantilla
+                //Validacion de plantilla
                 if($spreadsheet->getActiveSheet()->getCell('F6')=="2FV"){
                     for($i=2;$i<=count($data);$i++){
                     //Se verifica que la columna en la que esta la pregunta no este vacia
@@ -347,13 +350,61 @@ class PreguntaController extends Controller
                 }                
                 break;
             case 3:
+                //Validacion de plantilla
+                if($spreadsheet->getSheetByName("BASE")){
 
+                    if($spreadsheet->getSheetByName("BASE")->getCell('G1')=="3EMP"){
+
+                        //Contamos cuantas hojas son en total
+                        for ($j=0; $j < $spreadsheet->getSheetCount() ; $j++) {
+                            $data=$spreadsheet->getSheet($j)->toArray(null, true, true, true);
+
+                            //Creamos el grupo de emparejamiento con el nombre de la hoja
+                            if($spreadsheet->getSheet($j)->getTitle()!="BASE"){
+                                //Creamos el grupo de emparejamiento
+                                 $gpo=new Grupo_Emparejamiento();
+                                 $gpo->area_id=$area->id;
+                                 $gpo->descripcion_grupo_emp= $spreadsheet->getSheet($j)->getTitle();
+                                 $gpo->save();
+
+                                for ($i=5; $i <=count($data) ; $i++) {
+                                    if($data[$i]["A"]!=null&&$data[$i]["B"]!=null&&$data[$i]["C"]!=null){
+
+                                        //Se crea la pregunta segun la columna A
+                                        $preg=new Pregunta();
+                                        $preg->grupo_emparejamiento_id=$gpo->id;
+                                        $preg->pregunta=$data[$i]["A"];
+                                        $preg->save();
+
+                                        foreach ($data[$i] as $key => $val) {
+                                            if($key=="B"){
+                                                //Creacion de opcion correcta
+                                                $op=new Opcion();
+                                                $op->pregunta_id=$preg->id;
+                                                $op->opcion=$val;
+                                                $op->correcta=1;
+                                                $op->save();
+                                            }else{
+                                                if($key="C"){
+                                                    //Creacion de otras opciones
+                                                    $op=new Opcion();
+                                                    $op->pregunta_id=$preg->id;
+                                                    $op->opcion=$val;
+                                                    $op->correcta=0;
+                                                    $op->save();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
+                }
                 break;
             case 4:
-                //Se carga el archivo que subio el archivo para poder acceder a los datos
-                $spreadsheet = IOFactory::load(storage_path($path = "app\\".str_replace("/","\\",$ruta)));
-
-                //Se verifica el codigo de plantilla
+                //Validacion de plantilla
                 if($spreadsheet->getActiveSheet()->getCell('B4')=="4TC"){
                     //dd($data);
                     //Recuperando las columnas para acceder por columnas
@@ -395,7 +446,7 @@ class PreguntaController extends Controller
         }
         //Eliminar el archivo subido, solo se utiliza para la importacion y luego de desecha
         Storage::delete($ruta);
-        
+
         return response()->json($message);
     }
 }
