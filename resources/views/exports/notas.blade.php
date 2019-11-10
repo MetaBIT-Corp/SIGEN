@@ -15,9 +15,9 @@
 				<td colspan="3" style="text-align: center; font-size: 14px;"><b>Notas de {{ $evaluacion->nombre_evaluacion }}.</b></td>
 			</tr>
 			<tr>
-				<th><b>CARNET</b></th>
+				<th style="width: 15px;"><b>CARNET</b></th>
 				<th style="width: 40px;"><b>NOMBRE</b></th>
-				<th style="text-align: center;"><b>NOTA</b></th>
+				<th style="width: 10px; text-align: center;"><b>NOTA</b></th>
 			</tr>
 		</thead>
 		<tbody>
