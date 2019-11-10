@@ -9,11 +9,14 @@ use App\Docente;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use App\Intento;
+use App\Pregunta;
 use App\Clave;
 use App\Clave_Area;
+use App\Opcion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use DateTime;
+
 
 class EncuestaController extends Controller
 {
@@ -444,5 +447,103 @@ class EncuestaController extends Controller
         $new_fecha = DateTime::createFromFormat('Y-m-d H:i:s',$fecha)->format('d/m/Y h:i A');
         return $new_fecha;
     }
+
+    /**
+     * Funcion para estadísticas de encuestas
+     * @param 
+     * @author Edwin Palacios
+     */
+    public function estadisticas($id){
+        $id_encuesta = $id;
+        $preguntas = $this->obtenerPreguntas($id_encuesta);
+        
+        $estadisticas = Array();
+        
+        foreach ($preguntas as $pregunta){
+            $total_encuestados = 0;
+            $array_opciones = array();
+            if(Opcion::where("pregunta_id",$pregunta->id)->exists()){
+                $opciones = Opcion::where("pregunta_id",$pregunta->id)->get();
+                
+                foreach ($opciones as $opcion) {
+                    
+                    $cantidadRespuestas = $this->obtenerCantidadRespuestas($id_encuesta,$opcion->id);
+                    $total_encuestados += $cantidadRespuestas;
+                    $array_opciones[$opcion->id] = [
+                        'opcion' => $opcion->opcion,
+                        'cantidad' => $cantidadRespuestas,
+                        'porcentaje' => $this->obtenerPorcentaje($opciones,$opcion->id,$id_encuesta),
+                    ];
+                    
+                }
+            }
+           $estadisticas[$pregunta->id]=[
+            'pregunta' => $pregunta->pregunta,
+            'opciones' => $array_opciones,
+            'encuestados' => $total_encuestados,
+           ]; 
+        }
+        //dd($estadisticas);
+        return view('encuesta.estadisticasEncuesta')->with(compact('estadisticas','preguntas'));;
+    }
+
+
+    /**
+     * Funcion para obtener las preguntas presentadas en una encuesta
+     * @param $id_encuesta
+     * @author Edwin Palacios
+     */
+    public function obtenerPreguntas($id_encuesta){
+        $preguntas =DB::table('encuesta')
+        ->join('clave','encuesta.id','=','clave.encuesta_id')
+        ->join('clave_area','clave.id','=','clave_area.clave_id')
+        ->join('clave_area_pregunta','clave_area.id','=','clave_area_pregunta.clave_area_id')
+        ->join('pregunta','clave_area_pregunta.pregunta_id','=','pregunta.id')
+        ->where([
+            ['encuesta.id', '=', $id_encuesta],
+        ])->select('pregunta.*')->get();
+        return $preguntas;
+    }
+
+    /**
+     * Funcion para obtener la cantidad de personas que seleccionaron una opción en específico
+     * @param $id_encuesta
+     * @param $id_opcion
+     * @author Edwin Palacios
+     */
+    public function obtenerCantidadRespuestas($id_encuesta, $id_opcion){
+        $cantidadRespuestas =DB::table('encuesta')
+        ->join('clave','encuesta.id','=','clave.encuesta_id')
+        ->join('clave_area','clave.id','=','clave_area.clave_id')
+        ->join('clave_area_pregunta','clave_area.id','=','clave_area_pregunta.clave_area_id')
+        ->join('pregunta','clave_area_pregunta.pregunta_id','=','pregunta.id')
+        ->join('opcion','pregunta.id','=','opcion.pregunta_id')
+        ->join('respuesta','opcion.id','=','respuesta.id_opcion')
+        ->where([
+            ['encuesta.id', '=', $id_encuesta],
+            ['opcion.id', '=', $id_opcion],
+        ])->select('opcion.*')->count();
+        return $cantidadRespuestas;
+    }
+
+    /**
+     * Funcion para obtener el porcentaje obtenido
+     * @param $opciones
+     * @author Edwin Palacios
+     */
+    public function obtenerPorcentaje($opciones,$id_opcion,$id_encuesta){
+        $cantidad_total=0;
+        $cantidad_obtenida = 0;
+        foreach ($opciones as $opcion) {
+                    $cantidad_total += $this->obtenerCantidadRespuestas($id_encuesta,$opcion->id);
+                    if($opcion->id == $id_opcion){
+                        $cantidad_obtenida = $this->obtenerCantidadRespuestas($id_encuesta,$opcion->id);
+                    }
+                    
+                }
+        $porcentaje = ($cantidad_obtenida*100)/$cantidad_total;
+        return $porcentaje;
+    }
+
     
 }

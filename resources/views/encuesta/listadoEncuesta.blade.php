@@ -118,9 +118,9 @@
                       @endif
 
                       @endif
-                      <button title="Estadísticas" href="" class="btn btn-sm btn-option mb-1">
+                      <a title="Estadísticas" href="{{ URL::signedRoute('estadisticas_enc', ['id' => $encuesta->id]) }}" class="btn btn-sm btn-option mb-1">
                         <span class="icon-grafico"></span>
-                      </button>
+                      </a>
 
                     </td>
                   </tr>
