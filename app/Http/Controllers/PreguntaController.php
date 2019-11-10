@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Pregunta;
@@ -222,7 +223,7 @@ class PreguntaController extends Controller
                 break;
             case 4:
                 $ruta.='ImportarPreguntasTextoCorto.xlsx';
-                $nombre_descarga=trim($area->titulo," ")."_SIGEN_Texto_Corto.xlsx";
+                $nombre_descarga=str_replace(" ","_",$area->titulo)."_SIGEN_Texto_Corto.xlsx";
                 break;
         }
         return Storage::download($ruta,$nombre_descarga);
@@ -233,25 +234,74 @@ class PreguntaController extends Controller
      * @var int
      * @author Ricardo Estupinian
      */
-    public function uploadExcel(Request $request,$modalidad_area){
+    public function uploadExcel(Request $request,$id_area){
         //Se recupera el id del user y la hora actual para guardarlo momentaneamente 
         //con un nombre diferente y evitar conflictos a la hora de que hayan subidas multiples
         $id_user = auth()->user()->id;
+        $area=Area::find($id_area);
+        $modalidad_area=$area->tipo_item->id;
 
         //Se guarda en la ruta storage/app/importExcel de manera temporal y se recupera la ruta
-        $ruta=Storage::putFileAs('importExcel',$request->file('archivo'),$id_user."_".Carbon::now()->format('H_i_s')."_Excel.xlsx");
+        $ruta=Storage::putFileAs('importExcel',$request->file('archivo'),$id_user.Carbon::now()->format('His')."Excel.xlsx");
 
-        $mesaage="";
-
+        //Mensaje por defecto
         $message=['error'=>'Hubo un error en la importacion. Verifique que sea el formato adecuado.','type'=>1];
-        $message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
+        //$message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
         //Se hara la importacion de las preguntas segun la modalidad del area
          switch ($modalidad_area) {
             case 1:
                 
                 break;
             case 2:
+                try{
+                    //Se carga el archivo que subio el archivo para poder acceder a los datos
+                    $spreadsheet = IOFactory::load(storage_path($path = "app\\".str_replace("/","\\",$ruta)));
 
+                    if($spreadsheet->getActiveSheet()->getCell('A1')=="Pregunta"&&$spreadsheet->getActiveSheet()->getCell('B1')=="OpcionCorrecta"){
+                        //Todas las filas se convierten en un array que puede ser accedido por las letras de las columnas de archivo excel
+                        $data = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+                        for($i=2;$i<=count($data);$i++){
+                        //Se verifica que la columna en la que esta la pregunta no este vacia
+                            if($data[$i]["A"]!=""){
+                                //Se crea el grupo de emparejamiento
+                                $gpo=new Grupo_Emparejamiento();
+                                $gpo->area_id=$area->id;
+                                $gpo->save();
+
+                                //Se crea la pregunta segun la columna A
+                                $preg=new Pregunta();
+                                $preg->grupo_emparejamiento_id=$gpo->id;
+                                $preg->pregunta=$data[$i]["A"];
+                                $preg->save();
+
+                                //Creacion de opciones falso/verdaero
+                                $opv=new Opcion();
+                                $opv->pregunta_id=$preg->id;
+                                $opv->opcion="Verdadero";
+
+                                $opf=new Opcion();
+                                $opf->pregunta_id=$preg->id;
+                                $opf->opcion="Falso";
+
+                                //Si hay cualquier otra letra,esta vacia o v la correcta sera Verdadero por defecto
+                                $opf->correcta=0;
+                                $opv->correcta=1;
+
+                                //Caso si es falsa
+                                if(strtolower($data[$i]["B"])=="f"){
+                                   $opf->correcta=1;
+                                   $opv->correcta=0;
+                                }
+                                $opf->save();
+                                $opv->save();
+                            }
+                        }
+                        $message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
+                    }
+
+                }catch(ErrorException $e){
+                    $message=['error'=>'Hubo un error en la importacion. Verifique que sea el formato adecuado.','type'=>1];
+                }
                 break;
             case 3:
 
