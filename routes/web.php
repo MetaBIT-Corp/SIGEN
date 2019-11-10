@@ -88,6 +88,8 @@ Route::group(['middleware' => 'teacher'], function(){
     //Descarga de plantilla excel
     Route::get('download/excel/{id}/{id_area}','PreguntaController@downloadExcel')->name('dExcel')->middleware('signed');
 
+    Route::post('upload-excel/{id_area}','PreguntaController@uploadExcel')->name('uExcel');
+
     //Rutas relacionadas con Grupo Emparejamiento CRUD
     Route::post('grupo/{grupo_id}/edit','GrupoEmparejamientoController@updateGE')->name('editar-grupo');
     Route::post('area/{id}/grupo-store','GrupoEmparejamientoController@storeGE')->name('crear-grupo-emparejamiento');
