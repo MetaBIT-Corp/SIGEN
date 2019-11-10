@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Pregunta;
 use App\Area;
 use App\Grupo_Emparejamiento;
@@ -191,6 +193,7 @@ class PreguntaController extends Controller
     /**
      * Funcion encargada de retornar la plantilla Excel para posteiormente importar preguntas, usando la plantilla, segun modalidad del area.
      * @return type
+     * @author Ricardo Estupinian
      */
     public function downloadExcel($modalidad_area,$id_area){
 
@@ -199,26 +202,65 @@ class PreguntaController extends Controller
 
         //Condicional que controla que plantilla enviar segun modalidad del area
         $nombre_descarga="";
-        $ruta='plantillaExcel/PlantillaImportarPreguntas.xlsx';
+        $ruta='plantillaExcel/';
 
         //Segun la modalidad del area asignara un nombre de descarga ya que 3 de las modalidades
         //comparten el mismo formato de descarga.
         //A diferencia de la modalidad de emparejamiento es otra plantilla
         switch ($modalidad_area) {
             case 1:
+                $ruta.='ImportarPreguntasOpcionMultiple.xlsx';
                 $nombre_descarga=str_replace(" ","_",$area->titulo)."_SIGEN_Opcion_Multiple.xlsx";
                 break;
             case 2:
+                 $ruta.='ImportarPreguntasVerdaderoFalso.xlsx';
                 $nombre_descarga=str_replace(" ","_",$area->titulo)."_SIGEN_Falso_Verdadero.xlsx";
                 break;
             case 3:
+                $ruta.='ImportarPreguntasGpo.xlsx';
                 $nombre_descarga=str_replace(" ","_",$area->titulo)."_SIGEN_Emparejamiento.xlsx";
-                $ruta='plantillaExcel/PlantillaImportarPreguntasGpo.xlsx';
                 break;
             case 4:
+                $ruta.='ImportarPreguntasTextoCorto.xlsx';
                 $nombre_descarga=trim($area->titulo," ")."_SIGEN_Texto_Corto.xlsx";
                 break;
         }
         return Storage::download($ruta,$nombre_descarga);
+    }
+
+    /**
+     * Funcion que permite que el docente suba el archivo excel con el formato requerido lo valide e importe los grupos de emparejamiento(modalidad emparejamiento), preguntas y opciones.
+     * @var int
+     * @author Ricardo Estupinian
+     */
+    public function uploadExcel(Request $request,$modalidad_area){
+        //Se recupera el id del user y la hora actual para guardarlo momentaneamente 
+        //con un nombre diferente y evitar conflictos a la hora de que hayan subidas multiples
+        $id_user = auth()->user()->id;
+
+        //Se guarda en la ruta storage/app/importExcel de manera temporal y se recupera la ruta
+        $ruta=Storage::putFileAs('importExcel',$request->file('archivo'),$id_user."_".Carbon::now()->format('H_i_s')."_Excel.xlsx");
+
+        $mesaage="";
+
+        $message=['error'=>'Hubo un error en la importacion. Verifique que sea el formato adecuado.','type'=>1];
+        $message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
+        //Se hara la importacion de las preguntas segun la modalidad del area
+         switch ($modalidad_area) {
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+        }
+
+        return response()->json($message);
     }
 }

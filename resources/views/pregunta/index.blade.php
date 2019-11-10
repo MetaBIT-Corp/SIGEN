@@ -30,49 +30,60 @@
         <div class="col-9 text-right">
             <div class="btn-group" role="group" aria-label="Basic example">
 
-            <!--Boton para agregar pregunta-->    
-            <a class="btn btn-secondary" href="javascript:void(0)" data-target="#modal" data-toggle="modal" id="add_pregunta" title="Agregar Pregunta">
-                <h6 class="mb-0"><span class="icon-add-solid">
-                </span></h6>
-            </a>
+                <!--Boton para agregar pregunta-->    
+                <a class="btn btn-secondary" href="javascript:void(0)" data-target="#modal" data-toggle="modal" id="add_pregunta" title="Agregar Pregunta">
+                    <h6 class="mb-0"><span class="icon-add-solid">
+                    </span></h6>
+                </a>
 
-            <!--Icono para descargar plantilla-->
-            <a class="btn btn-secondary" href="{{ URL::signedRoute('dExcel',[$area->tipo_item->id,$area->id]) }}" title="Descargar Plantilla Excel">
-                <h6 class="mb-0"><span class="icon-download">
-                </span></h6>
-            </a>
+                <!--Icono para descargar plantilla-->
+                <a class="btn btn-secondary" href="{{ URL::signedRoute('dExcel',[$area->tipo_item->id,$area->id]) }}" title="Descargar Plantilla Excel">
+                    <h6 class="mb-0"><span class="icon-download">
+                    </span></h6>
+                </a>
 
-            <!--Icono para importar preguntas-->
-            <a class="btn btn-secondary" href="" title="Importar Preguntas">
-                <h6 class="mb-0"><span class="icon-importExcel">
-                </span></h6>
-            </a>
-        </div>
+               <!--Icoono para importar preguntas -->
+                <a class="btn btn-secondary" href="" title="Importar Preguntas" id="importExcel">
+                    <h6 class="mb-0"><span class="icon-importExcel">
+                    </span></h6>
+                </a>
+            </div>
+            <!--Formulario para subida de archivos de excel-->
+            <form method="POST" id="form-excel" enctype="multipart/form-data">
+                 @csrf
+                <input type="file" name="archivo" accept=".xlsx" id="fileExcel" data-modalidad='{{ $area->tipo_item->id }}' hidden="" />
+            </form>
         </div>
     @else
-    <!--Dropdown agregado para ver como queda mejor-->
-        <div class="col text-right">
-            <div class="btn-group dropleft" role="group">
-                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle dropleft" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Acciones
-                </button>
-                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-      
-                    <a class="btn btn-sm dropdown-item" href="#" data-toggle="modal" data-target="#createModal">
-                        <span class="icon-add text-primary"></span>
-                    </a>
-                    <!--Icono para descargar plantilla-->
-                    <a class="btn dropdown-item" href="{{ URL::signedRoute('dExcel',[$area->tipo_item->id,$area->id]) }}" title="Descargar Plantilla">
-                        <span class="icon-download"></span>
-                    </a>
-                    <a class="btn bt-lg dropdown-item" href="" title="Importar Preguntas">
-                        <span class="icon-excel"></span>
-                    </a>
-                </div>
+         <div class="col-7 text-right ml-5">
+            <div class="btn-group" role="group" aria-label="Basic example">
+
+                <!--Boton para agregar grupo-->    
+                <a class="btn btn-secondary" href="#" data-toggle="modal" data-target="#createModal">
+                    <span class="icon-add-solid">
+                    </span>
+                </a>
+
+                <!--Icono para descargar plantilla-->
+                <a class="btn btn-secondary" href="{{ URL::signedRoute('dExcel',[$area->tipo_item->id,$area->id]) }}" title="Descargar Plantilla Excel">
+                    <h6 class="mb-0"><span class="icon-download">
+                    </span></h6>
+                </a>
+
+                <!--Icoono para importar preguntas -->
+                <a class="btn btn-secondary" href="" title="Importar Preguntas" id="importExcel">
+                    <h6 class="mb-0"><span class="icon-importExcel">
+                    </span></h6>
+                </a>
             </div>
+            <!--Formulario para subida de archivos de excel-->
+            <form method="POST" id="form-excel" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="archivo" accept=".xlsx" id="fileExcel" data-modalidad='{{ $area->tipo_item->id }}' hidden="" />
+            </form>
+                
         </div>
     @endif
-
 @endsection
 
 @section('main')
@@ -322,4 +333,5 @@
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{asset('js/pregunta/grupo.js')}}"></script>
+     <script type="text/javascript" src="{{ asset('js/pregunta/importar.js') }}"></script>
 @endsection
