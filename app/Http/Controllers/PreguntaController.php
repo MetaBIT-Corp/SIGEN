@@ -248,7 +248,7 @@ class PreguntaController extends Controller
         //Se hara la importacion de las preguntas segun la modalidad del area
          switch ($modalidad_area) {
             case 1:
-
+                
                 break;
             case 2:
 
