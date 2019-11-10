@@ -12,7 +12,7 @@
 @section("body")
 
 @section("ol_breadcrumb")
-    <li class="breadcrumb-item"><a href="#">Listado Encuestas</a></li>
+    <li class="breadcrumb-item"><a href=" {{ URL::signedRoute('listado_encuesta') }}">Listado Encuestas</a></li>
     <li class="breadcrumb-item">Estadísticas</li>
 @endsection
 @section("main")
@@ -37,14 +37,20 @@
 
         <div class="row">
           @foreach($preguntas as $pregunta)
-        
+          @if(!$estadisticas[$pregunta->id]['respuesta_corta'])
           <div class="col-lg-4">
             <div class="card mb-3">
               <div class="card-header">
                 <i class="fas fa-chart-pie"></i>
                 Pregunta {{$loop->index + 1}} </div>
               <div class="card-body">
-                <canvas id="{{"pregunta".$pregunta->id}}" width="100%" height="100"></canvas>
+                @if($estadisticas[$pregunta->id]['encuestados'] > 0)
+                  <canvas id="{{"pregunta".$pregunta->id}}" width="100%" height="100"></canvas>
+                @else
+                  <div class="alert alert-info">
+                    Info: No hay respuestas.
+                  </div>
+                @endif
               </div>
               <div class="card-footer small text-muted">SIGEN</div>
             </div>
@@ -65,12 +71,7 @@
                 Opciones </div>
               <div class="card-body">
               @foreach($estadisticas[$pregunta->id]['opciones'] as $opcion)
-                @if($loop->last)
                    {{$opcion['opcion']}} <br>
-                @else
-                   {{$opcion['opcion']}} <br>
-                @endif
-              
               <div class="progress">
                 <div class="progress-bar" role="progressbar" style="width: {{$opcion['porcentaje']}}%;" aria-valuenow="{{$opcion['porcentaje']}}" aria-valuemin="0" aria-valuemax="100">{{$opcion['porcentaje']}}%</div>
               </div>
@@ -82,6 +83,34 @@
       
 
           </div>
+          
+          @else
+          <!-- Preguntas de respuesta Corta-->
+            <div class="col-lg-12">
+             <div class="card mb-3">
+              <div class="card-header">
+                <i class="fas fa-chart-pie"></i>
+                Pregunta {{$loop->index + 1}} </div>
+              <div class="card-body">
+              Pregunta: {{$estadisticas[$pregunta->id]['pregunta']}}
+              <br>
+              respuestas:
+               @foreach($estadisticas[$pregunta->id]['respuestas'] as $respuesta)
+              <span class="badge badge-primary mb-3 mt-3" style="font-size: 14px">
+                {{ str_replace("%20" ," ", $respuesta->texto_respuesta) }}
+              </span>
+               @endforeach
+            <br>
+             <span >Cantidad de respuestas: {{$estadisticas[$pregunta->id]['encuestados']}} </span>
+            
+
+            </div>
+            <div class="card-footer small text-muted">SIGEN</div>
+            </div>
+          </div>
+          <!-- Preguntas de respuesta Corta-->
+          @endif
+          <hr class="" style="color: #B0AFAF; background-color: #E1DEDE; width:90%;">
           @endforeach
         </div>
       </div>

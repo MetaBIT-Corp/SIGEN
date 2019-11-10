@@ -13,6 +13,7 @@ use App\Pregunta;
 use App\Clave;
 use App\Clave_Area;
 use App\Opcion;
+use App\Grupo_Emparejamiento;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use DateTime;
@@ -356,20 +357,25 @@ class EncuestaController extends Controller
                             $clave_areas = $clave->clave_areas;
                             //se verifica que la clave area tenga clave area preguntas
                             foreach ($clave_areas as $clave_area) {
+                                //obtenemos el area para saber que tipo de item es
+                                $area = $clave_area->area;
+
                                 if($clave_area->claves_areas_preguntas->count()>0){
                                     $claves_areas_preguntas = $clave_area->claves_areas_preguntas;
                                     //se verifica que la clave area pregunta tenga pregunta
                                     foreach ($claves_areas_preguntas as $clave_area_pregunta) {
                                         if($clave_area_pregunta->pregunta->count()>0){
                                             $pregunta = $clave_area_pregunta->pregunta;
-                                            //se verifica que la pregunta tengan opcion
-                                                if($pregunta->opciones->count()>0){
+                                            //se verifica que la pregunta tengan opcion. en este caso las de respuesta corta no deben de tener respuesta, por lo que la exluimos de esta evaluación
+                                            if($area->tipo_item->id != 4){
+                                               if($pregunta->opciones->count()>0 ){
                                                     
                                                 }else{
                                                     $todo_correcto = false;
                                                     $notification = "error";
                                                     $message = "Error: Hay preguntas sin opciones";
-                                                } 
+                                                }  
+                                            }     
                                         }else{
                                             $todo_correcto = false;
                                             $notification = "error";
@@ -459,30 +465,46 @@ class EncuestaController extends Controller
         
         $estadisticas = Array();
         
-        foreach ($preguntas as $pregunta){
-            $total_encuestados = 0;
-            $array_opciones = array();
-            if(Opcion::where("pregunta_id",$pregunta->id)->exists()){
-                $opciones = Opcion::where("pregunta_id",$pregunta->id)->get();
-                
-                foreach ($opciones as $opcion) {
-                    
-                    $cantidadRespuestas = $this->obtenerCantidadRespuestas($id_encuesta,$opcion->id);
-                    $total_encuestados += $cantidadRespuestas;
-                    $array_opciones[$opcion->id] = [
-                        'opcion' => $opcion->opcion,
-                        'cantidad' => $cantidadRespuestas,
-                        'porcentaje' => $this->obtenerPorcentaje($opciones,$opcion->id,$id_encuesta),
-                    ];
-                    
-                }
-            }
-           $estadisticas[$pregunta->id]=[
-            'pregunta' => $pregunta->pregunta,
-            'opciones' => $array_opciones,
-            'encuestados' => $total_encuestados,
-           ]; 
+        if(Encuesta::where('id',$id_encuesta)->exists()){
+            $encuesta = Encuesta::where('id',$id_encuesta)->first();
+            if($encuesta->claves->count() >0){
+                $claves = $encuesta->claves;
+                foreach ($claves as $clave) {
+                    foreach ($preguntas as $pregunta){
+                        $total_encuestados = 0;
+                        $array_opciones = array();
+                        if(Opcion::where("pregunta_id",$pregunta->id)->exists()){
+                            $opciones = Opcion::where("pregunta_id",$pregunta->id)->get();
+                            foreach ($opciones as $opcion) {
+                                
+                                $cantidadRespuestas = $this->obtenerCantidadRespuestas($id_encuesta,$opcion->id,$clave->id);
+                                $total_encuestados += $cantidadRespuestas;
+                                $array_opciones[$opcion->id] = [
+                                    'opcion' => $opcion->opcion,
+                                    'cantidad' => $cantidadRespuestas,
+                                    'porcentaje' => $this->obtenerPorcentaje($opciones,$opcion->id,$id_encuesta,$clave->id),
+                                ];
+                                
+                            }
+                        }
+                        $respuestas = null;
+                        $isRespuestaCorta = $this->isRespuestaCorta($pregunta);
+                        //traemos respuestas de las preguntas de modalidad respuesta corta
+                        if($isRespuestaCorta){
+                            $respuestas = $this->obtenerRespuestas($id_encuesta, $pregunta->id,$clave->id);
+                        }
+                       $estadisticas[$pregunta->id]=[
+                        'pregunta' => $pregunta->pregunta,
+                        'opciones' => $array_opciones,
+                        'encuestados' => $total_encuestados,
+                        'respuesta_corta' => $isRespuestaCorta,
+                        'respuestas' => $respuestas,
+                       ]; 
+                    }
+                } 
+            } 
         }
+        
         //dd($estadisticas);
         return view('encuesta.estadisticasEncuesta')->with(compact('estadisticas','preguntas'));;
     }
@@ -511,7 +533,7 @@ class EncuestaController extends Controller
      * @param $id_opcion
      * @author Edwin Palacios
      */
-    public function obtenerCantidadRespuestas($id_encuesta, $id_opcion){
+    public function obtenerCantidadRespuestas($id_encuesta, $id_opcion,$id_clave){
         $cantidadRespuestas =DB::table('encuesta')
         ->join('clave','encuesta.id','=','clave.encuesta_id')
         ->join('clave_area','clave.id','=','clave_area.clave_id')
@@ -519,11 +541,36 @@ class EncuestaController extends Controller
         ->join('pregunta','clave_area_pregunta.pregunta_id','=','pregunta.id')
         ->join('opcion','pregunta.id','=','opcion.pregunta_id')
         ->join('respuesta','opcion.id','=','respuesta.id_opcion')
+        ->join('intento','respuesta.id_intento','=','intento.id')
         ->where([
             ['encuesta.id', '=', $id_encuesta],
             ['opcion.id', '=', $id_opcion],
+            ['intento.clave_id', '=', $id_clave],
         ])->select('opcion.*')->count();
         return $cantidadRespuestas;
+    }
+
+     /**
+     * Funcion para obtener la respuestas de los intentos
+     * @param $id_encuesta
+     * @param $id_opcion
+     * @param $id_clave
+     * @author Edwin Palacios
+     */
+    public function obtenerRespuestas($id_encuesta, $id_pregunta,$id_clave){
+        $respuestas =DB::table('encuesta')
+        ->join('clave','encuesta.id','=','clave.encuesta_id')
+        ->join('clave_area','clave.id','=','clave_area.clave_id')
+        ->join('clave_area_pregunta','clave_area.id','=','clave_area_pregunta.clave_area_id')
+        ->join('pregunta','clave_area_pregunta.pregunta_id','=','pregunta.id')
+        ->join('respuesta','pregunta.id','=','respuesta.id_pregunta')
+        ->join('intento','respuesta.id_intento','=','intento.id')
+        ->where([
+            ['encuesta.id', '=', $id_encuesta],
+            ['pregunta.id', '=', $id_pregunta],
+            ['intento.clave_id', '=', $id_clave],
+        ])->select('respuesta.texto_respuesta')->get();
+        return $respuestas;
     }
 
     /**
@@ -531,18 +578,35 @@ class EncuestaController extends Controller
      * @param $opciones
      * @author Edwin Palacios
      */
-    public function obtenerPorcentaje($opciones,$id_opcion,$id_encuesta){
+    public function obtenerPorcentaje($opciones,$id_opcion,$id_encuesta,$id_clave){
         $cantidad_total=0;
         $cantidad_obtenida = 0;
+        $porcentaje = 0;
         foreach ($opciones as $opcion) {
-                    $cantidad_total += $this->obtenerCantidadRespuestas($id_encuesta,$opcion->id);
+                    $cantidad_total += $this->obtenerCantidadRespuestas($id_encuesta,$opcion->id,$id_clave);
                     if($opcion->id == $id_opcion){
-                        $cantidad_obtenida = $this->obtenerCantidadRespuestas($id_encuesta,$opcion->id);
-                    }
-                    
+                        $cantidad_obtenida = $this->obtenerCantidadRespuestas($id_encuesta,$opcion->id,$id_clave);
+                    }   
                 }
-        $porcentaje = ($cantidad_obtenida*100)/$cantidad_total;
+        if($cantidad_total != 0){
+            $porcentaje = ($cantidad_obtenida*100)/$cantidad_total;
+        }
         return $porcentaje;
+    }
+
+    /**
+     * Funcion que devuelve un boolean true si la pregunta que se le pasa por parametro 
+     * pertenece a un área de respuesta corta
+     * @param $pregunta
+     * @author Edwin Palacios
+     */
+    public function isRespuestaCorta($pregunta){
+        $is_respuesta_corta= false;
+        $grupo_emp = Grupo_Emparejamiento::where('id', $pregunta->grupo_emparejamiento_id)->first();
+        if($grupo_emp->area->tipo_item->id == 4){
+            $is_respuesta_corta= true;
+        }
+        return $is_respuesta_corta;
     }
 
     
