@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection;
 use DB;
 use Mail;
+use App\Exports\NotasExport;
+use App\Exports\NotasExportPdf;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EvaluacionController extends Controller
 {
@@ -763,5 +766,20 @@ class EvaluacionController extends Controller
         return view('evaluacion.estadisticosEvaluacion')->with(compact('evaluacion_id'));
 
     }
+
+
+    //Parte para exportar notas en formato Excel
+
+    public function exportarNotasExcel($evaluacion_id) 
+    {
+        return Excel::download(new NotasExport($evaluacion_id), 'notas.xlsx');
+    }
+
+    //Parte para exportar notas en formato Pdf
+    public function exportarNotasPdf($evaluacion_id) 
+    {
+        return Excel::download(new NotasExport($evaluacion_id), 'notas.pdf');
+    }
+
 
 }
