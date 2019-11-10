@@ -65,7 +65,7 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::get('/evaluacion/{id}/turnos/create', 'TurnoController@create')->name('crear_turno')->middleware('signed');
     Route::get('/evaluacion/{id}/turnos/{turno_id}/edit', 'TurnoController@edit')->name('editar_turno')->middleware('signed');
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController')->except(['index','create','edit']);
-    //Route::get('/evaluacion/{id}/{id_turno}','TurnoController@duplicarTurno')->name('duplicar');
+    Route::get('/evaluacion/{id}/turno/{id_turno}','TurnoController@duplicarTurno')->name('duplicar');
 
     //Rutas relacionadas con Area
     Route::get('/materia/{id}/areas/create','AreaController@create')->name('crear_area')->middleware('signed');
@@ -108,6 +108,14 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::post('/habilitar-evaluacion','EvaluacionController@habilitar')->name('habilitar_evaluacion');
     Route::get('materia/habilitar-evaluacion/{id}','EvaluacionController@reciclaje')->name('reciclaje_evaluacion')->middleware('signed');
     Route::post('evaluacion/publicar-turno','EvaluacionController@publicar')->name('publicar_evaluacion');
+    
+    Route::get('evaluacion/{evaluacion_id}/estudiantes', 'EstudianteController@estudiantesEnEvaluacion')
+            ->name('estudiantes_en_evaluacion')
+            ->middleware('signed');
+
+    Route::get('evaluacion/{evaluacion_id}/estadisticos', 'EvaluacionController@estadisticosEvaluacion')
+            ->name('estadisticas_evaluacion')
+            ->middleware('signed');
 
 
     //URL's para  encuesta
@@ -152,8 +160,5 @@ Route::group(['middleware' => 'admin_teacher'], function(){
     Route::get('/listado-encuesta','EncuestaController@listado')->name('listado_encuesta')->middleware('signed');
 });
 
-
-Route::get('evaluacion/{evaluacion_id}/estudiantes', 'EstudianteController@estudiantesEnEvaluacion');
-Route::get('evaluacion/{evaluacion_id}/estadisticos', 'EvaluacionController@estadisticosEvaluacion')->name('estadisticas-evaluacion');
 Route::get('/evaluacion/{evaluacion_id}/estadisticos/porcentajes', 'EvaluacionController@getPorcentajeAprovadosReprobados');
 Route::get('/evaluacion/{evaluacion_id}/estadisticos/intervalo/{intervalo}', 'EvaluacionController@getIntervalosNotas');
