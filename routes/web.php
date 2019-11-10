@@ -92,6 +92,11 @@ Route::group(['middleware' => 'teacher'], function(){
 
     Route::post('upload-excel/{id_area}','PreguntaController@uploadExcel')->name('uExcel');
 
+    //Descargar notas en formato Excel
+    Route::get('notas/exportar/{evaluacion_id}/excel', 'EvaluacionController@exportarNotasExcel')->name('notasExcel');
+    //Descargar notas en formato PDF
+    Route::get('notas/exportar/{evaluacion_id}/pdf', 'EvaluacionController@exportarNotasPdf')->name('notasPdf');
+
     //Rutas relacionadas con Grupo Emparejamiento CRUD
     Route::post('grupo/{grupo_id}/edit','GrupoEmparejamientoController@updateGE')->name('editar-grupo');
     Route::post('area/{id}/grupo-store','GrupoEmparejamientoController@storeGE')->name('crear-grupo-emparejamiento');
