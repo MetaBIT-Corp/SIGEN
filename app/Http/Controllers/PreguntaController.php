@@ -264,7 +264,45 @@ class PreguntaController extends Controller
         //Condicional segun modalidad del area, se procedera de manera diferente en la importacion
         switch ($modalidad_area) {
             case 1:
-                
+
+            //dd($data);
+                if($spreadsheet->getActiveSheet()->getCell('I1')=="1OP"){
+                    for ($i=5; $i <=count($data) ; $i++) {
+                        if($data[$i]["A"]!=null&&$data[$i]["B"]!=null&&$data[$i]["C"]!=null&&$data[$i]["D"]!=null){
+                            //Se crea el grupo de emparejamiento
+                            $gpo=new Grupo_Emparejamiento();
+                            $gpo->area_id=$area->id;
+                            $gpo->save();
+
+                            //Se crea la pregunta segun la columna A
+                            $preg=new Pregunta();
+                            $preg->grupo_emparejamiento_id=$gpo->id;
+                            $preg->pregunta=$data[$i]["A"];
+                            $preg->save();
+
+                            foreach ($data[$i] as $key => $val) {
+                                if($key=="B"){
+                                    //Creacion de opcion correcta
+                                    $op=new Opcion();
+                                    $op->pregunta_id=$preg->id;
+                                    $op->opcion=$val;
+                                    $op->correcta=1;
+                                    $op->save();
+                                }else{
+                                    if($key!="A"&&$val!=null){
+                                        //Creacion de otras opciones
+                                        $op=new Opcion();
+                                        $op->pregunta_id=$preg->id;
+                                        $op->opcion=$val;
+                                        $op->correcta=0;
+                                        $op->save();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
+                }
                 break;
             case 2:
                 //Se verifica el codigo de plantilla
@@ -340,7 +378,7 @@ class PreguntaController extends Controller
                        
                             for ($i=7; $i <= count($data) ; $i++) { 
                                 if($data[$i][$columns[$j]]!=null){
-                                    //Creacion de opciones falso/verdaero
+                                    //Creacion de opciones
                                     $op=new Opcion();
                                     $op->pregunta_id=$preg->id;
                                     $op->opcion=$data[$i][$columns[$j]];
@@ -355,8 +393,9 @@ class PreguntaController extends Controller
                 
                 break;
         }
-
         //Eliminar el archivo subido, solo se utiliza para la importacion y luego de desecha
+        Storage::delete($ruta);
+        
         return response()->json($message);
     }
 }
