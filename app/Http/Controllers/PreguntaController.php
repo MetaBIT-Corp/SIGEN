@@ -368,7 +368,7 @@ class PreguntaController extends Controller
                                  $gpo->save();
 
                                 for ($i=5; $i <=count($data) ; $i++) {
-                                    if($data[$i]["A"]!=null&&$data[$i]["B"]!=null&&$data[$i]["C"]!=null){
+                                    if($data[$i]["A"]!=null&&$data[$i]["B"]!=null){
 
                                         //Se crea la pregunta segun la columna A
                                         $preg=new Pregunta();
@@ -384,16 +384,16 @@ class PreguntaController extends Controller
                                                 $op->opcion=$val;
                                                 $op->correcta=1;
                                                 $op->save();
-                                            }else{
-                                                if($key="C"){
-                                                    //Creacion de otras opciones
-                                                    $op=new Opcion();
-                                                    $op->pregunta_id=$preg->id;
-                                                    $op->opcion=$val;
-                                                    $op->correcta=0;
-                                                    $op->save();
-                                                }
                                             }
+                                            if($key=="C"&&$val!=null){
+                                                //Creacion de otras opciones
+                                                $op=new Opcion();
+                                                $op->pregunta_id=$preg->id;
+                                                $op->opcion=$val;
+                                                $op->correcta=0;
+                                                $op->save();
+                                            }
+                                            
                                         }
                                     }
                                 }
@@ -444,6 +444,7 @@ class PreguntaController extends Controller
                 
                 break;
         }
+
         //Eliminar el archivo subido, solo se utiliza para la importacion y luego de desecha
         Storage::delete($ruta);
 
