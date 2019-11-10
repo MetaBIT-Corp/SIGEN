@@ -63,7 +63,7 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::get('/evaluacion/{id}/turnos/create', 'TurnoController@create')->name('crear_turno')->middleware('signed');
     Route::get('/evaluacion/{id}/turnos/{turno_id}/edit', 'TurnoController@edit')->name('editar_turno')->middleware('signed');
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController')->except(['index','create','edit']);
-    Route::get('/evaluacion/{id}/{id_turno}','TurnoController@duplicarTurno')->name('duplicar');
+    //Route::get('/evaluacion/{id}/{id_turno}','TurnoController@duplicarTurno')->name('duplicar');
 
     //Rutas relacionadas con Area
     Route::get('/materia/{id}/areas/create','AreaController@create')->name('crear_area')->middleware('signed');
@@ -144,3 +144,6 @@ Route::group(['middleware' => 'admin_teacher'], function(){
     Route::get('/evaluacion/{id}/turnos', 'TurnoController@index')->name('listado_turnos')->middleware('signed');
     Route::get('/listado-encuesta','EncuestaController@listado')->name('listado_encuesta')->middleware('signed');
 });
+
+
+Route::get('evaluacion/{evaluacion_id}/estudiantes', 'EstudianteController@estudiantesEnEvaluacion');

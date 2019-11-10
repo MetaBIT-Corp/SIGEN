@@ -27,6 +27,7 @@ class CreateIntentosTable extends Migration
             $table->dateTime('fecha_inicio_intento');
             $table->dateTime('fecha_final_intento')->nullable();
             $table->decimal('nota_intento',4,2)->nullable();
+            $table->boolean('revision_estudiante')->default(0);
             $table->timestamps();
         });
     }
