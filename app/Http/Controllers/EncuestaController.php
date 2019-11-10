@@ -13,10 +13,12 @@ use App\Pregunta;
 use App\Clave;
 use App\Clave_Area;
 use App\Opcion;
+use App\Exports\ResultadosEncuestaExport;
 use App\Grupo_Emparejamiento;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use DateTime;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class EncuestaController extends Controller
@@ -607,6 +609,21 @@ class EncuestaController extends Controller
             $is_respuesta_corta= true;
         }
         return $is_respuesta_corta;
+    }
+
+    //Parte para exportar notas en formato Excel
+
+    public function exportarResultadosExcel($encuesta_id) 
+    {
+        //return (new ResultadosEncuestaExport($encuesta_id))->view();
+        return Excel::download(new ResultadosEncuestaExport($encuesta_id,1), 'resultados.xlsx');
+    }
+
+    //Parte para exportar notas en formato Pdf
+
+    public function exportarResultadosPdf($encuesta_id) 
+    {
+        return Excel::download(new ResultadosEncuestaExport($encuesta_id,0), 'resultados.pdf');
     }
 
     

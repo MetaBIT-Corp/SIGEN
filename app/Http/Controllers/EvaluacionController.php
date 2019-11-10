@@ -21,7 +21,6 @@ use Illuminate\Support\Collection;
 use DB;
 use Mail;
 use App\Exports\NotasExport;
-use App\Exports\NotasExportPdf;
 use Maatwebsite\Excel\Facades\Excel;
 
 class EvaluacionController extends Controller

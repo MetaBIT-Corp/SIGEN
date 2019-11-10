@@ -97,6 +97,11 @@ Route::group(['middleware' => 'teacher'], function(){
     //Descargar notas en formato PDF
     Route::get('notas/exportar/{evaluacion_id}/pdf', 'EvaluacionController@exportarNotasPdf')->name('notasPdf');
 
+    //Descargar resultados de encuesta en formato Excel
+    Route::get('resultados/exportar/{encuesta_id}/excel', 'EncuestaController@exportarResultadosExcel')->name('resultadosExcel');
+    //Descargar resultados de encuesta en formato PDF
+    Route::get('resultados/exportar/{encuesta_id}/pdf', 'EncuestaController@exportarResultadosPdf')->name('resultadosPdf');
+
     //Rutas relacionadas con Grupo Emparejamiento CRUD
     Route::post('grupo/{grupo_id}/edit','GrupoEmparejamientoController@updateGE')->name('editar-grupo');
     Route::post('area/{id}/grupo-store','GrupoEmparejamientoController@storeGE')->name('crear-grupo-emparejamiento');

@@ -129,7 +129,7 @@
                        <a class="btn btn-option btn-sm mb-1" title="Estadísticas" href="{{ route('estadisticas-evaluacion', $evaluacion->id) }}">
                         <span class="icon-grafico"></span>
                        </a>
-                       <!-- Opcion de descargar notas de los estudiantes-->
+                       <!-- Opciones de descargar notas de los estudiantes-->
                        <a class="btn btn-option btn-sm mb-1" title="Descargar notas Excel" href="{{ route('notasExcel',$evaluacion->id) }}">
                         <span class="icon-importExcel"></span>
                        </a>
