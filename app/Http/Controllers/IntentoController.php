@@ -382,8 +382,6 @@ class IntentoController extends Controller
         $intento->save();
     }
     public function revisionEvaluacion($id_intento){
-        
-        
         $estudiante=null;
         $intento=null;
         $respuestas = null;
@@ -414,7 +412,8 @@ class IntentoController extends Controller
                 $paginacion = $this->paginacionRevision( 100, $preguntas);
             }
         }
-        return view('intento.revisionDeIntento')->with(compact('estudiante','intento','respuestas','paginacion','evaluacion'));
+        return view('intento.revisionDeIntento')
+        ->with(compact('estudiante','intento','respuestas','paginacion','evaluacion'));
     }
 
     public function calificacionEvaluacion(){
@@ -440,14 +439,10 @@ class IntentoController extends Controller
         return redirect(URL::signedRoute('revision_evaluacion', ['id_intento' => $id_intento]));
     }
 
-   
-
-
     private function paginacionRevision($preg_per_page, $array)
     {
         /*Calcular el desplazamiento segun la variable page, para determina que
         parte del array debe devolverse segun la pagina*/
-        
         $pagina_actual = 0;
         
         $offset_in_array = ($pagina_actual * $preg_per_page);
@@ -460,4 +455,48 @@ class IntentoController extends Controller
         $paginacion->setPath('');
         return $paginacion;
     }
+
+    /**
+     * Función que permite habilitar la revisión a un estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function habilitarRevision(Request $request){
+        //dd($request->all());
+        $notification = "exito";
+        $mensaje = "Exito: Se habilitó de manera exitosa la revisión";
+        $id_intento = $request->input('id_intento');
+        if(Intento::where('id',$id_intento)->exists()){
+            $intento = Intento::where('id',$id_intento)->first();
+            $intento->revision_estudiante = 1;
+            $intento->save();
+        }else{
+            $notification = "error";
+            $mensaje = "Error: No se habilitó la revisión, por favor intente de nuevo";
+        }
+        return back()->with($notification, $mensaje);
+    }
+
+    /**
+     * Función que permite deshabilitar la revisión a un estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function deshabilitarRevision(Request $request){
+        //dd($request->all());
+        $notification = "exito";
+        $mensaje = "Exito: Se deshabilitó de manera exitosa la revisión";
+        $id_intento = $request->input('id_intento_des');
+        if(Intento::where('id',$id_intento)->exists()){
+            $intento = Intento::where('id',$id_intento)->first();
+            $intento->revision_estudiante = 0;
+            $intento->save();
+        }else{
+            $notification = "error";
+            $mensaje = "Error: No se deshabilitó la revisión, por favor intente de nuevo";
+        }
+        return back()->with($notification, $mensaje);
+    }
+
+
 }

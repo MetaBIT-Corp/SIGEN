@@ -111,6 +111,8 @@ class EstudianteController extends Controller
         $estudiantes->pluck('final');
         $estudiantes->pluck('nota');
         $estudiantes->pluck('estado'); // 0: No iniciado; 1: Iniciado; 2: Finalizado
+        $estudiantes->pluck('id_intento');
+        $estudiantes->pluck('revision_estudiante');
 
         foreach($estudiantes as $estudiante){
             $intento = DB::table('turno as t')
@@ -118,13 +120,15 @@ class EstudianteController extends Controller
                             ->join('clave as c', 'c.turno_id', '=', 't.id')
                             ->join('intento as i', 'i.clave_id', '=', 'c.id')
                             ->where('i.estudiante_id', $estudiante->id_est)
-                            ->select('i.fecha_inicio_intento', 'i.fecha_final_intento', 'i.nota_intento')
+                            ->select('i.fecha_inicio_intento', 'i.fecha_final_intento', 'i.nota_intento', 'i.id', 'i.revision_estudiante')
                             ->get();
 
             if(count($intento) > 0){
                 $estudiante->inicio = $intento[0]->fecha_inicio_intento;
                 $estudiante->final = $intento[0]->fecha_final_intento;
                 $estudiante->nota = $intento[0]->nota_intento;
+                $estudiante->id_intento = $intento[0]->id;
+                $estudiante->revision_estudiante = $intento[0]->revision_estudiante;
                 
                 if($intento[0]->fecha_inicio_intento && $intento[0]->fecha_final_intento){
                     $estudiante->estado = 2;
@@ -137,6 +141,8 @@ class EstudianteController extends Controller
                 $estudiante->final =  ' - ';
                 $estudiante->nota =  ' - ';
                 $estudiante->estado = 0;
+                $estudiante->id_intento = 0;
+                $estudiante->revision_estudiante = 0;
             }
         }
 

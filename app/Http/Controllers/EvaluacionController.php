@@ -668,6 +668,8 @@ class EvaluacionController extends Controller
     }
 
     public function getPorcentajeAprovadosReprobados($evaluacion_id){
+        $evaluacion = Evaluacion::findOrFail($evaluacion_id);
+
         $intentos = DB::table('turno as t')
                         ->where('t.evaluacion_id', $evaluacion_id)
                         ->join('clave as c', 'c.turno_id', '=', 't.id')
@@ -709,6 +711,7 @@ class EvaluacionController extends Controller
     }
 
     public function getIntervalosNotas($evaluacion_id, $intervalo){
+        $evaluacion = Evaluacion::findOrFail($evaluacion_id);
         if($intervalo != 1 && $intervalo != 2 && $intervalo != 5){
             $intervalo = 1;
         }
@@ -762,7 +765,21 @@ class EvaluacionController extends Controller
     }
 
     public function estadisticosEvaluacion($evaluacion_id){
-        return view('evaluacion.estadisticosEvaluacion')->with(compact('evaluacion_id'));
+        $message = '';
+        $notification = '';
+        $evaluacion = Evaluacion::findOrFail($evaluacion_id);
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
+        $turnos = Turno::where('evaluacion_id', $evaluacion_id)->orderBy('fecha_final_turno', 'desc')->first();
+
+        if($turnos->fecha_final_turno > $fecha_hora_actual){
+            $message = "El periodo para resolver la evaluación aún no ha terminado";
+            $notification = 0;
+        }else{
+            $message = $evaluacion->nombre_evaluacion;
+            $notification = 1;
+        }
+
+        return view('evaluacion.estadisticosEvaluacion')->with(compact('evaluacion', 'notification', 'message'));
 
     }
 

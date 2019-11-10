@@ -6,6 +6,8 @@
    <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" type="text/css" rel="stylesheet"> 
    <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.css')}}">
    <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
+   <link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
+   <link rel="stylesheet" href="{{asset('css/estilo.css')}}">
 @endsection
 
 @section("body")
@@ -16,6 +18,20 @@
     <li class="breadcrumb-item">Estudiantes</li>
 @endsection
 @section("main")
+
+<!--Mostrará mensaje de éxito-->
+@if (session('exito'))
+  <div class="alert alert-success">
+    {!!session('exito')!!}
+  </div>
+@endif
+
+<!--Mostrará mensaje de error -->
+@if (session('error'))
+  <div class="alert alert-danger">
+    {!!session('error')!!}
+  </div>
+@endif
 
 <!-- /#wrapper -->
 <div id="wrapper">
@@ -70,7 +86,22 @@
                       <span class="badge badge-success "> - </span>
                     @endif
                   </td> 
-                  <td>-</td>
+                  <td>
+                    <!-- Validación para mostrar opción de habilitar y/0 deshabilitar -->
+                    @if(!$estudiante->revision_estudiante)
+                      @if($estudiante->id_intento != 0)
+                        <a class="btn btn-sm btn-option mb-1" title="Habilitar Revisión" href="#"
+                        data-habilitar-revision="{{ $estudiante->id_intento }}">
+                        <span class="icon-eye"></span>
+                        </a>
+                        @endif
+                    @else
+                      <a class="btn btn-sm btn-option mb-1" title="Deshabilitar Revisión" href="#"
+                      data-deshabilitar-revision="{{ $estudiante->id_intento }}">
+                        <span class="icon-eye-slash"></span>
+                      </a>
+                    @endif
+                  </td>
                 </tr>
                 @endforeach
               </tbody>
@@ -90,6 +121,58 @@
   <i class="fas fa-angle-up"></i>
 </a>
 
+<!-- Modal para autorizar revisión -->
+<div class="modal fade" id="habilitarRevision" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deshabilitarModalCenterTitle">Habilitar Revisión</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body" id="habilitar-revision">
+          <h5><strong>¿Desea habilitar la revisión?</strong></h5>
+        </div>
+        <div class="modal-footer">
+          <form action="{{ route('habilitar_revision')}}" method="POST">
+            {{ csrf_field() }}
+            <input type="hidden" value="" id="id_intento" name="id_intento">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-option">Habilitar</button>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+<!-- Modal para autorizar revisión -->
+
+<!-- Modal para deshabilitar revisión -->
+<div class="modal fade" id="deshabilitarRevision" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deshabilitarModalCenterTitle">Deshabilitar Revisión</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body" id="habilitar-revision">
+          <h5><strong>¿Desea deshabilitar la revisión?</strong></h5>
+        </div>
+        <div class="modal-footer">
+          <form action="{{ route('deshabilitar_revision')}}" method="POST">
+            {{ csrf_field() }}
+            <input type="hidden" value="" id="id_intento_des" name="id_intento_des">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-danger">Deshabilitar</button>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+<!-- Modal para deshabilitar revisión -->
+
 @endsection
 @endsection
 
@@ -98,9 +181,27 @@
 @endsection
 
 @section("js")
+<!-- Script para autorizar la revision -->
+    <script>
+      $('[data-habilitar-revision]').on('click', function(){
+        $('#id_intento').attr('value', $(this).data('habilitar-revision'));
+          $('#habilitarRevision').modal('show');
+      });
+    </script>
+<!-- Script para autorizar la revision -->
+
+  <!-- Script para deshabilitar la revision -->
+    <script>
+      $('[data-deshabilitar-revision]').on('click', function(){
+        $('#id_intento_des').attr('value', $(this).data('deshabilitar-revision'));
+          $('#deshabilitarRevision').modal('show');
+      });
+    </script>
+  <!-- Script para deshabilitar la revision -->
+
     <script type="text/javascript" src="{{asset('js/sb-admin.js')}}"></script>
-  <script type="text/javascript" src="{{asset('js/sb-admin.min.js')}}"></script>
-  <!-- Bootstrap core JavaScript-->
+    <script type="text/javascript" src="{{asset('js/sb-admin.min.js')}}"></script>
+    <!-- Bootstrap core JavaScript-->
     <script type="text/javascript" src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js' )}}"></script>
 
     <!-- Core plugin JavaScript-->
