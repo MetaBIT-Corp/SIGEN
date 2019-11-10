@@ -45,7 +45,20 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root' => storage_path('app/'),
+            //Se agregaron permisos para que no de error al intentar accesar a los directorios
+            //Cuando se necesita guardar un archivo
+            //Agregado por : Ricado Estupinian
+            'permissions' => [
+                'file' => [
+                    'public' => 0775,
+                    'private' => 0600,
+                ],
+                'dir' => [
+                    'public' => 0777,
+                    'private' => 0700,
+                ],
+            ],
         ],
 
         'public' => [

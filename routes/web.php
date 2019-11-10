@@ -20,6 +20,8 @@ Route::get('/', function () {
 });
 Route::get('/home', 'HomeController@index')->name('home');
 
+
+
 //Rutas relacionadas con Clave Area
 Route::get('random/', 'EvaluacionController@random');
 Route::post('turno/claves', 'ClaveController@asignarPreguntas')->name('agregar_clave_area');
@@ -85,6 +87,11 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::put('/area/{id}/pregunta/{pregunta}','PreguntaController@update');
     Route::delete('/area/{id}/pregunta/{pregunta}','PreguntaController@destroy');
 
+    //Descarga de plantilla excel
+    Route::get('download/excel/{id}/{id_area}','PreguntaController@downloadExcel')->name('dExcel')->middleware('signed');
+
+    Route::post('upload-excel/{id_area}','PreguntaController@uploadExcel')->name('uExcel');
+
     //Rutas relacionadas con Grupo Emparejamiento CRUD
     Route::post('grupo/{grupo_id}/edit','GrupoEmparejamientoController@updateGE')->name('editar-grupo');
     Route::post('area/{id}/grupo-store','GrupoEmparejamientoController@storeGE')->name('crear-grupo-emparejamiento');
@@ -104,12 +111,15 @@ Route::group(['middleware' => 'teacher'], function(){
 
 
     //URL's para  encuesta
-    Route::get('/encuesta','EncuestaController@getCreate')->name('gc_encuesta')->middleware('signed');;
+    Route::get('/encuesta','EncuestaController@getCreate')->name('gc_encuesta')->middleware('signed');
     Route::post('/encuesta','EncuestaController@postCreate')->name('pc_encuesta');
     Route::get('/encuesta/{id}/editar','EncuestaController@getUpdate')->name('gu_encuesta')->middleware('signed');;
     Route::post('/encuesta/{id}/editar','EncuestaController@postUpdate')->name('pu_encuesta');    
     Route::post('/eliminar-encuesta','EncuestaController@eliminarEncuesta')->name('eliminar_encuesta'); 
-    Route::post('/encuesta/publicar-encuesta','EncuestaController@publicar')->name('publicar_encuesta'); 
+    Route::post('/encuesta/publicar-encuesta','EncuestaController@publicar')->name('publicar_encuesta');
+
+    //Encuestas estadísticas
+    Route::get('estadisticas/{id}', 'EncuestaController@estadisticas')->name('estadisticas_enc')->middleware('signed'); 
 
     /*Rutas para Gestión de Opciones (Sin Grupo Emparejamiento)*/
     Route::get('pregunta/{pregunta_id}/opcion/','OpcionController@index')->name('index-opcion');
