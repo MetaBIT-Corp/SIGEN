@@ -126,7 +126,7 @@
                            <span class="icon-calendar-plus-o"></span>
                        </a>
 
-                       <a class="btn btn-option btn-sm mb-1" title="Estadísticas" href="#">
+                       <a class="btn btn-option btn-sm mb-1" title="Estadísticas" href="{{ route('estadisticas-evaluacion', $evaluacion->id) }}">
                         <span class="icon-grafico"></span>
                        </a>
                   </td>

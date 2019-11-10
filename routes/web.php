@@ -144,3 +144,6 @@ Route::group(['middleware' => 'admin_teacher'], function(){
 
 
 Route::get('evaluacion/{evaluacion_id}/estudiantes', 'EstudianteController@estudiantesEnEvaluacion');
+Route::get('evaluacion/{evaluacion_id}/estadisticos', 'EvaluacionController@estadisticosEvaluacion')->name('estadisticas-evaluacion');
+Route::get('/evaluacion/{evaluacion_id}/estadisticos/porcentajes', 'EvaluacionController@getPorcentajeAprovadosReprobados');
+Route::get('/evaluacion/{evaluacion_id}/estadisticos/intervalo/{intervalo}', 'EvaluacionController@getIntervalosNotas');

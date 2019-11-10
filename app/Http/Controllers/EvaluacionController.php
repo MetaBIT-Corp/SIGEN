@@ -665,4 +665,103 @@ class EvaluacionController extends Controller
         return $new_fecha;
     }
 
+    public function getPorcentajeAprovadosReprobados($evaluacion_id){
+        $intentos = DB::table('turno as t')
+                        ->where('t.evaluacion_id', $evaluacion_id)
+                        ->join('clave as c', 'c.turno_id', '=', 't.id')
+                        ->join('intento as i', 'i.clave_id', '=', 'c.id')
+                        ->select('i.id', 'i.nota_intento')
+                        ->get();
+
+        $aprobados_query = DB::table('turno as t')
+                            ->where('t.evaluacion_id', $evaluacion_id)
+                            ->join('clave as c', 'c.turno_id', '=', 't.id')
+                            ->join('intento as i', 'i.clave_id', '=', 'c.id')
+                            ->where('i.nota_intento', '>=', 6 )
+                            ->select('i.id', 'i.nota_intento')
+                            ->get();
+
+         $total_estudiantes = DB::table('evaluacion as ev')
+                                ->where('ev.id', $evaluacion_id)
+                                ->join('carga_academica as ca', 'ev.id_carga', '=', 'ca.id_carg_aca')
+                                ->join('detalle_insc_est as die', 'ca.id_carg_aca', '=', 'die.id_carg_aca')
+                                ->join('estudiante as es', 'die.id_est', '=', 'es.id_est')
+                                ->get();
+
+        $total_evaluados = count($intentos);
+        $aprobados = count($aprobados_query);
+        $reprobados = $total_evaluados - $aprobados;
+        $no_evaluados = count($total_estudiantes) - $total_evaluados;
+        
+        $porcentaje_aprobados = ($aprobados/$total_evaluados)*100;
+        $porcentaje_reprobados = ($reprobados/$total_evaluados)*100;
+        //$porcentaje_no_evaluados = ($no_evaluados/count($total_estudiantes))*100;
+
+        $data = [
+            'porcentaje_aprobados' => $porcentaje_aprobados,
+            //'porcentaje_no_evaluados' => $porcentaje_no_evaluados,
+            'porcentaje_reprobados' => $porcentaje_reprobados
+        ];
+
+        return $data;
+    }
+
+    public function getIntervalosNotas($evaluacion_id, $intervalo){
+        if($intervalo != 1 && $intervalo != 2 && $intervalo != 5){
+            $intervalo = 1;
+        }
+
+        $lim_superior = $intervalo;
+        $lim_inferior = 0;
+        $max_y = 10;
+
+        $cantidad = array();
+        $etiquetas = array();
+
+        array_push($etiquetas, 0);
+
+        for($i=0; $i<10; $i+=$intervalo){
+            $notas = DB::table('turno as t')
+                        ->where('t.evaluacion_id', $evaluacion_id)
+                        ->join('clave as c', 'c.turno_id', '=', 't.id')
+                        ->join('intento as i', 'i.clave_id', '=', 'c.id')
+                        ->whereBetween('i.nota_intento', array($lim_inferior+0.001, $lim_superior) )
+                        ->select('i.id', 'i.nota_intento')
+                        ->get();
+
+            if(count($notas) > 0){
+                array_push($cantidad, count($notas));
+            }else{
+                array_push($cantidad, 0);
+            }
+
+            $lim_inferior = $lim_superior;
+            $lim_superior += $intervalo;
+
+            array_push($etiquetas, (int)$lim_inferior);
+        }
+
+        foreach($cantidad as $c){
+            if($c > $max_y){
+                $max_y = $c;
+            }
+
+        }
+
+        $data = [
+            'cantidad'  => $cantidad,
+            'etiquetas' => $etiquetas,
+            'max'       => 10,
+            'max_x'     => 10-$intervalo,
+            'max_y'     => $max_y
+        ];
+
+        return $data;
+    }
+
+    public function estadisticosEvaluacion($evaluacion_id){
+        return view('evaluacion.estadisticosEvaluacion')->with(compact('evaluacion_id'));
+
+    }
+
 }
