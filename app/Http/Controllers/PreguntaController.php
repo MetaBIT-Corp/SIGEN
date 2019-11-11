@@ -218,8 +218,8 @@ class PreguntaController extends Controller
                 $nombre_descarga=str_replace(" ","_",$area->titulo)."_SIGEN_Falso_Verdadero.xlsx";
                 break;
             case 3:
-                $ruta.='ImportarPreguntasGpo.xlsx';
-                $nombre_descarga=str_replace(" ","_",$area->titulo)."_SIGEN_Emparejamiento.xlsx";
+                $ruta.='ImportarPreguntasGpo.xlsm';
+                $nombre_descarga=str_replace(" ","_",$area->titulo)."_SIGEN_Emparejamiento.xlsm";
                 break;
             case 4:
                 $ruta.='ImportarPreguntasTextoCorto.xlsx';
@@ -248,68 +248,205 @@ class PreguntaController extends Controller
         $message=['error'=>'Hubo un error en la importacion. Verifique que sea el formato adecuado.','type'=>1];
         //$message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
         //Se hara la importacion de las preguntas segun la modalidad del area
-         switch ($modalidad_area) {
+
+        $spreadsheet=null;
+        $data=null;
+        try{
+            //Se carga el archivo que subio el archivo para poder acceder a los datos
+            $spreadsheet = IOFactory::load(storage_path($path = "app\\".str_replace("/","\\",$ruta)));
+
+            //A la modalidad de emparejamiento se le dara otro tratamiento
+            if($modalidad_area!=3){
+                //Todas las filas se convierten en un array que puede ser accedido por las letras de las columnas de archivo excel
+                $data = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+            }
+
+        }catch(Exception $e){
+            return response()->json($message);
+        }
+
+        //Condicional segun modalidad del area, se procedera de manera diferente en la importacion
+        switch ($modalidad_area) {
             case 1:
-                
-                break;
-            case 2:
-                try{
-                    //Se carga el archivo que subio el archivo para poder acceder a los datos
-                    $spreadsheet = IOFactory::load(storage_path($path = "app\\".str_replace("/","\\",$ruta)));
+                //Validacion de plantilla
+                if($spreadsheet->getActiveSheet()->getCell('I1')=="1OP"){
+                    for ($i=5; $i <=count($data) ; $i++) {
+                        if($data[$i]["A"]!=null&&$data[$i]["B"]!=null&&$data[$i]["C"]!=null&&$data[$i]["D"]!=null){
+                            //Se crea el grupo de emparejamiento
+                            $gpo=new Grupo_Emparejamiento();
+                            $gpo->area_id=$area->id;
+                            $gpo->save();
 
-                    if($spreadsheet->getActiveSheet()->getCell('A1')=="Pregunta"&&$spreadsheet->getActiveSheet()->getCell('B1')=="OpcionCorrecta"){
-                        //Todas las filas se convierten en un array que puede ser accedido por las letras de las columnas de archivo excel
-                        $data = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-                        for($i=2;$i<=count($data);$i++){
-                        //Se verifica que la columna en la que esta la pregunta no este vacia
-                            if($data[$i]["A"]!=""){
-                                //Se crea el grupo de emparejamiento
-                                $gpo=new Grupo_Emparejamiento();
-                                $gpo->area_id=$area->id;
-                                $gpo->save();
+                            //Se crea la pregunta segun la columna A
+                            $preg=new Pregunta();
+                            $preg->grupo_emparejamiento_id=$gpo->id;
+                            $preg->pregunta=$data[$i]["A"];
+                            $preg->save();
 
-                                //Se crea la pregunta segun la columna A
-                                $preg=new Pregunta();
-                                $preg->grupo_emparejamiento_id=$gpo->id;
-                                $preg->pregunta=$data[$i]["A"];
-                                $preg->save();
-
-                                //Creacion de opciones falso/verdaero
-                                $opv=new Opcion();
-                                $opv->pregunta_id=$preg->id;
-                                $opv->opcion="Verdadero";
-
-                                $opf=new Opcion();
-                                $opf->pregunta_id=$preg->id;
-                                $opf->opcion="Falso";
-
-                                //Si hay cualquier otra letra,esta vacia o v la correcta sera Verdadero por defecto
-                                $opf->correcta=0;
-                                $opv->correcta=1;
-
-                                //Caso si es falsa
-                                if(strtolower($data[$i]["B"])=="f"){
-                                   $opf->correcta=1;
-                                   $opv->correcta=0;
+                            foreach ($data[$i] as $key => $val) {
+                                if($key=="B"){
+                                    //Creacion de opcion correcta
+                                    $op=new Opcion();
+                                    $op->pregunta_id=$preg->id;
+                                    $op->opcion=$val;
+                                    $op->correcta=1;
+                                    $op->save();
+                                }else{
+                                    if($key!="A"&&$val!=null){
+                                        //Creacion de otras opciones
+                                        $op=new Opcion();
+                                        $op->pregunta_id=$preg->id;
+                                        $op->opcion=$val;
+                                        $op->correcta=0;
+                                        $op->save();
+                                    }
                                 }
-                                $opf->save();
-                                $opv->save();
                             }
                         }
-                        $message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
                     }
-
-                }catch(ErrorException $e){
-                    $message=['error'=>'Hubo un error en la importacion. Verifique que sea el formato adecuado.','type'=>1];
+                    $message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
                 }
                 break;
-            case 3:
+            case 2:
+                //Validacion de plantilla
+                if($spreadsheet->getActiveSheet()->getCell('F6')=="2FV"){
+                    for($i=2;$i<=count($data);$i++){
+                    //Se verifica que la columna en la que esta la pregunta no este vacia
+                        if($data[$i]["A"]!=""){
+                            //Se crea el grupo de emparejamiento
+                            $gpo=new Grupo_Emparejamiento();
+                            $gpo->area_id=$area->id;
+                            $gpo->save();
 
+                            //Se crea la pregunta segun la columna A
+                            $preg=new Pregunta();
+                            $preg->grupo_emparejamiento_id=$gpo->id;
+                            $preg->pregunta=$data[$i]["A"];
+                            $preg->save();
+
+                            //Creacion de opciones falso/verdaero
+                            $opv=new Opcion();
+                            $opv->pregunta_id=$preg->id;
+                            $opv->opcion="Verdadero";
+
+                            $opf=new Opcion();
+                            $opf->pregunta_id=$preg->id;
+                            $opf->opcion="Falso";
+
+                            //Si hay cualquier otra letra,esta vacia o v la correcta sera Verdadero por defecto
+                            $opf->correcta=0;
+                            $opv->correcta=1;
+
+                            //Caso si es falsa
+                            if(strtolower($data[$i]["B"])=="f"){
+                               $opf->correcta=1;
+                               $opv->correcta=0;
+                            }
+                            $opv->save();
+                            $opf->save();
+                        }
+                    }
+                    $message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
+                }                
+                break;
+            case 3:
+                //Validacion de plantilla
+                if($spreadsheet->getSheetByName("BASE")){
+
+                    if($spreadsheet->getSheetByName("BASE")->getCell('G1')=="3EMP"){
+
+                        //Contamos cuantas hojas son en total
+                        for ($j=0; $j < $spreadsheet->getSheetCount() ; $j++) {
+                            $data=$spreadsheet->getSheet($j)->toArray(null, true, true, true);
+
+                            //Creamos el grupo de emparejamiento con el nombre de la hoja
+                            if($spreadsheet->getSheet($j)->getTitle()!="BASE"){
+                                //Creamos el grupo de emparejamiento
+                                 $gpo=new Grupo_Emparejamiento();
+                                 $gpo->area_id=$area->id;
+                                 $gpo->descripcion_grupo_emp= $spreadsheet->getSheet($j)->getTitle();
+                                 $gpo->save();
+
+                                for ($i=5; $i <=count($data) ; $i++) {
+                                    if($data[$i]["A"]!=null&&$data[$i]["B"]!=null){
+
+                                        //Se crea la pregunta segun la columna A
+                                        $preg=new Pregunta();
+                                        $preg->grupo_emparejamiento_id=$gpo->id;
+                                        $preg->pregunta=$data[$i]["A"];
+                                        $preg->save();
+
+                                        foreach ($data[$i] as $key => $val) {
+                                            if($key=="B"){
+                                                //Creacion de opcion correcta
+                                                $op=new Opcion();
+                                                $op->pregunta_id=$preg->id;
+                                                $op->opcion=$val;
+                                                $op->correcta=1;
+                                                $op->save();
+                                            }
+                                            if($key=="C"&&$val!=null){
+                                                //Creacion de otras opciones
+                                                $op=new Opcion();
+                                                $op->pregunta_id=$preg->id;
+                                                $op->opcion=$val;
+                                                $op->correcta=0;
+                                                $op->save();
+                                            }
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
+                }
                 break;
             case 4:
+                //Validacion de plantilla
+                if($spreadsheet->getActiveSheet()->getCell('B4')=="4TC"){
+                    //dd($data);
+                    //Recuperando las columnas para acceder por columnas
+                    $columns=null;
+                    foreach ($data[1] as $key => $value) {
+                        $columns[]=$key;
+                    }
 
+                    //dd($columns);
+                    for ($j=1; $j < count($columns)-1; $j++){
+                        if($data[6][$columns[$j]]!=null){
+                            //Se crea el grupo de emparejamiento
+                            $gpo=new Grupo_Emparejamiento();
+                            $gpo->area_id=$area->id;
+                            $gpo->save();
+
+                            //Se crea la pregunta segun la columna A
+                            $preg=new Pregunta();
+                            $preg->grupo_emparejamiento_id=$gpo->id;
+                            $preg->pregunta=$data[6][$columns[$j]];
+                            $preg->save();
+                       
+                            for ($i=7; $i <= count($data) ; $i++) { 
+                                if($data[$i][$columns[$j]]!=null){
+                                    //Creacion de opciones
+                                    $op=new Opcion();
+                                    $op->pregunta_id=$preg->id;
+                                    $op->opcion=$data[$i][$columns[$j]];
+                                    $op->correcta=1;
+                                    $op->save();
+                                }
+                            }
+                        }
+                    }
+                    $message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
+                }
+                
                 break;
         }
+
+        //Eliminar el archivo subido, solo se utiliza para la importacion y luego de desecha
+        Storage::delete($ruta);
 
         return response()->json($message);
     }

@@ -79,7 +79,7 @@
             <!--Formulario para subida de archivos de excel-->
             <form method="POST" id="form-excel" enctype="multipart/form-data">
                     @csrf
-                    <input type="file" name="archivo" accept=".xlsx" id="fileExcel" data-area='{{ $area->id }}' hidden="" />
+                    <input type="file" name="archivo" accept=".xlsm" id="fileExcel" data-area='{{ $area->id }}' hidden="" />
             </form>
                 
         </div>

@@ -9,7 +9,7 @@ $(document).ready(function() {
         setTimeout(function() {
             $("#message-success").attr('hidden', true);
             location.reload();
-        }, 4000);
+        }, 2000);
     }
 
     $('#importExcel').click(function(e) {
@@ -41,7 +41,7 @@ $(document).ready(function() {
                 }, 'slow');
                 setTimeout(function() {
                     $("#message-error").attr('hidden', true);
-                }, 4000);
+                }, 2000);
             }
         }).fail(function(xhr, status, e) {
             console.log(e);
