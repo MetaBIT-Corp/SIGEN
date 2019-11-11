@@ -109,6 +109,9 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::get('materia/habilitar-evaluacion/{id}','EvaluacionController@reciclaje')->name('reciclaje_evaluacion')->middleware('signed');
     Route::post('evaluacion/publicar-turno','EvaluacionController@publicar')->name('publicar_evaluacion');
 
+    Route::post('/deshabilitar-revision','IntentoController@deshabilitarRevision')->name('deshabilitar_revision');
+    Route::post('/habilitar-revision','IntentoController@habilitarRevision')->name('habilitar_revision');
+
 
     //URL's para  encuesta
     Route::get('/encuesta','EncuestaController@getCreate')->name('gc_encuesta')->middleware('signed');
