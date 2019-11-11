@@ -400,8 +400,20 @@ class IntentoController extends Controller
                 $clave = $intento->clave;
                 $turno = $clave->turno;
                 $evaluacion = $turno->evaluacion;
+
                 if($evaluacion->revision == 0){
                     return redirect(URL::signedRoute('listado_evaluacion', ['id' => $evaluacion->id_carga]));
+                }
+
+                //se valida que el usuario podrá ver la revisión hasta finalizar todos sus intentos
+                //esto mientras el periodo de evaluación esté vigente
+                $fecha_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+                if($turno->CantIntentos > 0 && $fecha_actual < $turno->fecha_final_turno){
+                    return redirect(
+                        URL::signedRoute(
+                            'listado_evaluacion', 
+                            ['id' => $evaluacion->id_carga])
+                    )->with('info', 'Info: Podrás consultar la revisión al finalizar todos los intentos');;
                 }
 
                 //Obtener las preguntas segun la clave asignada aleatoriamente

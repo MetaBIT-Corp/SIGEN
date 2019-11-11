@@ -58,4 +58,48 @@ class Turno extends Model
 
         return $evaluacion->intentos - $intento_realizados;
     }
+
+    /**
+     * verificar si un estudiante tiene permisos especiales de revision en un turno especifico
+     * @author Edwin Palacios
+     * @return boolean de si el estudiante tiene permiso
+     */
+    public function getRevisionEstudianteAttribute(){
+        $revision_estudiante =0;
+        $estudiante = Estudiante::where('user_id', auth()->user()->id)->first();
+
+        $clave = Clave::where('turno_id',$this->id)->first();
+
+        if(Intento::where('clave_id',$clave->id)
+                        ->where('estudiante_id',$estudiante->id_est)
+                        ->exists()){
+        $intento= Intento::where('clave_id',$clave->id)
+                        ->where('estudiante_id',$estudiante->id_est)
+                        ->first();
+        $revision_estudiante = $intento->revision_estudiante;
+        }
+        return $revision_estudiante;
+    }
+
+    /**
+     * retorna el id del intento de un estudiante en un turno específico
+     * @author Edwin Palacios
+     * @return id del intento
+     */
+    public function getIdIntentoAttribute(){
+        $id_intento = 0;
+        $estudiante = Estudiante::where('user_id', auth()->user()->id)->first();
+
+        $clave = Clave::where('turno_id',$this->id)->first();
+
+        if(Intento::where('clave_id',$clave->id)
+                        ->where('estudiante_id',$estudiante->id_est)
+                        ->exists()){
+        $intento= Intento::where('clave_id',$clave->id)
+                        ->where('estudiante_id',$estudiante->id_est)
+                        ->first();
+        $id_intento = $intento->id;
+        }
+        return $id_intento;
+    }
 }

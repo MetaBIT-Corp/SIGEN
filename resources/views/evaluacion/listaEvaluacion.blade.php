@@ -181,17 +181,45 @@
                       <br>
                       <small>Disponible desde: {{$turno->fecha_inicio_turno}} hasta: {{$turno->fecha_final_turno}} </small>
                       <br><br>
+                      <!-- Si todavía tiene intentos disponibles-->
                       @if($turno->CantIntentos > 0)
                       
                         <div class="alert alert-primary" style="background: #f5efee">
-                            <button type="button" class="btn btn-info mt-1 mr-3" data-acceder-evaluacion="{{ $turno->id }}" data-descripcion-evaluacion="{{ $evaluacion->descripcion_evaluacion }}" >Acceder</button>
+                            <button type="button" class="btn btn-info mt-1 mr-5" data-acceder-evaluacion="{{ $turno->id }}" data-descripcion-evaluacion="{{ $evaluacion->descripcion_evaluacion }}" >Acceder</button>
+                            
+                            <!-- Si se da revisión-->
+                            @if($evaluacion->revision == 1)
+                              <a class="btn btn-link btn-lg mb-1 float-right" title="Ver revisión" href="{{ URL::signedRoute('revision_evaluacion', ['id_intento' => $turno->IdIntento])}}">
+                                <span class="icon-eye"></span>
+                              </a>
+                            @else
+                              <!-- Aunque no haya revisión global pero si hay revisión personal-->
+                              @if($turno->RevisionEstudiante == 1 && $turno->CantIntentos != $evaluacion->intentos)
+                              <a class="btn btn-link btn-lg mb-1 float-right" title="Ver revisión" href="{{ URL::signedRoute('revision_evaluacion', ['id_intento' => $turno->IdIntento])}}">
+                                <span class="icon-eye"></span>
+                              </a>
+                              @endif
+                            @endif
+                            
                         </div>
                       @else
                       <div class="alert alert-danger" style="background: #f5efee">
                             <button type="button" class="btn btn-info mt-1 mr-3" data-acceder-evaluacion="{{ $turno->id }}" data-descripcion-evaluacion="{{ $evaluacion->descripcion_evaluacion }}" disabled="true">Acceder</button>
                             <a class="alert-link" style="color: #da4727;font-size: 13px">Ha realizado todos sus intentos!</a>
+                            <!-- Si se da revisión-->
+                            @if($evaluacion->revision == 1)
+                              <a class="btn btn-link btn-lg mb-1 float-right" title="Ver revisión" href="{{ URL::signedRoute('revision_evaluacion', ['id_intento' => $turno->IdIntento])}}">
+                                <span class="icon-eye"></span>
+                              </a>
+                            @else
+                              <!-- Aunque no haya revisión global pero si hay revisión personal-->
+                              @if($turno->RevisionEstudiante == 1 && $turno->CantIntentos != $evaluacion->intentos)
+                              <a class="btn btn-link btn-lg mb-1 float-right" title="Ver revisión" href="{{ URL::signedRoute('revision_evaluacion', ['id_intento' => $turno->IdIntento])}}">
+                                <span class="icon-eye"></span>
+                              </a>
+                              @endif
+                            @endif 
                       </div>
-                        
                       @endif
               		  </span>
                   </div>

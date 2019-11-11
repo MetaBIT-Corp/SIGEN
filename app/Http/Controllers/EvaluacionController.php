@@ -173,7 +173,7 @@ class EvaluacionController extends Controller
      * @author Edwin palacios
      */
     public function listado($id){
-        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/Denver')->format('d/m/Y h:i A');
         $id_carga = $id;
         if(auth()->user()->IsAdmin){
             $cargas=  CargaAcademica::where('id_mat_ci',$id)->get();
@@ -203,6 +203,8 @@ class EvaluacionController extends Controller
                         $turnos_activos = false;
                         if($evaluacion->turnos){
                             foreach ($evaluacion->turnos as $turno) {
+                                $turno->fecha_inicio_turno = $this->convertirFecha($turno->fecha_inicio_turno);
+                                $turno->fecha_final_turno = $this->convertirFecha($turno->fecha_final_turno);
                                 if($turno->visibilidad==1 &&
                                     $turno->fecha_final_turno > $fecha_hora_actual){
                                     $turnos_activos = true;
@@ -217,6 +219,7 @@ class EvaluacionController extends Controller
                 
             }
         }
+        
     	return view('evaluacion.listaEvaluacion')->with(compact('evaluaciones','id_carga','fecha_hora_actual'));
 
     }
@@ -571,7 +574,7 @@ class EvaluacionController extends Controller
             //validacion de fecha
             if(!($fecha_hora_actual >= $turno_a_acceder->fecha_inicio_turno && $turno_a_acceder->fecha_final_turno> $fecha_hora_actual )){
                 $notification = "error";
-                $message = "Error: La evaluacion no está disponible. " . $fecha_hora_actual;
+                $message = "Error: La evaluacion no está disponible. " . $this->convertirFecha($fecha_hora_actual);
                 return back()->with($notification,$message);
             } 
             
