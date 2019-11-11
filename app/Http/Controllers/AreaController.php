@@ -141,8 +141,16 @@ class AreaController extends Controller
         $area->tipo_item_id = $request->input('tipo_item');
         $area->titulo = $request->input('titulo');
         $area->save();
-        
-        return redirect(URL::signedRoute('getAreaIndex', ['id' => $id_materia]));
+
+        //dd($id_materia);
+
+        if($id_materia != 0)
+            return redirect(URL::signedRoute('getAreaIndex', ['id' => $id_materia]));
+        else{
+            $encuesta = true;
+            return view('area.index', compact('encuesta'));
+        }
+
     }
 
     /**
