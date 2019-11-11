@@ -147,7 +147,7 @@
           $('#titulo_acceso').html( $(this).data('titulo-encuesta'));
           $('#accederEncuesta').modal('show');
 
-          if($(this).data('ruta-encuesta') != null){
+          if($(this).data('ruta-encuesta') != ""){
             $('#img_encuesta').attr('src', "/images/" + $(this).data('ruta-encuesta'));
           }
       });

@@ -57,7 +57,8 @@ class EncuestaController extends Controller
             'description' => ['required'],
             'fecha_inicio' => ['required', 
                 function ($attribute, $value, $fail) {
-                    $fecha_actual = Carbon::now('America/Denver')->format('d/m/Y h:i A');
+                    $value = DateTime::createFromFormat('d/m/Y h:i A',$value)->format('Y-m-d H:i:s');
+                    $fecha_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
                     if (($value < $fecha_actual)) {
                         $fail('La fecha inicial debe ser mayor a la actual.' );
                     }
@@ -175,7 +176,8 @@ class EncuestaController extends Controller
             'description' => ['required'],
             'fecha_inicio' => ['required', 
                 function ($attribute, $value, $fail) {
-                    $fecha_actual = Carbon::now('America/Denver')->format('d/m/Y ´h:i A');
+                    $value = DateTime::createFromFormat('d/m/Y h:i A',$value)->format('Y-m-d H:i:s');
+                    $fecha_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
                     if (($value < $fecha_actual)) {
                         $fail('La fecha inicial debe ser mayor a la actual.' );
                     }
