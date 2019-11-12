@@ -13,34 +13,14 @@
 			<tr>
 				<td colspan="2" style="width: 80px;font-size: 16px;"><b>{{ $encuesta->titulo_encuesta }}</b></td>
 			</tr>
-			@foreach($preguntas as $pregunta)
-		        <tr>
-		            <td colspan="2"><i><b>{{ ++$i }}. {{ $pregunta->pregunta }}:</b></i></td>
-		        </tr>
-		        <tr>
-		        	<td style="width: 40px; text-align: center;"><b>Opción</b></td>
-		        	<td style="width: 40px; text-align: center;"><b>Cantidad</b></td>
-		        </tr>
-		        @foreach($pregunta->opciones as $opcion)
-					<tr>
-						<td style="text-align: center;">{{ $opcion->opcion }}</td>
-						<td style="text-align: center;">{{ $opcion->cantidad }}</td>
-					</tr>
-		        @endforeach
-		    @endforeach
-	    </table>
-	    @else
-	    	<table>
-				<tr>
-					<td colspan="2" style="text-align: center; font-size: 16px;"><b>{{ $encuesta->titulo_encuesta }}</b></td>
-				</tr>
+			@if($preguntas != [])
 				@foreach($preguntas as $pregunta)
 			        <tr>
 			            <td colspan="2"><i><b>{{ ++$i }}. {{ $pregunta->pregunta }}:</b></i></td>
 			        </tr>
 			        <tr>
-			        	<td style="text-align: center;"><b>Opción</b></td>
-			        	<td style="text-align: center;"><b>Cantidad</b></td>
+			        	<td style="width: 40px; text-align: center;"><b>Opción</b></td>
+			        	<td style="width: 40px; text-align: center;"><b>Cantidad</b></td>
 			        </tr>
 			        @foreach($pregunta->opciones as $opcion)
 						<tr>
@@ -49,7 +29,39 @@
 						</tr>
 			        @endforeach
 			    @endforeach
-		    </table>s
+		    @else
+			    <tr>
+			    	<td colspan="2"><b>No se encontraron preguntas para esta encuesta</b></td>
+			    </tr>
+		    @endif
+	    </table>
+	    @else
+	    	<table>
+				<tr>
+					<td colspan="2" style="text-align: center; font-size: 16px;"><b>{{ $encuesta->titulo_encuesta }}</b></td>
+				</tr>
+				@if($preguntas != [])
+					@foreach($preguntas as $pregunta)
+				        <tr>
+				            <td colspan="2"><i><b>{{ ++$i }}. {{ $pregunta->pregunta }}:</b></i></td>
+				        </tr>
+				        <tr>
+				        	<td style="text-align: center;"><b>Opción</b></td>
+				        	<td style="text-align: center;"><b>Cantidad</b></td>
+				        </tr>
+				        @foreach($pregunta->opciones as $opcion)
+							<tr>
+								<td style="text-align: center;">{{ $opcion->opcion }}</td>
+								<td style="text-align: center;">{{ $opcion->cantidad }}</td>
+							</tr>
+				        @endforeach
+				    @endforeach
+			    @else
+				    <tr>
+				    	<td colspan="2"><b>No se encontraron preguntas para esta encuesta</b></td>
+				    </tr>
+			    @endif
+		    </table>
 	    @endif
 	 </div>
 </body>

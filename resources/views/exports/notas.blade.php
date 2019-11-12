@@ -9,10 +9,10 @@
 	<table class="table">
 		<thead>
 			<tr>
-				<td colspan="3" style="text-align: center; font-size: 14px;"><b>Herramientas de productividad</b></td>
+				<td colspan="3" style="text-align: center; font-size: 14px;"><b>{{ $materia->nombre_mar }}</b></td>
 			</tr>
 			<tr>
-				<td colspan="3" style="text-align: center; font-size: 14px;"><b>Notas de {{ $evaluacion->nombre_evaluacion }}.</b></td>
+				<td colspan="3" style="text-align: center; font-size: 14px;"><b>Notas de <i>{{ $evaluacion->nombre_evaluacion }}.</i></b></td>
 			</tr>
 			<tr>
 				<th style="width: 15px;"><b>CARNET</b></th>

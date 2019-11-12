@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Encuesta;
 use App\Pregunta;
+use App\Http\Controllers\EncuestaController;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
@@ -26,23 +27,23 @@ class ResultadosEncuestaExport implements FromView
     	$preguntas = [];
     	
     	foreach ($claves_areas as $clave_area) {
-    		
-    		$clave_area_preguntas = $clave_area->claves_areas_preguntas;
-    		
-    		foreach ($clave_area_preguntas as $clave_area_pregunta) {
-    			
-    			$pregunta = $clave_area_pregunta->pregunta;
+            if($clave_area->area->tipo_item->id != 4){
 
-    			$num = rand(5,20);
+                $clave_area_preguntas = $clave_area->claves_areas_preguntas;
+            
+                foreach ($clave_area_preguntas as $clave_area_pregunta) {
+                    
+                    $pregunta = $clave_area_pregunta->pregunta;
 
-    			foreach ($pregunta->opciones as $opcion) {
-	    			$opcion['cantidad'] = $num;
-	    			$num--;
-	    		}
-	    		
-	    		$preguntas[] = $pregunta;
+                    foreach ($pregunta->opciones as $opcion) {
+                        $opcion['cantidad'] = EncuestaController::obtenerCantidadRespuestas($this->encuesta_id,$opcion->id,$clave->id);
+                    }
+                    
+                    $preguntas[] = $pregunta;
 
-    		}
+                }
+
+            }
 
     	}
 

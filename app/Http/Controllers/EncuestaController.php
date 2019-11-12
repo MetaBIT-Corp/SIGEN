@@ -265,6 +265,13 @@ class EncuestaController extends Controller
                 $encuestas = Encuesta::where('id_docente',$docente->id_pdg_dcn)->get();
                 //damos formato a fecha d/m/Y h:i A
                 foreach ($encuestas as $encuesta) {
+
+                    //Código para saber si encuesta ya finalizo y así mostrar opciones de exportar resultados
+                    $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
+                    $encuesta['finalizado'] = false;
+                    if(Carbon::parse($fecha_hora_actual)->gt(Carbon::parse($encuesta->fecha_final_encuesta)))
+                        $encuesta['finalizado'] = true;
+                    
                     $encuesta->fecha_inicio_encuesta = $this->convertirFechaS($encuesta->fecha_inicio_encuesta);
                     $encuesta->fecha_final_encuesta = $this->convertirFechaS($encuesta->fecha_final_encuesta);
                 }
@@ -540,7 +547,7 @@ class EncuestaController extends Controller
      * @param $id_opcion
      * @author Edwin Palacios
      */
-    public function obtenerCantidadRespuestas($id_encuesta, $id_opcion,$id_clave){
+    public static function obtenerCantidadRespuestas($id_encuesta, $id_opcion,$id_clave){
         $cantidadRespuestas =DB::table('encuesta')
         ->join('clave','encuesta.id','=','clave.encuesta_id')
         ->join('clave_area','clave.id','=','clave_area.clave_id')

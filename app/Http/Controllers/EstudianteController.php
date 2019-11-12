@@ -10,6 +10,7 @@ use App\CargaAcademica;
 use App\Ciclo;
 use App\Materia;
 use App\Evaluacion;
+use Carbon\Carbon;
 use DB;
 
 class EstudianteController extends Controller
@@ -97,6 +98,8 @@ class EstudianteController extends Controller
     public function estudiantesEnEvaluacion($evaluacion_id){
 
         $evaluacion = Evaluacion::findOrFail($evaluacion_id);
+        
+        $evaluacion_finalizada = $this->evaluacionFinalizada($evaluacion_id);
 
         $estudiantes = DB::table('evaluacion as ev')
                             ->where('ev.id', $evaluacion_id)
@@ -111,7 +114,7 @@ class EstudianteController extends Controller
         $estudiantes->pluck('final');
         $estudiantes->pluck('nota');
         $estudiantes->pluck('estado'); // 0: No iniciado; 1: Iniciado; 2: Finalizado
-        $estudiantes->pluck('id_intento');
+        $estudiantes->pluck('id_intento'); 
         $estudiantes->pluck('revision_estudiante');
 
         foreach($estudiantes as $estudiante){
@@ -146,6 +149,19 @@ class EstudianteController extends Controller
             }
         }
 
-        return view('estudiante.estudiantesEnEvaluacion')->with(compact('estudiantes','evaluacion'));
+        return view('estudiante.estudiantesEnEvaluacion')->with(compact('estudiantes','evaluacion_finalizada','evaluacion_id', 'evaluacion'));
+    }
+
+    public function evaluacionFinalizada($evaluacion_id){
+        $turnos = Evaluacion::find($evaluacion_id)->turnos;
+        $finalizado = 1;
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
+
+        foreach ($turnos as $turno) {
+            if(!Carbon::parse($fecha_hora_actual)->gt(Carbon::parse($turno->fecha_final_turno)))
+                return 0;
+        }
+
+        return $finalizado;
     }
 }
