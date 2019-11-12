@@ -122,14 +122,16 @@
                         <span class="icon-grafico"></span>
                       </a>
 
-                      <!-- Opciones de descarga de resultados de Encuesta -->
-                       <a class="btn btn-option btn-sm mb-1" title="Descargar resultados Excel" href="{{ route('resultadosExcel',$encuesta->id) }}">
-                        <span class="icon-importExcel"></span>
-                       </a>
+                      @if($encuesta->finalizado)
+                        <!-- Opciones de descarga de resultados de Encuesta -->
+                         <a class="btn btn-option btn-sm mb-1" title="Descargar resultados Excel" href="{{ route('resultadosExcel', $encuesta->id) }}">
+                          <span class="icon-importExcel"></span>
+                         </a>
 
-                       <a class="btn btn-option btn-sm mb-1" title="Descargar resultados PDF" href="{{ route('resultadosPdf',$encuesta->id) }}">
-                        <span class="icon-pdf"></span>
-                       </a>
+                         <a class="btn btn-option btn-sm mb-1" title="Descargar resultados PDF" href="{{ route('resultadosPdf', $encuesta->id) }}">
+                          <span class="icon-pdf"></span>
+                         </a>
+                      @endif
 
                     </td>
                   </tr>

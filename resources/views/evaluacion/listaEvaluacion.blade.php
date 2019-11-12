@@ -131,16 +131,6 @@
                         <span class="icon-grafico"></span>
                        </a>
 
-                       <!-- Opcion de descargar notas de los estudiantes-->
-
-                       <a class="btn btn-option btn-sm mb-1" title="Descargar notas Excel" href="{{ route('notasExcel',$evaluacion->id) }}">
-                        <span class="icon-importExcel"></span>
-                       </a>
-
-                       <a class="btn btn-option btn-sm mb-1" title="Descargar notas PDF" href="{{ route('notasPdf',$evaluacion->id) }}">
-                        <span class="icon-pdf"></span>
-                       </a>
-
                        @if(count($evaluacion->turnos) > 0)
                        <a class="btn btn-option btn-sm mb-1" title="Estudiantes en evaluación" 
                         href="{{ URL::signedRoute('estudiantes_en_evaluacion', ['evaluacion_id' => $evaluacion->id]) }}">

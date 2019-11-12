@@ -15,7 +15,21 @@
 @section("ol_breadcrumb")
     <li class="breadcrumb-item"><a href="{{ route('materias') }}">Materia</a></li>
     <li class="breadcrumb-item">Evaluacion</li>
-    <li class="breadcrumb-item">Estudiantes</li>
+    <li class="breadcrumb-item">Estudiantes</li> 
+    @if($evaluacion_finalizada)
+    <div class="col-7 text-right ml-6">
+      <div class="btn-group" role="group" aria-label="Basic example">
+      <!-- Opcion de descargar notas de los estudiantes-->
+     <a class="btn btn-option btn-sm mb-1" title="Descargar notas Excel" href="{{ route('notasExcel',$evaluacion_id) }}">
+      <span class="icon-importExcel"></span>
+     </a>
+
+     <a class="btn btn-option btn-sm mb-1" title="Descargar notas PDF" href="{{ route('notasPdf',$evaluacion_id) }}">
+      <span class="icon-pdf"></span>
+     </a>
+     </div>
+    </div>
+    @endif
 @endsection
 @section("main")
 
