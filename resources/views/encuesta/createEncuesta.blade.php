@@ -3,6 +3,18 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
 
+  <style media="screen">
+    #preview{
+      width: 420px;
+      margin: 0 auto;
+    }
+
+    img{
+      max-width: 250px;
+      height: auto;
+    }
+  </style>
+
 @endsection
 
 
@@ -40,14 +52,19 @@
       </div>
     @endif
 
-    @if (session('warning'))
-      <div class="alert alert-warning">
-        {{session('warning')}}
+    @if (session('danger'))
+      <div class="alert alert-danger">
+        <ul>
+          <li>
+            {{session('danger')}}
+          </li>
+        
+        </ul>
       </div>
     @endif
     
     
-      <form action="" method="POST">
+      <form action="" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
           <div class="form-group">
              <label for="title">Título</label>
@@ -64,7 +81,7 @@
                 <div class="form-group">
                   <label for="exampleInputEmail1">Fecha y Hora de inicio:</label>
                     <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                        <input id="datetimepicker1input" type="text" name="fecha_inicio" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="dd/mm/yyyy hh:mm A" value="{{ old('fecha_inicio') }}" />
+                        <input id="datetimepicker1input" type="text" name="fecha_inicio" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="dd/mm/yyyy hh:mm A" value="{{ old('fecha_inicio') }}"/>
                         <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
@@ -101,10 +118,18 @@
             </div>
           -->
           <div class="form-group">
+             <input name="img_encuesta" type="file" accept="image/*" id="img_encuesta" onchange="validarFile(this);">
+          </div>
+         
+
+          <div class="form-group">
              <button class="btn btn-primary mb-3">Crear</button>
              <a href="{{ URL::signedRoute('listado_encuesta')}}"
               class="btn btn-secondary mb-3"> Cancelar</a>
           </div>
+
+           <hr>
+          <div id="preview"></div>
          
       </form>
   </div>
@@ -122,6 +147,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>  
     <script type="text/javascript" src="{{ asset('js/encuesta/fecha.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/encuesta/image.js') }}"></script>
 @endsection
 
 

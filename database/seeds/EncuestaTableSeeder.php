@@ -11,6 +11,7 @@ class EncuestaTableSeeder extends Seeder
      */
     public function run()
     {
+        /*
         Encuesta::create([
         	'id_docente'=>1,
         	'titulo_encuesta'=>'Incripcion de Discusion',
@@ -35,5 +36,6 @@ class EncuestaTableSeeder extends Seeder
         	'fecha_final_encuesta'=>'2019-12-28 22:52:27',
             'visible'=>0
         ]);
+        */
     }
 }

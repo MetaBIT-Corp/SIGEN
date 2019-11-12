@@ -22,15 +22,15 @@ class MateriaController extends Controller
     {
         $id = auth()->user()->id;
         $mat_con_eva = new Materia();
-        //dd($mat_con_eva->hayEvaluaciones(1));
         
         switch (auth()->user()->role) {
             case 0:
                 $materias = array();
 
                 /*Se recupera los ciclos ordenados de mayor a menor con respecto al id, asumiendo que el ultimo registro en la tabla ciclo es el ciclo que se encuentra activo*/
-                $ciclos = DB::table('ciclo')->orderBy('id_ciclo', 'desc')->get();
+                $ciclos = DB::table('ciclo')->orderBy('id_ciclo', 'desc')->take(5)->get();
 
+                dd($ciclos);
                 foreach ($ciclos as $ciclo) {
                     /*Se crea un array asociativo donde se guardaran las materias por ciclo Ejemplo materias[1][] esto significa que del ciclo con id 1 obtienen todas las materias*/
                     $materias[$ciclo->id_ciclo] = DB::table('cat_mat_materia')
@@ -50,7 +50,7 @@ class MateriaController extends Controller
             case 1:
                 $materias = array();
                 /*Se recupera los ciclos ordenados de mayor a menor con respecto al id, asumiendo que el ultimo registro en la tabla ciclo es el ciclo que se encuentra activo*/
-                $ciclos = DB::table('ciclo')->orderBy('id_ciclo', 'desc')->get();
+                $ciclos = DB::table('ciclo')->orderBy('id_ciclo', 'desc')->take(5)->get();
                 foreach ($ciclos as $ciclo) {
                     $materias[$ciclo->id_ciclo] = DB::table('cat_mat_materia')
                         ->join('materia_ciclo', 'cat_mat_materia.id_cat_mat', '=', 'materia_ciclo.id_cat_mat')
@@ -64,7 +64,8 @@ class MateriaController extends Controller
                         })
                         ->join('ciclo', 'ciclo.id_ciclo', '=', 'materia_ciclo.id_ciclo')
                         ->where('ciclo.id_ciclo', '=', $ciclo->id_ciclo)
-                        ->select('cat_mat_materia.*', 'materia_ciclo.*','carga_academica.id_carg_aca')->get();
+                        ->select('cat_mat_materia.*', 'materia_ciclo.*','carga_academica.id_carg_aca')
+                        ->get();                        
                 }
                 return view("materia.listadoMateria", compact("materias", "ciclos", "mat_con_eva"));
                 break;

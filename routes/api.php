@@ -25,6 +25,7 @@ Route::get('/evaluacion/turno/{turno_id}/obtener/{estudiante_id}','ApiController
 Route::get('/encuesta/{encuesta_id}/{mac}','ApiController@getEncuesta');
 Route::get('/evaluaciones_m/turnos_m/{id_carga}','ApiController@evaluacionTurnosDisponibles');
 Route::get('/user/acceso/{email}/{password}','ApiController@accesoUserMovil');
+Route::get('/evaluacion/{evaluacion_id}/datos-estadisticos', 'EvaluacionController@getDatosEstadisticos');
 
 //Clave
 Route::get('/area/{id}/preguntas', 'ClaveController@preguntasPorArea');

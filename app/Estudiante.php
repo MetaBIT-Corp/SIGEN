@@ -10,6 +10,10 @@ class Estudiante extends Model
     Protected $table="estudiante";
     
     protected $fillable = [
-
+    	'user_id',
     ];
+
+    public function usuario(){
+    	return $this->belongsTo('App\User');
+    }
 }

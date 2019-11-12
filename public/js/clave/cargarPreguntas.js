@@ -3,7 +3,9 @@ $(function(){
   $('[data-preguntas-emp]').on('click', listarPregntasEmparejamiento);
   $('[data-id-clave-area]').on('click', cargarPreguntas);
   $('[data-id-clave-area-emp]').on('click', cargarPreguntasEmparejamiento);
+  $('#todas').on('click', seleccionarTodas);
 });
+
 function listarPregntas(){
   var id_clave_area = $(this).data('preguntas');
 
@@ -59,6 +61,7 @@ function listarPregntasEmparejamiento(){
 function cargarPreguntas(){
   var id_clave_area = $(this).data('id-clave-area');
 
+  $("#todas").prop("checked", false); //Quitar check de 'Seleccionar Todas'
   $('#id_clave_area_add').attr("value", id_clave_area);
   $('#id_clave_area_add_emp').removeAttr("value");
 
@@ -82,14 +85,14 @@ function cargarPreguntas(){
       if(checked){
         html_modal += i+1+'. '+
        '<label>'+
-        '<input type="checkbox" checked="true" name="preguntas[]" '+
+        '<input type="checkbox" class="cb-seleccion" checked="true" name="preguntas[]" '+
           'value="'+preguntas[i].id+'"> '+
          preguntas[i].pregunta+
        '</label>';
       }else{
         html_modal += i+1+'. '+
        '<label>'+
-        '<input type="checkbox" name="preguntas[]" '+
+        '<input type="checkbox" class="cb-seleccion" name="preguntas[]" '+
           'value="'+preguntas[i].id+'"> '+
          preguntas[i].pregunta+
        '</label>';
@@ -173,4 +176,21 @@ function cargarPreguntasEmparejamiento(){
 
   //Mostrar el modal
   $('#asignarPreguntasClaveArea').modal('show');
+}
+
+function seleccionarTodas(){
+  var seleccion = $('.cb-seleccion');
+
+  if($(this).prop('checked')){
+    seleccion.prop('checked', true);
+  }else{
+    seleccion.prop('checked', false);
+  }
+
+  /*if(this.checked){
+    seleccion.attr('checked', 'true');
+  }else{
+    seleccion.removeAttr('checked');
+  }*/
+
 }

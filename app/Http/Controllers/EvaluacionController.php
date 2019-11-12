@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection;
 use DB;
+use Mail;
+use App\Exports\NotasExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EvaluacionController extends Controller
 {
@@ -32,19 +35,34 @@ class EvaluacionController extends Controller
         $this->middleware('auth');
     }
     
-    //muestra el detalle de la evaluacion
+    /**
+     * Función que muestra el detalle de la evaluacion
+     * @param 
+     * @author Kike Menjivar
+     */
     public function show($id){
     	$evaluacion = Evaluacion::findOrFail($id);
     	return view('evaluacion.detalleEvaluacion')->with(compact('evaluacion'));
 
     }
 
-    //crear Evaluacion
+    /**
+     * Función que despliega el formulario de crear evaluacion
+     * recibe como parametro el id de la carga academica del docente
+     * @param 
+     * @author Edwin palacios
+     */
     public function getCreate($id){
     	return view('evaluacion.createEvaluacion')->with(compact('id'));
 
     }
 
+    /**
+     * Función que recibe el request del formulario de crear evaluacion
+     * recibe como parametro el id de la carga academica del docente
+     * @param 
+     * @author Edwin palacios
+     */
     public function postCreate($id,Request $request){
         //dd($request->all());
         $rules =[
@@ -87,14 +105,24 @@ class EvaluacionController extends Controller
 
     }
 
-    //en update se recibe como parametro el id de la evaluación a editar
+    /**
+     * Función que despliega el formulario de crear evaluacion
+     * recibe como parametro el id de la evaluación a editar
+     * @param 
+     * @author Edwin palacios
+     */
     public function getUpdate($id_eva){
         $evaluacion = Evaluacion::find($id_eva);
         return view('evaluacion.updateEvaluacion')->with(compact('evaluacion'));
 
     }
 
-    //en update se recibe como parametro el id de la evaluación a editar
+    /**
+     * Función que recibe el request del formulario de editar evaluacion
+     * recibe como parametro el id de la carga academica del docente
+     * @param 
+     * @author Edwin palacios
+     */
     public function postUpdate($id_eva,Request $request){
         //dd($request->all());
         $rules =[
@@ -137,12 +165,15 @@ class EvaluacionController extends Controller
     }
 
 
-    /*listado de evaluaciones por docente
-    el id que recibe es la carga academica si es docente (role=1)
-    el id que recibe es materia_ciclo si es admin (role=0)*/
 
+    /**
+     * listado de evaluaciones por docente
+     * @param el id que recibe es la carga academica si es docente (role=1)
+     *        el id que recibe es materia_ciclo si es admin (role=0)
+     * @author Edwin palacios
+     */
     public function listado($id){
-        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('d/m/Y h:i A');
         $id_carga = $id;
         if(auth()->user()->IsAdmin){
             $cargas=  CargaAcademica::where('id_mat_ci',$id)->get();
@@ -172,6 +203,8 @@ class EvaluacionController extends Controller
                         $turnos_activos = false;
                         if($evaluacion->turnos){
                             foreach ($evaluacion->turnos as $turno) {
+                                $turno->fecha_inicio_turno = $this->convertirFecha($turno->fecha_inicio_turno);
+                                $turno->fecha_final_turno = $this->convertirFecha($turno->fecha_final_turno);
                                 if($turno->visibilidad==1 &&
                                     $turno->fecha_final_turno > $fecha_hora_actual){
                                     $turnos_activos = true;
@@ -186,13 +219,17 @@ class EvaluacionController extends Controller
                 
             }
         }
+        
     	return view('evaluacion.listaEvaluacion')->with(compact('evaluaciones','id_carga','fecha_hora_actual'));
 
     }
 
-    /*listado de evaluaciones por docente
-    el id que recibe es la carga academica si es docente (role=1)
-    el id que recibe es materia_ciclo si es admin (role=0)*/
+    /**
+     * listado de evaluaciones deshabilitadas por docente
+     * @param el id que recibe es la carga academica si es docente (role=1)
+     *        el id que recibe es materia_ciclo si es admin (role=0)
+     * @author Edwin palacios
+     */
 
     public function reciclaje($id){
         $id_carga = $id;
@@ -201,7 +238,12 @@ class EvaluacionController extends Controller
 
     }
 
-    //Deshabilita evaluaciones, con excepción de aquellas que cuentan con turnos que están en periodo de evaluacion
+    /**
+     * Deshabilita evaluaciones, con excepción de aquellas que cuentan con turnos que están en periodo de evaluacion
+     * @param 
+     * @author Edwin palacios
+     */
+    
     public function deshabilitarEvaluacion(Request $request){
         //dd($request->all());
         $id_evaluacion = $request->input('id_evaluacion');
@@ -232,7 +274,11 @@ class EvaluacionController extends Controller
         return back()->with($notification, $mensaje);
     }
 
-    //habilita evaluaciones
+    /**
+     * Función que permite habilitar evaluaciones
+     * @param 
+     * @author Edwin palacios
+     */
     public function habilitar(Request $request){
         //dd($request->all());
         $id_evaluacion = $request->input('id_evaluacion');
@@ -250,7 +296,12 @@ class EvaluacionController extends Controller
         return back()->with($notification, $mensaje);
     }
 
-    //recibimos el id de los turnos que se desean publicar
+    /**
+     * Función que permite publicar evaluaciones,recibimos el id de los turnos que se desean publicar
+     * @param 
+     * @author Edwin palacios
+     */
+
     public function publicar( Request $request){
         //dd($request->all());
         $turnos = $request->input('turnosnopublicos');
@@ -272,14 +323,6 @@ class EvaluacionController extends Controller
                             $sumatoria_de_pesos = 0;
                             foreach ($areas_de_clave as $area_de_clave) {
                                 $sumatoria_de_pesos += $area_de_clave->peso;
-                                //verificamos si la clave_area es manual. es decir que no sean aleatorias
-                                if(!($area_de_clave->aleatorio)){
-                                    $preguntas_de_clave_area_pregunta = $area_de_clave->claves_areas_preguntas;
-                                    if($preguntas_de_clave_area_pregunta->count() == 0){
-                                        $message .= "Info: El turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno . " posee area(s) que no han sido asignadas preguntas, por favor verificar.";
-                                        return back()->with($notification,$message);
-                                    }
-                                }   
                             }
                             if($sumatoria_de_pesos<100){
                                 $message .= "Info: La sumatoria de pesos del turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno . " es de ". $sumatoria_de_pesos . ", menor al 100 requerido<br><br>";
@@ -291,8 +334,15 @@ class EvaluacionController extends Controller
                                 /*CREACION DE CLAVES
                                 *
                                 */
+                                $validacion = $this->validarBancoPreguntas($areas_de_clave);
 
-                                $claves = $this->generarClave($areas_de_clave,$turno);
+                                if($validacion["todo_correcto"]){
+                                    $claves = $this->generarClave($areas_de_clave,$turno);
+                                }else{
+                                    $message .= $validacion["message"] . " turno => <strong> Inicio: </strong>" . $turno_publico->fecha_inicio_turno . " <strong> Final: </strong> " . $turno_publico->fecha_final_turno;
+                                    return back()->with($notification,$message);
+                                }
+                                
                                 
                                 /*
                                 *
@@ -304,6 +354,7 @@ class EvaluacionController extends Controller
                                 $turno_publico->fecha_inicio_turno= $this->restablecerFecha($turno_publico->fecha_inicio_turno);
                                 $turno_publico->fecha_final_turno=  $this->restablecerFecha($turno_publico->fecha_final_turno);
                                 $turno_publico->save();
+                                $this->enviarCorreo($turno_publico);
                             }
                             
 
@@ -324,59 +375,7 @@ class EvaluacionController extends Controller
         return back()->with($notification,$message); 
     }
 
-    /**
-     * Funcion para validar el acceso a los intentos de evaluaciones.
-     * @param 
-     * @author Edwin Palacios
-     */
-    public function acceso(Request $request){
-        //declaracion de variables
-        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
-        $id_turno = $request->input('id_turno_acceso');
-        $contrasenia = $request->input('contraseña');
-        if($contrasenia){
-            $estudiante = Estudiante::where('user_id', auth()->user()->id)->first();
-            $turno_a_acceder =  Turno::find($id_turno);
-
-            //validacion de fecha
-            if(!($fecha_hora_actual >= $turno_a_acceder->fecha_inicio_turno && $turno_a_acceder->fecha_final_turno> $fecha_hora_actual )){
-                $notification = "error";
-                $message = "Error: La evaluacion no está disponible. " . $fecha_hora_actual;
-                return back()->with($notification,$message);
-            } 
-            
-            $evaluacion = $turno_a_acceder->evaluacion;
-            if($turno_a_acceder->CantIntentos <= 0){
-                $notification = "error";
-                $message = "Error: Ya ha realizado todos los intentos";
-                return back()->with($notification,$message);
-            }else{
-                //Se valida si la contraseña es valida
-                //devuelve false si son correctas
-                if(!strcmp($contrasenia, $turno_a_acceder->contraseña)){
-                    /*
-                    return redirect()->action(
-                        'IntentoController@iniciarEvaluacion', 
-                        ['id_intento' => $turno_a_acceder->id]
-                    );*/
-                    return redirect('intento/'.$turno_a_acceder->id.'?page=1');
-                }else{
-                    $notification = "error";
-                    $message = "Error: La contraseña no es valida";
-                    return back()->with($notification,$message);
-                }
-            }
-        }else{
-            $notification = "error";
-            $message = "Error: No ha ingresado la contraseña";
-            return back()->with($notification,$message);
-        }
-    }
-
-
-    
-
-    /**
+     /**
      * Funcion para retornar los estudiantes de una materia.
      * @param id_turno
      * @author Edwin Palacios
@@ -425,87 +424,52 @@ class EvaluacionController extends Controller
         $estudiantes = $this->getEstudiantesMateria($id_turno);
         //cantidad de intentos permitidos
         $cant_intentos = $this->getIntentosEvaluacion($id_turno);
-        //recorremos cada estudiante
+        
         foreach ($claves_area as $clave_area) {
-            $this->obtenerPreguntasClaveArea($clave_area,$estudiantes,$cant_intentos);
-        }
-    }
-
-    /**
-     * Funcion para obtener preguntas de un clave area
-     * @param f
-     * @author Edwin Palacios
-     */
-    public function obtenerPreguntasClaveArea($clave_area,$estudiantes,$cant_intentos){
-        $area = $clave_area->area;
-        $tipo_item = $area->tipo_item;
-        //si son manuales es 0
-        if($clave_area->aleatorio==0){
-            //si son de emparejamiento (item id 3) u otra modalidad, el tratamiento es el mismo si es manual
-            if($area->tipo_item_id == 3){
-                $clave_areas_preguntas = $clave_area->claves_areas_preguntas;
-            }else{
-               $clave_areas_preguntas = $clave_area->claves_areas_preguntas->shuffle(); 
-            }
-            foreach ($clave_areas_preguntas as $clave_area_pregunta) {
-                foreach ($estudiantes as $estudiante) {
-                   for( $i=1 ; $i<=$cant_intentos ; $i++){
-                        Clave_Area_Pregunta_Estudiante::create([
-                        'estudiante_id'=>$estudiante->id_est,
-                        'clave_area_id'=>$clave_area->id,
-                        'pregunta_id'=>$clave_area_pregunta->pregunta_id,
-                        'numero_intento'=> $i
-                        ]);
-                    } 
+            $area = $clave_area->area;
+            $tipo_item = $area->tipo_item;
+            //si son manuales es 0
+            if($clave_area->aleatorio==0){
+                //si son de emparejamiento (item id 3) u otra modalidad, el tratamiento es el mismo si es manual
+                if($area->tipo_item_id == 3){
+                    $clave_areas_preguntas = $clave_area->claves_areas_preguntas;
+                }else{
+                   $clave_areas_preguntas = $clave_area->claves_areas_preguntas->shuffle(); 
                 }
-            }
-           
-        //si son aleatorias es 1  
-        }elseif ($clave_area->aleatorio==1) {
-            //si son de emparejamiento (item id 3) u otra modalidad, el tratamiento es el mismo
-            foreach ($estudiantes as $estudiante) {
-                for( $i=1 ; $i<=$cant_intentos ; $i++){
-                    /*
-                    //si no es de emparejamiento se barajean las preguntas dentro del grupo emparejamiento
-                    if($tipo_item->id != 3){
-                            $grupo = $area->grupos_emparejamiento->first(); 
-                            $preguntas_all = $grupo->preguntas;
-                            if($clave_area->numero_preguntas >= $preguntas_all->count()){
-                                 $random_preguntas = $preguntas_all->shuffle();
-                            }else{
-                                $random_preguntas = $preguntas_all->random($clave_area->numero_preguntas);
-                            }
-                            
-                            foreach ($random_preguntas as $pregunta) {
-                                    Clave_Area_Pregunta_Estudiante::create([
-                                    'estudiante_id'=>$estudiante->id_est,
-                                    'clave_area_id'=>$clave_area->id,
-                                    'pregunta_id'=>$pregunta->id,
-                                    'numero_intento'=> $i
-                                    ]);
-                            }
-
+                foreach ($clave_areas_preguntas as $clave_area_pregunta) {
+                    foreach ($estudiantes as $estudiante) {
+                       for( $i=1 ; $i<=$cant_intentos ; $i++){
+                            Clave_Area_Pregunta_Estudiante::create([
+                            'estudiante_id'=>$estudiante->id_est,
+                            'clave_area_id'=>$clave_area->id,
+                            'pregunta_id'=>$clave_area_pregunta->pregunta_id,
+                            'numero_intento'=> $i
+                            ]);
+                        } 
                     }
-                    //si es de emparejamiento se barajean los grupos de emparejamiento
-                    else{*/
+                }
+               
+            //si son aleatorias (si es 1)  
+            }elseif ($clave_area->aleatorio==1) {
+                //si son de emparejamiento (item id 3) u otra modalidad, el tratamiento es el mismo
+                foreach ($estudiantes as $estudiante) {
+                    for( $i=1 ; $i<=$cant_intentos ; $i++){
                         $grupos_emparejamientos = $area->grupos_emparejamiento;
                         if($area->tipo_item_id == 3){
-
+                            //si son de emparejamiento lo que se hace es obtener las preguntas aleatoriamente pero respetando el 
+                            //orden de id, por tal motivo cuando el numero solitado es igual, simplemente se asigna.
                             if($clave_area->numero_preguntas >= $grupos_emparejamientos->count()){
-                            $random_grupos_emparejamientos = $grupos_emparejamientos;
+                                $random_grupos_emparejamientos = $grupos_emparejamientos;
                             }else{
                                 $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
                                 $random_grupos_emparejamientos = $random_grupos_emparejamientos->sortBy('id');
                             }
-
                         }else{
-
                             if($clave_area->numero_preguntas >= $grupos_emparejamientos->count()){
-                            $random_grupos_emparejamientos = $grupos_emparejamientos->shuffle();
+                                $random_grupos_emparejamientos = $grupos_emparejamientos->shuffle();
                             }else{
                                 $random_grupos_emparejamientos = $grupos_emparejamientos->random($clave_area->numero_preguntas);
                             }
-
                         }
                         
                         foreach ( $random_grupos_emparejamientos as $grupo) {
@@ -517,16 +481,173 @@ class EvaluacionController extends Controller
                                     'pregunta_id'=>$pregunta->id,
                                     'numero_intento'=> $i
                                     ]);
-                                 
-                            }
-                            
+                            } 
                         }
-                    //}
-                    
+                    }
                 }
             }
-         
         }
+    }
+
+    /**
+     * Funcion para validar que el banco de preguntas esté bien realizado, es decir, 
+     * que cada grupo tenga su pregunta y cada pregunta su opcion, etc.
+     * @param 
+     * @author Edwin Palacios
+     */
+    public function validarBancoPreguntas($claves_areas){
+        $todo_correcto = true;
+        $message = "";
+        //recorremos todas las clave_area
+        foreach ($claves_areas as $clave_area) {
+            $area = $clave_area->area;
+            $tipo_item = $area->tipo_item;
+
+            //si el area es manual
+            if($clave_area->aleatorio==0){
+                //se verifica que la clave area tenga clave area pregunta
+                if($clave_area->claves_areas_preguntas->count()>0){
+                    $claves_areas_preguntas = $clave_area->claves_areas_preguntas;
+                    //se verifica que la clave area pregunta tenga pregunta
+                    foreach ($claves_areas_preguntas as $clave_area_pregunta) {
+                        if($clave_area_pregunta->pregunta->count()>0){
+                            $pregunta = $clave_area_pregunta->pregunta;
+                            //se verifica que la pregunta tengan opcion
+                                if($pregunta->opciones->count()==0){
+                                    $todo_correcto = false;                               
+                                    $message = "Error: Hay preguntas sin opciones";
+                                } 
+                        }else{
+                            $todo_correcto = false;                         
+                            $message = "Error: No existen preguntas asignadas";
+                        }
+                    }
+                }else{
+                    $todo_correcto = false;
+                    $message = "Error: Para la publicación debe agregar preguntas al área";
+                }
+            }
+            //si la clave area es aleatoria
+            else{
+                //verificamos que el area tenga grupo de emparejamiento
+                if($area->grupos_emparejamiento->count() >0){
+                    foreach ($area->grupos_emparejamiento as $grupo_emparejamiento) {
+                        //verificamos que grupo de emparejamiento tenga preguntas
+                        if($grupo_emparejamiento->preguntas->count() >0){
+                            foreach ($grupo_emparejamiento->preguntas as $pregunta) {
+                                //verificamos que las preguntas tengan opciones
+                                if($pregunta->opciones->count()==0){
+                                    $todo_correcto = false;
+                                    $message = "Error: Para la publicación todas las preguntas deben contener opciones";
+                                }
+                            }
+                        }else{
+                            $todo_correcto = false;
+                            $message = "Error: Para la publicación todos los grupos de emparejamiento debe contener preguntas";
+                        }
+                    }
+                }else{
+                    $todo_correcto = false;
+                    $message = "Error: Para la publicación las áreas deben tener grupo de emparejamiento";
+                }
+            } 
+        }
+
+        $validacion = ['todo_correcto'=>$todo_correcto, 'message' => $message];
+        return $validacion;
+    }
+
+    /**
+     * Funcion para validar el acceso a los intentos de evaluaciones.
+     * @param 
+     * @author Edwin Palacios
+     */
+    public function acceso(Request $request){
+        //declaracion de variables
+        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $id_turno = $request->input('id_turno_acceso');
+        $contrasenia = $request->input('contraseña');
+        if($contrasenia){
+            $estudiante = Estudiante::where('user_id', auth()->user()->id)->first();
+            $turno_a_acceder =  Turno::find($id_turno);
+
+            //validacion de fecha
+            if(!($fecha_hora_actual >= $turno_a_acceder->fecha_inicio_turno && $turno_a_acceder->fecha_final_turno> $fecha_hora_actual )){
+                $notification = "error";
+                $message = "Error: La evaluacion no está disponible. " . $this->convertirFecha($fecha_hora_actual);
+                return back()->with($notification,$message);
+            } 
+            
+            $evaluacion = $turno_a_acceder->evaluacion;
+            if($turno_a_acceder->CantIntentos <= 0){
+                $notification = "error";
+                $message = "Error: Ya ha realizado todos los intentos";
+                return back()->with($notification,$message);
+            }else{
+                //Se valida si la contraseña es valida
+                //devuelve false si son correctas
+                if(!strcmp($contrasenia, $turno_a_acceder->contraseña)){
+                    /*
+                    return redirect()->action(
+                        'IntentoController@iniciarEvaluacion', 
+                        ['id_intento' => $turno_a_acceder->id]
+                    );*/
+                    return redirect('intento/'.$turno_a_acceder->id.'?page=1');
+                }else{
+                    $notification = "error";
+                    $message = "Error: La contraseña no es valida";
+                    return back()->with($notification,$message);
+                }
+            }
+        }else{
+            $notification = "error";
+            $message = "Error: No ha ingresado la contraseña";
+            return back()->with($notification,$message);
+        }
+    }
+
+
+    /**
+     * Funcion para enviar correo de notificación de una nueva evaluación a todos los 
+     * estudiantes inscritos en una evaluación
+     * @param $turno: el turno a publicar
+     * @author Edwin Palacios
+     */
+    public function enviarCorreo($turno){
+        $estudiantes = $this->getEstudiantesMateria($turno->id);
+        if($estudiantes->count()>0){
+            $evaluacion = $turno->evaluacion;
+            $periodo = "Periodo de disponibilidad: Desde " . 
+                        $this->convertirFecha($turno->fecha_inicio_turno) . 
+                        " Hasta: " . 
+                        $this->convertirFecha($turno->fecha_final_turno);
+            $data = [
+                "periodo" => $periodo,
+                "descripcion" => $evaluacion->descripcion_evaluacion,
+                "titulo" => $evaluacion->nombre_evaluacion
+            ];
+
+            foreach ($estudiantes as $estudiante) {
+                $usuario = User::find($estudiante->user_id);
+                $this->emailSend($data,$usuario->email,"SIGEN: Nueva Evaluacíón");
+            }
+        }
+    }
+
+    /**
+     * Funcion para enviar correo al publicar una evaluacion
+     * @param $data: son los parametros para emplear la plantilla, se necesita: nombre de evaluacion, fechas de turno y materia
+     * @param $correo: correo al que se enviará la notificación
+     * @param $asunto: asunto del correo
+     * @author Edwin Palacios
+     */
+    public function emailSend($data,$correo,$asunto){
+        Mail::send('evaluacion.emailPublicar', $data , function($msj) use($asunto,$correo){
+            $msj->from("sigen.fia.eisi@gmail.com","Sigen");
+            $msj->subject($asunto);
+            $msj->to($correo);
+        });
+        return redirect()->back();
     }
 
     /**
@@ -535,24 +656,149 @@ class EvaluacionController extends Controller
      * @author Edwin Palacios
      */
     public function convertirFecha($fecha){
-        $new_fecha = DateTime::createFromFormat('Y-m-d H:i:s',$fecha)->format('l jS \\of F Y h:i A');
+        $new_fecha = DateTime::createFromFormat('Y-m-d H:i:s',$fecha)->format('d/m/Y h:i A');
         return $new_fecha;
     }
 
     /**
-     * Funcion para convertir la fecha de formato letra a 2019-09-23 23:24:12.
+     * Funcion para convertir la fecha de formato letra a formato como guarda en la base de datos 2019-09-23 23:24:12.
      * @param fecha
      * @author Edwin Palacios
      */
     public function restablecerFecha($fecha){
-        $new_fecha = DateTime::createFromFormat('l jS \\of F Y h:i A',$fecha)->format('Y-m-d H:i:s');
+        $new_fecha = DateTime::createFromFormat('d/m/Y h:i A',$fecha)->format('Y-m-d H:i:s');
         return $new_fecha;
     }
 
-    
-    public function random(){
-        $turnos = Turno::All();
-        $turno_random = $turnos->random(4);
-        return $turno_random->first();
+    public function getPorcentajeAprovadosReprobados($evaluacion_id){
+        $evaluacion = Evaluacion::findOrFail($evaluacion_id);
+
+        $intentos = DB::table('turno as t')
+                        ->where('t.evaluacion_id', $evaluacion_id)
+                        ->join('clave as c', 'c.turno_id', '=', 't.id')
+                        ->join('intento as i', 'i.clave_id', '=', 'c.id')
+                        ->select('i.id', 'i.nota_intento')
+                        ->get();
+
+        $aprobados_query = DB::table('turno as t')
+                            ->where('t.evaluacion_id', $evaluacion_id)
+                            ->join('clave as c', 'c.turno_id', '=', 't.id')
+                            ->join('intento as i', 'i.clave_id', '=', 'c.id')
+                            ->where('i.nota_intento', '>=', 6 )
+                            ->select('i.id', 'i.nota_intento')
+                            ->get();
+
+         $total_estudiantes = DB::table('evaluacion as ev')
+                                ->where('ev.id', $evaluacion_id)
+                                ->join('carga_academica as ca', 'ev.id_carga', '=', 'ca.id_carg_aca')
+                                ->join('detalle_insc_est as die', 'ca.id_carg_aca', '=', 'die.id_carg_aca')
+                                ->join('estudiante as es', 'die.id_est', '=', 'es.id_est')
+                                ->get();
+
+        $total_evaluados = count($intentos);
+        $aprobados = count($aprobados_query);
+        $reprobados = $total_evaluados - $aprobados;
+        $no_evaluados = count($total_estudiantes) - $total_evaluados;
+        
+        $porcentaje_aprobados = ($aprobados/$total_evaluados)*100;
+        $porcentaje_reprobados = ($reprobados/$total_evaluados)*100;
+        //$porcentaje_no_evaluados = ($no_evaluados/count($total_estudiantes))*100;
+
+        $data = [
+            'porcentaje_aprobados' => $porcentaje_aprobados,
+            //'porcentaje_no_evaluados' => $porcentaje_no_evaluados,
+            'porcentaje_reprobados' => $porcentaje_reprobados
+        ];
+
+        return $data;
     }
+
+    public function getIntervalosNotas($evaluacion_id, $intervalo){
+        $evaluacion = Evaluacion::findOrFail($evaluacion_id);
+        if($intervalo != 1 && $intervalo != 2 && $intervalo != 5){
+            $intervalo = 1;
+        }
+
+        $lim_superior = $intervalo;
+        $lim_inferior = 0;
+        $max_y = 10;
+
+        $cantidad = array();
+        $etiquetas = array();
+
+        array_push($etiquetas, 0);
+
+        for($i=0; $i<10; $i+=$intervalo){
+            $notas = DB::table('turno as t')
+                        ->where('t.evaluacion_id', $evaluacion_id)
+                        ->join('clave as c', 'c.turno_id', '=', 't.id')
+                        ->join('intento as i', 'i.clave_id', '=', 'c.id')
+                        ->whereBetween('i.nota_intento', array($lim_inferior+0.001, $lim_superior) )
+                        ->select('i.id', 'i.nota_intento')
+                        ->get();
+
+            if(count($notas) > 0){
+                array_push($cantidad, count($notas));
+            }else{
+                array_push($cantidad, 0);
+            }
+
+            $lim_inferior = $lim_superior;
+            $lim_superior += $intervalo;
+
+            array_push($etiquetas, (int)$lim_inferior);
+        }
+
+        foreach($cantidad as $c){
+            if($c > $max_y){
+                $max_y = $c;
+            }
+
+        }
+
+        $data = [
+            'cantidad'  => $cantidad,
+            'etiquetas' => $etiquetas,
+            'max'       => 10,
+            'max_x'     => 10-$intervalo,
+            'max_y'     => $max_y
+        ];
+
+        return $data;
+    }
+
+    public function estadisticosEvaluacion($evaluacion_id){
+        $message = '';
+        $notification = '';
+        $evaluacion = Evaluacion::findOrFail($evaluacion_id);
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
+        $turnos = Turno::where('evaluacion_id', $evaluacion_id)->orderBy('fecha_final_turno', 'desc')->first();
+
+        if($turnos->fecha_final_turno > $fecha_hora_actual){
+            $message = "El periodo para resolver la evaluación aún no ha terminado";
+            $notification = 0;
+        }else{
+            $message = $evaluacion->nombre_evaluacion;
+            $notification = 1;
+        }
+
+        return view('evaluacion.estadisticosEvaluacion')->with(compact('evaluacion', 'notification', 'message'));
+
+    }
+
+
+    //Parte para exportar notas en formato Excel
+
+    public function exportarNotasExcel($evaluacion_id) 
+    {
+        return Excel::download(new NotasExport($evaluacion_id), 'notas.xlsx');
+    }
+
+    //Parte para exportar notas en formato Pdf
+    public function exportarNotasPdf($evaluacion_id) 
+    {
+        return Excel::download(new NotasExport($evaluacion_id), 'notas.pdf');
+    }
+
+
 }

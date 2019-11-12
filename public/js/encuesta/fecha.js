@@ -9,6 +9,4 @@ $(document).ready(function() {
         format: 'DD/MM/YYYY h:mm A'
     });
     
-    if($('#datetimepicker1input').val() == "")
-        $('#datetimepicker2input').val("");
  });

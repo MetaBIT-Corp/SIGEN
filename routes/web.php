@@ -20,6 +20,8 @@ Route::get('/', function () {
 });
 Route::get('/home', 'HomeController@index')->name('home');
 
+
+
 //Rutas relacionadas con Clave Area
 Route::get('random/', 'EvaluacionController@random');
 Route::post('turno/claves', 'ClaveController@asignarPreguntas')->name('agregar_clave_area');
@@ -63,7 +65,7 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::get('/evaluacion/{id}/turnos/create', 'TurnoController@create')->name('crear_turno')->middleware('signed');
     Route::get('/evaluacion/{id}/turnos/{turno_id}/edit', 'TurnoController@edit')->name('editar_turno')->middleware('signed');
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController')->except(['index','create','edit']);
-    Route::get('/evaluacion/{id}/{id_turno}','TurnoController@duplicarTurno')->name('duplicar');
+    Route::get('/evaluacion/{id}/turno/{id_turno}','TurnoController@duplicarTurno')->name('duplicar');
 
     //Rutas relacionadas con Area
     Route::get('/materia/{id}/areas/create','AreaController@create')->name('crear_area')->middleware('signed');
@@ -85,6 +87,21 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::put('/area/{id}/pregunta/{pregunta}','PreguntaController@update');
     Route::delete('/area/{id}/pregunta/{pregunta}','PreguntaController@destroy');
 
+    //Descarga de plantilla excel
+    Route::get('download/excel/{id}/{id_area}','PreguntaController@downloadExcel')->name('dExcel')->middleware('signed');
+
+    Route::post('upload-excel/{id_area}','PreguntaController@uploadExcel')->name('uExcel');
+
+    //Descargar notas en formato Excel
+    Route::get('notas/exportar/{evaluacion_id}/excel', 'EvaluacionController@exportarNotasExcel')->name('notasExcel');
+    //Descargar notas en formato PDF
+    Route::get('notas/exportar/{evaluacion_id}/pdf', 'EvaluacionController@exportarNotasPdf')->name('notasPdf');
+
+    //Descargar resultados de encuesta en formato Excel
+    Route::get('resultados/exportar/{encuesta_id}/excel', 'EncuestaController@exportarResultadosExcel')->name('resultadosExcel');
+    //Descargar resultados de encuesta en formato PDF
+    Route::get('resultados/exportar/{encuesta_id}/pdf', 'EncuestaController@exportarResultadosPdf')->name('resultadosPdf');
+
     //Rutas relacionadas con Grupo Emparejamiento CRUD
     Route::post('grupo/{grupo_id}/edit','GrupoEmparejamientoController@updateGE')->name('editar-grupo');
     Route::post('area/{id}/grupo-store','GrupoEmparejamientoController@storeGE')->name('crear-grupo-emparejamiento');
@@ -101,15 +118,29 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::post('/habilitar-evaluacion','EvaluacionController@habilitar')->name('habilitar_evaluacion');
     Route::get('materia/habilitar-evaluacion/{id}','EvaluacionController@reciclaje')->name('reciclaje_evaluacion')->middleware('signed');
     Route::post('evaluacion/publicar-turno','EvaluacionController@publicar')->name('publicar_evaluacion');
+    
+    Route::get('evaluacion/{evaluacion_id}/estudiantes', 'EstudianteController@estudiantesEnEvaluacion')
+            ->name('estudiantes_en_evaluacion')
+            ->middleware('signed');
+
+    Route::get('evaluacion/{evaluacion_id}/estadisticos', 'EvaluacionController@estadisticosEvaluacion')
+            ->name('estadisticas_evaluacion')
+            ->middleware('signed');
+
+    Route::post('/deshabilitar-revision','IntentoController@deshabilitarRevision')->name('deshabilitar_revision');
+    Route::post('/habilitar-revision','IntentoController@habilitarRevision')->name('habilitar_revision');
 
 
     //URL's para  encuesta
-    Route::get('/encuesta','EncuestaController@getCreate')->name('gc_encuesta')->middleware('signed');;
+    Route::get('/encuesta','EncuestaController@getCreate')->name('gc_encuesta')->middleware('signed');
     Route::post('/encuesta','EncuestaController@postCreate')->name('pc_encuesta');
     Route::get('/encuesta/{id}/editar','EncuestaController@getUpdate')->name('gu_encuesta')->middleware('signed');;
     Route::post('/encuesta/{id}/editar','EncuestaController@postUpdate')->name('pu_encuesta');    
     Route::post('/eliminar-encuesta','EncuestaController@eliminarEncuesta')->name('eliminar_encuesta'); 
-    Route::post('/encuesta/publicar-encuesta','EncuestaController@publicar')->name('publicar_encuesta'); 
+    Route::post('/encuesta/publicar-encuesta','EncuestaController@publicar')->name('publicar_encuesta');
+
+    //Encuestas estadísticas
+    Route::get('estadisticas/{id}', 'EncuestaController@estadisticas')->name('estadisticas_enc')->middleware('signed'); 
 
     /*Rutas para Gestión de Opciones (Sin Grupo Emparejamiento)*/
     Route::get('pregunta/{pregunta_id}/opcion/','OpcionController@index')->name('index-opcion');
@@ -141,3 +172,6 @@ Route::group(['middleware' => 'admin_teacher'], function(){
     Route::get('/evaluacion/{id}/turnos', 'TurnoController@index')->name('listado_turnos')->middleware('signed');
     Route::get('/listado-encuesta','EncuestaController@listado')->name('listado_encuesta')->middleware('signed');
 });
+
+Route::get('/evaluacion/{evaluacion_id}/estadisticos/porcentajes', 'EvaluacionController@getPorcentajeAprovadosReprobados');
+Route::get('/evaluacion/{evaluacion_id}/estadisticos/intervalo/{intervalo}', 'EvaluacionController@getIntervalosNotas');

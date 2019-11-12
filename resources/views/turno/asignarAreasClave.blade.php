@@ -171,13 +171,19 @@
           <input type="hidden" name="clave_area" value="" id="id_clave_area_add">
           <input type="hidden" name="modalidad" value="" id="id_clave_area_add_emp">
           <div id="asignar-preguntas">
-
+  
           </div>
       </div>
-      <div class="modal-footer">
+        <div> 
+          <hr>
+          <div class="d-inline float-left mb-3 ml-4">
+            <label><input type="checkbox" id="todas">&nbsp;Seleccionar todas</label>
+          </div>
+          <div class="d-inline float-right mb-3 mr-3">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-primary">Guardar cambios</button>
-      </div>
+          </div>
+        </div>
       </form>
     </div>
   </div>
@@ -226,11 +232,11 @@
           <input type="hidden" value="" id="val_peso_actual" name="peso_total">
           <input type="hidden" value="" id="id_ca" name="id_clave_area">
           <div class="form-group">
-            <label for="cantidad_preguntas_id" id="msj_cant_preg">Cantidad de preguntas</label>
+            <label for="cantidad_preguntas_id" id="msj_cant_preg">Cantidad de preguntas*</label>
             <input type="number"  min="1" class="form-control" id="cantidad_preguntas_id" name="numero_preguntas">
           </div>
           <div class="form-group">
-            <label for="peso_ca_id">Peso del área</label>
+            <label for="peso_ca_id">Peso del área*</label>
             <input type="number" min="0" max="100" class="form-control" id="peso_ca_id" name="peso">
           </div>
         </div>

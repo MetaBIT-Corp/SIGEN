@@ -118,9 +118,18 @@
                       @endif
 
                       @endif
-                      <button title="Estadísticas" href="" class="btn btn-sm btn-option mb-1">
+                      <a title="Estadísticas" href="{{ URL::signedRoute('estadisticas_enc', ['id' => $encuesta->id]) }}" class="btn btn-sm btn-option mb-1">
                         <span class="icon-grafico"></span>
-                      </button>
+                      </a>
+
+                      <!-- Opciones de descarga de resultados de Encuesta -->
+                       <a class="btn btn-option btn-sm mb-1" title="Descargar resultados Excel" href="{{ route('resultadosExcel',$encuesta->id) }}">
+                        <span class="icon-importExcel"></span>
+                       </a>
+
+                       <a class="btn btn-option btn-sm mb-1" title="Descargar resultados PDF" href="{{ route('resultadosPdf',$encuesta->id) }}">
+                        <span class="icon-pdf"></span>
+                       </a>
 
                     </td>
                   </tr>

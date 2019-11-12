@@ -1,5 +1,14 @@
 @extends("../layouts.plantilla")
 
+@section("css")
+  <style media="screen">
+    img{
+      max-width: 450px;
+      height: auto;
+    }
+  </style>
+@endsection
+
 @section("body")
 
   @section("ol_breadcrumb")
@@ -52,8 +61,13 @@
                        <br>
                       <small>Autor: {{$encuesta->docente->nombre_docente}} </small>
                       <br><br>
-                      <button type="button" class="btn btn-info mt-1 mb-1" data-acceder-encuesta="{{$encuesta->IdClave}}"
-                        data-descripcion-encuesta="{{$encuesta->descripcion_encuesta}}" data-titulo-encuesta="{{$encuesta->titulo_encuesta}}" data-id-encuesta="{{$encuesta->id}}">Acceder</button>
+                      <button type="button" class="btn btn-info mt-1 mb-1" 
+                        data-acceder-encuesta="{{$encuesta->IdClave}}"
+                        data-descripcion-encuesta="{{$encuesta->descripcion_encuesta}}" 
+                        data-titulo-encuesta="{{$encuesta->titulo_encuesta}}" 
+                        data-id-encuesta="{{$encuesta->id}}"
+                        data-ruta-encuesta="{{$encuesta->ruta}}"
+                        >Acceder</button>
               		  </span>
                     
                   </div>
@@ -89,8 +103,8 @@
       <div class="modal-body" >
         <div class="card card-cascade wider reverse">
             <!-- Card image -->
-            <div class="view view-cascade overlay">
-              <img class="card-img-top" style="" src="https://lh3.googleusercontent.com/p/AF1QipO1Q0Sh_IlRVhVkwlrGgUFQphOcjCsLb4ACa4Yc=s1600-w400" alt="Card image cap">
+            <div class="view view-cascade overlay" align="center">
+              <img id="img_encuesta" class="card-img-top" style="" src="https://lh3.googleusercontent.com/p/AF1QipO1Q0Sh_IlRVhVkwlrGgUFQphOcjCsLb4ACa4Yc=s1600-w400" alt="Card image cap" >
               <a href="#!">
                 <div class="mask rgba-white-slight"></div>
               </a>
@@ -124,8 +138,6 @@
 </div>
   @endsection 
   @section('js')
-  
-  
     <script>
       $('[data-acceder-encuesta]').on('click', function(){
           var indicaciones = "<strong>Indicaciones: </strong>";
@@ -133,8 +145,11 @@
           $('#id_encuesta_acceso').attr('value', $(this).data('id-encuesta'));
           $('#descripcion_acceso').html( indicaciones.concat($(this).data('descripcion-encuesta')));
           $('#titulo_acceso').html( $(this).data('titulo-encuesta'));
-          
           $('#accederEncuesta').modal('show');
+
+          if($(this).data('ruta-encuesta') != ""){
+            $('#img_encuesta').attr('src', "/images/" + $(this).data('ruta-encuesta'));
+          }
       });
     </script>
 

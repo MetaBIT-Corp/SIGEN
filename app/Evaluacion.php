@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Turno;
+use DB;
 
 class Evaluacion extends Model
 {
