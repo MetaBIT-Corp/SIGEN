@@ -135,56 +135,27 @@ class OpcionController extends Controller
                 $indice = $request->indice;
                 $pregunta_id = $request->pregunta_id;
 
-                for ($i=0; $i < $indice ; $i++) {
-
-                    if($request->id_dcn!=""){
-
-                        $new_rules = array(
-                            'contador'=>'required|numeric|gte:2',
-                            'opcion'.$i=>'required');
-
-                        $new_messages = array(
-                            'opcion'.$i.'.required' => 'Texto de Opción no fue ingresado.',
-                            'contador.gte'=>'Cantidad de Opciones ingresadas muy baja. Debe ingresar dos opciones como mínimo.'
-
-                        );
-                    }else{
-
-                        $new_rules = array(
-                            'contador'=>'required|numeric|gte:3',
-                            'opcion'.$i=>'required');
-
-                        $new_messages = array(
-                            'opcion'.$i.'.required' => 'Texto de Opción no fue ingresado.',
-                            'contador.gte'=>'Cantidad de Opciones ingresadas muy baja. Debe ingresar tres opciones como mínimo.'
-
-                        );
-
-                    }
-
-                    $rules=array_merge($rules, $new_rules);
-                    $messages=array_merge($messages,$new_messages);
-
-                }
-
-                $validator = Validator::make($requestData, $rules, $messages);
-
-                if ($validator->fails()) {
-                    return back()->withErrors($validator)->withInput();
-                }
+                $errors = '';
 
                 for ($i=0; $i < $indice ; $i++) {
 
                     $opcion = $request->input('opcion'.$i);
 
-                    if ($request->has('correcta'.$i)) {
-                        $correcta = 1;                    
-                    }else{
-                        $correcta = 0;                    
-                    }
+                    if($opcion != null){
 
-                    $this->store_om($pregunta_id,$opcion,$correcta);
+                        if ($request->has('correcta'.$i)) {
+                            $correcta = 1;                    
+                        }else{
+                            $correcta = 0;                    
+                        }
+
+                        $this->store_om($pregunta_id,$opcion,$correcta);
+                    }else{
+                        $errors = 'Una o más opciones no fueron ingresadas por el usuario.';
+                    }
                 }
+
+                return response()->json(array('errors'=>$errors));
 
             break;
 

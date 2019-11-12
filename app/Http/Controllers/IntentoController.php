@@ -120,7 +120,7 @@ class IntentoController extends Controller
                 $intento->user_id=$id_user;
             }
             $intento->clave_id=$clave_de_intento->id;
-            $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+            $intento->fecha_inicio_intento=Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
             $intento->fecha_final_intento=null;
             $intento->numero_intento=$num_intento;
             $intento->save();
@@ -130,7 +130,7 @@ class IntentoController extends Controller
                 DB::table('respuesta')->where('id_intento',$intento->id)->delete();
                 $num_intento=$intento->numero_intento;
                 $intento->numero_intento=$num_intento+1;
-                $intento->fecha_inicio_intento=Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+                $intento->fecha_inicio_intento=Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
                 $intento->fecha_final_intento=null;
                 $intento->save();
             }
@@ -376,7 +376,7 @@ class IntentoController extends Controller
         $nota = $intento->calcularNota($intento_id);
 
         //Actualizar los datos del intento correspondiente
-        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $intento->nota_intento = $nota;
         $intento->fecha_final_intento = $fecha_hora_actual;
         $intento->save();
@@ -432,7 +432,7 @@ class IntentoController extends Controller
 
             if(Intento::where('user_id',auth()->user()->id)->where('fecha_final_intento', null)->exists()){
                 $intento_encuesta = Intento::where('user_id',auth()->user()->id)->where('fecha_final_intento', null)->first();
-                $intento_encuesta->fecha_final_intento = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+                $intento_encuesta->fecha_final_intento = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
                 $intento_encuesta->save();
                 return redirect('encuestas');
             }

@@ -142,7 +142,7 @@ class EvaluacionController extends Controller
     el id que recibe es materia_ciclo si es admin (role=0)*/
 
     public function listado($id){
-        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $id_carga = $id;
         if(auth()->user()->IsAdmin){
             $cargas=  CargaAcademica::where('id_mat_ci',$id)->get();
@@ -211,7 +211,7 @@ class EvaluacionController extends Controller
             $mensaje = 'La evaluación ha sido deshabilitada exitosamente'; 
             $evaluacion = Evaluacion::find($id_evaluacion); 
             if($evaluacion->turnos){
-                $fecha_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+                $fecha_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
                 foreach ($evaluacion->turnos as $turno) {
                     if($fecha_actual > $turno->fecha_inicio_turno && $fecha_actual < $turno->fecha_final_turno){
                         $notification = 'error';
@@ -331,7 +331,7 @@ class EvaluacionController extends Controller
      */
     public function acceso(Request $request){
         //declaracion de variables
-        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $id_turno = $request->input('id_turno_acceso');
         $contrasenia = $request->input('contraseña');
         if($contrasenia){

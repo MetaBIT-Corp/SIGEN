@@ -46,7 +46,7 @@ class TurnoController extends Controller
         $nombre_evaluacion = $evaluacion->nombre_evaluacion;
 
         //Obtenemos fecha:hora actual
-        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
 
         //A continuación procedemos a verificar si los turnos podran ser editados y/o eliminados
         //Si el turno no ha empezado, se podrá editar y eliminar
@@ -138,7 +138,7 @@ class TurnoController extends Controller
         
         //Obtenemos la fecha actual, para luego hacer una validación que la fecha de inicio sea mayor que la actual
 
-        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $fecha_hora_actual_alert = DateTime::createFromFormat('Y-m-d H:i:s', $fecha_hora_actual)->format('d/m/Y h:i A');
         
         //Validamos que la fecha de inicio sea mayor que la fecha actual    
@@ -204,7 +204,7 @@ class TurnoController extends Controller
 
         //dd(count($claves[0]->clave_areas[0]->claves_areas_preguntas));
 
-        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         
         $turno = Turno::find($turno_id);
         $turno['iniciado'] = false;
@@ -275,7 +275,7 @@ class TurnoController extends Controller
         
         //Obtenemos la fecha actual, para luego hacer una validación que la fecha de inicio sea mayor que la actual
         
-        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $fecha_hora_actual_alert = DateTime::createFromFormat('Y-m-d H:i:s', $fecha_hora_actual)->format('d/m/Y h:i A');
         
         //Si no ha iniciado, significa que se puede editar fecha de inicio, por lo que ese necesario validar que la fecha de inicio sea mayor que la fecha actual

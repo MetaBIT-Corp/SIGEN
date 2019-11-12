@@ -1,12 +1,88 @@
 $(document).ready(function() {
 
-    $('#enviar').attr('disabled',true)
+    var input = document.getElementById("contador");
+    var contador = parseInt(input.value);
+    var btnDel = document.getElementsByClassName("btnDel");
 
-    if($('#contador').value<=3){
-        $('#sugerencia').attr('disabled',false)
+    $('#alerta').hide();
+
+    $('#enviar').attr('disabled',true);
+
+    if(($('#id_dcn').val())!=""){
+
+        if (contador<=2) {
+
+            for (i = 0; i < btnDel.length; i++) {
+                btnDel[i].style.color = "white";
+                btnDel[i].style.pointerEvents = "none";
+                btnDel[i].style.background = "grey";
+            }
+
+        }else{
+
+            for (i = 0; i < btnDel.length; i++) {
+                btnDel[i].style.color = "white";
+            }
+
+        }
+    
     }else{
-        $('#sugerencia').attr('disabled',true)
+        if (contador<=3) {
+
+            for (i = 0; i < btnDel.length; i++) {
+                btnDel[i].style.color = "white";
+                btnDel[i].style.pointerEvents = "none";
+                btnDel[i].style.background = "grey";
+            }
+
+        }else{
+
+            for (i = 0; i < btnDel.length; i++) {
+                btnDel[i].style.color = "white";
+            }
+
+        }
+
     }
+
+    $('#enviar').click(function(e){
+
+        e.preventDefault();
+
+        var form = $(this).parents('form');
+        var url = form.attr('action');
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: form.serialize(),
+            dataType: "json"
+        }).done(function(datos){
+
+            $('#enviar').attr("disabled", true);
+            location.reload(true);
+
+            if((datos.errors)==''){
+
+                $('#alerta').show();
+                var child = document.getElementById("ul-alert").lastElementChild;
+
+                while (child) {
+                    document.getElementById("ul-alert").removeChild(child);
+                    child = document.getElementById("ul-alert").lastElementChild;
+                }
+
+                var li = document.createElement('li');
+                liContent = document.createTextNode(datos.errors);
+                li.appendChild(liContent);
+                document.getElementById("ul-alert").appendChild(li);
+                
+            }
+
+        }).fail(function(xhr, status, e) {
+            console.log(e);
+        });
+    });
 
     $('#editModal').on('show.bs.modal', function(event){
 
@@ -39,54 +115,6 @@ $(document).ready(function() {
         var modal = $(this)
         console.log(id)
         modal.find('.modal-footer #id').val(id)
-    });
-
-    $(document).ready(function() {
-
-        var input = document.getElementById("contador");
-        var contador = parseInt(input.value);
-
-        var btnDel = document.getElementsByClassName("btnDel");
-
-        if(($('#id_dcn').val())!=""){
-
-            if (contador<=2) {
-
-                for (i = 0; i < btnDel.length; i++) {
-                    btnDel[i].style.color = "white";
-                    btnDel[i].style.pointerEvents = "none";
-                    btnDel[i].style.background = "grey";
-                }
-
-            }else{
-
-                document.getElementById("infoP").style.display="none";
-
-                for (i = 0; i < btnDel.length; i++) {
-                    btnDel[i].style.color = "white";
-                }
-
-            }
-        }else{
-            if (contador<=3) {
-
-                for (i = 0; i < btnDel.length; i++) {
-                    btnDel[i].style.color = "white";
-                    btnDel[i].style.pointerEvents = "none";
-                    btnDel[i].style.background = "grey";
-                }
-
-            }else{
-
-                document.getElementById("infoP").style.display="none";
-
-                for (i = 0; i < btnDel.length; i++) {
-                    btnDel[i].style.color = "white";
-                }
-
-            }
-        }
-        
     });
 
     $('#btnAgregarFila').on('click',function(event){
@@ -139,8 +167,8 @@ $(document).ready(function() {
             }
 
         }
-
     });
-    
+
+
 
 });

@@ -39,7 +39,7 @@ class EncuestaController extends Controller
             'description' => ['required'],
             'fecha_inicio' => ['required', 
                 function ($attribute, $value, $fail) {
-                    $fecha_actual = Carbon::now('America/Denver')->format('d/m/Y g:i A');
+                    $fecha_actual = Carbon::now('America/El_Salvador')->format('d/m/Y g:i A');
                     if (($value < $fecha_actual)) {
                         $fail($fecha_actual.'La fecha inicial debe ser mayor a la actual.' );
                     }
@@ -72,7 +72,7 @@ class EncuestaController extends Controller
         if($encuesta->fecha_inicio_encuesta >= $encuesta->fecha_final_encuesta){
             return back()->with('warning', 'La fecha final debe ser mayor a la inicial');
         }
-        if($encuesta->fecha_inicio_encuesta <= Carbon::now('America/Denver')->format('Y-m-d H:i:s')){
+        if($encuesta->fecha_inicio_encuesta <= Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s')){
             return back()->with('warning', 'La fecha inicial debe ser mayor a la actual');
         }
         $encuesta->descripcion_encuesta=$request->input('description');
@@ -105,7 +105,7 @@ class EncuestaController extends Controller
             'Y-m-d H:i:s',$encuesta->fecha_inicio_encuesta)->format('d/m/Y g:i A');
         $encuesta->fecha_final_encuesta=DateTime::createFromFormat(
             'Y-m-d H:i:s',$encuesta->fecha_final_encuesta)->format('d/m/Y g:i A');
-        $fecha_actual = Carbon::now('America/Denver')->format('d/m/Y g:i A');
+        $fecha_actual = Carbon::now('America/El_Salvador')->format('d/m/Y g:i A');
 
         $se_puede_editar=true;
         if($encuesta->fecha_inicio_encuesta<=$fecha_actual){
@@ -132,7 +132,7 @@ class EncuestaController extends Controller
             'description' => ['required'],
             'fecha_inicio' => ['required', 
                 function ($attribute, $value, $fail) {
-                    $fecha_actual = Carbon::now('America/Denver')->format('d/m/Y g:i A');
+                    $fecha_actual = Carbon::now('America/El_Salvador')->format('d/m/Y g:i A');
                     if (($value < $fecha_actual)) {
                         $fail($fecha_actual.'La fecha inicial debe ser mayor a la actual.' );
                     }
@@ -185,7 +185,7 @@ class EncuestaController extends Controller
         if($encuesta->fecha_inicio_encuesta >= $encuesta->fecha_final_encuesta){
             return back()->with('warning', 'La fecha final debe ser mayor a la inicial');
         }
-        if($encuesta->fecha_inicio_encuesta <= Carbon::now('America/Denver')->format('Y-m-d H:i:s')){
+        if($encuesta->fecha_inicio_encuesta <= Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s')){
             return back()->with('warning', 'La fecha inicial debe ser mayor a la actual');
         }
         $encuesta->descripcion_encuesta=$request->input('description');
@@ -214,7 +214,7 @@ class EncuestaController extends Controller
     }
 
     public function listado_publico(){
-        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $encuestas = Encuesta::where('visible',1)
                         ->where('fecha_final_encuesta','>=', $fecha_hora_actual)
                         ->get();
@@ -320,7 +320,7 @@ class EncuestaController extends Controller
         return back()->with($notification,$message); 
     }
     public function acceso(Request $request){
-        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $id_clave = $request->input('id_clave');
         $id_encuesta_acceso = $request->input('id_encuesta_acceso');
         //dd($request->all());

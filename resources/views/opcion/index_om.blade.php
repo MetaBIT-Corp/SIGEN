@@ -42,10 +42,12 @@
 	<?php $indiceCorrecta = 0; ?>
 
 	<h3 class="mt-2 mb-5"><b>Pregunta</b>: <?php echo $pregunta->pregunta ?></h3>
+	<h4>
+	</h4>
 
 	<form action="{{ route('agregar-opcion',$pregunta->id)}}" method="POST">
 
-		<table class="table table-hover" style="text-align: center;">
+		<table class="table table-hover" id="topciones" style="text-align: center;">
 
 			<thead>
 
@@ -132,22 +134,14 @@
 				<i class="fas fa-plus-circle"></i> Agregar Opción
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<button type="submit" id="enviar" class="btn btn-success btn mt-3" >
-				<i class="fas fa-arrow-right"></i> Enviar Opciones
+				<i class="fas fa-arrow-right"></i> Guardar Opciones
 			</button>
 		</div>
-		<div class="d-flex justify-content-begin m-3" id="sugerencia">
-			<br><br><br><p id="infoP">*La Cantidad de Opciones ingresadas no alcanzan el mínimo.</p>
+		
+		<div class="alert alert-warning m-3" id="alerta">
+			<ul id="ul-alert">
+			</ul>
 		</div>
-
-		@if(count($errors)>0)
-			<div class="alert alert-danger m-3" id="alerta">
-				<ul id="ul-alert">
-					@foreach ($errors->all() as $error)
-						<li>{{$error}}</li>
-					@endforeach
-				</ul>
-			</div>
-		@endif
 
 	</form>
 

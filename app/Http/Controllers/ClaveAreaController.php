@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Response;
 
 use App\Turno;
 use App\Clave;
@@ -15,6 +14,8 @@ use App\CargaAcademica;
 use App\CicloMateria;
 use App\Clave_Area;
 use App\Grupo_Emparejamiento;
+
+use Response;
 
 class ClaveAreaController extends Controller
 {
