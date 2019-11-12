@@ -123,13 +123,6 @@ footer{
 	font-weight:bold;
 }
 
-.p-carta{
-	font-weight: bold;
-	color: rgb(80,80,80);
-	margin:0;
-	padding:0;
-}
-
 .in-carta{
 	color: rgb(80,80,80);
 	margin:0;
@@ -137,28 +130,30 @@ footer{
 	text-align: ;
 }
 
-#paginador-pregunta{	padding: 20px;
+#paginador-pregunta{
+	padding: 20px;
 	margin-bottom: 5px;
 }
 
-.a-div:hover{
+.p-carta{
+	font-weight: bold;
 	color: rgb(80,80,80);
-	background-color:white;
-	text-decoration: none;
-}
-
-.a-div{
+	margin:0;
+	padding:0;
 }
 
 .a-pregunta{
-
+	position: relative;
 	color: rgb(80,80,80);
 	border: solid;
 	height: 30px;
 	width: 40px;
 }
+
 .a-pregunta:hover{
-	text-decoration: none;
+	color: white;
+	border-color: rgb(80,80,80);
+	background-color: rgb(220,53,69);
 }
 
 .carta-div-float{
@@ -169,6 +164,7 @@ footer{
 
 .carta-info{
 	text-align: ;
+	padding-bottom: 15px;
 	border-bottom: solid rgba(80,80,80,1);
 	overflow:;
 }

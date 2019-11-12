@@ -54,3 +54,14 @@ function capturar_data_navigator(url){
     });
 
 }
+
+// $(document).ready(function(){
+     
+//      $('.respondida').on('click',function(event){
+        
+//         // alert($('.respondida').attr('data-id-pregunta'));
+
+//         $('#a-'+($('.respondida').attr('data-id-pregunta'))).css("background-color", "yellow");
+
+//      })
+// })

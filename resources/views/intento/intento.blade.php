@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="carta-div-float">
-                    <p class="p-carta">Tiempo Restante:</p>
+                    <p class="p-carta">Tiempo Restante (m:s):</p>
                     <span class="in-carta" id="contador"></span>
                 </div>
             
@@ -68,18 +68,14 @@
 
                 @for($i=0;$i<$paginacion->total();$i++)
                     @if($i % $paginacion->perPage() == 0)
-                        <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux}}#pregunta{{$i+1}}')" class="a-pregunta btn btn-link text-align-center text-align-center mb-1">
-                            <div class="a-div mb-2 text-align-center">
+                        <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux}}#pregunta{{$i+1}}')" class="a-pregunta mb-1">
                                 {{$i+1}}
                                 <?php $aux++; ?>
-                            </div>
                         </button>
                     @else
-                        <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux-1}}#pregunta{{$i+1}}')" class="a-pregunta btn btn-link text-align-center mb-1">
-                            <div class="a-div text-align-center mb-2">
+                        <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux-1}}#pregunta{{$i+1}}')" class="a-pregunta mb-1">
                                 {{$i+1}}
                                 <?php $aux-1 ?>
-                            </div>
                         </button>
                     @endif
                 @endfor

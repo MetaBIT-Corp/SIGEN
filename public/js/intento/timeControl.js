@@ -30,8 +30,15 @@ $(document).ready(function(){
 			var minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60))
 			var segundos = Math.floor((distancia % (1000 * 60)) / 1000)
 
+			var duracion_min = Math.floor((distancia/1000)/60); 
+
 			// Desplegando el resultado en el contador del HTML
-			document.getElementById("contador").innerHTML =horas + ":"+ minutos + ":" + segundos
+			// document.getElementById("contador").innerHTML =horas + ":"+ minutos + ":" + segundos
+
+			document.getElementById("contador").innerHTML = ('0' + duracion_min).substr(-2) +":"+('0' + segundos).substr(-2)
+
+
+			
 
 			// If the count down is finished, write some text
 			if (distancia < 0) {

@@ -146,6 +146,6 @@ class EstudianteController extends Controller
             }
         }
 
-        return view('estudiante.estudiantesEnEvaluacion')->with(compact('estudiantes'));
+        return view('estudiante.estudiantesEnEvaluacion')->with(compact('estudiantes','evaluacion'));
     }
 }

@@ -38,11 +38,11 @@ class ClaveController extends Controller
             $opciones = Opcion::where('pregunta_id',$pregunta->id)->count();
 
             if($area->id_pdg_dcn!=null){
-                if($opciones>3){
+                if($opciones>=2){
                     array_push($preguntas,$pregunta);
                 }
             }else{
-                if($opciones>2){
+                if($opciones>=3){
                     array_push($preguntas,$pregunta);
                 }
             }

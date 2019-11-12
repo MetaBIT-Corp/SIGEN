@@ -19,6 +19,9 @@
 @endsection
 @section("main")
 
+
+
+
 <!--Mostrará mensaje de éxito-->
 @if (session('exito'))
   <div class="alert alert-success">
@@ -37,11 +40,37 @@
 <div id="wrapper">
   <div id="content-wrapper">
     <div class="container-fluid">
+
+      <!-- Información sobre la Evaluación -->
+      <div class="card mb-3" style="max-width: 100%;">
+        <div class="card-header"><strong>Información sobre la Evaluación</strong></div>
+        <div class="card-body">
+          <div class="row">
+            <p class="col-md-12"><strong>Nombre:</strong> {{$evaluacion->nombre_evaluacion}}</p>
+          </div>
+          <div class="row">
+            <p class="col-md-12"><strong>Descripcion:</strong> {{$evaluacion->descripcion_evaluacion}}</p>
+          </div>
+          <div class="row">
+            <p class="col-md-4"><strong>Duración (minutos):</strong> {{$evaluacion->duracion}}</p>
+            <p class="col-md-4"><strong>Intentos Posibles:</strong> {{$evaluacion->intentos}}</p>
+            <p class="col-md-4">
+              <strong>Revisión:</strong>
+              @if($evaluacion->revision==1)
+                Permitida
+              @else
+                No Permitida
+              @endif
+            </p>
+          </div>
+        </div>
+      </div>
+
       <!-- DataTables Example -->
       <div class="card mb-3">
         <div class="card-header">
           <i class="fas fa-table"></i>
-          Estudiantes de la evaluación</div>
+          <strong>Estudiantes de Evaluación</strong></div>
         <div class="card-body">
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -86,7 +115,8 @@
                       <span class="badge badge-success "> - </span>
                     @endif
                   </td> 
-                  <td>
+                  <td class="text-center">
+
                     <!-- Validación para mostrar opción de habilitar y/0 deshabilitar -->
                     @if(!$estudiante->revision_estudiante)
                       @if($estudiante->id_intento != 0)
@@ -99,6 +129,12 @@
                       <a class="btn btn-sm btn-option mb-1" title="Deshabilitar Revisión" href="#"
                       data-deshabilitar-revision="{{ $estudiante->id_intento }}">
                         <span class="icon-eye-slash"></span>
+                      </a>
+                    @endif
+
+                    @if($estudiante->id_intento !=0 )
+                      <a class="btn btn-sm btn-option mb-1" title="Revisión" href="{{ route('revision_evaluacion',$estudiante->id_intento)}}">
+                        <span class="icon-detail_user"></span>
                       </a>
                     @endif
                   </td>
