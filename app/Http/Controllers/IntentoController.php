@@ -407,7 +407,7 @@ class IntentoController extends Controller
 
                 //se valida que el usuario podrá ver la revisión hasta finalizar todos sus intentos
                 //esto mientras el periodo de evaluación esté vigente
-                $fecha_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+                $fecha_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
                 if($turno->CantIntentos > 0 && $fecha_actual < $turno->fecha_final_turno){
                     return redirect(
                         URL::signedRoute(

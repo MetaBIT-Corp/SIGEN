@@ -564,7 +564,7 @@ class EvaluacionController extends Controller
      */
     public function acceso(Request $request){
         //declaracion de variables
-        $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $id_turno = $request->input('id_turno_acceso');
         $contrasenia = $request->input('contraseña');
         if($contrasenia){
