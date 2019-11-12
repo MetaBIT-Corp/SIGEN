@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
+use App\Area;
 use App\Clave_Area;
 use App\Clave_Area_Pregunta;
 use App\Clave;
 use App\Pregunta;
+use App\Opcion;
 
 
 class ClaveController extends Controller
@@ -15,16 +18,36 @@ class ClaveController extends Controller
 
     //Funcion para cargar las preguntas de una área mediante AJAX
     public function preguntasPorArea($id){
+
     	$clave_area = Clave_Area::where('id', $id)->first();
+        $area = Area::where('id',$clave_area->area_id)->first();
 
         $cap = Clave_Area_Pregunta::where('clave_area_id',$id)->pluck('pregunta_id');
+
+        $preguntas = [];
     
-        $preguntas = DB::table('area')
+        $preguntas_area = DB::table('area')
                         ->where('area.id', $clave_area->area_id)
                         ->join('grupo_emparejamiento as grupo', 'area.id', '=', 'grupo.area_id')
                         ->join('pregunta as p', 'grupo.id', '=', 'p.grupo_emparejamiento_id')
                         ->select('p.id', 'p.pregunta', 'area.titulo')
                         ->get();
+
+        foreach ($preguntas_area as $pregunta) {
+
+            $opciones = Opcion::where('pregunta_id',$pregunta->id)->count();
+
+            if($area->id_pdg_dcn!=null){
+                if($opciones>3){
+                    array_push($preguntas,$pregunta);
+                }
+            }else{
+                if($opciones>2){
+                    array_push($preguntas,$pregunta);
+                }
+            }
+            
+        }
 
     	$data = ['p_asignadas'=>$cap, 'preguntas'=>$preguntas];
     	return $data;
