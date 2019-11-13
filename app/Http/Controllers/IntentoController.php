@@ -481,6 +481,28 @@ class IntentoController extends Controller
 
     }
 
+    public function recalificarEvaluaciones($id_intento){
+
+        $intento_pivote = Intento::where('id',$id_intento)->first();
+        $intentos = Intento::where('clave_id',$intento_pivote->clave_id)->get();
+
+        foreach ($intentos as $intento) {
+
+            $nota_actual = $intento->nota_intento;
+            $nota_nueva = $intento->calcularNota($intento->id);
+
+            if ($nota_actual > $nota_nueva) {
+
+            }else{
+                $intento->nota_intento = $nota_nueva;
+                $intento->save();
+            }
+        }
+
+        return redirect(URL::signedRoute('revision_evaluacion', ['id_intento' => $id_intento]));
+
+    }
+
     private function paginacionRevision($preg_per_page, $array)
     {
         /*Calcular el desplazamiento segun la variable page, para determina que

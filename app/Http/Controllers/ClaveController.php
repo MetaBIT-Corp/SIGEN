@@ -26,7 +26,7 @@ class ClaveController extends Controller
 
         $preguntas = [];
 
-        if($area->tipo_item_id!=2){
+        if($area->tipo_item_id==1){
     
             $preguntas_area = DB::table('area')
                             ->where('area.id', $clave_area->area_id)
