@@ -25,28 +25,38 @@ class ClaveController extends Controller
         $cap = Clave_Area_Pregunta::where('clave_area_id',$id)->pluck('pregunta_id');
 
         $preguntas = [];
+
+        if($area->tipo_item_id!=2){
     
-        $preguntas_area = DB::table('area')
-                        ->where('area.id', $clave_area->area_id)
-                        ->join('grupo_emparejamiento as grupo', 'area.id', '=', 'grupo.area_id')
-                        ->join('pregunta as p', 'grupo.id', '=', 'p.grupo_emparejamiento_id')
-                        ->select('p.id', 'p.pregunta', 'area.titulo')
-                        ->get();
+            $preguntas_area = DB::table('area')
+                            ->where('area.id', $clave_area->area_id)
+                            ->join('grupo_emparejamiento as grupo', 'area.id', '=', 'grupo.area_id')
+                            ->join('pregunta as p', 'grupo.id', '=', 'p.grupo_emparejamiento_id')
+                            ->select('p.id', 'p.pregunta', 'area.titulo')
+                            ->get();
 
-        foreach ($preguntas_area as $pregunta) {
+            foreach ($preguntas_area as $pregunta) {
 
-            $opciones = Opcion::where('pregunta_id',$pregunta->id)->count();
+                $opciones = Opcion::where('pregunta_id',$pregunta->id)->count();
 
-            if($area->id_pdg_dcn!=null){
-                if($opciones>=2){
-                    array_push($preguntas,$pregunta);
+                if($area->id_pdg_dcn!=null){
+                    if($opciones>=2){
+                        array_push($preguntas,$pregunta);
+                    }
+                }else{
+                    if($opciones>=3){
+                        array_push($preguntas,$pregunta);
+                    }
                 }
-            }else{
-                if($opciones>=3){
-                    array_push($preguntas,$pregunta);
-                }
+                
             }
-            
+        }else{
+            $preguntas = DB::table('area')
+                            ->where('area.id', $clave_area->area_id)
+                            ->join('grupo_emparejamiento as grupo', 'area.id', '=', 'grupo.area_id')
+                            ->join('pregunta as p', 'grupo.id', '=', 'p.grupo_emparejamiento_id')
+                            ->select('p.id', 'p.pregunta', 'area.titulo')
+                            ->get();
         }
 
     	$data = ['p_asignadas'=>$cap, 'preguntas'=>$preguntas];

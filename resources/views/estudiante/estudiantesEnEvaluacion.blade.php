@@ -130,7 +130,6 @@
                     @endif
                   </td> 
                   <td class="text-center">
-
                     <!-- Validación para mostrar opción de habilitar y/0 deshabilitar -->
                     @if(!$estudiante->revision_estudiante)
                       @if($estudiante->id_intento != 0)
@@ -147,7 +146,7 @@
                     @endif
 
                     @if($estudiante->id_intento !=0 )
-                      <a class="btn btn-sm btn-option mb-1" title="Revisión" href="{{ route('revision_evaluacion',$estudiante->id_intento)}}">
+                      <a class="btn btn-sm btn-option mb-1" title="Revisión" href="{{ URL::signedRoute('revision_evaluacion',$estudiante->id_intento)}}">
                         <span class="icon-detail_user"></span>
                       </a>
                     @endif

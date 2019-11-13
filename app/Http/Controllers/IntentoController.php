@@ -382,13 +382,17 @@ class IntentoController extends Controller
         $intento->save();
     }
     public function revisionEvaluacion($id_intento){
+
         $estudiante=null;
         $intento=null;
         $respuestas = null;
         $paginacion = null;
         $evaluacion = null;
+
         if(auth()->check()){
+
             if(auth()->user()->IsStudent){
+
                 $estudiante = Estudiante::where('user_id',auth()->user()->id)->first();
                 if($id_intento==0){
                     $intento = Intento::where('estudiante_id',$estudiante->id_est)->where('fecha_final_intento', null)->first();
@@ -401,7 +405,7 @@ class IntentoController extends Controller
                 $turno = $clave->turno;
                 $evaluacion = $turno->evaluacion;
 
-                if($evaluacion->revision == 0){
+                if($evaluacion->revision == 0 && $intento->revision_estudiante == 0){
                     return redirect(URL::signedRoute('listado_evaluacion', ['id' => $evaluacion->id_carga]));
                 }
 
@@ -422,10 +426,23 @@ class IntentoController extends Controller
 
                 //Variable que contiene el array a mostrar en la paginacion
                 $paginacion = $this->paginacionRevision( 100, $preguntas);
+
+            }
+
+            if(auth()->user()->IsTeacher){
+
+            	$intento = Intento::where('id',$id_intento)->first();
+            	$estudiante = Estudiante::where('id_est',$intento->estudiante_id)->first();
+                
+                $respuestas = $intento->respuestas;
+                $clave = $intento->clave;
+                $turno = $clave->turno;
+                $evaluacion = $turno->evaluacion;
+                $preguntas = $this->obtenerPreguntas($intento->clave,0,$estudiante->id_est,$intento->numero_intento,$intento);
+                $paginacion = $this->paginacionRevision( 100, $preguntas);
             }
         }
-        return view('intento.revisionDeIntento')
-        ->with(compact('estudiante','intento','respuestas','paginacion','evaluacion'));
+        return view('intento.revisionDeIntento')->with(compact('estudiante','intento','respuestas','paginacion','evaluacion'));
     }
 
     public function calificacionEvaluacion(){
@@ -449,6 +466,19 @@ class IntentoController extends Controller
             }
         }
         return redirect(URL::signedRoute('revision_evaluacion', ['id_intento' => $id_intento]));
+    }
+
+    public function recalificarEvaluacion($id_intento){
+
+        $intento = Intento::find($id_intento);
+        
+        //Lama al método calcular nota y lo guarda en la variable $nota
+        $nota = $intento->calcularNota($id_intento);
+        $intento->nota_intento = $nota;
+        $intento->save();
+
+        return redirect(URL::signedRoute('revision_evaluacion', ['id_intento' => $id_intento]));
+
     }
 
     private function paginacionRevision($preg_per_page, $array)

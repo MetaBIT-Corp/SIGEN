@@ -32,10 +32,11 @@ Route::get('clave-area/{clave_area_id}/preguntas','ClaveAreaController@listarPre
 //Rutas relacionadas con Intento y Encuesta (Resolucion de encuesta y evaluacion)
 Route::get('persistencia/', 'IntentoController@persistence');
 Route::get('calificar/', 'IntentoController@calificacionEvaluacion')->name('calificar_evaluacion');
+Route::get('recalificar/{id_intento}', 'IntentoController@recalificarEvaluacion')->name('recalificar_evaluacion');
 Route::get('intento/{id_intento}','IntentoController@iniciarEvaluacion')->name('prueba');
 Route::get('encuesta/{id_clave}','IntentoController@iniciarEncuesta')->name('prueba_encuesta');
 Route::get('intento/revision/{id_intento}','IntentoController@revisionEvaluacion')->name('revision_evaluacion')->middleware('signed');
-Route::get('intento/{intento_id}/respuestas','IntentoController@calcularNota');
+Route::get('intento/{intento_id}/respuestas','IntentoController@calcularNota')->name('calcular_nota');
 
 //Rutas relacionadas con materias
 Route::get('/materias', 'MateriaController@listar')->name('materias');
