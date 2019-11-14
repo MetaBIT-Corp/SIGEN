@@ -93,7 +93,7 @@ class UsersTableSeeder extends Seeder
         //Estudiantes para pruebas agregado por Ricardo Estupinian
         User::create([
             'name' => 'Enrique Menjívar',
-            'email' => 'mt16007@ues.edu.sv@gmail.com',
+            'email' => 'mt16007@ues.edu.sv',
             'password' => bcrypt('sigen2019'),
             'role' => 2
         ]);
@@ -124,7 +124,7 @@ class UsersTableSeeder extends Seeder
 
         Estudiante::create([
             'id_est' => 1,
-            'user_id'=>8,
+            'user_id'=>7,
             'carnet'=>'MT16007',
             'nombre'=>'Enrique Menjívar',
             'activo'=>1,
@@ -132,7 +132,7 @@ class UsersTableSeeder extends Seeder
         ]);
         Estudiante::create([
             'id_est' => 2,
-            'user_id'=>7,
+            'user_id'=>8,
             'carnet'=>'MR11139',
             'nombre'=>'René Martínez',
             'activo'=>1,
