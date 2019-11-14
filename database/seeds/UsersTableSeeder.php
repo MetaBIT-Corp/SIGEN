@@ -125,16 +125,16 @@ class UsersTableSeeder extends Seeder
         Estudiante::create([
             'id_est' => 1,
             'user_id'=>8,
-            'carnet'=>'OG16003',
-            'nombre'=>'Diego Ochoa',
+            'carnet'=>'MT16007',
+            'nombre'=>'Enrique Menjívar',
             'activo'=>1,
             'anio_ingreso'=>2016
         ]);
         Estudiante::create([
             'id_est' => 2,
             'user_id'=>7,
-            'carnet'=>'FB16005',
-            'nombre'=>'Jose Montano',
+            'carnet'=>'MR11139',
+            'nombre'=>'René Martínez',
             'activo'=>1,
             'anio_ingreso'=>2016
         ]);
@@ -142,7 +142,7 @@ class UsersTableSeeder extends Seeder
             'id_est' => 3,
             'user_id'=>9,
             'carnet'=>'EL16002',
-            'nombre'=>'Rocardo Bladimir',
+            'nombre'=>'Ricardo Bladimir',
             'activo'=>1,
             'anio_ingreso'=>2016
         ]);
