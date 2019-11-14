@@ -21,7 +21,7 @@
  <div class="alert alert-{{ session('notification-type') }} offset-1 col-md-10">
     <ul>
         <li>
-             {{ session('notification-message') }}
+             {!! session('notification-message') !!}
         </li>
     </ul>
  </div>
@@ -32,7 +32,7 @@
          <ul>
               @foreach($errors->all() as $error)
                         
-                        <li>{{ $error }}</li>
+                        <li>{!! $error !!}</li>
 
                @endforeach
            </ul>
@@ -43,7 +43,7 @@
 @if (session('exito'))
   <div class="alert alert-success">
     <ul>
-      <h4 class="text-center">{{session('exito')}}</h4>
+      <h4 class="text-center">{!! session('exito') !!}</h4>
     </ul>
   </div>
 @endif

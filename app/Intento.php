@@ -85,11 +85,20 @@ class Intento extends Model
                 if($modalidad==4){
 
                     $txt_respuesta = strtolower($respuesta->texto_respuesta);
-                    $txt_opcion = strtolower($respuesta->pregunta->opciones[0]->opcion);
-                    
+
+                    $correctas = 0;
+
+                    foreach($respuesta->pregunta->opciones as $opcion) {
+
+                        if(strcmp($txt_respuesta, strtolower($opcion->opcion)) == 0){
+                            $correctas++;
+                        }else{
+                            $correctas=$correctas;
+                        }
+                    }
+
                     //Compara la respuesta del usuario con la respuesta correcta
-                    if(strcmp($txt_respuesta, $txt_opcion) == 0){
-                        
+                    if($correctas>0){                        
                         //Calcula la ponderación de la pregunta
                         $nota += ($peso/$cantidad_preguntas)/10;
                     }

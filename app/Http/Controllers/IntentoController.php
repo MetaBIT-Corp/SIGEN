@@ -468,34 +468,19 @@ class IntentoController extends Controller
         return redirect(URL::signedRoute('revision_evaluacion', ['id_intento' => $id_intento]));
     }
 
-    public function recalificarEvaluacion($id_intento){
-
-        $intento = Intento::find($id_intento);
-        
-        //Lama al método calcular nota y lo guarda en la variable $nota
-        $nota = $intento->calcularNota($id_intento);
-        $intento->nota_intento = $nota;
-        $intento->save();
-
-        return redirect(URL::signedRoute('revision_evaluacion', ['id_intento' => $id_intento]));
-
-    }
-
     public function recalificarEvaluaciones($id_intento){
 
         $intento_pivote = Intento::where('id',$id_intento)->first();
-        $intentos = Intento::where('clave_id',$intento_pivote->clave_id)->get();
+        $intentos = Intento::where('clave_id',$intento_pivote->clave_id)->get();        
 
         foreach ($intentos as $intento) {
 
             $nota_actual = $intento->nota_intento;
             $nota_nueva = $intento->calcularNota($intento->id);
 
-            if ($nota_actual > $nota_nueva) {
-
-            }else{
-                $intento->nota_intento = $nota_nueva;
-                $intento->save();
+            if ($nota_actual < $nota_nueva) {
+                $intento->update(['nota_intento'=>$nota_nueva]);
+            }else{               
             }
         }
 

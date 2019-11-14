@@ -82,6 +82,15 @@
           <p id="peso_info" hidden>* Turno debe poseer peso igual a 100</p>
           <p id="preguntas_info" hidden>* Todas las Áreas deben tener asignadas una o más preguntas</p>
         </div>
+        <div class="w-100 text-center">
+          <form action="{{route ('publicar_evaluacion')}}" method="POST">
+            <div class="d-none">
+              <input class="ml-2" type="checkbox" checked="" name="turnosnopublicos[]" value="{{$turno->id}}">
+            </div>
+            @csrf
+            <button type="submit" class="btn btn-success" id="btn-publicar" hidden>Publicar</button>
+          </form>
+        </div>
         
         
       </div>

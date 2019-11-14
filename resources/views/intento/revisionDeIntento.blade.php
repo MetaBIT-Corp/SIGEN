@@ -101,7 +101,7 @@
 
 															@foreach($respuestas as $respuesta)
 																@if($respuesta->id_pregunta == $valores[$i]['pregunta']->id)
-																	@if($respuesta->texto_respuesta == $valores[$i]['opciones'][0]->opcion)
+																	@if(strtolower($respuesta->texto_respuesta) == strtolower($valores[$i]['opciones'][0]->opcion))
 																		style="background-color: #9FF189;"
 																	@else
 																		style="background-color: #F37F7F;"
@@ -244,9 +244,6 @@
 												<!-- Fin Botones de control para paginacion-->
 
 											</div>
-
-											
-
 										</div>
 
 									</div>

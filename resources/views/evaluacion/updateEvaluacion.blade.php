@@ -21,7 +21,7 @@
     <!-- Notificacion  -->
             @if (session('notification'))
                   <div class="alert alert-success">
-                        {{session('notification')}}
+                        {!!session('notification')!!}
                   </div>
             @endif
             <!-- Notificacion -->

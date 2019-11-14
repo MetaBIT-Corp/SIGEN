@@ -91,10 +91,12 @@ $(document).ready(function() {
         $('#estado_s').text('No Publicable')
         $('#div-info-estado').attr('class','alert alert-dismissible alert-danger pb-0')
         if(peso_total<100){$('#peso_info').attr('hidden',false)}
-        if(areas_sin_preguntas>0){$('#preguntas_info').attr('hidden',false)}        
+        if(areas_sin_preguntas>0){$('#preguntas_info').attr('hidden',false)}
     }else if(peso_total==100 && visibilidad != 1){
+        $('#btn-publicar').attr('hidden',false)
         $('#estado_s').text('Publicable')
         $('#div-info-estado').attr('class','alert alert-dismissible alert-success pb-0')
+
     }else{
         $('#estado_s').text('Publicado')
         $('#div-info-estado').attr('class','alert alert-dismissible alert-info pb-0')
