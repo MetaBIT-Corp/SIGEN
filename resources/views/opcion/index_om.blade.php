@@ -45,6 +45,12 @@
 	<h4>
 	</h4>
 
+	@if($area->id_cat_mat)
+		<input type="text" class="form-control-plaintext" readonly="" id="esencuesta" name="es-encuesta" value="0">
+	@else
+		<input type="text" class="form-control-plaintext" readonly="" id="esencuesta" name="es-encuesta" value="1">
+	@endif
+
 	<form action="{{ route('agregar-opcion',$pregunta->id)}}" method="POST">
 
 		<table class="table table-hover" id="topciones" style="text-align: center;">
@@ -93,6 +99,8 @@
 							<?php endif ?>
 
 						@endif
+
+
 						
 						<td>
 							

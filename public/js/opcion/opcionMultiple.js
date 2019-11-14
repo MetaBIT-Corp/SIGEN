@@ -130,7 +130,10 @@ $(document).ready(function() {
         fila.appendChild(celda1);
         var celda2 = fila.insertCell(1);
         var celda3 = fila.insertCell(2);
-        var celda4 = fila.insertCell(3);
+
+        if (($('#esencuesta').val())==0) {
+            var celda4 = fila.insertCell(3);
+        }
 
         celda1.innerHTML = fila.rowIndex-2;
         celda1.setAttribute('scope','row');
@@ -142,12 +145,14 @@ $(document).ready(function() {
         input.setAttribute('class','form-control');
         celda2.appendChild(input);
 
-        var radio = document.createElement("input");
-        radio.type = "radio";
-        radio.name = "correcta" + indice;
-        radio.id = "correcta" + indice;
-        radio.setAttribute('class','custom-control-label');
-        celda3.appendChild(radio);
+        if (($('#esencuesta').val())==0) {
+            var radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "correcta" + indice;
+            radio.id = "correcta" + indice;
+            radio.setAttribute('class','custom-control-label');
+            celda3.appendChild(radio);
+        }
 
         indice++;
 
