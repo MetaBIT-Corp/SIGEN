@@ -121,7 +121,7 @@
 					</div>
 
 					<div class="form-group text-right mt-3">
-						<button id="btn-incorrecta-2" type="button" class="btn btn-outline-dark">Agregar Respuesta Incorrecta</button>
+						<button id="btn-incorrecta" type="button" class="btn btn-outline-dark">Agregar Respuesta Incorrecta</button>
 					</div>
 				</div>
 

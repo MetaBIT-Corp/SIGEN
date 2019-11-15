@@ -116,12 +116,8 @@ class GrupoEmparejamientoController extends Controller
 
                 }
 
-                return response()->json(['pregunta'=>$pregunta, 'opcion'=>$opcion, 'opcion_incorrecta'=>$opcion_incorrecta]);
-
-            }else{
                 return response()->json(['pregunta'=>$pregunta, 'opcion'=>$opcion]);
             }
-
         }
     }
 
@@ -167,7 +163,7 @@ class GrupoEmparejamientoController extends Controller
         $messages = [
 
             'pregunta.required' => 'Pregunta no ingresada.',
-            'opcion.required' => 'Respuesta no ingresada.'
+            'opcion.required' => 'Respuesta Correcta no ingresada.'
         ];
 
         $validator = Validator::make($request_data, $rules, $messages);
