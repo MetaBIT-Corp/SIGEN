@@ -101,14 +101,20 @@ class GrupoEmparejamientoController extends Controller
 
             $opcion->save();
 
-            if($request->opcionincorrecta!=""){
+            if($request->incorrectas_contador>0){
 
-                $opcion_incorrecta = new Opcion;
+                for($i = 0; $i < $request->incorrectas_contador; $i++){
 
-                $opcion_incorrecta->pregunta_id = $pregunta->id;
-                $opcion_incorrecta->opcion = $request->opcionincorrecta;
-                $opcion_incorrecta->correcta = 0;
-                $opcion_incorrecta->save();
+                    $opcion_incorrecta = new Opcion;
+                    $opcion_incorrecta->pregunta_id = $pregunta->id;
+                    $opcion_incorrecta->opcion = $request->input('incorrecta'.((string)($i+1)));
+                    $opcion_incorrecta->correcta = 0;
+
+                    if($opcion_incorrecta->opcion!=""){
+                        $opcion_incorrecta->save();
+                    }
+
+                }
 
                 return response()->json(['pregunta'=>$pregunta, 'opcion'=>$opcion, 'opcion_incorrecta'=>$opcion_incorrecta]);
 

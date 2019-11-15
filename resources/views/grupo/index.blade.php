@@ -104,6 +104,7 @@
 					<div class="form-group" style="display:none;">
 						<label class="col-form-label" for="idGrupo">Grupo ID:</label>
 						<input type="text" class="form-control" name="idGrupo" placeholder="ID de Pregunta" id="idGrupo" value="{{$grupo->id}}">
+						<input type="number" id="incorrectas-contador" name="incorrectas_contador" class="form-control-plaintext" value="0">
 					</div>
 
 					<div class="form-group">
@@ -116,14 +117,11 @@
 						<input type="text" class="form-control" name="opcion" placeholder="Inserte el texto de la Respuesta" id="opcion">
 					</div>
 
-					<div class="form-group" id="incorrecta">
-						<label class="col-form-label" for="opcionincorrecta">Respuesta Incorrecta:</label>
-						<input type="text" class="form-control" name="opcionincorrecta" placeholder="Inserte el texto de la Respuesta" id="opcionincorrecta">
-						<button id="cancelar-incorrecta" class="btn btn-link float-right p-0">Cancelar</button>
+					<div id="incorrectas-div">
 					</div>
 
-					<div class="form-group text-right">
-						<button id="btn-incorrecta" class="btn btn-outline-dark">Agregar Respuesta Incorrecta</button>
+					<div class="form-group text-right mt-3">
+						<button id="btn-incorrecta-2" type="button" class="btn btn-outline-dark">Agregar Respuesta Incorrecta</button>
 					</div>
 				</div>
 
