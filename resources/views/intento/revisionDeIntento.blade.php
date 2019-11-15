@@ -60,7 +60,7 @@
 									</table>
 								</div>
 								<!-- Fin Info Intento -->
-
+								@if($se_permite_revision)
 								<!-- Inicio Revisión Intento -->
 								<form id="quiz_form">
 									<div class="card">
@@ -102,9 +102,9 @@
 															@foreach($respuestas as $respuesta)
 																@if($respuesta->id_pregunta == $valores[$i]['pregunta']->id)
 																	@if(strtolower($respuesta->texto_respuesta) == strtolower($valores[$i]['opciones'][0]->opcion))
-																		style="background-color: #9FF189;"
+																		style="background-color: #d4edda;"
 																	@else
-																		style="background-color: #F37F7F;"
+																		style="background-color: #f8d7da;"
 																	@endif
 																@endif
 															@endforeach
@@ -120,9 +120,9 @@
 																		@if($respuesta->id_pregunta == $valores[$i]['pregunta']->id)
 																			@if($respuesta->id_opcion==$valores[$i]['opciones'][$j]->id)
 																				@if($valores[$i]['opciones'][$j]->correcta)
-																					style="background-color: #9FF189;"
+																					style="background-color: #d4edda;"
 																				@else
-																					style="background-color: #F37F7F;"
+																					style="background-color: #f8d7da;"
 																				@endif
 																			@endif
 																		@endif
@@ -188,9 +188,9 @@
 																							@for($j=0; $j< count($valores[$i]['preguntas'][$e]->opciones); $j++)
 																								@if($valores[$i]['preguntas'][$e]->opciones[$j]->id == $respuesta->id_opcion )
 																									@if($valores[$i]['preguntas'][$e]->opciones[$j]->correcta && $valores[$i]['preguntas'][$e]->opciones[$j]->pregunta_id == $valores[$i]['preguntas'][$r]->id)
-																										style="background-color: #9FF189;"
+																										style="background-color: #d4edda;"
 																									@else
-																										style="background-color: #F37F7F;"
+																										style="background-color: #f8d7da;"
 																									@endif
 																								@endif
 																							@endfor
@@ -237,7 +237,7 @@
 															Recálculo de Nota
 														</a>
 													@endif
-													<a class="btn btn-danger text-white" href="">
+													<a class="btn btn-danger text-white" href="{{ URL::signedRoute('listado_evaluacion', ['id' => $evaluacion->id_carga]) }}">
 														Finalizar Revisión
 													</a>
 												</div>
@@ -249,7 +249,11 @@
 									</div>
 								</form>
 								<!-- Fin Revisión Intento -->
-
+								@else
+								<a class="btn btn-danger text-white" href="{{ URL::signedRoute('listado_evaluacion', ['id' => $evaluacion->id_carga]) }}">
+									Finalizar Revisión
+								</a>
+								@endif
 							@endif
 						</div>
 
