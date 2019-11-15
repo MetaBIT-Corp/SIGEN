@@ -44,13 +44,13 @@ class UsersTableSeeder extends Seeder
         ]);
         User::create([
             'name' => 'Enrique',
-            'email' => 'mt16007@ues.edu.sv',
+            'email' => 'mt16007@gmail.com',
             'password' => bcrypt('sigen2019'),
             'role' => 1
         ]);
         User::create([
             'name' => 'Pablo',
-            'email' => 'dc16009@ues.edu.sv',
+            'email' => 'dc16009@gmail.com',
             'password' => bcrypt('sigen2019'),
             'role' => 1
         ]);
@@ -92,72 +92,75 @@ class UsersTableSeeder extends Seeder
 
         //Estudiantes para pruebas agregado por Ricardo Estupinian
         User::create([
-            'name' => 'Jose',
-            'email' => 'jose@gmail.com',
+            'name' => 'Enrique Menjívar',
+            'email' => 'mt16007@ues.edu.sv',
             'password' => bcrypt('sigen2019'),
             'role' => 2
         ]);
         User::create([
-            'name' => 'Diego',
-            'email' => 'diego@gmail.com',
-            'password' => bcrypt('sigen2019'),
-            'role' => 2
-        ]);
-
-        Estudiante::create([
-            'user_id'=>8,
-            'carnet'=>'OG16003',
-            'nombre'=>'Diego Ochoa',
-            'activo'=>1,
-            'anio_ingreso'=>2016
-        ]);
-
-        Estudiante::create([
-            'user_id'=>7,
-            'carnet'=>'FB16005',
-            'nombre'=>'Jose Montano',
-            'activo'=>1,
-            'anio_ingreso'=>2016
-        ]);
-        
-
-        //Estudiantes Para Pruebas
-        User::create([
-            'name' => 'Edwin Joel Amaya Palacios',
-            'email' => 'ap16014@ues.edu.sv',
-            'password' => bcrypt('sigen2019'),
-            'role' => 1
-        ]);
-        User::create([
-            'name' => 'Kilmer Fabricio Maravilla López',
-            'email' => 'ml16006@ues.edu.sv',
-            'password' => bcrypt('sigen2019'),
-            'role' => 1
-        ]);
-        User::create([
-            'name' => 'José Alberto Flores Barillas',
-            'email' => 'fb16014@ues.edu.sv',
-            'password' => bcrypt('sigen2019'),
-            'role' => 1
-        ]);
-
-        User::create([
-            'name' => 'Marco Antonio Flores Ventura',
-            'email' => 'fv16002@ues.edu.sv',
-            'password' => bcrypt('sigen2019'),
-            'role' => 1
-        ]);
-        User::create([
-            'name' => 'Armando Patricio Rivera López',
-            'email' => 'rv16007@ues.edu.sv',
-            'password' => bcrypt('sigen2019'),
-            'role' => 1
-        ]);
-        User::create([
-            'name' => 'Carlos Rene Martinez Rivera',
+            'name' => 'René Martínez',
             'email' => 'mr11139@ues.edu.sv',
             'password' => bcrypt('sigen2019'),
-            'role' => 1
+            'role' => 2
+        ]);
+        User::create([
+            'name' => 'Ricardo Estupinián',
+            'email' => 'ricaslo@gmail.com',
+            'password' => bcrypt('sigen2019'),
+            'role' => 2
+        ]);
+        User::create([
+            'name' => 'Pablo Díaz',
+            'email' => 'dc16009@ues.edu.sv',
+            'password' => bcrypt('sigen2019'),
+            'role' => 2
+        ]);
+        User::create([
+            'name' => 'Edwin Palacios',
+            'email' => 'ap16014@ues.edu.sv',
+            'password' => bcrypt('sigen2019'),
+            'role' => 2
+        ]);
+
+        Estudiante::create([
+            'id_est' => 1,
+            'user_id'=>7,
+            'carnet'=>'MT16007',
+            'nombre'=>'Enrique Menjívar',
+            'activo'=>1,
+            'anio_ingreso'=>2016
+        ]);
+        Estudiante::create([
+            'id_est' => 2,
+            'user_id'=>8,
+            'carnet'=>'MR11139',
+            'nombre'=>'René Martínez',
+            'activo'=>1,
+            'anio_ingreso'=>2016
+        ]);
+        Estudiante::create([
+            'id_est' => 3,
+            'user_id'=>9,
+            'carnet'=>'EL16002',
+            'nombre'=>'Ricardo Bladimir',
+            'activo'=>1,
+            'anio_ingreso'=>2016
+        ]);
+        Estudiante::create([
+            'id_est' => 4,
+            'user_id'=>10,
+            'carnet'=>'DC16009',
+            'nombre'=>'Juan Pablo',
+            'activo'=>1,
+            'anio_ingreso'=>2016
+        ]);
+        Estudiante::create([
+            'id_est' => 5,
+            'user_id'=>11,
+            'carnet'=>'AP16014',
+            'nombre'=>'Edwin Joel',
+            'activo'=>1,
+            'anio_ingreso'=>2016
         ]);
         
     }

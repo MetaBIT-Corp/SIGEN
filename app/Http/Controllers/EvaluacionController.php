@@ -774,12 +774,17 @@ class EvaluacionController extends Controller
         $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $turnos = Turno::where('evaluacion_id', $evaluacion_id)->orderBy('fecha_final_turno', 'desc')->first();
 
-        if($turnos->fecha_final_turno > $fecha_hora_actual){
-            $message = "El periodo para resolver la evaluación aún no ha terminado";
-            $notification = 0;
+        if($turnos){
+            if($turnos->fecha_final_turno > $fecha_hora_actual){
+                $message = "El periodo para resolver la evaluación aún no ha terminado";
+                $notification = 0;
+            }else{
+                $message = $evaluacion->nombre_evaluacion;
+                $notification = 1;
+            }
         }else{
-            $message = $evaluacion->nombre_evaluacion;
-            $notification = 1;
+            $message = "Esta evaluación no tiene turnos";
+            $notification = 0;
         }
 
         return view('evaluacion.estadisticosEvaluacion')->with(compact('evaluacion', 'notification', 'message'));
