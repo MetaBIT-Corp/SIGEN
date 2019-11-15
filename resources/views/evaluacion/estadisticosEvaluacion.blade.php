@@ -34,7 +34,7 @@
       <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                Procentajde de Aprobados y Reprobados
+              Procentaje de Aprobados, Reprobados, Evaluados y No evaluados
             </div>
             <div class="col-md-4">
                 <div class="custom-control custom-radio custom-control-inline">
@@ -50,10 +50,10 @@
             </div>
         </div>
         </div>
-      <div class="card-body">
+      <div class="card-body" id="canvasAprobadosReprobados">
         <canvas id="aprovadosReprobados" width="400" height="400"></canvas>
       </div>
-      <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+      <div class="card-footer small text-muted">Finalizada: {{ $fecha_fin }}</div>
     </div>
   </div>
   <div class="col-lg-6">
@@ -74,10 +74,10 @@
         </div>
 
       </div>
-      <div class="card-body">
+      <div class="card-body" id="canvasRangoNotas">
         <canvas id="rangosNotas" width="400" height="400"></canvas>
       </div>
-      <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+      <div class="card-footer small text-muted">Finalizada: {{ $fecha_fin }}</div>
     </div>
   </div>
 </div>
