@@ -267,21 +267,28 @@ class GrupoEmparejamientoController extends Controller
 
     public function destroyGE(Request $request)
     {
+        
         $pregunta = Pregunta::where('grupo_emparejamiento_id',$request->grupoiddelete)->first();
-        if($pregunta){
+
+        if(!$pregunta){
+        
+            Grupo_Emparejamiento::where('id',$request->grupoiddelete)->delete();
+            $message=['success'=>'El grupo fue eliminado.','type'=>2];
+            return response()->json($message);            
+        
+        }else{
+
             $clave_area_pregunta = Clave_Area_Pregunta::where('pregunta_id',$pregunta->id)->count();
+            
             if($clave_area_pregunta>0){
                 $message=['error'=>'El grupo no puede ser eliminado por que ya fue publicado en una encuesta.','type'=>1];            
             }else{
-                
-            }
-        }else{
-            Grupo_Emparejamiento::where('id',$request->grupoiddelete)->delete();
+                Grupo_Emparejamiento::where('id',$request->grupoiddelete)->delete();
                 $message=['success'=>'El grupo fue eliminado.','type'=>2];
+            }
+
+            return response()->json($message);
         }
-
         
-
-        return response()->json($message);
     }
 }

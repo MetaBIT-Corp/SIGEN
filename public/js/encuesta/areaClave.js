@@ -3,6 +3,7 @@ $(document).ready(function(){
     var btnAsignar = $('.btn-asignacion');
 
     btnAsignar.click(function(e){           /*On Click para Submit*/
+        btnAsignar.attr("disabled", true);
 
         e.preventDefault();
 
