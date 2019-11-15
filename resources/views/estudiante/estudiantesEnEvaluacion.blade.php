@@ -14,7 +14,8 @@
 
 @section("ol_breadcrumb")
     <li class="breadcrumb-item"><a href="{{ route('materias') }}">Materia</a></li>
-    <li class="breadcrumb-item">Evaluacion</li>
+    <li class="breadcrumb-item"><a 
+      href=" {{ URL::signedRoute('listado_evaluacion', ['id' => $evaluacion->carga_academica->id_carg_aca]) }}">Evaluaciones</a></li>
     <li class="breadcrumb-item">Estudiantes</li> 
     @if($evaluacion_finalizada)
     <div class="col-7 text-right ml-6">

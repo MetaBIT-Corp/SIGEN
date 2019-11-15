@@ -702,12 +702,14 @@ class EvaluacionController extends Controller
         
         $porcentaje_aprobados = ($aprobados/$total_evaluados)*100;
         $porcentaje_reprobados = ($reprobados/$total_evaluados)*100;
-        //$porcentaje_no_evaluados = ($no_evaluados/count($total_estudiantes))*100;
-
+        $porcentaje_no_evaluados = ($no_evaluados/count($total_estudiantes))*100;
+        $porcentaje_evaluados = ($total_evaluados/count($total_estudiantes))*100;
+        
         $data = [
-            'porcentaje_aprobados' => $porcentaje_aprobados,
-            //'porcentaje_no_evaluados' => $porcentaje_no_evaluados,
-            'porcentaje_reprobados' => $porcentaje_reprobados
+            'porcentaje_aprobados' => round($porcentaje_aprobados, 2),
+            'porcentaje_reprobados' => round($porcentaje_reprobados, 2),
+            'porcentaje_no_evaluados' => round($porcentaje_no_evaluados, 2),
+            'porcentaje_evaluados' => round($porcentaje_evaluados, 2)
         ];
 
         return $data;
@@ -770,19 +772,26 @@ class EvaluacionController extends Controller
     public function estadisticosEvaluacion($evaluacion_id){
         $message = '';
         $notification = '';
+        $fecha_fin = '';
         $evaluacion = Evaluacion::findOrFail($evaluacion_id);
         $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $turnos = Turno::where('evaluacion_id', $evaluacion_id)->orderBy('fecha_final_turno', 'desc')->first();
 
-        if($turnos->fecha_final_turno > $fecha_hora_actual){
-            $message = "El periodo para resolver la evaluación aún no ha terminado";
-            $notification = 0;
+        if($turnos){
+            if($turnos->fecha_final_turno > $fecha_hora_actual){
+                $message = "El periodo para resolver la evaluación aún no ha terminado";
+                $notification = 0;
+            }else{
+                $fecha_fin = $this->convertirFecha($turnos->fecha_final_turno);
+                $message = $evaluacion->nombre_evaluacion;
+                $notification = 1;
+            }
         }else{
-            $message = $evaluacion->nombre_evaluacion;
-            $notification = 1;
+            $message = "Esta evaluación no tiene turnos";
+            $notification = 0;
         }
 
-        return view('evaluacion.estadisticosEvaluacion')->with(compact('evaluacion', 'notification', 'message'));
+        return view('evaluacion.estadisticosEvaluacion')->with(compact('evaluacion', 'notification', 'message', 'fecha_fin'));
 
     }
 

@@ -1,6 +1,8 @@
 $(document).ready(porcentajeAprobadosReprobados('pie'));
 $('[name="chart"]').on('change', changeTypeChart)
-$('#rango').on('change', function(){ rangosNotas($(this).val() )});
+$('#rango').on('change', function(){ 
+    rangosNotas($(this).val() )
+});
 $(document).ready(function(){ rangosNotas(1); });
 
 function changeTypeChart(){
@@ -15,9 +17,12 @@ function changeTypeChart(){
 }
 
 function rangosNotas(intervalo){
+    var body = $('#canvasRangoNotas');
+    body.html('<canvas id="rangosNotas" width="400" height="400"></canvas>');
+
     var ctx2 = document.getElementById('rangosNotas').getContext('2d');
     var evaluacion_id = $('#evaluacion').data('evaluacion-id');
-    
+
     $.get('/evaluacion/'+evaluacion_id+'/estadisticos/intervalo/'+intervalo, function(data){
         var dataValues = data.cantidad;
         var dataLabels = data.etiquetas;
@@ -30,9 +35,9 @@ function rangosNotas(intervalo){
           data: {
             labels: dataLabels,
             datasets: [{
-              label: 'Notas',
+              label: 'Cantidad',
               data: dataValues,
-              backgroundColor: 'rgba(255, 99, 132, 1)',
+              backgroundColor: '#16D1FF',
             }]
           },
           options: {
@@ -61,6 +66,9 @@ function rangosNotas(intervalo){
                     display: true
                 }
               }]
+            },
+            legend: {
+                display: false
             }
           }
         });
@@ -68,24 +76,41 @@ function rangosNotas(intervalo){
 };
 
 function porcentajeAprobadosReprobados(tipo){
+    var body = $('#canvasAprobadosReprobados');
+    body.html('<canvas id="aprovadosReprobados" width="400" height="400"></canvas>');
+
     var evaluacion_id = $('#evaluacion').data('evaluacion-id');
     var ctx = document.getElementById('aprovadosReprobados').getContext('2d');
 
     $.get('/evaluacion/'+evaluacion_id+'/estadisticos/porcentajes', function(data){
+         var porcentaje_aprobados = data.porcentaje_aprobados;
+         var porcentaje_reprobados = data.porcentaje_reprobados;
+         var porcentaje_evaluados = data.porcentaje_evaluados;
+         var porcentaje_no_evaluados = data.porcentaje_no_evaluados;
+
          var myChart = new Chart(ctx, {
             type: tipo,
             data: {
-                labels: ['Aprobados', 'Reprobados'],
+                labels: ['Aprobados', 'Reprobados', 'Evaluados', 'No evaluados'],
                 datasets: [{
                     label: 'Procentaje',
-                    data: [data.porcentaje_aprobados, data.porcentaje_reprobados],
+                    data: [
+                        porcentaje_aprobados, 
+                        porcentaje_reprobados, 
+                        porcentaje_evaluados, 
+                        porcentaje_no_evaluados
+                    ],
                     backgroundColor: [
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 99, 132, 0.2)'
+                        '#00D903',
+                        '#EA1313',
+                        '#00AEFF',
+                        '#FFC100'
                     ],
                     borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 99, 132, 1)'
+                        '#02A200',
+                        '#A20016',
+                        '#0080A2',
+                        '#FF9700'
                     ],
                     borderWidth: 1
                 }]

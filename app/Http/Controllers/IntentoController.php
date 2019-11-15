@@ -382,7 +382,7 @@ class IntentoController extends Controller
         $intento->save();
     }
     public function revisionEvaluacion($id_intento){
-
+        $se_permite_revision = true;
         $estudiante=null;
         $intento=null;
         $respuestas = null;
@@ -413,17 +413,17 @@ class IntentoController extends Controller
                 //esto mientras el periodo de evaluación esté vigente
                 $fecha_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
                 if($turno->CantIntentos > 0 && $fecha_actual < $turno->fecha_final_turno){
-                    return redirect(
+                    /*return redirect(
                         URL::signedRoute(
                             'listado_evaluacion', 
                             ['id' => $evaluacion->id_carga])
-                    )->with('info', 'Info: Podrás consultar la revisión al finalizar todos los intentos');;
+                    )->with('info', 'Info: Podrás consultar la revisión al finalizar todos los intentos');*/
+                    $se_permite_revision = false;
                 }
 
                 //Obtener las preguntas segun la clave asignada aleatoriamente
                 //Se envia el tipo 0 para evaluaciones
                 $preguntas = $this->obtenerPreguntas($intento->clave,0,$estudiante->id_est,$intento->numero_intento,$intento);
-
                 //Variable que contiene el array a mostrar en la paginacion
                 $paginacion = $this->paginacionRevision( 100, $preguntas);
 
@@ -442,7 +442,7 @@ class IntentoController extends Controller
                 $paginacion = $this->paginacionRevision( 100, $preguntas);
             }
         }
-        return view('intento.revisionDeIntento')->with(compact('estudiante','intento','respuestas','paginacion','evaluacion'));
+        return view('intento.revisionDeIntento')->with(compact('estudiante','intento','respuestas','paginacion','evaluacion','se_permite_revision'));
     }
 
     public function calificacionEvaluacion(){

@@ -12,6 +12,7 @@ use App\Materia;
 use App\Evaluacion;
 use Carbon\Carbon;
 use DB;
+use DateTime;
 
 class EstudianteController extends Controller
 {
@@ -95,6 +96,20 @@ class EstudianteController extends Controller
         return view('estudiante.detalleEstudiante',compact('mat_ci_valido'));
     }
 
+    /**
+     * Funcion para convertir la fecha de formato 2019-09-23 23:24:12 a letra
+     * @param fecha
+     * @author Edwin Palacios
+     */
+    public function convertirFecha($fecha){
+        if($fecha){
+            $new_fecha = DateTime::createFromFormat('Y-m-d H:i:s',$fecha)->format('d/m/Y h:i A');
+            return $new_fecha;
+        }else{
+            return ' - ';
+        }
+    }
+
     public function estudiantesEnEvaluacion($evaluacion_id){
 
         $evaluacion = Evaluacion::findOrFail($evaluacion_id);
@@ -127,8 +142,8 @@ class EstudianteController extends Controller
                             ->get();
 
             if(count($intento) > 0){
-                $estudiante->inicio = $intento[0]->fecha_inicio_intento;
-                $estudiante->final = $intento[0]->fecha_final_intento;
+                $estudiante->inicio = $this->convertirFecha($intento[0]->fecha_inicio_intento);
+                $estudiante->final = $this->convertirFecha($intento[0]->fecha_final_intento);
                 $estudiante->nota = $intento[0]->nota_intento;
                 $estudiante->id_intento = $intento[0]->id;
                 $estudiante->revision_estudiante = $intento[0]->revision_estudiante;
