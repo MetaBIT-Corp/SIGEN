@@ -11,6 +11,7 @@
     <li class="breadcrumb-item">Materia</li>
 @endsection
 @section("main")
+
 @if(auth()->user()->role==2)
 <div class="card">
   <div class="card-header">

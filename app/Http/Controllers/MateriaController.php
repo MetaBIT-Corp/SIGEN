@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\Materia;
+use Illuminate\Http\Request;
 
 class MateriaController extends Controller
 {
@@ -18,17 +19,41 @@ class MateriaController extends Controller
         $this->middleware('auth');
     }
 
-    public function listar()
+    public function listar(Request $request)
     {
         $id = auth()->user()->id;
         $mat_con_eva = new Materia();
+
+        $recuperar_ciclos=0;
+        if($request->ciclos){
+            switch ($request->ciclos) {
+            case 1:
+                //Recuperamos 5 ciclos
+                $recuperar_ciclos=5;
+                break;
+            case 2:
+                //Recuperamos 10 ciclos
+                $recuperar_ciclos=10;
+                break;
+            case 3:
+                //Recuperamos 20 ciclos
+                $recuperar_ciclos=20;
+                break;
+            }
+        }
         
         switch (auth()->user()->role) {
             case 0:
                 $materias = array();
 
                 /*Se recupera los ciclos ordenados de mayor a menor con respecto al id, asumiendo que el ultimo registro en la tabla ciclo es el ciclo que se encuentra activo*/
-                $ciclos = DB::table('ciclo')->orderBy('id_ciclo', 'desc')->take(5)->get();
+
+                if($recuperar_ciclos!=0){
+                    $ciclos = DB::table('ciclo')->orderBy('id_ciclo', 'desc')->take($recuperar_ciclos)->get();
+                }else{
+                     $ciclos = DB::table('ciclo')->orderBy('id_ciclo', 'desc')->get();
+                }
+                
                 //dd($ciclos);
                 foreach ($ciclos as $ciclo) {
                     /*Se crea un array asociativo donde se guardaran las materias por ciclo Ejemplo materias[1][] esto significa que del ciclo con id 1 obtienen todas las materias*/
@@ -49,7 +74,12 @@ class MateriaController extends Controller
             case 1:
                 $materias = array();
                 /*Se recupera los ciclos ordenados de mayor a menor con respecto al id, asumiendo que el ultimo registro en la tabla ciclo es el ciclo que se encuentra activo*/
-                $ciclos = DB::table('ciclo')->orderBy('id_ciclo', 'desc')->take(5)->get();
+
+                if($recuperar_ciclos!=0){
+                    $ciclos = DB::table('ciclo')->orderBy('id_ciclo', 'desc')->take($recuperar_ciclos)->get();
+                }else{
+                     $ciclos = DB::table('ciclo')->orderBy('id_ciclo', 'desc')->get();
+                }
                 foreach ($ciclos as $ciclo) {
                     $materias[$ciclo->id_ciclo] = DB::table('cat_mat_materia')
                         ->join('materia_ciclo', 'cat_mat_materia.id_cat_mat', '=', 'materia_ciclo.id_cat_mat')
