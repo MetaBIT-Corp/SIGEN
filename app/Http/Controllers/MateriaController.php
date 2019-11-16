@@ -29,8 +29,7 @@ class MateriaController extends Controller
 
                 /*Se recupera los ciclos ordenados de mayor a menor con respecto al id, asumiendo que el ultimo registro en la tabla ciclo es el ciclo que se encuentra activo*/
                 $ciclos = DB::table('ciclo')->orderBy('id_ciclo', 'desc')->take(5)->get();
-
-                dd($ciclos);
+                //dd($ciclos);
                 foreach ($ciclos as $ciclo) {
                     /*Se crea un array asociativo donde se guardaran las materias por ciclo Ejemplo materias[1][] esto significa que del ciclo con id 1 obtienen todas las materias*/
                     $materias[$ciclo->id_ciclo] = DB::table('cat_mat_materia')
