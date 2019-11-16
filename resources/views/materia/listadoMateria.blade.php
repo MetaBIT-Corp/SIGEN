@@ -9,8 +9,25 @@
 @section("body")
 @section("ol_breadcrumb")
     <li class="breadcrumb-item">Materia</li>
+    @if(auth()->user()->role!=2)
+    <div class="col-11 text-right">
+      <div class="dropdown">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Ciclos a Mostrar
+        </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="/materias?ciclos=1">5 Ciclos</a>
+            <a class="dropdown-item" href="/materias?ciclos=2">10 Ciclos</a>
+            <a class="dropdown-item" href="/materias?ciclos=3">20 Ciclos</a>
+            <a class="dropdown-item" href="/materias">Todos los ciclos</a>
+          </div>
+      </div>
+    </div>
+    @endif
 @endsection
+
 @section("main")
+
 @if(auth()->user()->role==2)
 <div class="card">
   <div class="card-header">
