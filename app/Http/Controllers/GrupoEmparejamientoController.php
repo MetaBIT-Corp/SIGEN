@@ -33,16 +33,16 @@ class GrupoEmparejamientoController extends Controller
 
             $opciones[$indice] = Opcion::where('pregunta_id',$pregunta->id)->where('correcta',1)->first();
 
-            $opciones_incorrectas[$indice] = Opcion::where('pregunta_id',$pregunta->id)->where('correcta',0)->first();
+            $incorrectas[$indice] = Opcion::where('pregunta_id',$pregunta->id)->where('correcta',0)->get();
 
             $indice++;
 
         }
 
-        // dd($opciones_incorrectas);
+        // dd($opciones_incorrectas[1][1]);
 
         if(isset($opciones)){
-            return view('grupo.index',['grupo'=>$grupo,'preguntas'=>$preguntas,'opciones'=>$opciones,'opciones_incorrectas'=>$opciones_incorrectas,'area'=>$area]);
+            return view('grupo.index',['grupo'=>$grupo,'preguntas'=>$preguntas,'opciones'=>$opciones,'incorrectas'=>$incorrectas,'area'=>$area]);
         }else{
             return view('grupo.index',['grupo'=>$grupo,'area'=>$area]);
         }
@@ -116,8 +116,12 @@ class GrupoEmparejamientoController extends Controller
 
                 }
 
+                return response()->json(['pregunta'=>$pregunta, 'opcion'=>$opcion, 'opcion_incorrecta'=>$opcion_incorrecta]);
+
+            }else{
                 return response()->json(['pregunta'=>$pregunta, 'opcion'=>$opcion]);
             }
+
         }
     }
 
@@ -152,18 +156,17 @@ class GrupoEmparejamientoController extends Controller
      */
     public function update(Request $request)
     {
-
         $request_data = $request->all();
 
         $rules = [
-            'pregunta'=> 'required',
-            'opcion' => 'required'
+            'pregunta_edit'=> 'required',
+            'correcta_edit' => 'required'
         ];
 
         $messages = [
 
-            'pregunta.required' => 'Pregunta no ingresada.',
-            'opcion.required' => 'Respuesta Correcta no ingresada.'
+            'pregunta_edit.required' => 'Pregunta no ingresada.',
+            'correcta_edit.required' => 'Respuesta Correcta no ingresada.'
         ];
 
         $validator = Validator::make($request_data, $rules, $messages);
@@ -172,32 +175,37 @@ class GrupoEmparejamientoController extends Controller
             return response::json(array('errors'=>$validator->getMessageBag()->toarray()));
         }else{
 
-            $pregunta = Pregunta::where('id',$request->idPregunta)->update(['pregunta'=>$request->pregunta]);
-            $opcion = Opcion::where('id',$request->idOpcion)->update(['opcion'=>$request->opcion]);
+            $pregunta = Pregunta::where('id',$request->id_pregunta)->update(['pregunta'=>$request->pregunta_edit]);
 
-            if($request->opcionincorrectaedit==null){
-                Opcion::where('pregunta_id',$request->idPregunta)->where('correcta',0)->delete();
-            }else{
-                $count = Opcion::where('pregunta_id',$request->idPregunta)->where('correcta',0)->count();
-                if($count!=0){
-                    //Update
-                    $opcion_incorrecta = Opcion::where('pregunta_id',$request->idPregunta)->where('correcta',0)->update(['opcion'=>$request->opcionincorrectaedit]);
-                    return response()->json(['pregunta'=>$pregunta, 'opcion'=>$opcion, 'opcion_incorrecta'=>$opcion_incorrecta]);
-                }else{
-                    //Create
-                    $opcion_incorrecta = new Opcion;
+            $correcta = Opcion::where('id',$request->id_correcta)->update(['opcion'=>$request->correcta_edit]);
 
-                    $opcion_incorrecta->pregunta_id = $request->idPregunta;
-                    $opcion_incorrecta->opcion = $request->opcionincorrectaedit;
-                    $opcion_incorrecta->correcta = 0;
+            if((int)($request->incorrectas_contador_edit)>0){
 
-                    $opcion_incorrecta->save();
+                for ($i=0; $i<((int)($request->incorrectas_contador_edit)); $i++) {
 
-                    return response()->json(['pregunta'=>$pregunta, 'opcion'=>$opcion, 'opcion_incorrecta'=>$opcion_incorrecta]);
+                    if($request->input('incorrecta'.((string)($i+1)))!=""){
+
+                        if ((Opcion::where('id',$request->input('id_incorrecta'.((string)($i+1))))->count())>0) {
+                            $incorrecta = Opcion::where('id',$request->input('id_incorrecta'.((string)($i+1))))->update(['opcion'=>$request->input('incorrecta'.((string)($i+1)))]);
+                        }else{
+                            $incorrecta = new Opcion;
+                            $incorrecta->pregunta_id = $request->id_pregunta;
+                            $incorrecta->opcion = $request->input('incorrecta'.((string)($i+1)));
+                            $incorrecta->correcta = 0;
+                            $incorrecta->save();
+                        }
+                        
+                    }else{
+                        $incorrecta = Opcion::where('id',$request->input('id_incorrecta'.((string)($i+1))))->delete();
+                    }
+
                 }
-            }
 
-            return response()->json(['pregunta'=>$pregunta, 'opcion'=>$opcion]);
+                return response()->json(['pregunta'=>$pregunta, 'correcta'=>$correcta,'incorrecta'=>$incorrecta]);
+
+            }else{}
+
+            return response()->json(['pregunta'=>$pregunta, 'correcta'=>$correcta]);
         }
     }
 
@@ -209,8 +217,8 @@ class GrupoEmparejamientoController extends Controller
      */
     public function destroy(Request $request)
     {
-        Opcion::where('pregunta_id',$request->idPregunta)->delete();
-        Pregunta::find($request->idPregunta)->delete();
+        Opcion::where('pregunta_id',$request->id_pregunta_delete)->delete();
+        Pregunta::find($request->id_pregunta_delete)->delete();
         return back();
     }
 
