@@ -87,6 +87,11 @@
 @endsection
 
 @section('main')
+<div class="text-center" id="spinner" hidden="true">
+    <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;" role="status" >
+    </div><br>
+    <span class="">Importando ...</span>
+</div>
     <div id="message-success" class="alert alert-success alert-dismissible fade show text-center" role="alert" hidden>
       <strong id="text-success">Exito</strong>
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
