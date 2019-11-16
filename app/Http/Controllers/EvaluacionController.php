@@ -800,13 +800,26 @@ class EvaluacionController extends Controller
 
     public function exportarNotasExcel($evaluacion_id) 
     {
-        return Excel::download(new NotasExport($evaluacion_id), 'notas.xlsx');
+        $nombre_file = $this->getNombreEvaluacionFormato($evaluacion_id);
+
+        return Excel::download(new NotasExport($evaluacion_id), $nombre_file . '.xlsx');
     }
 
     //Parte para exportar notas en formato Pdf
     public function exportarNotasPdf($evaluacion_id) 
     {
-        return Excel::download(new NotasExport($evaluacion_id), 'notas.pdf');
+        $nombre_file = $this->getNombreEvaluacionFormato($evaluacion_id);
+
+        return Excel::download(new NotasExport($evaluacion_id), $nombre_file . '.pdf');
+    }
+
+    public function getNombreEvaluacionFormato($evaluacion_id){
+        $evaluacion = Evaluacion::find($evaluacion_id);
+        return 'notas_' . strval($this->formato_str($evaluacion->nombre_evaluacion));
+    }
+
+    public function formato_str($string){
+        return str_replace(" ", "_", $string);
     }
 
 

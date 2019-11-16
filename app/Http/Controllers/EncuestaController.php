@@ -627,16 +627,27 @@ class EncuestaController extends Controller
 
     public function exportarResultadosExcel($encuesta_id) 
     {
-        //return (new ResultadosEncuestaExport($encuesta_id))->view();
-        return Excel::download(new ResultadosEncuestaExport($encuesta_id,1), 'resultados.xlsx');
-    }
+        $nombre_file = $this->getTituloEncuestaFormato($encuesta_id);
+
+        return Excel::download(new ResultadosEncuestaExport($encuesta_id,1), $nombre_file . '.xlsx');
+    } 
 
     //Parte para exportar notas en formato Pdf
 
     public function exportarResultadosPdf($encuesta_id) 
     {
-        return Excel::download(new ResultadosEncuestaExport($encuesta_id,0), 'resultados.pdf');
+        $nombre_file = $this->getTituloEncuestaFormato($encuesta_id);
+
+        return Excel::download(new ResultadosEncuestaExport($encuesta_id,0), $nombre_file . '.pdf');
     }
 
-    
+    public function getTituloEncuestaFormato($encuesta_id){
+        $encuesta = Encuesta::find($encuesta_id);
+        return 'resultados_' . strval($this->formato_str($encuesta->titulo_encuesta));
+    }
+
+    public function formato_str($string){
+        return str_replace(" ", "_", $string);
+    }
+
 }
