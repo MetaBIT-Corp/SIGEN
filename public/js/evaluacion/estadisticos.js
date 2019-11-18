@@ -41,6 +41,12 @@ function rangosNotas(intervalo){
             }]
           },
           options: {
+            tooltips: {
+                enabled: false,
+                footerFontColor: '#000000',
+                bodyFontColor: '#000000'
+
+            },
             scales: {
               xAxes: [{
                 display: false,
@@ -63,7 +69,10 @@ function rangosNotas(intervalo){
                   beginAtZero:true
                 },
                 scaleLabel: {
-                    display: true
+                    display: true,
+                    labelString: 'Cantidad de estudiantes',
+                    fontColor: 'black',
+                    fontSize: 15
                 }
               }]
             },
@@ -77,10 +86,19 @@ function rangosNotas(intervalo){
 
 function porcentajeAprobadosReprobados(tipo){
     var body = $('#canvasAprobadosReprobados');
+    var showScale = true;
+    var showAxis = true;
+    var showTooltip = false;
     body.html('<canvas id="aprovadosReprobados" width="400" height="400"></canvas>');
 
     var evaluacion_id = $('#evaluacion').data('evaluacion-id');
     var ctx = document.getElementById('aprovadosReprobados').getContext('2d');
+
+    if(tipo == 'pie'){
+        showScale = false;
+        showAxis = false;
+        showTooltip = true;
+    }
 
     $.get('/evaluacion/'+evaluacion_id+'/estadisticos/porcentajes', function(data){
          var porcentaje_aprobados = data.porcentaje_aprobados;
@@ -116,8 +134,12 @@ function porcentajeAprobadosReprobados(tipo){
                 }]
             },
             options: {
+                tooltips: {
+                    enabled: showTooltip
+                },
                 scales: {
                     yAxes: [{
+                        display:showAxis,
                         gridLines: {
                             zeroLineColor: "black",
                             zeroLineWidth: 2
@@ -129,7 +151,10 @@ function porcentajeAprobadosReprobados(tipo){
                             beginAtZero: true
                         },
                         scaleLabel: {
-                            display: true
+                            display: showScale,
+                            labelString: 'Porcentajes',
+                            fontColor: 'black',
+                            fontSize: 15
                         }
                     }]
                 },
