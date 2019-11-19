@@ -110,12 +110,20 @@ class EstudianteController extends Controller
         }
     }
 
+    /**
+     * Función para mostrar los estudiantes que se encuentran en la evalución 
+     * @param  int -> id de la evalución que se desea consultar la información
+     * @return view
+     * @author Enrique Menjívar <mt16007@ues.edu.sv>
+     */
     public function estudiantesEnEvaluacion($evaluacion_id){
 
         $evaluacion = Evaluacion::findOrFail($evaluacion_id);
         
+        //Llamada al metodo evaluacionFinalizada($evaluacion_id);
         $evaluacion_finalizada = $this->evaluacionFinalizada($evaluacion_id);
 
+        //Obtener los estudiantes que tienen derecho a la evalución
         $estudiantes = DB::table('evaluacion as ev')
                             ->where('ev.id', $evaluacion_id)
                             ->join('carga_academica as ca', 'ev.id_carga', '=', 'ca.id_carg_aca')
@@ -125,6 +133,7 @@ class EstudianteController extends Controller
                             ->orderBy('es.carnet', 'asc')
                             ->get();
 
+        //Agregando las columnas necesarias al array $estudiantes
         $estudiantes->pluck('inicio');
         $estudiantes->pluck('final');
         $estudiantes->pluck('nota');
@@ -132,7 +141,10 @@ class EstudianteController extends Controller
         $estudiantes->pluck('id_intento'); 
         $estudiantes->pluck('revision_estudiante');
 
+        //Obtner información para las columnas recién agregadas para cada estudiante
         foreach($estudiantes as $estudiante){
+
+            //Consulta para verficar si existe un intento de la evaluación, es decir, verificar que el estudiante ya haya iniciado la evaluación
             $intento = DB::table('turno as t')
                             ->where('t.evaluacion_id', $evaluacion_id)
                             ->join('clave as c', 'c.turno_id', '=', 't.id')
@@ -141,6 +153,7 @@ class EstudianteController extends Controller
                             ->select('i.fecha_inicio_intento', 'i.fecha_final_intento', 'i.nota_intento', 'i.id', 'i.revision_estudiante')
                             ->get();
 
+            //Si ya la incicio
             if(count($intento) > 0){
                 $estudiante->inicio = $this->convertirFecha($intento[0]->fecha_inicio_intento);
                 $estudiante->final = $this->convertirFecha($intento[0]->fecha_final_intento);
@@ -148,17 +161,18 @@ class EstudianteController extends Controller
                 $estudiante->id_intento = $intento[0]->id;
                 $estudiante->revision_estudiante = $intento[0]->revision_estudiante;
                 
+                //Verficar si ya terminó la evaluación
                 if($intento[0]->fecha_inicio_intento && $intento[0]->fecha_final_intento){
-                    $estudiante->estado = 2;
-                }else{
-                    $estudiante->estado = 1;
+                    $estudiante->estado = 2; //Asignación de estado Finalizado
+                }else{ 
+                    $estudiante->estado = 1; //Asignación de estado Iniciado
                 }
-
+            //Si no la ha iniciado
             }else{
                 $estudiante->inicio = ' - ';
                 $estudiante->final =  ' - ';
                 $estudiante->nota =  ' - ';
-                $estudiante->estado = 0;
+                $estudiante->estado = 0;    //Asignación de estado No iniciado
                 $estudiante->id_intento = 0;
                 $estudiante->revision_estudiante = 0;
             }

@@ -20,6 +20,8 @@ $(document).ready(function() {
     $('#fileExcel').on("change", function() {
         var modalidad = $(this).data('area');
         var data = new FormData($("#form-excel")[0]);
+        //Mostrando Spinner
+        $("#spinner").removeAttr("hidden");
         $.ajax({
             url: '/upload-excel/' + modalidad,
             type: "POST",
@@ -43,7 +45,12 @@ $(document).ready(function() {
                     $("#message-error").attr('hidden', true);
                 }, 2000);
             }
+            //Para ocultar spinner
+            $("#spinner").attr("hidden",true);
+
         }).fail(function(xhr, status, e) {
+            //Para ocultar spinner
+            $("#spinner").attr("hidden",true);
             console.log(e);
         });
     });
