@@ -336,7 +336,7 @@ class OpcionController extends Controller
     public function update_revision(Request $request)
     {
 
-        if(($request->tipo_pregunta!=3)&&($request->tipo_pregunta!=4)){
+        if($request->tipo_pregunta!=4){
 
             $indice_correcta = $request->correcta;
             $opcion_correcta = $request->input('id_opcion'.((string)($indice_correcta)));
@@ -348,7 +348,7 @@ class OpcionController extends Controller
 
             Opcion::where("id",$opcion_correcta)->update(["correcta"=>1]);
 
-        }elseif($request->tipo_pregunta==4){
+        }else{
 
             if($request->cantidad_nuevas>0){
                 for($i=1; $i <= $request->cantidad_nuevas ; $i++){
