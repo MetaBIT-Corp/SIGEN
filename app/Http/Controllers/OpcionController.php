@@ -333,6 +333,42 @@ class OpcionController extends Controller
         }
     }
 
+    public function update_revision(Request $request)
+    {
+
+        if(($request->tipo_pregunta!=3)&&($request->tipo_pregunta!=4)){
+
+            $indice_correcta = $request->correcta;
+            $opcion_correcta = $request->input('id_opcion'.((string)($indice_correcta)));
+
+            $opciones = Opcion::where('pregunta_id',$request->id_pregunta)->get();
+            foreach ($opciones as $opcion) {
+                Opcion::where("id",$opcion->id)->update(["correcta"=>0]);
+            }
+
+            Opcion::where("id",$opcion_correcta)->update(["correcta"=>1]);
+
+        }elseif($request->tipo_pregunta==4){
+
+            if($request->cantidad_nuevas>0){
+                for($i=1; $i <= $request->cantidad_nuevas ; $i++){
+
+                    if(($request->input('nueva'.((string)($i))))!=null){
+
+                        $opcion_nueva = new Opcion;
+                        $opcion_nueva->pregunta_id=$request->id_pregunta;
+                        $opcion_nueva->opcion=$request->input('nueva'.((string)($i)));
+                        $opcion_nueva->correcta=1;
+                        $opcion_nueva->save();
+                    }
+                }
+            }
+        }
+
+        return back();
+    }
+    
+
     /**
      * Remove the specified resource from storage.
      *

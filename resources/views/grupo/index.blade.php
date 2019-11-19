@@ -162,7 +162,7 @@
 			</div>
 
 			<form action="{{ route('editar-pregunta-grupo',$grupo->id)}}" method="POST">
-				<div class="modal-body" style=" max-height: calc(100vh - 200px); overflow-y: auto;">
+				<div class="modal-body" style="max-height: calc(100vh - 200px); overflow-y: auto;">
 					<div class="form-group d-none">
 						<label class="col-form-label" for="id-grupo-edit">ID Grupo:</label>
 						<input type="text" id="id-grupo-edit" name="id_grupo_edit" class="form-control-plaintext" value="{{$grupo->id}}">
