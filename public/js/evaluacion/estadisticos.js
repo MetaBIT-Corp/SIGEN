@@ -1,6 +1,8 @@
 $(document).ready(porcentajeAprobadosReprobados('pie'));
 $('[name="chart"]').on('change', changeTypeChart)
-$('#rango').on('change', function(){ rangosNotas($(this).val() )});
+$('#rango').on('change', function(){ 
+    rangosNotas($(this).val() )
+});
 $(document).ready(function(){ rangosNotas(1); });
 
 function changeTypeChart(){
@@ -15,9 +17,12 @@ function changeTypeChart(){
 }
 
 function rangosNotas(intervalo){
+    var body = $('#canvasRangoNotas');
+    body.html('<canvas id="rangosNotas" width="400" height="400"></canvas>');
+
     var ctx2 = document.getElementById('rangosNotas').getContext('2d');
     var evaluacion_id = $('#evaluacion').data('evaluacion-id');
-    
+
     $.get('/evaluacion/'+evaluacion_id+'/estadisticos/intervalo/'+intervalo, function(data){
         var dataValues = data.cantidad;
         var dataLabels = data.etiquetas;
@@ -30,12 +35,18 @@ function rangosNotas(intervalo){
           data: {
             labels: dataLabels,
             datasets: [{
-              label: 'Notas',
+              label: 'Cantidad',
               data: dataValues,
-              backgroundColor: 'rgba(255, 99, 132, 1)',
+              backgroundColor: '#16D1FF',
             }]
           },
           options: {
+            tooltips: {
+                enabled: false,
+                footerFontColor: '#000000',
+                bodyFontColor: '#000000'
+
+            },
             scales: {
               xAxes: [{
                 display: false,
@@ -58,9 +69,15 @@ function rangosNotas(intervalo){
                   beginAtZero:true
                 },
                 scaleLabel: {
-                    display: true
+                    display: true,
+                    labelString: 'Cantidad de estudiantes',
+                    fontColor: 'black',
+                    fontSize: 15
                 }
               }]
+            },
+            legend: {
+                display: false
             }
           }
         });
@@ -68,31 +85,61 @@ function rangosNotas(intervalo){
 };
 
 function porcentajeAprobadosReprobados(tipo){
+    var body = $('#canvasAprobadosReprobados');
+    var showScale = true;
+    var showAxis = true;
+    var showTooltip = false;
+    body.html('<canvas id="aprovadosReprobados" width="400" height="400"></canvas>');
+
     var evaluacion_id = $('#evaluacion').data('evaluacion-id');
     var ctx = document.getElementById('aprovadosReprobados').getContext('2d');
 
+    if(tipo == 'pie'){
+        showScale = false;
+        showAxis = false;
+        showTooltip = true;
+    }
+
     $.get('/evaluacion/'+evaluacion_id+'/estadisticos/porcentajes', function(data){
+         var porcentaje_aprobados = data.porcentaje_aprobados;
+         var porcentaje_reprobados = data.porcentaje_reprobados;
+         var porcentaje_evaluados = data.porcentaje_evaluados;
+         var porcentaje_no_evaluados = data.porcentaje_no_evaluados;
+
          var myChart = new Chart(ctx, {
             type: tipo,
             data: {
-                labels: ['Aprobados', 'Reprobados'],
+                labels: ['Aprobados', 'Reprobados', 'Evaluados', 'No evaluados'],
                 datasets: [{
                     label: 'Procentaje',
-                    data: [data.porcentaje_aprobados, data.porcentaje_reprobados],
+                    data: [
+                        porcentaje_aprobados, 
+                        porcentaje_reprobados, 
+                        porcentaje_evaluados, 
+                        porcentaje_no_evaluados
+                    ],
                     backgroundColor: [
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 99, 132, 0.2)'
+                        '#00D903',
+                        '#EA1313',
+                        '#00AEFF',
+                        '#FFC100'
                     ],
                     borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 99, 132, 1)'
+                        '#02A200',
+                        '#A20016',
+                        '#0080A2',
+                        '#FF9700'
                     ],
                     borderWidth: 1
                 }]
             },
             options: {
+                tooltips: {
+                    enabled: showTooltip
+                },
                 scales: {
                     yAxes: [{
+                        display:showAxis,
                         gridLines: {
                             zeroLineColor: "black",
                             zeroLineWidth: 2
@@ -104,7 +151,10 @@ function porcentajeAprobadosReprobados(tipo){
                             beginAtZero: true
                         },
                         scaleLabel: {
-                            display: true
+                            display: showScale,
+                            labelString: 'Porcentajes',
+                            fontColor: 'black',
+                            fontSize: 15
                         }
                     }]
                 },

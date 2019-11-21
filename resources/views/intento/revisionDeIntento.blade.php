@@ -1,5 +1,9 @@
 @extends("../layouts.plantilla")
 
+@php
+	use App\Opcion;
+@endphp
+
 @section("head")
 	@php
 	{{
@@ -81,13 +85,35 @@
 																		{{ $i+1}}.&nbsp&nbsp{{ $valores[$i]['pregunta']->pregunta }}
 																	</h4>
 																</div>
+																
 																@if(auth()->user()->IsTeacher)
+																	
 																	<div class="col-md-1">
-																		<a class="btn btn-sm btn-secondary" title="Editar Opciones" href="{{ route('index-opcion',$valores[$i]['pregunta']->id)}}">
+																		<a class="btn btn-sm btn-info text-white" title="Editar Opciones"
+
+																			style="cursor: pointer;" 
+
+																			data-id-pregunta="{{$valores[$i]['pregunta']->id}}"
+																			data-pregunta="{{$valores[$i]['pregunta']->pregunta}}"
+																			data-tipo-pregunta="{{$valores[$i]['tipo_item']}}"
+
+																			data-cantidad-opciones ="{{$valores[$i]['opciones']->count()}}"
+
+																			@foreach($valores[$i]['opciones'] as $opcion)
+																				data-id-opcion{{$loop->iteration}}="{{$opcion->id}}"
+																				data-opcion{{$loop->iteration}}="{{$opcion->opcion}}"
+																				data-correcta-opcion{{$loop->iteration}}="{{$opcion->correcta}}"
+																			@endforeach
+
+																			data-toggle="modal"
+																			data-target="#edit-modal"
+																		>
 																			<span class="icon-edit"></span>
 																		</a>
 																	</div>
+
 																@endif
+
 															</div>
 														</div>
 
@@ -101,11 +127,24 @@
 
 															@foreach($respuestas as $respuesta)
 																@if($respuesta->id_pregunta == $valores[$i]['pregunta']->id)
-																	@if(strtolower($respuesta->texto_respuesta) == strtolower($valores[$i]['opciones'][0]->opcion))
-																		style="background-color: #d4edda;"
-																	@else
-																		style="background-color: #f8d7da;"
-																	@endif
+
+																	<?php $contador_rc = 0; ?>
+
+																	@foreach(($valores[$i]['opciones']) as $opcion)
+																		@if(strtolower($respuesta->texto_respuesta) == strtolower($opcion->opcion))
+																			<?php $contador_rc++ ; ?>
+																		@else
+																			<?php $contador_rc = $contador_rc ; ?>
+																		@endif
+																	@endforeach
+																		@if($contador_rc>0)
+																			style="background-color: #d4edda;"
+																		@else
+																			style="background-color: #f8d7da;"
+																		@endif
+
+																	
+																	
 																@endif
 															@endforeach
 															></input>
@@ -128,6 +167,8 @@
 																		@endif
 																	@endforeach>
 
+
+
 																		<input  disabled="true" class="custom-control-input" id="{{ $valores[$i]['opciones'][$j]->id}}" name="pregunta_{{ $valores[$i]['pregunta']->id }}" type="radio" value="opcion_{{ $valores[$i]['opciones'][$j]->id }}"
 
 																		@if($valores[$i]['opciones'][$j]->seleccionada) checked
@@ -140,6 +181,7 @@
 																			@endif
 																		@endforeach>
 
+
 																			<label class="custom-control-label" for="{{ $valores[$i]['opciones'][$j]->id}}">
 																				<h5>{{ $valores[$i]['opciones'][$j]->opcion }}</h5>
 																			</label>
@@ -148,6 +190,7 @@
 																@endfor
 															</div>
 														@endif
+
 													</div>
 												@endif
 
@@ -166,6 +209,39 @@
 																				{{ $valores[$i]['preguntas'][$r]->pregunta }}
 																			</td>
 																			<td>
+
+																			<a class="btn btn-sm btn-info text-white" title="Editar Opciones"
+
+																			style="cursor: pointer;" 
+
+																			data-id-pregunta="{{ $valores[$i]['preguntas'][$r]->id }}"
+																			data-pregunta="{{ $valores[$i]['preguntas'][$r]->pregunta}}"
+																			data-tipo-pregunta="3"
+
+
+																			<?php
+																				$opciones_gpo = Opcion::where('pregunta_id', $valores[$i]['preguntas'][$r]->id)->get();
+																			?>
+
+																			data-cantidad-opciones="{{$opciones_gpo->count()}}"
+
+																			@foreach($opciones_gpo as $opcion)
+																				data-id-opcion{{$loop->iteration}}="{{$opcion->id}}"
+																				data-opcion{{$loop->iteration}}="{{$opcion->opcion}}"
+																				data-correcta-opcion{{$loop->iteration}}="{{$opcion->correcta}}"
+																			@endforeach
+
+
+																			data-toggle="modal"
+																			data-target="#edit-modal"
+																			>
+																				<span class="icon-edit"></span>
+																			</a>
+
+																				
+
+																			</td>
+																			<td>
 																				@php
 																				{{
 																					/*Funcionalidad que mezcla las opciones de un select,
@@ -179,6 +255,7 @@
 																				}}
 																				@endphp
 
+																				
 																				<select disabled="true" class="custom-select col-12" id="{{ $valores[$i]['preguntas'][$r]->id }}" name="pregunta_{{ $valores[$i]['preguntas'][$r]->id }}"
 																				//recorremos las respuestas
 
@@ -233,7 +310,7 @@
 												<!--Botones de control para paginacion-->
 												<div class="col-md-5 text-right">
 													@if(auth()->user()->IsTeacher)
-														<a class="btn btn-warning text-secondary" href="{{ route('recalificar_evaluacion',$intento->id)}}">
+														<a class="btn btn-warning" href="{{ route('recalificar_evaluacion',$intento->id)}}">
 															Recálculo de Nota
 														</a>
 													@endif
@@ -264,6 +341,8 @@
 			</div>
 		</div>
 
+	@include('intento.edicion_opcion')
+
 
 	@endsection
 
@@ -275,5 +354,6 @@
 				window.onhashchange=function(){window.location.hash="no-back-button";}
 			}
 		</script>
+		<script src="{{asset('js/intento/edicion_opcion.js')}}"></script>
 	@endsection
 @endsection

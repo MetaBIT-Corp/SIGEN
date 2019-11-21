@@ -268,6 +268,7 @@ class PreguntaController extends Controller
         //Condicional segun modalidad del area, se procedera de manera diferente en la importacion
         switch ($modalidad_area) {
             case 1:
+            //Modalidad Opcion Multiple
                 //Validacion de plantilla
                 if($spreadsheet->getActiveSheet()->getCell('I1')=="1OP"){
                     for ($i=5; $i <=count($data) ; $i++) {
@@ -308,6 +309,7 @@ class PreguntaController extends Controller
                 }
                 break;
             case 2:
+            //Modalidad Falso/Verdadero
                 //Validacion de plantilla
                 if($spreadsheet->getActiveSheet()->getCell('F6')=="2FV"){
                     for($i=2;$i<=count($data);$i++){
@@ -350,6 +352,7 @@ class PreguntaController extends Controller
                 }                
                 break;
             case 3:
+            //Modalidad grupo emparejamiento
                 //Validacion de plantilla
                 if($spreadsheet->getSheetByName("BASE")){
 
@@ -385,13 +388,15 @@ class PreguntaController extends Controller
                                                 $op->correcta=1;
                                                 $op->save();
                                             }
-                                            if($key=="C"&&$val!=null){
-                                                //Creacion de otras opciones
-                                                $op=new Opcion();
-                                                $op->pregunta_id=$preg->id;
-                                                $op->opcion=$val;
-                                                $op->correcta=0;
-                                                $op->save();
+                                            else{
+                                                if($key!="A"&&$val!=null){
+                                                    //Creacion de otras opciones
+                                                    $op=new Opcion();
+                                                    $op->pregunta_id=$preg->id;
+                                                    $op->opcion=$val;
+                                                    $op->correcta=0;
+                                                    $op->save();
+                                                }
                                             }
                                             
                                         }
@@ -404,6 +409,7 @@ class PreguntaController extends Controller
                 }
                 break;
             case 4:
+            //Modalidad Texto Corto
                 //Validacion de plantilla
                 if($spreadsheet->getActiveSheet()->getCell('B4')=="4TC"){
                     //dd($data);
@@ -441,7 +447,6 @@ class PreguntaController extends Controller
                     }
                     $message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
                 }
-                
                 break;
         }
 

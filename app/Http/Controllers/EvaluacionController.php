@@ -679,9 +679,17 @@ class EvaluacionController extends Controller
         return $new_fecha;
     }
 
+    /**
+     * Función para obtener el porcentaje de estudiante que aprobaron y reprobaron la evaluacion, asi como tambien
+     * los que la realizaron y los que no la realizaron para mostrarlos en un gráfico
+     * @param  int
+     * @return json
+     * @author Enrique Menjívar <mt16007@ues.edu.sv>
+     */
     public function getPorcentajeAprovadosReprobados($evaluacion_id){
         $evaluacion = Evaluacion::findOrFail($evaluacion_id);
 
+        //Obtener los intentos, es decir, los estudiantes que realizaron la evaluación
         $intentos = DB::table('turno as t')
                         ->where('t.evaluacion_id', $evaluacion_id)
                         ->join('clave as c', 'c.turno_id', '=', 't.id')
@@ -689,6 +697,7 @@ class EvaluacionController extends Controller
                         ->select('i.id', 'i.nota_intento')
                         ->get();
 
+        //Obtener los intentos de los estudiantes cuya nota se mayor o igual que 6
         $aprobados_query = DB::table('turno as t')
                             ->where('t.evaluacion_id', $evaluacion_id)
                             ->join('clave as c', 'c.turno_id', '=', 't.id')
@@ -697,6 +706,7 @@ class EvaluacionController extends Controller
                             ->select('i.id', 'i.nota_intento')
                             ->get();
 
+         //Obtener el total de estudiantes que tenían derecho a realizar la evalución
          $total_estudiantes = DB::table('evaluacion as ev')
                                 ->where('ev.id', $evaluacion_id)
                                 ->join('carga_academica as ca', 'ev.id_carga', '=', 'ca.id_carg_aca')
@@ -704,50 +714,69 @@ class EvaluacionController extends Controller
                                 ->join('estudiante as es', 'die.id_est', '=', 'es.id_est')
                                 ->get();
 
+        //Cantidades
         $total_evaluados = count($intentos);
         $aprobados = count($aprobados_query);
         $reprobados = $total_evaluados - $aprobados;
         $no_evaluados = count($total_estudiantes) - $total_evaluados;
         
+        //Porcentajes
         $porcentaje_aprobados = ($aprobados/$total_evaluados)*100;
         $porcentaje_reprobados = ($reprobados/$total_evaluados)*100;
-        //$porcentaje_no_evaluados = ($no_evaluados/count($total_estudiantes))*100;
-
+        $porcentaje_no_evaluados = ($no_evaluados/count($total_estudiantes))*100;
+        $porcentaje_evaluados = ($total_evaluados/count($total_estudiantes))*100;
+        
+        //La variable $data es un json que contendrá todos los porcentajes calculados anteriormente con un precsion de 2 decimales
         $data = [
-            'porcentaje_aprobados' => $porcentaje_aprobados,
-            //'porcentaje_no_evaluados' => $porcentaje_no_evaluados,
-            'porcentaje_reprobados' => $porcentaje_reprobados
+            'porcentaje_aprobados' => round($porcentaje_aprobados, 2),
+            'porcentaje_reprobados' => round($porcentaje_reprobados, 2),
+            'porcentaje_no_evaluados' => round($porcentaje_no_evaluados, 2),
+            'porcentaje_evaluados' => round($porcentaje_evaluados, 2)
         ];
 
         return $data;
     }
 
+    /**
+     * Función para obtener la cantidad de estudiantes según el intervalos que se solicita y mostrarla en un gráfico
+     * @param  int -> id de la evaluación
+     * @param  int -> intervalo del histograma de notas
+     * @return json
+     * @author Enrique Menjívar <mt16007@ues.edu.sv>
+     */
     public function getIntervalosNotas($evaluacion_id, $intervalo){
         $evaluacion = Evaluacion::findOrFail($evaluacion_id);
+        $inc = 0; //Guardará un valor de incremento para consultar entre intevalos
+        
+        //Validacion para que no se intruduzca un valor diferente al mostrado en el combobox
         if($intervalo != 1 && $intervalo != 2 && $intervalo != 5){
             $intervalo = 1;
         }
 
-        $lim_superior = $intervalo;
-        $lim_inferior = 0;
-        $max_y = 10;
+        $lim_superior = $intervalo; //limite superior del intervalo
+        $lim_inferior = 0;          //limite inferior del intervalo
+        $max_y = 10;                //Logintud por defecto del eje y
 
-        $cantidad = array();
-        $etiquetas = array();
+        $cantidad = array(); //Guardará la cantidad por cada iteración según el intervalo indicado
+        $etiquetas = array();//Giardará los números que se mostrarán en el eje X ya que varian según el intervalo
 
-        array_push($etiquetas, 0);
+        array_push($etiquetas, 0);//Poner 0 como primer valor en el eje X
 
         for($i=0; $i<10; $i+=$intervalo){
+            if($i>1){
+                $inc = 0.0001;
+            }
+            //Obtienen los registros de intento cuya nota esta entre el intervalo indicado
             $notas = DB::table('turno as t')
                         ->where('t.evaluacion_id', $evaluacion_id)
                         ->join('clave as c', 'c.turno_id', '=', 't.id')
                         ->join('intento as i', 'i.clave_id', '=', 'c.id')
-                        ->whereBetween('i.nota_intento', array($lim_inferior+0.001, $lim_superior) )
+                        ->whereBetween('i.nota_intento', array($lim_inferior+$inc, $lim_superior) )
                         ->select('i.id', 'i.nota_intento')
                         ->get();
 
             if(count($notas) > 0){
-                array_push($cantidad, count($notas));
+                array_push($cantidad, count($notas)); 
             }else{
                 array_push($cantidad, 0);
             }
@@ -758,6 +787,7 @@ class EvaluacionController extends Controller
             array_push($etiquetas, (int)$lim_inferior);
         }
 
+        //Obtener el intervalos donde se concentran la mayor parte de notas y asignarselo al eje y
         foreach($cantidad as $c){
             if($c > $max_y){
                 $max_y = $c;
@@ -765,6 +795,7 @@ class EvaluacionController extends Controller
 
         }
 
+        //La variable $data retornará un json con los valores calculados anteriormente
         $data = [
             'cantidad'  => $cantidad,
             'etiquetas' => $etiquetas,
@@ -776,18 +807,28 @@ class EvaluacionController extends Controller
         return $data;
     }
 
+    /**
+     * Funcíon para mostrar los estadísticos de la evaluación correspondiente
+     * @param  int -> id de la evaluación que se desean ver los estadísticos
+     * @return view
+     * @author Enrique Menjívar <mt16007@ues.edu.sv>
+     */
     public function estadisticosEvaluacion($evaluacion_id){
         $message = '';
         $notification = '';
+        $fecha_fin = '';
         $evaluacion = Evaluacion::findOrFail($evaluacion_id);
         $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $turnos = Turno::where('evaluacion_id', $evaluacion_id)->orderBy('fecha_final_turno', 'desc')->first();
 
         if($turnos){
+            //validar que todos los turnos estén finalizados para ver los resultados
             if($turnos->fecha_final_turno > $fecha_hora_actual){
                 $message = "El periodo para resolver la evaluación aún no ha terminado";
                 $notification = 0;
             }else{
+                //Cambiando el formato de la fecha
+                $fecha_fin = $this->convertirFecha($turnos->fecha_final_turno);
                 $message = $evaluacion->nombre_evaluacion;
                 $notification = 1;
             }
@@ -796,7 +837,7 @@ class EvaluacionController extends Controller
             $notification = 0;
         }
 
-        return view('evaluacion.estadisticosEvaluacion')->with(compact('evaluacion', 'notification', 'message'));
+        return view('evaluacion.estadisticosEvaluacion')->with(compact('evaluacion', 'notification', 'message', 'fecha_fin'));
 
     }
 
@@ -805,13 +846,26 @@ class EvaluacionController extends Controller
 
     public function exportarNotasExcel($evaluacion_id) 
     {
-        return Excel::download(new NotasExport($evaluacion_id), 'notas.xlsx');
+        $nombre_file = $this->getNombreEvaluacionFormato($evaluacion_id);
+
+        return Excel::download(new NotasExport($evaluacion_id), $nombre_file . '.xlsx');
     }
 
     //Parte para exportar notas en formato Pdf
     public function exportarNotasPdf($evaluacion_id) 
     {
-        return Excel::download(new NotasExport($evaluacion_id), 'notas.pdf');
+        $nombre_file = $this->getNombreEvaluacionFormato($evaluacion_id);
+
+        return Excel::download(new NotasExport($evaluacion_id), $nombre_file . '.pdf');
+    }
+
+    public function getNombreEvaluacionFormato($evaluacion_id){
+        $evaluacion = Evaluacion::find($evaluacion_id);
+        return 'notas_' . strval($this->formato_str($evaluacion->nombre_evaluacion));
+    }
+
+    public function formato_str($string){
+        return str_replace(" ", "_", $string);
     }
 
 

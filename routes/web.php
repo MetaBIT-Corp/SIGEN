@@ -149,6 +149,8 @@ Route::group(['middleware' => 'teacher'], function(){
     Route::post('pregunta/{pregunta_id}/opcion/update','OpcionController@update')->name('actualizar-opcion');
     Route::post('pregunta/{pregunta_id}/opcion/delete','OpcionController@destroy')->name('eliminar-opcion');
 
+    Route::post('pregunta/opcion/update_rev','OpcionController@update_revision')->name('actualizar-opcion-revision');
+
     /*Rutas para Gestión Grupo Emparejamiento*/
     Route::get('grupo/{grupo_id}/preguntas/','GrupoEmparejamientoController@index')->name('list-preguntas');
     Route::post('grupo/{grupo_id}/preguntas/store','GrupoEmparejamientoController@store')->name('crear-pregunta-grupo');
