@@ -53,19 +53,19 @@
 
 	<form action="{{ route('agregar-opcion',$pregunta->id)}}" method="POST">
 
-		<table class="table table-hover" id="topciones" style="text-align: center;">
+		<table class="table table-striped border" id="topciones" style="text-align: center;">
 
 			<thead>
 
 				@if($area->id_cat_mat)
-					<tr><th colspan="4" style="text-align: right; color: rgb(100,180,10);">Pregunta de Opción Múltiple</th></tr>
+					<tr><th colspan="4"  style="text-align: right; color: rgb(100,180,10);">Pregunta de Opción Múltiple</th></tr>
 					<tr><th colspan="4" style="text-align: left; font-size: 1.3em;">Opciones de Pregunta</th></tr>
 				@else
 					<tr><th colspan="3" style="text-align: right; color: rgb(100,180,10);">Pregunta de Opción Múltiple</th></tr>
 					<tr><th colspan="3" style="text-align: left; font-size: 1.3em;">Opciones de Pregunta</th></tr>
 				@endif
 				
-				<tr class="table-primary">
+				<tr class="table border">
 					<th scope="col">N°</th>
 					<th scope="col">Opción</th>
 					@if($area->id_cat_mat)
@@ -75,7 +75,7 @@
 				</tr>
 			</thead>
 
-			<tbody id="tabla1">
+			<tbody id="tabla1" class="border">
 
 				<?php foreach ($opciones as $opcion): ?>
 

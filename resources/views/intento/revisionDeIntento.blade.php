@@ -131,7 +131,7 @@
 																	<?php $contador_rc = 0; ?>
 
 																	@foreach(($valores[$i]['opciones']) as $opcion)
-																		@if(strtolower($respuesta->texto_respuesta) == strtolower($opcion->opcion))
+																		@if(str_replace('%20',' ',strtolower($respuesta->texto_respuesta)) == strtolower($opcion->opcion))
 																			<?php $contador_rc++ ; ?>
 																		@else
 																			<?php $contador_rc = $contador_rc ; ?>

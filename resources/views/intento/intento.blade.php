@@ -71,7 +71,7 @@
                         <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux}}#pregunta{{$i+1}}')" class="a-pregunta mb-1"
                             @if(!in_array($preguntas_id[$i],$preguntas_respondidas))
                             @else
-                                style="background-color: gold;"
+                                style="background-color: rgba(100,100,100,0.7);"
                             @endif
                         >
                             {{$i+1}}
@@ -81,7 +81,7 @@
                         <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux-1}}#pregunta{{$i+1}}')" class="a-pregunta mb-1"
                             @if(!in_array($preguntas_id[$i],$preguntas_respondidas))
                             @else
-                                style="background-color: gold;"
+                                style="background-color: rgba(100,100,100,0.7);"
                             @endif
                         >
                                 {{$i+1}}

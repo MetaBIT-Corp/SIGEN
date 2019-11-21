@@ -84,7 +84,7 @@ class Intento extends Model
                 //Verifica si la pregunta pertenece a modalidad de respuesta corta
                 if($modalidad==4){
 
-                    $txt_respuesta = strtolower($respuesta->texto_respuesta);
+                    $txt_respuesta = str_replace('%20',' ',strtolower($respuesta->texto_respuesta));
 
                     $correctas = 0;
 

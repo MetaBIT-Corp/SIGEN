@@ -257,7 +257,7 @@ class IntentoController extends Controller
                         $pregunta['texto'] = "";
                         //Si existe ya una respuesta, obtenemos el texto de la respuesta y lo agregamos al objeto pregunta
                         if($respuesta != null)
-                            $pregunta['texto'] = $respuesta->texto_respuesta;
+                            $pregunta['texto'] = str_replace("%20", " ", $respuesta->texto_respuesta);
                     }
                     
                     $preguntas[] = ['tipo_item' => $claves_areas_preguntas[$i][1], 'pregunta' => $pregunta, 'opciones' => $opciones];

@@ -36,11 +36,11 @@
 
 <h3 class="mt-2 mb-5"><b>Pregunta</b>: <?php echo $pregunta->pregunta ?></h3>
 
-<table class="table table-hover" style="text-align: center;">
+<table class="table table-striped border"  style="text-align: center;">
 	<thead>
 		<tr><th colspan="2" style="text-align: right;color: rgb(100,180,10);">Pregunta de Verdadero/Falso</th></tr>
 		<tr><th colspan="2" style="text-align: left; font-size: 1.3em;">Opciones de Pregunta</th></tr>
-		<tr class="table-primary">
+		<tr class="table border">
 			<th scope="col">Opción</th>
 			<th scope="col">Correcta</th>
 		</tr>
