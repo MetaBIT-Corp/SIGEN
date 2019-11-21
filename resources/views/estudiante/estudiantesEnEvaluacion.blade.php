@@ -95,6 +95,7 @@
                   <th>Nombre</th>
                   <th>Inicio</th>
                   <th>Finalización</th>
+                  <th>Turno</th>
                   <th>Nota</th>
                   <th>Estado</th>
                   <th>Opciones</th>
@@ -106,6 +107,7 @@
                   <th>Nombre</th>
                   <th>Inicio</th>
                   <th>Finalización</th>
+                  <th>Turno</th>
                   <th>Nota</th>
                   <th>Estado</th>
                   <th>Opciones</th>
@@ -118,6 +120,7 @@
                   <td>{{ $estudiante->nombre }}</td>
                   <td>{{ $estudiante->inicio }}</td> <!--campo atributo agregado en el controlador-->
                   <td>{{ $estudiante->final }}</td> <!--campo atributo agregado en el controlador-->
+                  <td>{{ $estudiante->turno }}</td> <!--campo atributo agregado en el controlador-->
                   <td>{{ $estudiante->nota }}</td> <!--campo atributo agregado en el controlador-->
                   <td> <!--campo atributo agregado en el controlador-->
                     @if( $estudiante->estado == 0)

@@ -10,6 +10,7 @@ use App\CargaAcademica;
 use App\Ciclo;
 use App\Materia;
 use App\Evaluacion;
+use App\Intento;
 use Carbon\Carbon;
 use DB;
 use DateTime;
@@ -138,6 +139,7 @@ class EstudianteController extends Controller
         $estudiantes->pluck('final');
         $estudiantes->pluck('nota');
         $estudiantes->pluck('estado'); // 0: No iniciado; 1: Iniciado; 2: Finalizado
+        $estudiantes->pluck('turno');
         $estudiantes->pluck('id_intento'); 
         $estudiantes->pluck('revision_estudiante');
 
@@ -157,6 +159,7 @@ class EstudianteController extends Controller
             if(count($intento) > 0){
                 $estudiante->inicio = $this->convertirFecha($intento[0]->fecha_inicio_intento);
                 $estudiante->final = $this->convertirFecha($intento[0]->fecha_final_intento);
+                $estudiante->turno = 'Turno ' . $this->obtenerTurno($intento[0]->id);
                 $estudiante->nota = $intento[0]->nota_intento;
                 $estudiante->id_intento = $intento[0]->id;
                 $estudiante->revision_estudiante = $intento[0]->revision_estudiante;
@@ -173,6 +176,7 @@ class EstudianteController extends Controller
                 $estudiante->final =  ' - ';
                 $estudiante->nota =  ' - ';
                 $estudiante->estado = 0;    //Asignación de estado No iniciado
+                $estudiante->turno = ' - ';
                 $estudiante->id_intento = 0;
                 $estudiante->revision_estudiante = 0;
             }
@@ -192,5 +196,30 @@ class EstudianteController extends Controller
         }
 
         return $finalizado;
+    }
+
+
+    /**
+     * Función para obtener el turno en el que inicio el estudieante
+     * @param  int $intento_id
+     * @return int -> numero de turno
+     */
+    public function obtenerTurno($intento_id){
+        $numero = 1;                                 //Se inicializa la variable numero con 1
+        $intento = Intento::findOrFail($intento_id); //Se obitiene el objeto intento
+        $turno = $intento->clave->turno;            //Se obtiene el turno del desde el que se inicio el intneto
+        $evaluacion = $turno->evaluacion;           //Se obtiene la evaluación del turno
+        $turnos_evaluacion = $evaluacion->turnos;   //Se obtienen todos los turnos de la evalución
+
+        //Obener el numero del turno que inicio el estudiante
+        foreach ($turnos_evaluacion as $t) {
+            if($t->id == $turno->id){
+                break;
+            }
+
+            $numero++;
+        }
+
+        return $numero;
     }
 }
