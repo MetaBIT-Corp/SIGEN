@@ -208,39 +208,7 @@
 																			<td>
 																				{{ $valores[$i]['preguntas'][$r]->pregunta }}
 																			</td>
-																			<td>
-
-																			<a class="btn btn-sm btn-info text-white" title="Editar Opciones"
-
-																			style="cursor: pointer;" 
-
-																			data-id-pregunta="{{ $valores[$i]['preguntas'][$r]->id }}"
-																			data-pregunta="{{ $valores[$i]['preguntas'][$r]->pregunta}}"
-																			data-tipo-pregunta="3"
-
-
-																			<?php
-																				$opciones_gpo = Opcion::where('pregunta_id', $valores[$i]['preguntas'][$r]->id)->get();
-																			?>
-
-																			data-cantidad-opciones="{{$opciones_gpo->count()}}"
-
-																			@foreach($opciones_gpo as $opcion)
-																				data-id-opcion{{$loop->iteration}}="{{$opcion->id}}"
-																				data-opcion{{$loop->iteration}}="{{$opcion->opcion}}"
-																				data-correcta-opcion{{$loop->iteration}}="{{$opcion->correcta}}"
-																			@endforeach
-
-
-																			data-toggle="modal"
-																			data-target="#edit-modal"
-																			>
-																				<span class="icon-edit"></span>
-																			</a>
-
-																				
-
-																			</td>
+																			
 																			<td>
 																				@php
 																				{{
@@ -287,6 +255,39 @@
 																						@endfor
 																					@endfor
 																				</select>
+																			</td>
+																			<td>
+
+																			<a class="btn btn-sm btn-info text-white" title="Editar Opciones"
+
+																			style="cursor: pointer;" 
+
+																			data-id-pregunta="{{ $valores[$i]['preguntas'][$r]->id }}"
+																			data-pregunta="{{ $valores[$i]['preguntas'][$r]->pregunta}}"
+																			data-tipo-pregunta="3"
+
+
+																			<?php
+																				$opciones_gpo = Opcion::where('pregunta_id', $valores[$i]['preguntas'][$r]->id)->get();
+																			?>
+
+																			data-cantidad-opciones="{{$opciones_gpo->count()}}"
+
+																			@foreach($opciones_gpo as $opcion)
+																				data-id-opcion{{$loop->iteration}}="{{$opcion->id}}"
+																				data-opcion{{$loop->iteration}}="{{$opcion->opcion}}"
+																				data-correcta-opcion{{$loop->iteration}}="{{$opcion->correcta}}"
+																			@endforeach
+
+
+																			data-toggle="modal"
+																			data-target="#edit-modal"
+																			>
+																				<span class="icon-edit"></span>
+																			</a>
+
+																				
+
 																			</td>
 																		</tr>
 																	@endfor

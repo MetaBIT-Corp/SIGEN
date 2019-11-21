@@ -54,21 +54,50 @@ class IntentoController extends Controller
         //Verificamos si es el primer intento que realiza
         $intento=Intento::where('estudiante_id',$id_est)->first();
 
+       
+
         //Verificamos el intento que se realizara o esta realizando
         $intento=$this->verificarIntento(0,$id_user,$clave_de_intento,$id_est);
+
+        $preguntas_respondidas = array();
+
+        if(Respuesta::where('id_intento',$intento->id)->first()){
+
+            $respuestas = Respuesta::where('id_intento',$intento->id)->get();
+
+            $preguntas_respondidas = array();
+
+            foreach ($respuestas as $respuesta) {
+                $pregunta_respondida= Pregunta::where('id',$respuesta->id_pregunta)->first();
+                array_push($preguntas_respondidas, $pregunta_respondida->id);
+            }
+
+        }
         
         //Obtener las preguntas segun la clave asignada aleatoriamente
         //Se envia el tipo 0 para evaluaciones
         $preguntas = $this->obtenerPreguntas($clave_de_intento,0,$id_est,$intento->numero_intento,$intento);
 
+        $preguntas_id = array();
+
+        for ($i=0; $i < count($preguntas); $i++){
+
+            if($preguntas[$i]['tipo_item']!=3){
+                array_push($preguntas_id,$preguntas[$i]['pregunta']->id);
+            }else{
+                array_push($preguntas_id,$preguntas[$i]['preguntas'][0]->id);
+            }
+
+        }
+
+        
+
         //Variable que contiene el array a mostrar en la paginacion
         $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
 
+        // dd($preguntas_respondidas);
 
-
-
-        //return dd($preguntas);
-        return view('intento.intento', compact('paginacion','evaluacion','intento','clave_de_intento'));
+        return view('intento.intento', compact('paginacion','evaluacion','intento','clave_de_intento','preguntas_id','preguntas_respondidas'));
     }
 
     public function iniciarEncuesta($id_clave, Request $request)

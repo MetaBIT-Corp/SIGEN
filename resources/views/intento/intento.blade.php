@@ -68,12 +68,22 @@
 
                 @for($i=0;$i<$paginacion->total();$i++)
                     @if($i % $paginacion->perPage() == 0)
-                        <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux}}#pregunta{{$i+1}}')" class="a-pregunta mb-1">
-                                {{$i+1}}
-                                <?php $aux++; ?>
+                        <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux}}#pregunta{{$i+1}}')" class="a-pregunta mb-1"
+                            @if(!in_array($preguntas_id[$i],$preguntas_respondidas))
+                            @else
+                                style="background-color: gold;"
+                            @endif
+                        >
+                            {{$i+1}}
+                            <?php $aux++; ?>
                         </button>
                     @else
-                        <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux-1}}#pregunta{{$i+1}}')" class="a-pregunta mb-1">
+                        <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux-1}}#pregunta{{$i+1}}')" class="a-pregunta mb-1"
+                            @if(!in_array($preguntas_id[$i],$preguntas_respondidas))
+                            @else
+                                style="background-color: gold;"
+                            @endif
+                        >
                                 {{$i+1}}
                                 <?php $aux-1 ?>
                         </button>
