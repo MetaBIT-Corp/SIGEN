@@ -442,8 +442,10 @@ class EncuestaController extends Controller
         *
         *
         */
+        //dd($fecha_hora_actual);
         if(Encuesta::find($id_encuesta_acceso)->exists()){
             $encuesta = Encuesta::find($id_encuesta_acceso);
+
             if($encuesta->fecha_inicio_encuesta <= $fecha_hora_actual &&
                 $encuesta->fecha_final_encuesta > $fecha_hora_actual){
                 return redirect()->action(

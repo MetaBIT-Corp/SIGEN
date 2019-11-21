@@ -354,7 +354,16 @@ class EvaluacionController extends Controller
                                 $turno_publico->fecha_inicio_turno= $this->restablecerFecha($turno_publico->fecha_inicio_turno);
                                 $turno_publico->fecha_final_turno=  $this->restablecerFecha($turno_publico->fecha_final_turno);
                                 $turno_publico->save();
-                                $this->enviarCorreo($turno_publico);
+
+                                
+                                try {
+
+                                  $this->enviarCorreo($turno_publico);
+
+                                } catch (\Exception $e) {
+
+                                    return back()->with($notification,$message);
+                                }
                             }
                             
 
