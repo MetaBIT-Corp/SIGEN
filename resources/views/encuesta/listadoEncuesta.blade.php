@@ -88,7 +88,7 @@
                       <span class="icon-eye"></span>
                       @else
                       <span class="badge badge-warning ">No visible</span>
-                      <span class="icon-eye-slash"></span>
+                      <span class="icon-eye-slash"></span> 
                       @endif
                     </td>
                     <td>

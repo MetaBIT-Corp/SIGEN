@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Fecha + Hora de inicio:</label>
+                  <label for="exampleInputEmail1">Fecha + Hora de inicio: <b>*</b></label>
                     <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
                         <input id="datetimepicker1input" type="text" name="fecha_inicio_turno" class="form-control datetimepicker-input col-md-10" data-target="#datetimepicker1" placeholder="dd/mm/yyyy hh:mm A" value="{{ old('fecha_inicio_turno') }}" data-evaluacion_id="{{ $id }}"/>
                         <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
@@ -31,7 +31,7 @@
         <div class="row">
             <div class="col-md-10">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Fecha + Hora de fin:</label>
+                  <label for="exampleInputEmail1">Fecha + Hora de fin: <b>*</b></label>
                     <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
                         <input id="datetimepicker2input" type="text" name="fecha_final_turno" class="form-control datetimepicker-input col-md-8" data-target="#datetimepicker2" placeholder="dd/mm/yyyy hh:mm A" value="{{ old('fecha_final_turno') }}"/>
                         <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
@@ -44,8 +44,9 @@
     </div>
   </div>
   <div class="form-group col-md-7">
-    <label for="exampleInputPassword1">Contraseña:</label>
+    <label for="exampleInputPassword1">Contraseña: <b>*</b></label>
     <input type="password" name="contraseña" class="form-control" id="exampleInputPassword1" placeholder="Contraseña" value="{{ old('contraseña') }}">
+    <small id="emailHelp" class="text-muted">Debe poseer 8 caracteres como mínimo.</small>
   </div><br>
   <div class="row offset-1">
      <div class="form-group">

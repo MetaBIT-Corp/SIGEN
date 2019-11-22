@@ -47,7 +47,7 @@
                       <th>#</th>
                       <th>Fecha/Hora de inicio</th>
                       <th>Fecha/Hora de fin</th>
-                      <th>Visible</th>
+                      <th>Visibilidad</th>
                       @if(auth()->user()->IsTeacher)
                         <th>Acciones</th>
                       @endif
@@ -61,7 +61,15 @@
                                 <th scope="row">{{ ++$i }}</th>
                                 <td>{{ $turno->fecha_inicio_turno }}</td>
                                 <td>{{ $turno->fecha_final_turno }}</td>
-                                <td><input type="checkbox" @if($turno->visibilidad) checked @endif disabled></td>
+                                <td>
+                                  @if($turno->visibilidad)
+                                    <span class="badge badge-success col-sm-6">Visible</span>
+                                    <span class="icon-eye"></span>
+                                  @else
+                                    <span class="badge badge-warning col-sm-6">No visible</span>
+                                    <span class="icon-eye-slash"></span>
+                                  @endif  
+                                </td>
                                 @if(auth()->user()->IsTeacher)
                                   <td>
                                       @if($turno->acciones)

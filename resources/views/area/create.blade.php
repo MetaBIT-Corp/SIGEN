@@ -14,7 +14,7 @@ Crear Área
 <form action="/materia/{{ $id_materia }}/areas" method="post">
    @csrf
     <div class="form-group">
-        <label for="select_tipo_item">Tipo de item</label>
+        <label for="select_tipo_item">Tipo de item: <b>*</b></label>
         <select class="form-control" id="select_tipo_item" name="tipo_item">
           @if(count($tipos_item))
               <option>------ Seleccione ------</option>
@@ -27,8 +27,9 @@ Crear Área
         </select>
       </div>
       <div class="form-group">
-        <label for="titulo_input">Titulo del área</label>
+        <label for="titulo_input">Titulo del área: <b>*</b></label>
         <input type="text" class="form-control" id="titulo_input" name="titulo" placeholder="Ingrese el título..." value="{{ old('titulo') }}">
+        <small class="text-muted">Debe poseer 15 caracteres como mínimo.</small>
       </div>
       <div class="row">
          <div class="form-group">
