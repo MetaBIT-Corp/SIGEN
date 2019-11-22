@@ -849,7 +849,7 @@ class EvaluacionController extends Controller
     public function exportarNotasExcel($evaluacion_id) 
     {
         $nombre_file = $this->getNombreEvaluacionFormato($evaluacion_id);
-
+        //return (new NotasExport($evaluacion_id))->view();
         return Excel::download(new NotasExport($evaluacion_id), $nombre_file . '.xlsx');
     }
 
@@ -869,6 +869,5 @@ class EvaluacionController extends Controller
     public function formato_str($string){
         return str_replace(" ", "_", $string);
     }
-
 
 }

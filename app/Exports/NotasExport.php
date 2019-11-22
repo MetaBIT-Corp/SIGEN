@@ -8,8 +8,11 @@ use App\Materia;
 use App\Intento;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class NotasExport implements FromView
+
+class NotasExport implements FromView, WithColumnFormatting
 {
     
     protected $evaluacion_id;
@@ -32,13 +35,20 @@ class NotasExport implements FromView
             
             if($intentos->count())
                 $estudiante["nota"] = $intentos[0]->nota_intento;
-                
+
     	}
 
         return view('exports.notas', [
             'materia' => $materia,
         	'evaluacion' => $evaluacion,
             'estudiantes' => $estudiantes
-        ]);
+        ]); 
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'C' => NumberFormat::FORMAT_NUMBER_00,
+        ];
     }
 }
