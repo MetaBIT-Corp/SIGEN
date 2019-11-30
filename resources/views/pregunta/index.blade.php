@@ -152,7 +152,7 @@
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label" for="inputPassword">
-                                Pregunta
+                                Pregunta: <b>*</b>
                             </label>
                             <div class="col-sm-8">
                                 <input type="hidden" id="pregunta_id" name="pregunta_id"/>

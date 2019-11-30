@@ -97,7 +97,7 @@
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label" for="inputPassword">
-                                Titulo de Area
+                                Titulo de Area: <b>*</b>
                             </label>
                             <div class="col-sm-8">
                                 <input hidden="" id="id_area" name="id_area" type="number"/>
