@@ -115,12 +115,12 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-form-label" for="pregunta">Pregunta:</label>
+						<label class="col-form-label" for="pregunta"><b>*</b>&nbsp;Pregunta:</label>
 						<input type="text" class="form-control" name="pregunta" placeholder="Inserte el texto de la Pregunta" id="pregunta">
 					</div>
 
 					<div class="form-group">
-						<label class="col-form-label text-success" for="opcion">Respuesta Correcta:</label>
+						<label class="col-form-label text-success" for="opcion"><b>*</b>&nbsp;Respuesta Correcta:</label>
 						<input type="text" class="form-control" name="opcion" placeholder="Inserte el texto de la Respuesta" id="opcion">
 					</div>
 
@@ -175,12 +175,12 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-form-label" for="pregunta-edit">Pregunta:</label>
+						<label class="col-form-label" for="pregunta-edit"><b>*</b>&nbsp;Pregunta:</label>
 						<input type="text" id="pregunta-edit" class="form-control" name="pregunta_edit" placeholder="Inserte el texto de la Pregunta">
 					</div>
 
 					<div class="form-group">
-						<label class="col-form-label text-success" for="correcta-edit">Respuesta Correcta:</label>
+						<label class="col-form-label text-success" for="correcta-edit"><b>*</b>&nbsp;Respuesta Correcta:</label>
 						<input type="text" class="form-control" name="correcta_edit" placeholder="Inserte el texto de la Respuesta" id="correcta-edit">
 					</div>
 

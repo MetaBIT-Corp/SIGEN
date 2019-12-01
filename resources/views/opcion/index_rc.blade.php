@@ -95,7 +95,7 @@
 				<form action="{{ route('agregar-opcion',$pregunta->id)}}" method="POST">
 
 					<div class="form-group">
-						<label class="col-form-label" for="opcion">Opción:</label>
+						<label class="col-form-label" for="opcion"><b>*</b>&nbsp;Opción:</label>
 						<input type="text" class="form-control" name="opcion" placeholder="Inserte el texto de la Opción" id="opcion">
 					</div>
 					{{ csrf_field() }}
@@ -136,7 +136,7 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-form-label" for="opcion">Opción:</label>
+						<label class="col-form-label" for="opcion"><b>*</b>&nbsp;Opción:</label>
 						<input type="text" class="form-control" required="required" name="opcion" placeholder="Inserte el texto de la Opción" id="opcion">
 					</div>
 					{{ csrf_field() }}

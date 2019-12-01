@@ -231,7 +231,7 @@
 
 					<form action="{{ route('actualizar-opcion',$pregunta->id)}}" method="POST">
 
-						<div class="form-group" style="display:none;">
+						<div class="form-group d-none">
 							<label class="col-form-label" for="opcion">Pregunta_ID:</label>
 							<input type="text" class="form-control" name="id" placeholder="ID de Pregunta" id="id">
 							<label class="col-form-label" for="opcion">Tipo Opcion</label>
@@ -239,7 +239,7 @@
 						</div>
 
 						<div class="form-group">
-							<label class="col-form-label" for="opcion">Opción:</label>
+							<label class="col-form-label" for="opcion"><b>*</b> Opción:</label>
 							<input type="text" class="form-control" name="opcion" placeholder="Inserte el texto de la Opción" id="opcion" required="required">
 						</div>
 						@if($area->id_cat_mat)
