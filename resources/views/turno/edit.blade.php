@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Fecha + Hora de inicio: <b>*</b></label>
+                  <label for="exampleInputEmail1"><b title="Campo Obligatorio">*</b>&nbsp;Fecha + Hora de inicio:</label>
                     <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
                         <input id="datetimepicker1input" type="text" name="fecha_inicio_turno" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="dd/mm/yyyy hh:mm tt" value="{{ old('fecha_inicio_turno',$turno->fecha_inicio_turno) }}" data-evaluacion_id="{{ $turno->evaluacion_id }}" @if($turno->iniciado) readonly @endif/>
                         <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
@@ -33,7 +33,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Fecha + Hora de fin: <b>*</b></label>
+                  <label for="exampleInputEmail1"><b title="Campo Obligatorio">*</b>&nbsp;Fecha + Hora de fin:</label>
                     <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
                         <input id="datetimepicker2input" type="text" name="fecha_final_turno" class="form-control datetimepicker-input" data-target="#datetimepicker2" placeholder="dd/mm/yyyy hh:mm tt" value="{{ old('fecha_final_turno',$turno->fecha_final_turno) }}"/>
                         <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">

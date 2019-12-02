@@ -3,12 +3,19 @@ $(document).ready(function(){
 	if($('#encuesta').val()!=1){
 
 		var fecha_inicio_intento = new Date($('#fecha-inicio-intento').attr('value'))
+
+		var fecha_inicio_formateada = ('0' + fecha_inicio_intento.getDate()).substr(-2)+'/'+('0'+(fecha_inicio_intento.getMonth()+1)).slice(-2)+'/'+fecha_inicio_intento.getFullYear() 
+										+" "+ fecha_inicio_intento.getHours() + ":" + fecha_inicio_intento.getMinutes() + ":" + fecha_inicio_intento.getSeconds()
+
+		$('#fecha-inicio-intento').attr('value',fecha_inicio_formateada);
+
+
 		var fecha_final_intento = new Date()
 		var duracion = parseInt($('#duracion-intento').attr('value'))
 
 		fecha_final_intento.setTime(fecha_inicio_intento.getTime() + (duracion * 60 * 1000))
 
-		var fecha = fecha_final_intento.getFullYear()+'-'+('0'+(fecha_final_intento.getMonth()+1)).slice(-2)+'-'+fecha_final_intento.getDate()
+		var fecha = ('0' + fecha_final_intento.getDate()).substr(-2)+'/'+('0'+(fecha_final_intento.getMonth()+1)).slice(-2)+'/'+fecha_final_intento.getFullYear()
 		var hora = fecha_final_intento.getHours() + ":" + fecha_final_intento.getMinutes() + ":" + fecha_final_intento.getSeconds()
 		var fecha_final_intento_formateada = fecha+' '+hora
 		$('#fecha-final-intento').attr('value',fecha_final_intento_formateada)

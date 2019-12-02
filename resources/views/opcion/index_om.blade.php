@@ -239,7 +239,7 @@
 						</div>
 
 						<div class="form-group">
-							<label class="col-form-label" for="opcion"><b>*</b> Opción:</label>
+							<label class="col-form-label" for="opcion"><b>*</b>&nbsp;Opción:</label>
 							<input type="text" class="form-control" name="opcion" placeholder="Inserte el texto de la Opción" id="opcion" required="required">
 						</div>
 						@if($area->id_cat_mat)

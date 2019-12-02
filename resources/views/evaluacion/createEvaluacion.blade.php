@@ -41,11 +41,11 @@
         {{ csrf_field() }}
 
           <div class="form-group">
-             <label for="title">Título</label>
+             <label for="title"><b title="Campo Obligatorio">*</b>&nbsp;Título</label>
              <input type="text" name="title" class="form-control" value="{{ old('title') }}">
           </div>
           <div class="form-group">
-             <label for="description">Descripción</label>
+             <label for="description"><b title="Campo Obligatorio">*</b>&nbsp;Descripción</label>
              <textarea name="description" class="form-control">{{ old('description') }}</textarea>
           </div>
           

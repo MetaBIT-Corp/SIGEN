@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="carta-div-float">
-                    <p class="p-carta">Tiempo Restante (m:s):</p>
+                    <p class="p-carta">Tiempo Restante (min:seg):</p>
                     <span class="in-carta" id="contador"></span>
                 </div>
             

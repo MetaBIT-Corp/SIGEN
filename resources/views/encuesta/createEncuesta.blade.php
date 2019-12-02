@@ -67,11 +67,11 @@
       <form action="" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
           <div class="form-group">
-             <label for="title">Título</label>
+             <label for="title"><b title="Campo Obligatorio">*</b>&nbsp;Título</label>
              <input type="text" name="title" class="form-control" value="{{ old('title') }}">
           </div>
           <div class="form-group">
-             <label for="description">Descripción</label>
+             <label for="description"><b title="Campo Obligatorio">*</b>&nbsp;Descripción</label>
              <textarea name="description" class="form-control">{{ old('description') }}</textarea>
           </div>
           
@@ -79,7 +79,7 @@
 
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Fecha y Hora de inicio:</label>
+                  <label for="exampleInputEmail1"><b title="Campo Obligatorio">*</b>&nbsp;Fecha y Hora de inicio:</label>
                     <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
                         <input id="datetimepicker1input" type="text" name="fecha_inicio" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="dd/mm/yyyy hh:mm A" value="{{ old('fecha_inicio') }}"/>
                         <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
@@ -91,7 +91,7 @@
               
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Fecha y Hora de fin:</label>
+                  <label for="exampleInputEmail1"><b title="Campo Obligatorio">*</b>&nbsp;Fecha y Hora de fin:</label>
                   <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
                         <input id="datetimepicker2input" type="text" name="fecha_final" class="form-control datetimepicker-input col-md-12" data-target="#datetimepicker2" placeholder="dd/mm/yyyy hh:mm A" value="{{ old('fecha_final') }}"/>
                         <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">

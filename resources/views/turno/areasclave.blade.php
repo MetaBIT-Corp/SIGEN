@@ -216,13 +216,13 @@
 					</div><br>
 
 					<div class="form-group" id="divAleatorias">
-						<label class="col-form-label" for="cantidad"><b>*</b>&nbsp;Cantidad de Preguntas Aleatorias:</label>
+						<label class="col-form-label" for="cantidad"><b title="Campo Obligatorio">*</b>&nbsp;Cantidad de Preguntas Aleatorias:</label>
 						<span style="float: right;" id="cantidad_preguntas_s2"></span>
 						<input type="text" class="form-control" name="cantidad" id="cantidad" value="0">
 					</div>
 
 					<div class="form-group">
-						<label class="col-form-label" for="peso"><b>*</b>&nbsp;Peso del Área:</label>
+						<label class="col-form-label" for="peso"><b title="Campo Obligatorio">*</b>&nbsp;Peso del Área:</label>
 						<span style="float: right;" id="peso_restante_s"></span>
 						<input type="text" class="form-control" name="peso" placeholder="Inserte Peso" id="peso">
 					</div>
