@@ -44,13 +44,13 @@ class UsersTableSeeder extends Seeder
         ]);
         User::create([
             'name' => 'Enrique',
-            'email' => 'mt167@gmail.com',
+            'email' => 'mt16007@gmail.com',
             'password' => bcrypt('sigen2019'),
             'role' => 1
         ]);
         User::create([
             'name' => 'Pablo',
-            'email' => 'dc169@gmail.com',
+            'email' => 'dc16009@gmail.com',
             'password' => bcrypt('sigen2019'),
             'role' => 1
         ]);
@@ -93,7 +93,7 @@ class UsersTableSeeder extends Seeder
         //Estudiantes para pruebas agregado por Ricardo Estupinian
         User::create([
             'name' => 'Enrique Menjívar',
-            'email' => 'mt167@ues.edu.sv',
+            'email' => 'mt16007@ues.edu.sv',
             'password' => bcrypt('sigen2019'),
             'role' => 2
         ]);
@@ -105,19 +105,19 @@ class UsersTableSeeder extends Seeder
         ]);
         User::create([
             'name' => 'Ricardo Estupinián',
-            'email' => 'ricslo@gmail.com',
+            'email' => 'ricaeslo@gmail.com',
             'password' => bcrypt('sigen2019'),
             'role' => 2
         ]);
         User::create([
             'name' => 'Pablo Díaz',
-            'email' => 'dc109@ues.edu.sv',
+            'email' => 'dc16009@ues.edu.sv',
             'password' => bcrypt('sigen2019'),
             'role' => 2
         ]);
         User::create([
             'name' => 'Edwin Palacios',
-            'email' => 'ap114@ues.edu.sv',
+            'email' => 'ap16014@ues.edu.sv',
             'password' => bcrypt('sigen2019'),
             'role' => 2
         ]);
