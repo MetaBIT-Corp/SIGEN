@@ -1,12 +1,12 @@
 $(document).ready(function() {
-    
+
     $(function() {
         var control=$("#gpo-preg").data("control");
         var token =$("#gpo-preg").data('token');
         if(control==0){
-            var data=['id','descripcion_grupo_emp'];
+            var data=['num','descripcion_grupo_emp'];
         }else{
-            var data=['id','pregunta'];
+            var data=['num','pregunta'];
         }
         var table = $('#areas').DataTable({
             "processing":true,
@@ -19,8 +19,8 @@ $(document).ready(function() {
                 }
             },
             "columns": [
-                { data: data[0]}, 
-                { data: data[1]}, 
+                { data: data[0]},
+                { data: data[1]},
                 {
                     data: 'actions',
                     orderable: false,
@@ -43,28 +43,24 @@ $(document).ready(function() {
                 "infoFiltered": "",
             },
             //Centrar datos dentro de una columna target=3
-            columnDefs: [{
-                'className': 'text-center',
-                'targets': 2,
-                'width' : "20%"
-            },{
-                'targets':1,
+            columnDefs: [
+              {
+                  "searchable": false,
+                  "orderable": false,
+                  "targets": 0,
+                  'width' : "10%",
+                  "visible":true
+              },{
+                'targets': 1,
                 'width' : "70%"
-            },{
-                "searchable": false,
-                "orderable": false,
-                "targets": 0,
-                'width' : "10%"
-            }]
+              },{
+                  'className': 'text-center',
+                  'targets': 2,
+                  'width' : "20%"
+              }
+          ]
         });
-        table.on('order.dt search.dt', function() {
-            table.column(0, {
-                search: 'applied',
-                order: 'applied'
-            }).nodes().each(function(cell, i) {
-                cell.innerHTML = i + 1;
-            });
-        }).draw();
+        table.draw();
 
         function exito(datos) {
             $("#message-success").removeAttr("hidden");
