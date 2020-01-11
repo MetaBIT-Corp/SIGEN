@@ -99,6 +99,10 @@ class EvaluacionController extends Controller
 
         if(isset($request->all()['revision']))
             $evaluacion->revision = 1;
+
+        if(isset($request->all()['mostrar_nota']))
+            $evaluacion->mostrar_nota = 1;
+
         $evaluacion->save();
         //return back()->with('notification','Se registró exitosamente');
         //return redirect()->action('EvaluacionController@listado', ['id' => $id]);
@@ -155,9 +159,14 @@ class EvaluacionController extends Controller
         $evaluacion->descripcion_evaluacion=$request->input('description');
         $evaluacion->preguntas_a_mostrar=$request->input('paginacion');
         $evaluacion->revision=0;
+        $evaluacion->mostrar_nota = 0;
 
         if(isset($request->all()['revision']))
             $evaluacion->revision = 1;
+
+        if(isset($request->all()['mostrar_nota']))
+            $evaluacion->mostrar_nota = 1;
+
         $evaluacion->save();
         //return back()->with('notification','Se registró exitosamente');
         //return redirect()->action('EvaluacionController@listado', ['id' => $evaluacion->id_carga]);

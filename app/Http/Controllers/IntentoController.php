@@ -434,7 +434,7 @@ class IntentoController extends Controller
                 $turno = $clave->turno;
                 $evaluacion = $turno->evaluacion;
 
-                if($evaluacion->revision == 0 && $intento->revision_estudiante == 0){
+                if($evaluacion->revision == 0 && $evaluacion->mostrar_nota == 0 && $intento->revision_estudiante == 0){
                     return redirect(URL::signedRoute('listado_evaluacion', ['id' => $evaluacion->id_carga]));
                 }
 

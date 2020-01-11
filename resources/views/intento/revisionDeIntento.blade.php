@@ -22,7 +22,7 @@
 	
 	@section("ol_breadcrumb")
 		<a href="#" >
-			Evaluacion \ Parcial I
+			 Evaluacion \ {{$evaluacion->nombre_evaluacion }}
 		</a>
 	@endsection
 
@@ -64,7 +64,7 @@
 									</table>
 								</div>
 								<!-- Fin Info Intento -->
-								@if($se_permite_revision)
+								@if($se_permite_revision && $evaluacion->revision==1 || $intento->revision_estudiante==1)
 								<!-- Inicio Revisión Intento -->
 								<form id="quiz_form">
 									<div class="card">

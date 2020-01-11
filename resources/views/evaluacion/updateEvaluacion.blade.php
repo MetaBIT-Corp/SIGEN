@@ -52,21 +52,21 @@
           
             <div class="row">
 
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <div class="form-group">
                  <label for="duration">Duración (minutos):</label>
                  <input type="number" min="1" max="" name="duration" class="form-control" value="{{ old('duration',$evaluacion->duracion) }}">
                 </div>
               </div>
               
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <div class="form-group">
                  <label for="intentos">Cantidad de intentos:</label>
                  <input type="number" min="1" max="" name="intentos" class="form-control" value="{{ old('intentos',$evaluacion->intentos) }}">
                 </div>
               </div>
               
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <div class="form-group">
                  <label for="paginacion">Preguntas por página:</label>
                  <select name="paginacion" class="form-control" >
@@ -88,18 +88,28 @@
                 </div>
               </div>
 
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for=""></label>
-                  <div class="form-check">
+              
+          </div>
 
-                    <input type="checkbox" name="revision" class="form-check-input" 
-                    @if($evaluacion->revision)
+          <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                  <label for="">Parametros de revisión</label>
+                  <div class="form-check">
+                    <input 
+                    @if($evaluacion->mostrar_nota)
                     checked
                     @endif
-                    >
-                    <label class="form-check-label" for="exampleCheck1">Revisión</label>
-                    <small class="form-text text-muted">La solución de la evaluación será visible para los estudiantes al finalizar el intento.</small>
+                    type="checkbox" name="mostrar_nota" class="form-check-input" >
+                    <small for="mostrar_nota" class="form-text text-muted">Mostrar solamente la calificación obtenida al finalizar el intento.</small>
+
+                    <input
+                    @if($evaluacion->revision)
+                    checked
+                    @endif 
+                    type="checkbox" name="revision" class="form-check-input" >
+                    <small for="revision" class="form-text text-muted">Mostrar la calificación obtenida y la solución de la evaluación al finalizar el intento.</small>
+                    
                   </div>
                 </div>
             </div>
