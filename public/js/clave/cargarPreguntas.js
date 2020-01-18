@@ -146,14 +146,14 @@ function cargarPreguntasEmparejamiento(){
       if(checked){
         html_modal += i+1+'. '+
        '<label>'+
-        '<input type="checkbox" checked="true" name="preguntasEmp[]" '+
+        '<input type="checkbox" class="cb-seleccion" checked="true" name="preguntasEmp[]" '+
           'value="'+preguntas[i].id+'"> '+
          preguntas[i].descripcion_grupo_emp+
        '</label>';
       }else{
         html_modal += i+1+'. '+
        '<label>'+
-        '<input type="checkbox" name="preguntasEmp[]" '+
+        '<input type="checkbox" class="cb-seleccion" name="preguntasEmp[]" '+
           'value="'+preguntas[i].id+'"> '+
          preguntas[i].descripcion_grupo_emp+
        '</label>';
