@@ -13,15 +13,15 @@ class MateriaCicloTableSeeder extends Seeder
     {
         CicloMateria::create([
         	'id_cat_mat'=>1,
-        	'id_ciclo'=>4
+        	'id_ciclo'=>14
         ]);
         CicloMateria::create([
         	'id_cat_mat'=>4,
-        	'id_ciclo'=>4
+        	'id_ciclo'=>14
         ]);
         CicloMateria::create([
         	'id_cat_mat'=>2,
-        	'id_ciclo'=>4
+        	'id_ciclo'=>14
         ]);
         CicloMateria::create([
         	'id_cat_mat'=>3,
@@ -39,7 +39,7 @@ class MateriaCicloTableSeeder extends Seeder
         /*MateriaCiclo de Prueba (René).*/
         CicloMateria::create([
             'id_cat_mat'=>7,
-            'id_ciclo'=>4
+            'id_ciclo'=>14
         ]);
     }
 }

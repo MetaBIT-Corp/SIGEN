@@ -13,15 +13,66 @@ class CicloTableSeeder extends Seeder
     public function run()
     {
         Ciclo::create([
-        	'num_ciclo'=>1,
-        	'anio'=>2018,
-        	'estado'=>0
+            'num_ciclo'=>1,
+            'anio'=>2013,
+            'estado'=>0
         ]);
          Ciclo::create([
-        	'num_ciclo'=>2,
-        	'anio'=>2018,
-        	'estado'=>0
+            'num_ciclo'=>2,
+            'anio'=>2013,
+            'estado'=>0
         ]);
+         Ciclo::create([
+            'num_ciclo'=>1,
+            'anio'=>2014,
+            'estado'=>0
+        ]);
+         Ciclo::create([
+            'num_ciclo'=>2,
+            'anio'=>2014,
+            'estado'=>0
+        ]);
+         Ciclo::create([
+            'num_ciclo'=>1,
+            'anio'=>2015,
+            'estado'=>0
+        ]);
+         Ciclo::create([
+            'num_ciclo'=>2,
+            'anio'=>2015,
+            'estado'=>0
+        ]);
+         Ciclo::create([
+            'num_ciclo'=>1,
+            'anio'=>2016,
+            'estado'=>0
+        ]);
+         Ciclo::create([
+            'num_ciclo'=>2,
+            'anio'=>2016,
+            'estado'=>0
+        ]);
+         Ciclo::create([
+            'num_ciclo'=>1,
+            'anio'=>2017,
+            'estado'=>0
+        ]);
+         Ciclo::create([
+            'num_ciclo'=>2,
+            'anio'=>2017,
+            'estado'=>0
+        ]);
+         Ciclo::create([
+            'num_ciclo'=>1,
+            'anio'=>2018,
+            'estado'=>0
+        ]);
+         Ciclo::create([
+            'num_ciclo'=>2,
+            'anio'=>2018,
+            'estado'=>0
+        ]);
+
           Ciclo::create([
         	'num_ciclo'=>1,
         	'anio'=>2019,

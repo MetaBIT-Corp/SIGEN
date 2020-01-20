@@ -54,22 +54,31 @@ class IntentoController extends Controller
         //Verificamos si es el primer intento que realiza
         $intento=Intento::where('estudiante_id',$id_est)->first();
 
+
        
 
         //Verificamos el intento que se realizara o esta realizando
         $intento=$this->verificarIntento(0,$id_user,$clave_de_intento,$id_est);
 
         $preguntas_respondidas = array();
+        $grupos_respondidos = array();
 
         if(Respuesta::where('id_intento',$intento->id)->first()){
 
             $respuestas = Respuesta::where('id_intento',$intento->id)->get();
 
             $preguntas_respondidas = array();
+                        
 
             foreach ($respuestas as $respuesta) {
-                $pregunta_respondida= Pregunta::where('id',$respuesta->id_pregunta)->first();
-                array_push($preguntas_respondidas, $pregunta_respondida->id);
+                $pregunta_respondida= $respuesta->pregunta;
+                if(($pregunta_respondida->grupo_emp->area->tipo_item_id)!=3){
+                    array_push($preguntas_respondidas, $pregunta_respondida->id);
+                }else{
+                    $grupo_resp = $pregunta_respondida->grupo_emp->id;
+                    $pregunta_centro = Pregunta::where('grupo_emparejamiento_id',$grupo_resp)->first();
+                    array_push($preguntas_respondidas,$pregunta_centro->id);
+                }
             }
 
         }
@@ -79,13 +88,20 @@ class IntentoController extends Controller
         $preguntas = $this->obtenerPreguntas($clave_de_intento,0,$id_est,$intento->numero_intento,$intento);
 
         $preguntas_id = array();
+        
 
         for ($i=0; $i < count($preguntas); $i++){
 
             if($preguntas[$i]['tipo_item']!=3){
                 array_push($preguntas_id,$preguntas[$i]['pregunta']->id);
-            }else{
-                array_push($preguntas_id,$preguntas[$i]['preguntas'][0]->id);
+            }else{                
+                for($cont=0; $cont < sizeof($preguntas[$i]['preguntas']); $cont++){
+
+                    if(!(in_array(($preguntas[$i]['preguntas'][$cont])->grupo_emp->id, $grupos_respondidos))){
+                        array_push($preguntas_id,$preguntas[$i]['preguntas'][0]->id);
+                        array_push($grupos_respondidos,($preguntas[$i]['preguntas'][$cont])->grupo_emp->id);
+                    }
+                }
             }
 
         }
@@ -95,7 +111,7 @@ class IntentoController extends Controller
         //Variable que contiene el array a mostrar en la paginacion
         $paginacion = $this->paginacion($request, $preg_per_page, $preguntas);
 
-        // dd($preguntas_respondidas);
+        // dd($grupos_respondidos);
 
         return view('intento.intento', compact('paginacion','evaluacion','intento','clave_de_intento','preguntas_id','preguntas_respondidas'));
     }
