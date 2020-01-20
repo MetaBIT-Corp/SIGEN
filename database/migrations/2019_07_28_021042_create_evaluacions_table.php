@@ -22,7 +22,8 @@ class CreateEvaluacionsTable extends Migration
             $table->string('nombre_evaluacion');
             $table->text('descripcion_evaluacion');
             $table->integer('preguntas_a_mostrar');//Cantidad de preguntas a presentar en la paginacion
-            $table->boolean('revision');//parametro que indica si se permite revisión o no
+            $table->boolean('revision')->default(0);//parametro que indica si se permite revisión o no
+            $table->boolean('mostrar_nota')->default(0);//parametro que indica si se permite mostrar la nota o no
             $table->boolean('habilitado')->default(1);//parametro que indica si la evaluación está habilitada o deshabilitada
             $table->timestamps();
         });

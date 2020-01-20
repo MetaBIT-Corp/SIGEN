@@ -30,7 +30,7 @@
         <div class="col-9 text-right">
             <div class="btn-group" role="group" aria-label="Basic example">
 
-                <!--Boton para agregar pregunta-->    
+                <!--Boton para agregar pregunta-->
                 <a class="btn btn-secondary" href="javascript:void(0)" data-target="#modal" data-toggle="modal" id="add_pregunta" title="Agregar Pregunta">
                     <h6 class="mb-0"><span class="icon-add-solid">
                     </span></h6>
@@ -58,7 +58,7 @@
          <div class="col-7 text-right ml-5">
             <div class="btn-group" role="group" aria-label="Basic example">
 
-                <!--Boton para agregar grupo-->    
+                <!--Boton para agregar grupo-->
                 <a class="btn btn-secondary" href="#" data-toggle="modal" data-target="#createModal">
                     <span class="icon-add-solid">
                     </span>
@@ -81,7 +81,7 @@
                     @csrf
                     <input type="file" name="archivo" accept=".xlsm" id="fileExcel" data-area='{{ $area->id }}' hidden="" />
             </form>
-                
+
         </div>
     @endif
 @endsection
@@ -111,7 +111,7 @@
             <thead>
                 <tr>
                 	<th>
-                        #
+                       #
                     </th>
                     <th>
                     @if(Request::get('id_gpo')==1)
@@ -195,7 +195,7 @@
                             </label>
                             <input hidden="" id="id_preg_eli" name="id" type="number"/>
                             <p class="ml-3 mr-3 mb-0 text-justify">Se eliminaran las opciones asociadas con la pregunta, al ejecutar esta accion. </p>
-                            
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -242,7 +242,7 @@
                     <div class="modal-footer">
                         {{ csrf_field() }}
                         <button type="submit" id="btn-agregar" class="btn btn-primary">Agregar Grupo de Emparejamiento</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -284,7 +284,7 @@
                     <div class="modal-footer">
                         {{ csrf_field() }}
                         <button type="submit" id="btn-edit-ge" class="btn btn-primary">Agregar Grupo de Emparejamiento</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -321,7 +321,7 @@
                     <div class="modal-footer">
                         {{ csrf_field() }}
                         <button type="submit" id="btn-delete-ge" class="btn btn-danger">Eliminar Grupo de Emparejamiento</button>
-                        <button type="button" id="salir_delete" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                
+                        <button type="button" id="salir_delete" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>

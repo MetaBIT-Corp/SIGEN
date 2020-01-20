@@ -24,16 +24,34 @@ class PreguntaController extends Controller
         $area=Area::find($id_area);
         $gpos=$area->grupos_emparejamiento;
         if($request->ajax()){
+            $i=1;
             if($request->id_gpo==1){
+
+              $grupos=[];
+
+              foreach ($gpos as $gpo) {
+                $grupos[]=[
+                  'num'=>$i++,
+                  'id'=>$gpo->id,
+                  'descripcion_grupo_emp'=>$gpo->descripcion_grupo_emp,
+                  'area_id'=>$gpo->area_id
+                ];
+              }
                 return dataTables()
-                    ->of($gpos)
+                    ->of($grupos)
                     ->addColumn('actions','pregunta/actions')
                     ->rawColumns(['actions'])
                     ->toJson();
             }else{
                 $pregunta=[];
                 foreach ($gpos as $gpo) {
-                    $pregunta[]=$gpo->preguntas[0];
+                    $preg=[
+                      'num'=>$i++,
+                      'id'=>$gpo->preguntas[0]->id,
+                      'pregunta'=>$gpo->preguntas[0]->pregunta,
+                      'grupo_emparejamiento_id'=>$gpo->preguntas[0]->grupo_emparejamiento_id
+                    ];
+                    $pregunta[]=$preg;
                 }
                 return dataTables()
                     ->of($pregunta)
@@ -88,7 +106,7 @@ class PreguntaController extends Controller
         $gpo->descripcion_grupo_emp="";
         $gpo->save();
 
-           
+
         $pregunta=new Pregunta();
         $pregunta->grupo_emparejamiento_id=$gpo->id;
         $pregunta->pregunta=$request->pregunta;
@@ -108,7 +126,7 @@ class PreguntaController extends Controller
             $opcion->correcta=false;
             $opcion->save();
 
-        }     
+        }
         return response()->json(['success'=>'Se ha creado la pregunta exitosamente.']);
     }
 
@@ -154,7 +172,7 @@ class PreguntaController extends Controller
         $message_pregunta='El campo pregunta es requerido.';
         $message_gpo='Seleccione un grupo de emparejamiento valido.';
         $message_mod='No modifique la pagina web, por favor.';
-        
+
         $rules = ['pregunta' => $rule_pregunta];
         $messages = ['pregunta_id.exists'=> $message_mod, 'pregunta.required' => $message_pregunta];
         $validator = Validator::make(['pregunta'=>$request->pregunta], $rules, $messages);
@@ -235,7 +253,7 @@ class PreguntaController extends Controller
      * @author Ricardo Estupinian
      */
     public function uploadExcel(Request $request,$id_area){
-        //Se recupera el id del user y la hora actual para guardarlo momentaneamente 
+        //Se recupera el id del user y la hora actual para guardarlo momentaneamente
         //con un nombre diferente y evitar conflictos a la hora de que hayan subidas multiples
         $id_user = auth()->user()->id;
         $area=Area::find($id_area);
@@ -349,7 +367,7 @@ class PreguntaController extends Controller
                         }
                     }
                     $message=['success'=>'La importacion de preguntas se efectuo exitosamente.','type'=>2];
-                }                
+                }
                 break;
             case 3:
             //Modalidad grupo emparejamiento
@@ -398,7 +416,7 @@ class PreguntaController extends Controller
                                                     $op->save();
                                                 }
                                             }
-                                            
+
                                         }
                                     }
                                 }
@@ -432,8 +450,8 @@ class PreguntaController extends Controller
                             $preg->grupo_emparejamiento_id=$gpo->id;
                             $preg->pregunta=$data[6][$columns[$j]];
                             $preg->save();
-                       
-                            for ($i=7; $i <= count($data) ; $i++) { 
+
+                            for ($i=7; $i <= count($data) ; $i++) {
                                 if($data[$i][$columns[$j]]!=null){
                                     //Creacion de opciones
                                     $op=new Opcion();
