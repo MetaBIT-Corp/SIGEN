@@ -69,9 +69,11 @@
                 @for($i=0;$i<$paginacion->total();$i++)
                     @if($i % $paginacion->perPage() == 0)
                         <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux}}#pregunta{{$i+1}}')" class="a-pregunta mb-1"
-                            @if(!in_array($preguntas_id[$i],$preguntas_respondidas))
-                            @else
-                                style="background-color: rgba(100,100,100,0.7);"
+                            @if(!empty($preguntas_respondidas))
+                                @if(!in_array($preguntas_id[$i],$preguntas_respondidas))
+                                @else
+                                    style="background-color: rgba(100,100,100,0.7);"
+                                @endif
                             @endif
                         >
                             {{$i+1}}
@@ -79,9 +81,11 @@
                         </button>
                     @else
                         <button onclick="capturar_data_navigator('/intento/{{$clave_de_intento->turno_id}}?page={{$aux-1}}#pregunta{{$i+1}}')" class="a-pregunta mb-1"
-                            @if(!in_array($preguntas_id[$i],$preguntas_respondidas))
-                            @else
-                                style="background-color: rgba(100,100,100,0.7);"
+                            @if(!empty($preguntas_respondidas))
+                                @if(!in_array($preguntas_id[$i],$preguntas_respondidas))
+                                @else
+                                    style="background-color: rgba(100,100,100,0.7);"
+                                @endif
                             @endif
                         >
                                 {{$i+1}}

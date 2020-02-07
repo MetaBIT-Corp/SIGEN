@@ -14,6 +14,7 @@ use App\Intento;
 use Carbon\Carbon;
 use DB;
 use DateTime;
+use DateInterval;
 
 class EstudianteController extends Controller
 {
@@ -180,6 +181,9 @@ class EstudianteController extends Controller
                 $estudiante->id_intento = 0;
                 $estudiante->revision_estudiante = 0;
             }
+
+            $this->finalizarIntentos($estudiante,$evaluacion);
+
         }
 
         return view('estudiante.estudiantesEnEvaluacion')->with(compact('estudiantes','evaluacion_finalizada','evaluacion_id', 'evaluacion'));
@@ -222,4 +226,31 @@ class EstudianteController extends Controller
 
         return $numero;
     }
+
+     /**
+     * Método para verificar que todos los intentos a los que se les ha terminado el tiempo valido de evaluación
+     * estén finalizados, en caso de no encontrarse finalizados, se invoca al método de finalización de Intento.
+     * @param  Entidad 'Estudiante' generada en método de 'EstudiantesEnEvaluación' / Evaluacion $evaluacion
+     * @return void
+     * @author Carlos René Martínez Rivera
+     */
+     public function finalizarIntentos($estudiante,$evaluacion){
+
+        $fecha_inicio_estudiante = Intento::select('fecha_inicio_intento')->where('id',$estudiante->id_intento)->first();
+
+        if($fecha_inicio_estudiante){
+
+            $minutos_agregar = $evaluacion->duracion;
+            $fecha_fin_estudiante = new DateTime($fecha_inicio_estudiante['fecha_inicio_intento']);
+            $fecha_fin_estudiante->add(new DateInterval('PT' . $minutos_agregar . 'M'));
+            $fecha_fin_formateada = $fecha_fin_estudiante->format('Y-m-d H:i:s');
+
+            if($fecha_fin_formateada<=(Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s'))){
+               
+                app('App\Http\Controllers\IntentoController')->finalizarIntentoWeb($estudiante->id_intento);
+            }
+        
+        }
+
+     }
 }
