@@ -19,12 +19,30 @@
 @endsection
 
 @section("body")
-	
-	@section("ol_breadcrumb")
-		<a href="#" >
-			 Evaluacion \ {{$evaluacion->nombre_evaluacion }}
-		</a>
-	@endsection
+
+	@if(auth()->user()->IsStudent)	
+		@section("ol_breadcrumb")
+			<a href="#" >
+				 Evaluacion \ {{$evaluacion->nombre_evaluacion }}
+			</a>
+		@endsection
+	@else
+		@section("ol_breadcrumb")
+			<li class="breadcrumb-item">
+				<a href=" {{ URL::signedRoute('listado_evaluacion', ['id'=>$evaluacion->carga_academica->id_carg_aca]) }}">
+					Evaluaciones
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="{{ URL::signedRoute('estudiantes_en_evaluacion', ['evaluacion_id' => $evaluacion->id]) }}">
+					Estudiantes
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				Revisión de Estudiante
+			</li>
+		@endsection
+	@endif
 
 	@section("main")
 		<div id="wrapper">
