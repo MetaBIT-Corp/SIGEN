@@ -112,7 +112,6 @@ class MateriaController extends Controller
      * @author Ricardo Estupinian
      */
     public static function materiasEstudiante($id_user){
-        $ciclo    = DB::table("ciclo")->where("estado", "=", 1)->get();
         $materias = DB::table('cat_mat_materia')
             ->join('materia_ciclo', 'cat_mat_materia.id_cat_mat', '=', 'materia_ciclo.id_cat_mat')
             ->join('carga_academica', 'carga_academica.id_mat_ci', '=', 'materia_ciclo.id_mat_ci')

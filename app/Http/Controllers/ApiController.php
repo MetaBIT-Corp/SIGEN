@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -185,7 +185,6 @@ class ApiController extends Controller
      */
     public function getMateriasEstudiante($id_user){
         $materias=MateriaController::materiasEstudiante($id_user);
-        //dd($materias);
         return response()->Json($materias);
     }
 
@@ -409,6 +408,29 @@ class ApiController extends Controller
         $encuesta_arr['clave_area_preguntas'] = $clave_area_preguntas_arr;
         
         return $encuesta_arr;
+    }
+
+    /**
+     * Funcion para obtener las materias segun docente y el ciclo activo. Web Service.
+     * @param int $id_user ID del usuario del estudiante
+     * @author Ricardo Estupinian
+     */
+    public function getMateriasDocente($id_user){
+        $materias = DB::table('cat_mat_materia')
+            ->join('materia_ciclo', 'cat_mat_materia.id_cat_mat', '=', 'materia_ciclo.id_cat_mat')
+            ->join('carga_academica', 'carga_academica.id_mat_ci', '=', 'materia_ciclo.id_mat_ci')
+            ->join('pdg_dcn_docente', 'carga_academica.id_pdg_dcn', '=', 'pdg_dcn_docente.id_pdg_dcn')
+            ->where('pdg_dcn_docente.user_id', '=', $id_user)
+            /*->join('pdg_dcn_docente', function ($join) {
+                //Consulta Avanzada donde se determina de que docente se trata
+                $join->on('pdg_dcn_docente.id_pdg_dcn', '=', 'carga_academica.id_pdg_dcn')->where('pdg_dcn_docente.user_id', '=', $id_user);
+            })*/
+            ->join('ciclo', 'ciclo.id_ciclo', '=', 'materia_ciclo.id_ciclo')
+            ->where('ciclo.estado', '=', 1)
+            ->select('cat_mat_materia.*', 'materia_ciclo.*','carga_academica.*','pdg_dcn_docente.*')
+            ->get();    
+        //dd($materias);                    
+        return $materias;
     }
 
 }
