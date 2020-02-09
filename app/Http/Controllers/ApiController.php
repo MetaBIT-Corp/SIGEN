@@ -433,4 +433,10 @@ class ApiController extends Controller
         return $materias;
     }
 
+    public function getEstadisticosEvaluacion($id_eva){
+        $data = EvaluacionController::getPorcentajeAprovadosReprobados($id_eva);
+        dd($data);
+        return $data;
+    }
+
 }

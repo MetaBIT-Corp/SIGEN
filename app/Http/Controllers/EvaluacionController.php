@@ -697,7 +697,7 @@ class EvaluacionController extends Controller
      * @return json
      * @author Enrique Menjívar <mt16007@ues.edu.sv>
      */
-    public function getPorcentajeAprovadosReprobados($evaluacion_id){
+    public static function getPorcentajeAprovadosReprobados($evaluacion_id){
         $evaluacion = Evaluacion::findOrFail($evaluacion_id);
 
         //Obtener los intentos, es decir, los estudiantes que realizaron la evaluación
