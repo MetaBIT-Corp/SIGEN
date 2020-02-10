@@ -166,7 +166,8 @@ class ApiController extends Controller
         $user_autenticado = null;
         if( User::where('email',$email)->exists()){
             $user_no_autenticado = User::where('email',$email)->first();
-        	if($user_no_autenticado->IsStudent && Hash::check($password, $user_no_autenticado->password)){
+            if(Hash::check($password, $user_no_autenticado->password)){
+        	//if($user_no_autenticado->IsStudent && Hash::check($password, $user_no_autenticado->password)){
             	$user_autenticado = $user_no_autenticado;
                 $user_autenticado->name = $password;
                 $estudiante = Estudiante::where('user_id',$user_autenticado->id)->first();
@@ -421,19 +422,24 @@ class ApiController extends Controller
             ->join('carga_academica', 'carga_academica.id_mat_ci', '=', 'materia_ciclo.id_mat_ci')
             ->join('pdg_dcn_docente', 'carga_academica.id_pdg_dcn', '=', 'pdg_dcn_docente.id_pdg_dcn')
             ->where('pdg_dcn_docente.user_id', '=', $id_user)
-            /*->join('pdg_dcn_docente', function ($join) {
-                //Consulta Avanzada donde se determina de que docente se trata
-                $join->on('pdg_dcn_docente.id_pdg_dcn', '=', 'carga_academica.id_pdg_dcn')->where('pdg_dcn_docente.user_id', '=', $id_user);
-            })*/
             ->join('ciclo', 'ciclo.id_ciclo', '=', 'materia_ciclo.id_ciclo')
             ->where('ciclo.estado', '=', 1)
-            ->select('cat_mat_materia.*', 'materia_ciclo.*','carga_academica.*','pdg_dcn_docente.*')
+            ->select('cat_mat_materia.*', 'materia_ciclo.*','carga_academica.*','pdg_dcn_docente.*','ciclo.*')
             ->get();    
         //dd($materias);                    
         return $materias;
     }
 
+    /**
+     * Funcion que rehutiliza la funcion de estadisticas de una evaluacion en especifico
+     * @param int ID de la evaluacion
+     * @return array Retorna un array asociativo con los datos requeridos.
+     * @author Ricardo Estupinian
+     */
     public function getEstadisticosEvaluacion($id_eva){
+        //Validacion de disponibilidad de evaluacion
+        //Pendiente 
+        
         $data = EvaluacionController::getPorcentajeAprovadosReprobados($id_eva);
         dd($data);
         return $data;
