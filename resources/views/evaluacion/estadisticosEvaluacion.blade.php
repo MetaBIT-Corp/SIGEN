@@ -4,6 +4,7 @@
 
 <!--Css para Datatable-->
 <script src="/vendor/chart.js/Chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
 
 @endsection
 
@@ -27,8 +28,9 @@
     </ul>
   </div>
 
+<a href="#" id="downloadPdf">Download Report Page as PDF</a>
 @if($notification==1)
-<div class="row" id="evaluacion" data-evaluacion-id={{ $evaluacion->id }}>
+<div class="row" id="evaluacion" data-evaluacion-id="{{ $evaluacion->id }}">
   <div class="col-lg-6">
     <div class="card mb-3">
       <div class="card-header">
