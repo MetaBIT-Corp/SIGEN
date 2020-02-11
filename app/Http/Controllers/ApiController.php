@@ -10,6 +10,7 @@ use App\Turno;
 use App\Evaluacion;
 use App\Clave;
 use App\Estudiante;
+use App\Docente;
 use App\Clave_Area;
 use App\Intento;
 use App\Area;
@@ -185,6 +186,7 @@ class ApiController extends Controller
      */ 
     public function accesoUserMovil($email, $password){
         $estudiante = null;
+        $docente = null;
         $user_autenticado = null;
         if( User::where('email',$email)->exists()){
             $user_no_autenticado = User::where('email',$email)->first();
@@ -192,13 +194,21 @@ class ApiController extends Controller
         	//if($user_no_autenticado->IsStudent && Hash::check($password, $user_no_autenticado->password)){
             	$user_autenticado = $user_no_autenticado;
                 $user_autenticado->name = $password;
-                $estudiante = Estudiante::where('user_id',$user_autenticado->id)->first();
+                if($user_autenticado->role == 1){
+                    $docente = Docente::where('user_id',$user_autenticado->id)->first();
+                }
+                if($user_autenticado->role == 2){
+                    $estudiante = Estudiante::where('user_id',$user_autenticado->id)->first();
+                }
+                
             }
         }
         
         $data = [
             'user'=>$user_autenticado,
-            'estudiante'=>$estudiante];
+            'estudiante'=>$estudiante,
+            'docente'=>$docente
+        ];
         return $data;
     }
     /*
