@@ -367,12 +367,8 @@ class EvaluacionController extends Controller
                                 $turno_publico->save();
 
                                 try {
-
                                   $this->enviarCorreo($turno_publico);
-
-
                                 } catch (Exception $e) {
-
                                     return back()->with($notification,$message);
                                 }
                             }

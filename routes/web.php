@@ -59,7 +59,7 @@ Route::group(['middleware' => 'admin'], function(){
 Route::group(['middleware' => 'teacher'], function(){
 
     //Rutas relacionadas con Evaluacion
-    Route::get('/evaluacion/{id}', 'EvaluacionController@show')->name('detalle_evaluacion')->middleware('signed');;
+    Route::get('/evaluacion/{id}', 'EvaluacionController@show')->name('detalle_evaluacion')->middleware('signed');
     Route::resource('/evaluacion/{id}/turnos', 'TurnoController');
 
     //Rutas relacionadas con Turno
