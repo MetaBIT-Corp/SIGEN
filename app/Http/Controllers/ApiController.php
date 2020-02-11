@@ -329,14 +329,14 @@ class ApiController extends Controller
         
     }
     
-    public function getEncuesta($encuesta_id, $mac){
+    public function getEncuesta($encuesta_id, $user_id){
         $encuesta_arr = array();
         //Primero obtenemos el objeto de Encuesta
         $encuesta = Encuesta::find($encuesta_id);
         $encuesta_arr['encuesta'] = $encuesta;
         
         //Buscamos si esta dirección MAC ya se encuentra registrada
-        $encuestados = Encuestado::where('MAC',$mac)->get();
+        /*$encuestados = Encuestado::where('MAC',$mac)->get();
         $encuestado = null;
     
         if($encuestados->count())
@@ -347,19 +347,23 @@ class ApiController extends Controller
             $encuestado = new Encuestado();
             $encuestado->MAC = $mac;
             $encuestado->save();
-        }
-        //Ahora almacenamos en el Array al Encuestado
-        $encuesta_arr['encuestado'] = $encuestado;
+        }*/
+        
+        //Buscamos al usuario que desea participar en la encuesta
+        //$usuario = Usuario::find($user_id);
+        //Ahora almacenamos en el Array al Usuario
+        //$encuesta_arr['usuario'] = $usuario; //No es necesario, ya que este ya esta registrado en la BD del móvil
         
         //Procederemos a obtener la Clave, la cual se relaciona con la Encuesta directamente
         //Se asume por el momento que una Encuesta solamente poseera una Clave
+
         $clave = Clave::where('encuesta_id', $encuesta->id)->first();
         $encuesta_arr['clave'] = $clave;
         
         //Procederemos a crear el Intento
         $intento = new Intento(); 
         $intento->estudiante_id = null;
-        $intento->encuestado_id = $encuestado->id;
+        $intento->user_id = $user_id;
         $intento->clave_id = $clave->id;
         $intento->numero_intento = 1;
         $intento->fecha_inicio_intento = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
