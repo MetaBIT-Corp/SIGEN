@@ -1,7 +1,7 @@
 $(document).ready(porcentajeAprobadosReprobados('pie'));
 $('[name="chart"]').on('change', changeTypeChart)
 $('#rango').on('change', function(){ 
-    rangosNotas($(this).val() )
+    rangosNotas($(this).val() ) 
 });
 $(document).ready(function(){ rangosNotas(1); });
 
@@ -170,3 +170,4 @@ function porcentajeAprobadosReprobados(tipo){
         }); 
     })
 };
+

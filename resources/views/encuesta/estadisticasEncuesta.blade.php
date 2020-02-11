@@ -224,7 +224,7 @@
           
         }
         
-        doc.save("resultados_gráficos_{{ str_replace(" ","_",$titulo) }}.pdf");
+        doc.save("resultados_gráficos_{{ str_replace(' ','_',$titulo) }}.pdf");
       }
 
     </script>

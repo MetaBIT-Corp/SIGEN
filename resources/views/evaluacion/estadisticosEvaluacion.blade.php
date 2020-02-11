@@ -13,6 +13,9 @@
     <li class="breadcrumb-item"><a 
       href=" {{ URL::signedRoute('listado_evaluacion', ['id' => $evaluacion->carga_academica->id_carg_aca]) }}">Evaluaciones</a></li>
     <li class="breadcrumb-item">Estadísdticos</li>
+    <button id="btn_desc_pdf" class="btn btn-option btn-sm mb-1 offset-8" title="Descargar gráficos en formato PDF" onclick="downloadPDF();">
+      <span class="icon-pdf"></span>
+    </button>
 @endsection
 
 @section("main")
@@ -34,7 +37,7 @@
       <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-              Procentaje de Aprobados, Reprobados, Evaluados y No evaluados
+              Porcentaje de Aprobados, Reprobados, Evaluados y No evaluados
             </div>
             <div class="col-md-4">
                 <div class="custom-control custom-radio custom-control-inline">
@@ -88,4 +91,30 @@
 @if($notification==1)
 <script src="/js/evaluacion/estadisticos.js"></script>
 @endif
+
+<script>
+  
+  function downloadPDF() {
+    
+    var doc = new jsPDF('portrait');
+    doc.setFontSize(16);
+    doc.text(15,15,"{{ $materia }}");
+    doc.text(15,22,"{{ $message }}");
+
+    doc.setFontSize(14);
+    doc.text(15,30,"Porcentaje de Aprobados, Reprobados, Evaluados y No evaluados");
+    var aprovadosReprobados = document.getElementById('aprovadosReprobados');
+    var aprovadosReprobadosImg = aprovadosReprobados.toDataURL("image/jpeg", 1.0);
+    doc.addImage(aprovadosReprobadosImg, 'JPEG', 50, 32, 120, 120 );
+
+    doc.text(15,160,"Rangos de notas");
+    var rangosNotas = document.getElementById('rangosNotas');
+    var rangosNotasImg = rangosNotas.toDataURL("image/jpeg", 1.0);
+    doc.addImage(rangosNotasImg, 'JPEG', 50, 162, 120, 120 );
+
+    doc.save("resultados_gráficos_{{ str_replace(' ','_',$message) }}.pdf");
+  }
+
+</script>
+
 @endsection
