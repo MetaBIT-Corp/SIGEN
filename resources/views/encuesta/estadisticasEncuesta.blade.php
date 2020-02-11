@@ -14,6 +14,9 @@
 @section("ol_breadcrumb")
     <li class="breadcrumb-item"><a href=" {{ URL::signedRoute('listado_encuesta') }}">Listado Encuestas</a></li>
     <li class="breadcrumb-item">Estadísticas</li>
+    <button id="btn_desc_pdf" class="btn btn-option btn-sm mb-1 offset-8" title="Descargar gráficos en formato PDF" onclick="downloadPDF();">
+      <span class="icon-pdf"></span>
+    </button>
 @endsection
 @section("main")
 
@@ -33,7 +36,7 @@
 
 <div id="content-wrapper">
 
-      <div class="container-fluid">
+      <div class="container-fluid"> 
 
         <div class="row">
           @foreach($preguntas as $pregunta)
@@ -45,7 +48,7 @@
                 Pregunta {{$loop->index + 1}} </div>
               <div class="card-body">
                 @if($estadisticas[$pregunta->id]['encuestados'] > 0)
-                  <canvas id="{{"pregunta".$pregunta->id}}" width="100%" height="100"></canvas>
+                  <canvas class="graphs" id="{{"pregunta".$pregunta->id}}" width="100%" height="100" alt="{{$estadisticas[$pregunta->id]['pregunta']}}"></canvas>
                 @else
                   <div class="alert alert-info">
                     Info: No hay respuestas.
@@ -178,6 +181,52 @@
           }],
         },
       });
+
+
+      function downloadPDF() {
+        var canvas = document.getElementsByClassName('graphs');
+
+        var doc = new jsPDF('portrait'); 
+        doc.setFontSize(16);
+        
+        pageHeight= doc.internal.pageSize.height;
+    
+        doc.text(15,15,"{{ $titulo }}");
+
+        doc.setFontSize(14);
+
+        var y = 20;
+        var h = 100;
+        var len = canvas.length;
+
+        for (var i = 0; i < len; i++) {
+          //Crear imagen de un elemento canvas
+          var canvasImg = canvas[i].toDataURL("image/jpeg", 1.0);
+
+
+          if (y >= pageHeight || (pageHeight - y) < (30 + h))
+          {
+            doc.addPage();
+            y = 20; // Reiniciar la posición de altura
+          }
+          //Crear PDF de img
+          if(i==0){
+            doc.text(15, (y + 10), (i+1).toString() + ". " + canvas[i].getAttribute("alt"));
+            doc.addImage(canvasImg, 'JPEG', 50, (y+20), 100, h );
+            y += (40 + h);
+          }
+          else{
+            doc.text(15, y, (i+1).toString() + ". " + canvas[i].getAttribute("alt"));
+            doc.addImage(canvasImg, 'JPEG', 50, (y+10), 100, h );
+            y += (30 + h);
+          }
+          
+          
+        }
+        
+        doc.save("resultados_gráficos_{{ str_replace(" ","_",$titulo) }}.pdf");
+      }
+
     </script>
 
   @endforeach
