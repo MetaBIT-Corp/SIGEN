@@ -10,6 +10,7 @@ use App\CargaAcademica;
 use App\Clave_Area_Pregunta_Estudiante;
 use App\Turno;
 use App\User;
+use App\Materia;
 use App\Clave_Area;
 use App\Intento;
 use App\Estudiante;
@@ -825,6 +826,7 @@ class EvaluacionController extends Controller
         $notification = '';
         $fecha_fin = '';
         $evaluacion = Evaluacion::findOrFail($evaluacion_id);
+        $materia = Materia::where("id_cat_mat",$evaluacion->carga_academica->materiaCiclo->id_cat_mat)->first()->nombre_mar;
         $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $turnos = Turno::where('evaluacion_id', $evaluacion_id)->orderBy('fecha_final_turno', 'desc')->first();
 
@@ -844,7 +846,7 @@ class EvaluacionController extends Controller
             $notification = 0;
         }
 
-        return view('evaluacion.estadisticosEvaluacion')->with(compact('evaluacion', 'notification', 'message', 'fecha_fin'));
+        return view('evaluacion.estadisticosEvaluacion')->with(compact('evaluacion', 'notification', 'message', 'fecha_fin','materia'));
 
     }
 
