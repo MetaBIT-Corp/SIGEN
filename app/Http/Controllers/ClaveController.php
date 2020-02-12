@@ -86,6 +86,8 @@ class ClaveController extends Controller
     	$mensaje = 'Ninguna pregunta fue seleccionada';
     	$notificacion = 'error';
 
+        $clave_area = Clave_Area::find($id_clave_area);
+
     	//Almacenando preguntas en la base de datos
     	if($modalidad){
             if($preguntasEmp){
@@ -102,6 +104,9 @@ class ClaveController extends Controller
                         $clave_area_pregunta->save();
                     }
                 }
+
+                $clave_area->numero_preguntas = count($preguntasEmp);
+
                 $mensaje = 'Preguntas agregadas exitosamente.';
                 $notificacion = 'exito';
             }
@@ -115,11 +120,15 @@ class ClaveController extends Controller
 
                     $clave_area_pregunta->save();
                 }
+
+                $clave_area->numero_preguntas = count($preguntas);
+
                 $mensaje = 'Preguntas agregadas exitosamente.';
                 $notificacion = 'exito';
             }
         }
-    	
+
+        $clave_area->save();
 
     	return back()->with($notificacion, $mensaje);
     }

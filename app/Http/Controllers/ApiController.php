@@ -32,7 +32,7 @@ class ApiController extends Controller
 	/*--------------------------Modelo Encuesta--------------------------*/
     //Funcion rotorna las encuestas de propósito general que se encuentra disponibles en formato JSON  
     public function encuestasDisponibles(){
-        $fecha_hora_actual = Carbon::now('America/Denver')->addMinutes(10)->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->addMinutes(10)->format('Y-m-d H:i:s');
         $encuestas = Encuesta::whereDate('fecha_final_encuesta', '>', $fecha_hora_actual)->get();
 
         //dd($encuestas);
@@ -73,7 +73,7 @@ class ApiController extends Controller
         	//pergunta si es una encuesta
             if($es_encuesta==1){
         		//Actualizar los datos del intento correspondiente
-	            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+	            $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
 	            $intento->fecha_final_intento = $fecha_hora_actual;
 	            $intento->save();
         	}else{
@@ -81,11 +81,12 @@ class ApiController extends Controller
 	            $nota = $intento->calcularNota($request->intento_id);
 
 	            //Actualizar los datos del intento correspondiente
-	            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+	            $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
 	            $intento->nota_intento = $nota;
 	            $intento->fecha_final_intento = $fecha_hora_actual;
 	            $intento->save();
         	}
+            return $nota;
         }
     }
 
@@ -245,7 +246,7 @@ class ApiController extends Controller
         $intento->clave_id = $clave->id;
         $intento->encuestado_id = null;
         $intento->numero_intento = 1;
-        $intento->fecha_inicio_intento = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $intento->fecha_inicio_intento = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $intento->save();*/
         $evaluacion['intento'] = $intento;
         
@@ -366,7 +367,7 @@ class ApiController extends Controller
         $intento->user_id = $user_id;
         $intento->clave_id = $clave->id;
         $intento->numero_intento = 1;
-        $intento->fecha_inicio_intento = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $intento->fecha_inicio_intento = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $intento->save();
         
         $encuesta_arr['intento'] = $intento;
