@@ -86,7 +86,6 @@ class ApiController extends Controller
 	            $intento->fecha_final_intento = $fecha_hora_actual;
 	            $intento->save();
         	}
-            return $nota;
         }
     }
 
