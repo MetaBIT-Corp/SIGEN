@@ -477,7 +477,6 @@ class ApiController extends Controller
         //Pendiente 
         
         $data = EvaluacionController::getPorcentajeAprovadosReprobados($id_eva);
-        dd($data);
         return $data;
     }
 
