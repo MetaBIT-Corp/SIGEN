@@ -474,9 +474,23 @@ class ApiController extends Controller
      */
     public function getEstadisticosEvaluacion($id_eva){
         //Validacion de disponibilidad de evaluacion
-        //Pendiente 
-        
-        $data = EvaluacionController::getPorcentajeAprovadosReprobados($id_eva);
+        $turnos = Turno::where('evaluacion_id', $id_eva)->orderBy('fecha_final_turno', 'desc')->first();
+        $data=null;
+
+        if($turnos){
+            //Verificacion de fecha de turnos para mostrar datos
+            $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
+            if($turnos->fecha_final_turno > $fecha_hora_actual){
+                $data= ["info"=>0];
+                $notification = 0;
+            }else{
+                //Se envian los datos del grafico
+                $data = EvaluacionController::getPorcentajeAprovadosReprobados($id_eva);
+            }
+        }else{
+            $data = ["info"=>1];
+        }
+       
         return $data;
     }
 
