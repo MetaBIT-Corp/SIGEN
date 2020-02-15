@@ -31,7 +31,6 @@
     </ul>
   </div>
 
-<a href="#" id="downloadPdf">Download Report Page as PDF</a>
 @if($notification==1)
 <div class="row" id="evaluacion" data-evaluacion-id="{{ $evaluacion->id }}">
   <div class="col-lg-6">
@@ -92,29 +91,26 @@
 @section("js")
 @if($notification==1)
 <script src="/js/evaluacion/estadisticos.js"></script>
+<script src="{{asset('js/html2canvas.js')}}"></script>
 @endif
 
 <script>
   
   function downloadPDF() {
     
-    var doc = new jsPDF('portrait');
+    var doc = new jsPDF('landscape');
     doc.setFontSize(16);
     doc.text(15,15,"{{ $materia }}");
     doc.text(15,22,"{{ $message }}");
 
-    doc.setFontSize(14);
-    doc.text(15,30,"Porcentaje de Aprobados, Reprobados, Evaluados y No evaluados");
-    var aprovadosReprobados = document.getElementById('aprovadosReprobados');
-    var aprovadosReprobadosImg = aprovadosReprobados.toDataURL("image/jpeg", 1.0);
-    doc.addImage(aprovadosReprobadosImg, 'JPEG', 50, 32, 120, 120 );
+    var evaluacion = document.getElementById('evaluacion');
 
-    doc.text(15,160,"Rangos de notas");
-    var rangosNotas = document.getElementById('rangosNotas');
-    var rangosNotasImg = rangosNotas.toDataURL("image/jpeg", 1.0);
-    doc.addImage(rangosNotasImg, 'JPEG', 50, 162, 120, 120 );
-
-    doc.save("resultados_gráficos_{{ str_replace(' ','_',$message) }}.pdf");
+    html2canvas(evaluacion).then(function(canvas) {
+      canvasImg = canvas.toDataURL("image/jpeg", 1.0);
+      doc.addImage(canvasImg, 'JPEG', 25, 30, 250, 150);
+    }).then(function() {
+      doc.save("resultados_gráficos_{{ str_replace(' ','_',$message) }}.pdf");
+    });    
   }
 
 </script>
