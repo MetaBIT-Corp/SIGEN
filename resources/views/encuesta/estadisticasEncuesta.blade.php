@@ -213,7 +213,7 @@
             }
           }
         }).then(function() {
-          doc.save('sample-file.pdf');
+          doc.save("resultados_gráficos_{{ str_replace(" ","_",$titulo) }}.pdf");
         });
       }
 
