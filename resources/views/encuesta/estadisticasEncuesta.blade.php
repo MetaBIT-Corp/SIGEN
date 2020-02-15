@@ -38,7 +38,7 @@
 
       <div class="container-fluid"> 
 
-        <div class="row">
+        <div class="row graphs">
           @foreach($preguntas as $pregunta)
           @if(!$estadisticas[$pregunta->id]['respuesta_corta'])
           <div class="col-lg-4">
@@ -48,44 +48,42 @@
                 Pregunta {{$loop->index + 1}} </div>
               <div class="card-body">
                 @if($estadisticas[$pregunta->id]['encuestados'] > 0)
-                  <canvas class="graphs" id="{{"pregunta".$pregunta->id}}" width="100%" height="100" alt="{{$estadisticas[$pregunta->id]['pregunta']}}"></canvas>
+                  <canvas class="canvs" id="{{"pregunta".$pregunta->id}}" width="100%" height="100" alt="{{$estadisticas[$pregunta->id]['pregunta']}}"></canvas>
                 @else
                   <div class="alert alert-info">
-                    Info: No hay respuestas.
+                    Info: No hay respuestas. 
                   </div>
                 @endif
               </div>
               <div class="card-footer small text-muted">SIGEN</div>
             </div>
           </div>
-          <div class="col-lg-8">
-             <div class="card mb-3">
-              <div class="card-header">
-                <i class="fas fa-chart-pie"></i>
-                Descripción de pregunta </div>
-              <div class="card-body">
-            {{$estadisticas[$pregunta->id]['pregunta']}}
-            </div>
-            </div>
-
-            <div class="card mb-3">
-              <div class="card-header">
-                <i class="fas fa-chart-pie"></i>
-                Opciones </div>
-              <div class="card-body">
-              @foreach($estadisticas[$pregunta->id]['opciones'] as $opcion)
-                   {{$opcion['opcion']}} <br>
-              <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: {{$opcion['porcentaje']}}%;" aria-valuenow="{{$opcion['porcentaje']}}" aria-valuemin="0" aria-valuemax="100">{{$opcion['porcentaje']}}%</div>
+            <div class="col-lg-8">
+               <div class="card mb-3">
+                <div class="card-header">
+                  <i class="fas fa-chart-pie"></i>
+                  Descripción de pregunta </div>
+                <div class="card-body">
+              {{$estadisticas[$pregunta->id]['pregunta']}}
               </div>
-             @endforeach
-              <br>
-             <span >Cantidad de respuestas: {{$estadisticas[$pregunta->id]['encuestados']}}</span>
-            </div>
-            </div>
-      
+              </div>
 
-          </div>
+              <div class="card mb-3">
+                <div class="card-header">
+                  <i class="fas fa-chart-pie"></i>
+                  Opciones </div>
+                <div class="card-body prog">
+                @foreach($estadisticas[$pregunta->id]['opciones'] as $opcion)
+                     {{$opcion['opcion']}} <br>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" style="width: {{$opcion['porcentaje']}}%;" aria-valuenow="{{$opcion['porcentaje']}}" aria-valuemin="0" aria-valuemax="100">{{$opcion['porcentaje']}}%</div>
+                </div>
+               @endforeach
+                <br>
+               <span >Cantidad de respuestas: {{$estadisticas[$pregunta->id]['encuestados']}}</span>
+              </div>
+              </div>
+            </div>
           
           @else
           <!-- Preguntas de respuesta Corta-->
@@ -135,6 +133,7 @@
 
      <!-- Page level plugin JavaScript-->
     <script src="{{asset('vendor/chart.js/Chart.min.js')}}"></script>
+    <script src="{{asset('js/html2canvas.js')}}"></script>
 
     @foreach($preguntas as $pregunta)
 
@@ -184,47 +183,38 @@
 
 
       function downloadPDF() {
-        var canvas = document.getElementsByClassName('graphs');
+        var graphs = document.getElementsByClassName('graphs');
+        var canvs = document.getElementsByClassName('canvs');
 
         var doc = new jsPDF('portrait'); 
         doc.setFontSize(16);
         
-        pageHeight= doc.internal.pageSize.height;
-    
-        doc.text(15,15,"{{ $titulo }}");
-
-        doc.setFontSize(14);
+        doc.text(15,15,"{{ $titulo }} - SIGEN");
 
         var y = 20;
-        var h = 100;
-        var len = canvas.length;
+        var pages = Math.ceil(canvs.length/3);
+        var h = 92*canvs.length;
+        var offset = -289;
 
-        for (var i = 0; i < len; i++) {
-          //Crear imagen de un elemento canvas
-          var canvasImg = canvas[i].toDataURL("image/jpeg", 1.0);
+        var canvasImg = null;
 
+        html2canvas(graphs[0]).then(function(canvas) {
+          canvasImg = canvas.toDataURL("image/jpeg", 1.0);
 
-          if (y >= pageHeight || (pageHeight - y) < (30 + h))
-          {
-            doc.addPage();
-            y = 20; // Reiniciar la posición de altura
+          for(var i = 0; i < pages; i++){
+            if(i == 0)
+              doc.addImage(canvasImg, 'JPEG', 5, y, 200, h*1.02);
+            else{
+              doc.addPage();
+              if(i%2 == 0){//3,-2
+                offset += -1;
+              }
+              doc.addImage(canvasImg, 'JPEG', 5, offset*i, 200, h*1.06);
+            }
           }
-          //Crear PDF de img
-          if(i==0){
-            doc.text(15, (y + 10), (i+1).toString() + ". " + canvas[i].getAttribute("alt"));
-            doc.addImage(canvasImg, 'JPEG', 50, (y+20), 100, h );
-            y += (40 + h);
-          }
-          else{
-            doc.text(15, y, (i+1).toString() + ". " + canvas[i].getAttribute("alt"));
-            doc.addImage(canvasImg, 'JPEG', 50, (y+10), 100, h );
-            y += (30 + h);
-          }
-          
-          
-        }
-        
-        doc.save("resultados_gráficos_{{ str_replace(' ','_',$titulo) }}.pdf");
+        }).then(function() {
+          doc.save('sample-file.pdf');
+        });
       }
 
     </script>
