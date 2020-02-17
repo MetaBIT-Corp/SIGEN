@@ -29,7 +29,7 @@ Route::get('/evaluacion/{id}/duracion/','ApiController@getDuracionEvaluacion');
 Route::get('/evaluacion/turno/{turno_id}/obtener/{estudiante_id}','ApiController@getEvaluacion');
 Route::get('/encuesta/{encuesta_id}/{mac}','ApiController@getEncuesta');
 Route::get('/evaluaciones_m/turnos_m/{id_carga}/{role}','ApiController@evaluacionTurnosDisponibles');
-Route::get('/evaluaciones_m/publicar_turno/{id_turno}','ApiController@publicarTurno');
+Route::post('/evaluaciones_m/publicar_turno/{id_turno}','ApiController@publicarTurno');
 Route::get('/user/acceso/{email}/{password}','ApiController@accesoUserMovil');
 Route::get('/evaluacion/{evaluacion_id}/datos-estadisticos', 'EvaluacionController@getDatosEstadisticos');
 
