@@ -161,7 +161,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
-    <script src="/js/encuesta/areaclave.js"></script>
+    <script src="/js/encuesta/areaClave.js"></script>
     <script src="/js/clave/cargarPreguntas.js"> </script>
     <script src="/js/clave/operacionesClaveArea.js"> </script>
     <script type="text/javascript" src="{{ asset('js/encuesta/fecha.js') }}"></script>

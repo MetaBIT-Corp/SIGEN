@@ -477,6 +477,7 @@ class EncuestaController extends Controller
      */
     public function estadisticas($id){
         $id_encuesta = $id;
+        $titulo = Encuesta::find($id)->titulo_encuesta;
         $preguntas = $this->obtenerPreguntas($id_encuesta);
         
         $estadisticas = Array();
@@ -522,7 +523,7 @@ class EncuestaController extends Controller
         }
         
         //dd($estadisticas);
-        return view('encuesta.estadisticasEncuesta')->with(compact('estadisticas','preguntas'));;
+        return view('encuesta.estadisticasEncuesta')->with(compact('estadisticas','preguntas','titulo'));;
     }
 
 
@@ -607,7 +608,7 @@ class EncuestaController extends Controller
         if($cantidad_total != 0){
             $porcentaje = ($cantidad_obtenida*100)/$cantidad_total;
         }
-        return $porcentaje;
+        return round($porcentaje,2);
     }
 
     /**

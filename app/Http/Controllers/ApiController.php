@@ -32,7 +32,7 @@ class ApiController extends Controller
 	/*--------------------------Modelo Encuesta--------------------------*/
     //Funcion rotorna las encuestas de propósito general que se encuentra disponibles en formato JSON  
     public function encuestasDisponibles(){
-        $fecha_hora_actual = Carbon::now('America/Denver')->addMinutes(10)->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->addMinutes(10)->format('Y-m-d H:i:s');
         $encuestas = Encuesta::whereDate('fecha_final_encuesta', '>', $fecha_hora_actual)->get();
 
         //dd($encuestas);
@@ -73,7 +73,7 @@ class ApiController extends Controller
         	//pergunta si es una encuesta
             if($es_encuesta==1){
         		//Actualizar los datos del intento correspondiente
-	            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+	            $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
 	            $intento->fecha_final_intento = $fecha_hora_actual;
 	            $intento->save();
         	}else{
@@ -81,7 +81,7 @@ class ApiController extends Controller
 	            $nota = $intento->calcularNota($request->intento_id);
 
 	            //Actualizar los datos del intento correspondiente
-	            $fecha_hora_actual = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+	            $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
 	            $intento->nota_intento = $nota;
 	            $intento->fecha_final_intento = $fecha_hora_actual;
 	            $intento->save();
@@ -245,7 +245,7 @@ class ApiController extends Controller
         $intento->clave_id = $clave->id;
         $intento->encuestado_id = null;
         $intento->numero_intento = 1;
-        $intento->fecha_inicio_intento = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $intento->fecha_inicio_intento = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $intento->save();*/
         $evaluacion['intento'] = $intento;
         
@@ -329,14 +329,14 @@ class ApiController extends Controller
         
     }
     
-    public function getEncuesta($encuesta_id, $mac){
+    public function getEncuesta($encuesta_id, $user_id){
         $encuesta_arr = array();
         //Primero obtenemos el objeto de Encuesta
         $encuesta = Encuesta::find($encuesta_id);
         $encuesta_arr['encuesta'] = $encuesta;
         
         //Buscamos si esta dirección MAC ya se encuentra registrada
-        $encuestados = Encuestado::where('MAC',$mac)->get();
+        /*$encuestados = Encuestado::where('MAC',$mac)->get();
         $encuestado = null;
     
         if($encuestados->count())
@@ -347,22 +347,26 @@ class ApiController extends Controller
             $encuestado = new Encuestado();
             $encuestado->MAC = $mac;
             $encuestado->save();
-        }
-        //Ahora almacenamos en el Array al Encuestado
-        $encuesta_arr['encuestado'] = $encuestado;
+        }*/
+        
+        //Buscamos al usuario que desea participar en la encuesta
+        //$usuario = Usuario::find($user_id);
+        //Ahora almacenamos en el Array al Usuario
+        //$encuesta_arr['usuario'] = $usuario; //No es necesario, ya que este ya esta registrado en la BD del móvil
         
         //Procederemos a obtener la Clave, la cual se relaciona con la Encuesta directamente
         //Se asume por el momento que una Encuesta solamente poseera una Clave
+
         $clave = Clave::where('encuesta_id', $encuesta->id)->first();
         $encuesta_arr['clave'] = $clave;
         
         //Procederemos a crear el Intento
         $intento = new Intento(); 
         $intento->estudiante_id = null;
-        $intento->encuestado_id = $encuestado->id;
+        $intento->user_id = $user_id;
         $intento->clave_id = $clave->id;
         $intento->numero_intento = 1;
-        $intento->fecha_inicio_intento = Carbon::now('America/Denver')->format('Y-m-d H:i:s');
+        $intento->fecha_inicio_intento = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $intento->save();
         
         $encuesta_arr['intento'] = $intento;
@@ -470,10 +474,23 @@ class ApiController extends Controller
      */
     public function getEstadisticosEvaluacion($id_eva){
         //Validacion de disponibilidad de evaluacion
-        //Pendiente 
-        
-        $data = EvaluacionController::getPorcentajeAprovadosReprobados($id_eva);
-        dd($data);
+        $turnos = Turno::where('evaluacion_id', $id_eva)->orderBy('fecha_final_turno', 'desc')->first();
+        $data=null;
+
+        if($turnos){
+            //Verificacion de fecha de turnos para mostrar datos
+            $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
+            if($turnos->fecha_final_turno > $fecha_hora_actual){
+                $data= ["info"=>0];
+                $notification = 0;
+            }else{
+                //Se envian los datos del grafico
+                $data = EvaluacionController::getPorcentajeAprovadosReprobados($id_eva);
+            }
+        }else{
+            $data = ["info"=>1];
+        }
+       
         return $data;
     }
 
