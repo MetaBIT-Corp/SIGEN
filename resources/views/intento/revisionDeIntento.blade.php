@@ -82,7 +82,9 @@
 									</table>
 								</div>
 								<!-- Fin Info Intento -->
-								@if($se_permite_revision && $evaluacion->revision==1 || $intento->revision_estudiante==1)
+
+								<!-- Validación de revisión: $se_permite_revision  informa si el estudiante ha realizado todos sus intentos para lograr ver la revisión-->
+								@if($se_permite_revision && ($evaluacion->revision==1 || $intento->revision_estudiante==1 || auth()->user()->IsTeacher))
 								<!-- Inicio Revisión Intento -->
 								<form id="quiz_form">
 									<div class="card">

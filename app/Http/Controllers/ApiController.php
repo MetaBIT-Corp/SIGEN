@@ -61,19 +61,19 @@ class ApiController extends Controller
         $respuesta->texto_respuesta = $request->texto_respuesta;//texto escrito en caso sea respues corta
 
         //Verificar si la encuesta que se envia del móvil ya existe para ser remplazada
-        if($es_encuesta == 1){
-            $intento_encuesta = Intento::find($request->intento_id);
+        //if($es_encuesta == 1){
+        $intento_encuesta = Intento::find($request->intento_id);
 
-            if($intento_encuesta->fecha_final_intento != null){
-                $respuesta_encuesta = Respuesta::where('id_intento', $request->intento_id)->get();
+        if($intento_encuesta->fecha_final_intento != null){
+            $respuesta_encuesta = Respuesta::where('id_intento', $request->intento_id)->get();
 
-                if(count($respuesta_encuesta) > 0){
-                    DB::table('respuesta')->where('id_intento', $request->intento_id)->delete();
-                    $intento_encuesta->fecha_final_intento = null;
-                    $intento_encuesta->save();
-                }
+            if(count($respuesta_encuesta) > 0){
+                DB::table('respuesta')->where('id_intento', $request->intento_id)->delete();
+                $intento_encuesta->fecha_final_intento = null;
+                $intento_encuesta->save();
             }
         }
+        //}
 
         //Guardar el objeto respuesta
         $respuesta->save();
