@@ -115,9 +115,12 @@ class ApiController extends Controller
      */ 
     public function evaluacionTurnosDisponibles($id_carga,$role){
     	//declaración de variables
-        $fecha_hora_actual = Carbon::now('America/El_Salvador')->addMinutes(10)->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $evaluaciones = array();
-        $turnos = array();
+        $turnosDisponibles = array();
+        $comparaciones = array();
+        $iteracion =0;
+
             //verificamos si existe la carga academica
             if(CargaAcademica::where('id_carg_aca',$id_carga)->exists()){
                 //obtenemos todas las cargas academicas de la materia, con el objetivo de presentar todas las evaluaciones de los docentes en la materia
@@ -137,10 +140,13 @@ class ApiController extends Controller
                             $turnos_activos = false;
                             if($evaluacion->turnos){
                                 foreach ($evaluacion->turnos as $turno) {
-                                    if($turno->visibilidad==1 && 
-                                        $turno->fecha_final_turno > $fecha_hora_actual){
+                                    
+                                    $iteracion++;
+                                    if($turno->visibilidad==1 && Carbon::parse($turno->fecha_final_turno)->gt(Carbon::parse($fecha_hora_actual))){
+                                        
+                                        $comparaciones[]= Carbon::parse($turno->fecha_final_turno)->gt(Carbon::parse($fecha_hora_actual));
                                         $turnos_activos = true;
-                                        $turnos[] = $turno;
+                                        $turnosDisponibles[] = $turno;
                                     }
                                 }
                                 if($turnos_activos==true){
@@ -151,7 +157,7 @@ class ApiController extends Controller
                     }
                 }
                 //Si el usuario es docente
-                if($role = 1){
+                if($role == 1){
                     $evaluaciones_all = Evaluacion::where('id_carga',$carga_academica->id_carg_aca)
                                     ->where('habilitado',1)
                                     ->get();
@@ -159,7 +165,7 @@ class ApiController extends Controller
                         $evaluaciones[] = $evaluacion;
                         if($evaluacion->turnos){
                             foreach ($evaluacion->turnos as $turno) {
-                                $turnos[] = $turno;
+                                $turnosDisponibles[] = $turno;
                             }
                         }
                     }
@@ -169,7 +175,8 @@ class ApiController extends Controller
             } 
         $data = [
             'evaluaciones'=>$evaluaciones,
-            'turnos' => $turnos];
+            'turnos' => $turnosDisponibles
+        ];
         return response()->json(
             $data,
              200,
