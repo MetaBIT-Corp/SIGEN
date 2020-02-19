@@ -55,3 +55,5 @@ Route::get('/calcular-nota/{intento_id}', 'IntentoController@calcularNota');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/encuestas-docente/{id_docente}','ApiController@getEncuestasDocente');

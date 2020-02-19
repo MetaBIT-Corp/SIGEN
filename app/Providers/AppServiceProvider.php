@@ -2,14 +2,10 @@
 
 namespace App\Providers;
 
-use View;
-use App\Ciclo;
-
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-use Carbon\Carbon;
-
-
+use View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,9 +28,6 @@ class AppServiceProvider extends ServiceProvider
     {
 
         Schema::defaultStringLength(191);
-
-        $ciclo_activo = Ciclo::where('estado',1)->first();
-        View::share('ciclo_activo', $ciclo_activo);
         
         //Carbon para fechas en español
         Carbon::setLocale('es');

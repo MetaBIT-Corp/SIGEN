@@ -60,6 +60,21 @@ class ApiController extends Controller
         $respuesta->id_intento = $request->intento_id;          //intento 
         $respuesta->texto_respuesta = $request->texto_respuesta;//texto escrito en caso sea respues corta
 
+        //Verificar si la encuesta que se envia del móvil ya existe para ser remplazada
+        if($es_encuesta == 1){
+            $intento_encuesta = Intento::find($request->intento_id);
+
+            if($intento_encuesta->fecha_final_intento != null){
+                $respuesta_encuesta = Respuesta::where('id_intento', $request->intento_id)->get();
+
+                if(count($respuesta_encuesta) > 0){
+                    DB::table('respuesta')->where('id_intento', $request->intento_id)->delete();
+                    $intento_encuesta->fecha_final_intento = null;
+                    $intento_encuesta->save();
+                }
+            }
+        }
+
         //Guardar el objeto respuesta
         $respuesta->save();
 
@@ -276,6 +291,7 @@ class ApiController extends Controller
             
             //Procedemos a obtener las preguntas que se le han asignado al estudiante para esta clave_area que se esta recorriendo
             $clave_area_preguntas = Clave_Area_Pregunta_Estudiante::where('clave_area_id',$clave_area->id)->where('estudiante_id',$estudiante->id_est)->where('numero_intento', $intento->numero_intento)->get();
+
             
             foreach($clave_area_preguntas as $clave_area_pregunta){
                 //Almacenamos esta relacion ya que se necesita esta en la BD del móvil clave_area_pregunta
@@ -816,4 +832,14 @@ class ApiController extends Controller
         }
     }
     /*------------------------------ FIN DE PUBLICAR EVALUACION -----------------------------*/
+
+    public function getEncuestasDocente($id_docente){
+
+    	$encuestas = Encuesta::where('id_docente',$id_docente)->get();
+
+    	$data = [ 'encuestas'=>$encuestas];
+
+        return response()->json($data, 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
+    }
+    
 }
