@@ -795,4 +795,14 @@ class ApiController extends Controller
         }
     }
     /*------------------------------ FIN DE PUBLICAR EVALUACION -----------------------------*/
+
+    public function getEncuestasDocente($id_docente){
+
+    	$encuestas = Encuesta::where('id_docente',$id_docente)->get();
+
+    	$data = [ 'encuestas'=>$encuestas];
+
+        return response()->json($data, 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
+    }
+    
 }

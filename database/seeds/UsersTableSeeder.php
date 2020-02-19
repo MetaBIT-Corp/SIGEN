@@ -38,19 +38,19 @@ class UsersTableSeeder extends Seeder
         //Docentes Para Pruebas
         User::create([
             'name' => 'Ricardo',
-            'email' => 'el16002@ues.edu.sv',
+            'email' => 'el1600@ues.edu.sv',
             'password' => bcrypt('sigen2019'),
             'role' => 1
         ]);
         User::create([
             'name' => 'Enrique',
-            'email' => 'mt16007@gmail.com',
+            'email' => 'mt1600@gmail.com',
             'password' => bcrypt('sigen2019'),
             'role' => 1
         ]);
         User::create([
             'name' => 'Pablo',
-            'email' => 'dc16009@gmail.com',
+            'email' => 'dc1600@gmail.com',
             'password' => bcrypt('sigen2019'),
             'role' => 1
         ]);
@@ -93,31 +93,31 @@ class UsersTableSeeder extends Seeder
         //Estudiantes para pruebas agregado por Ricardo Estupinian
         User::create([
             'name' => 'Enrique Menjívar',
-            'email' => 'mt16007@ues.edu.sv',
+            'email' => 'mt1600@ues.edu.sv',
             'password' => bcrypt('sigen2019'),
             'role' => 2
         ]);
         User::create([
             'name' => 'René Martínez',
-            'email' => 'mr11139@ues.edu.sv',
+            'email' => 'mr1113@ues.edu.sv',
             'password' => bcrypt('sigen2019'),
             'role' => 2
         ]);
         User::create([
             'name' => 'Ricardo Estupinián',
-            'email' => 'ricaeslo@gmail.com',
+            'email' => 'ricaesl@gmail.com',
             'password' => bcrypt('sigen2019'),
             'role' => 2
         ]);
         User::create([
             'name' => 'Pablo Díaz',
-            'email' => 'dc16009@ues.edu.sv',
+            'email' => 'dc1600@ues.edu.sv',
             'password' => bcrypt('sigen2019'),
             'role' => 2
         ]);
         User::create([
             'name' => 'Edwin Palacios',
-            'email' => 'ap16014@ues.edu.sv',
+            'email' => 'ap1601@ues.edu.sv',
             'password' => bcrypt('sigen2019'),
             'role' => 2
         ]);
