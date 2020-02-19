@@ -275,7 +275,8 @@ class ApiController extends Controller
             $areas_arr[] = Area::find($clave_area->area_id);
             
             //Procedemos a obtener las preguntas que se le han asignado al estudiante para esta clave_area que se esta recorriendo
-            $clave_area_preguntas = Clave_Area_Pregunta_Estudiante::where('clave_area_id',$clave_area->id)->where('estudiante_id',$estudiante->id_est)->where('numero_intento',1)->get();
+            $clave_area_preguntas = Clave_Area_Pregunta_Estudiante::where('clave_area_id',$clave_area->id)->where('estudiante_id',$estudiante->id_est)->where('numero_intento', $intento->numero_intento)->get();
+
             
             foreach($clave_area_preguntas as $clave_area_pregunta){
                 //Almacenamos esta relacion ya que se necesita esta en la BD del móvil clave_area_pregunta
