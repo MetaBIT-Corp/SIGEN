@@ -60,6 +60,21 @@ class ApiController extends Controller
         $respuesta->id_intento = $request->intento_id;          //intento 
         $respuesta->texto_respuesta = $request->texto_respuesta;//texto escrito en caso sea respues corta
 
+        //Verificar si la encuesta que se envia del móvil ya existe para ser remplazada
+        if($es_encuesta == 1){
+            $intento_encuesta = Intento::find($request->intento_id);
+
+            if($intento_encuesta->fecha_final_intento != null){
+                $respuesta_encuesta = Respuesta::where('id_intento', $request->intento_id)->get();
+
+                if(count($respuesta_encuesta) > 0){
+                    DB::table('respuesta')->where('id_intento', $request->intento_id)->delete();
+                    $intento_encuesta->fecha_final_intento = null;
+                    $intento_encuesta->save();
+                }
+            }
+        }
+
         //Guardar el objeto respuesta
         $respuesta->save();
 
@@ -115,9 +130,12 @@ class ApiController extends Controller
      */ 
     public function evaluacionTurnosDisponibles($id_carga,$role){
     	//declaración de variables
-        $fecha_hora_actual = Carbon::now('America/El_Salvador')->addMinutes(10)->format('Y-m-d H:i:s');
+        $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
         $evaluaciones = array();
-        $turnos = array();
+        $turnosDisponibles = array();
+        $comparaciones = array();
+        $iteracion =0;
+
             //verificamos si existe la carga academica
             if(CargaAcademica::where('id_carg_aca',$id_carga)->exists()){
                 //obtenemos todas las cargas academicas de la materia, con el objetivo de presentar todas las evaluaciones de los docentes en la materia
@@ -137,10 +155,13 @@ class ApiController extends Controller
                             $turnos_activos = false;
                             if($evaluacion->turnos){
                                 foreach ($evaluacion->turnos as $turno) {
-                                    if($turno->visibilidad==1 && 
-                                        $turno->fecha_final_turno > $fecha_hora_actual){
+                                    
+                                    $iteracion++;
+                                    if($turno->visibilidad==1 && Carbon::parse($turno->fecha_final_turno)->gt(Carbon::parse($fecha_hora_actual))){
+                                        
+                                        $comparaciones[]= Carbon::parse($turno->fecha_final_turno)->gt(Carbon::parse($fecha_hora_actual));
                                         $turnos_activos = true;
-                                        $turnos[] = $turno;
+                                        $turnosDisponibles[] = $turno;
                                     }
                                 }
                                 if($turnos_activos==true){
@@ -151,7 +172,7 @@ class ApiController extends Controller
                     }
                 }
                 //Si el usuario es docente
-                if($role = 1){
+                if($role == 1){
                     $evaluaciones_all = Evaluacion::where('id_carga',$carga_academica->id_carg_aca)
                                     ->where('habilitado',1)
                                     ->get();
@@ -159,7 +180,7 @@ class ApiController extends Controller
                         $evaluaciones[] = $evaluacion;
                         if($evaluacion->turnos){
                             foreach ($evaluacion->turnos as $turno) {
-                                $turnos[] = $turno;
+                                $turnosDisponibles[] = $turno;
                             }
                         }
                     }
@@ -169,7 +190,8 @@ class ApiController extends Controller
             } 
         $data = [
             'evaluaciones'=>$evaluaciones,
-            'turnos' => $turnos];
+            'turnos' => $turnosDisponibles
+        ];
         return response()->json(
             $data,
              200,
@@ -268,7 +290,8 @@ class ApiController extends Controller
             $areas_arr[] = Area::find($clave_area->area_id);
             
             //Procedemos a obtener las preguntas que se le han asignado al estudiante para esta clave_area que se esta recorriendo
-            $clave_area_preguntas = Clave_Area_Pregunta_Estudiante::where('clave_area_id',$clave_area->id)->where('estudiante_id',$estudiante->id_est)->where('numero_intento',1)->get();
+            $clave_area_preguntas = Clave_Area_Pregunta_Estudiante::where('clave_area_id',$clave_area->id)->where('estudiante_id',$estudiante->id_est)->where('numero_intento', $intento->numero_intento)->get();
+
             
             foreach($clave_area_preguntas as $clave_area_pregunta){
                 //Almacenamos esta relacion ya que se necesita esta en la BD del móvil clave_area_pregunta
@@ -474,9 +497,23 @@ class ApiController extends Controller
      */
     public function getEstadisticosEvaluacion($id_eva){
         //Validacion de disponibilidad de evaluacion
-        //Pendiente 
-        
-        $data = EvaluacionController::getPorcentajeAprovadosReprobados($id_eva);
+        $turnos = Turno::where('evaluacion_id', $id_eva)->orderBy('fecha_final_turno', 'desc')->first();
+        $data=null;
+
+        if($turnos){
+            //Verificacion de fecha de turnos para mostrar datos
+            $fecha_hora_actual = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
+            if($turnos->fecha_final_turno > $fecha_hora_actual){
+                $data= ["info"=>0];
+                $notification = 0;
+            }else{
+                //Se envian los datos del grafico
+                $data = EvaluacionController::getPorcentajeAprovadosReprobados($id_eva);
+            }
+        }else{
+            $data = ["info"=>1];
+        }
+       
         return $data;
     }
 
