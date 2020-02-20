@@ -61,19 +61,19 @@ class ApiController extends Controller
         $respuesta->texto_respuesta = $request->texto_respuesta;//texto escrito en caso sea respues corta
 
         //Verificar si la encuesta que se envia del móvil ya existe para ser remplazada
-        //if($es_encuesta == 1){
-        $intento_encuesta = Intento::find($request->intento_id);
+        if($es_encuesta == 1){
+            $intento_encuesta = Intento::find($request->intento_id);
 
-        if($intento_encuesta->fecha_final_intento != null){
-            $respuesta_encuesta = Respuesta::where('id_intento', $request->intento_id)->get();
+            if($intento_encuesta->fecha_final_intento != null){
+                $respuesta_encuesta = Respuesta::where('id_intento', $request->intento_id)->get();
 
-            if(count($respuesta_encuesta) > 0){
-                DB::table('respuesta')->where('id_intento', $request->intento_id)->delete();
-                $intento_encuesta->fecha_final_intento = null;
-                $intento_encuesta->save();
+                if(count($respuesta_encuesta) > 0){
+                    DB::table('respuesta')->where('id_intento', $request->intento_id)->delete();
+                    $intento_encuesta->fecha_final_intento = null;
+                    $intento_encuesta->save();
+                }
             }
         }
-        //}
 
         //Guardar el objeto respuesta
         $respuesta->save();
@@ -337,6 +337,13 @@ class ApiController extends Controller
             }
                  
             
+        }
+
+        //Borra los resultados del intento aterior en caso que se desee descargar otro intento.
+        if($intento->fecha_final_intento != null){
+            DB::table('respuesta')->where('id_intento', $intento->intento_id)->delete();
+            $intento->fecha_final_intento = null;
+            $intento->save();
         }
         
         //Agregamos los Arrays que obtuvimos de los bucles anteriores al Array que se enviara como respuesta 
