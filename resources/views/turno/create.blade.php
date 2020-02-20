@@ -46,7 +46,8 @@
   <div class="form-group col-md-7">
     <label for="exampleInputPassword1"><b title="Campo Obligatorio">*</b>&nbsp;Contraseña:</label>
     <input type="password" name="contraseña" class="form-control" id="exampleInputPassword1" placeholder="Contraseña" value="{{ old('contraseña') }}">
-    <small id="emailHelp" class="text-muted">Debe poseer 8 caracteres como mínimo.</small>
+    <input type="checkbox" onclick="showPass()"> Mostrar contraseña
+    <small id="emailHelp" class="text-muted"> (Debe poseer 8 caracteres como mínimo.)</small>
   </div><br>
   <div class="row offset-1">
      <div class="form-group">

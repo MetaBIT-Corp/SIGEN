@@ -43,3 +43,21 @@ $(document).ready(function() {
 
 });
 
+function showPass() {
+  var x = document.getElementById("exampleInputPassword1");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+
+function showPassEdit() {
+  var x = document.getElementById("contraseña");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+
