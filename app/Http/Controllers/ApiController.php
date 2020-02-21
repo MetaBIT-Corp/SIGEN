@@ -249,9 +249,21 @@ class ApiController extends Controller
     }
     
     public function getEvaluacion($turno_id, $estudiante_id){
-        
+
         //Array asociativo que se enviara como respuesta
         $evaluacion = array();
+
+        //Vamos a recorrer los objetos clave_areas para obtener los objetos relacionados con cada uno de ellos
+        $clave_areas_arr = array();
+        $areas_arr = array();
+        $grupos_emp_arr = array();
+        $preguntas_arr = array();
+        $opciones_arr = array();
+        $clave_area_preguntas_arr = array();
+
+        if($this->getCantidadIntentos($turno_id,$estudiante_id) > 0){
+
+        
         
         //Obtenemos la clave que corresponde al turno que el estudiante a indicado que desea descargar
         $clave = Clave::where('turno_id', $turno_id)->first();
@@ -274,13 +286,7 @@ class ApiController extends Controller
         //Obtenemos las clave_area, esto significa obtener las areas que corresponden a la clave
         $clave_areas = Clave_Area::where('clave_id', $clave->id)->get();
         
-        //Vamos a recorrer los objetos clave_areas para obtener los objetos relacionados con cada uno de ellos
-        $clave_areas_arr = array();
-        $areas_arr = array();
-        $grupos_emp_arr = array();
-        $preguntas_arr = array();
-        $opciones_arr = array();
-        $clave_area_preguntas_arr = array();
+        
         
         foreach($clave_areas as $clave_area){
             //Almacenamos el objeto en un Array
@@ -345,7 +351,13 @@ class ApiController extends Controller
             $intento->fecha_final_intento = null;
             $intento->save();
         }
-        
+
+        $evaluacion['resultado'] = 1;
+
+        }else{
+            $evaluacion['resultado'] = 0;
+    }
+
         //Agregamos los Arrays que obtuvimos de los bucles anteriores al Array que se enviara como respuesta 
         
         $evaluacion['clave_areas'] = $clave_areas_arr;
@@ -357,6 +369,27 @@ class ApiController extends Controller
         
         return $evaluacion;   
         
+    }
+
+    /**
+     * Metodo para obtener la cantidad de intentos que le faltan al estudiante en un turno.
+     * @author Edwin Palacios
+     * @return int cantidad de intentos que le faltan
+     */
+    public function getCantidadIntentos($id_turno, $id_estudiante){
+        $intento_realizados =0;
+        $turno = Turno::find($id_turno);
+        $evaluacion = Evaluacion::find($turno->evaluacion_id);
+        $clave = Clave::where('turno_id',$turno->id)->first();
+        if(Intento::where('clave_id',$clave->id)
+                        ->where('estudiante_id',$id_estudiante)
+                        ->exists()){
+            $intento= Intento::where('clave_id',$clave->id)
+                        ->where('estudiante_id',$id_estudiante)
+                        ->first();
+            $intento_realizados = $intento->numero_intento;
+        }
+        return ($evaluacion->intentos - $intento_realizados);
     }
     
     public function getEncuesta($encuesta_id, $user_id){
@@ -580,12 +613,6 @@ class ApiController extends Controller
                         $turno_publico->fecha_inicio_turno= $this->restablecerFecha($turno_publico->fecha_inicio_turno);
                         $turno_publico->fecha_final_turno=  $this->restablecerFecha($turno_publico->fecha_final_turno);
                         $turno_publico->save();
-
-                        try {
-                          $this->enviarCorreo($turno_publico);
-                        } catch (Exception $e) {
-                            return ['resultado'=>$message];
-                        }
                     }
                     
 
