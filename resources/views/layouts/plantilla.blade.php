@@ -5,6 +5,7 @@
     use Request;
     use View;
     use URL;
+    use Request;
     $ciclo_activo = Ciclo::where('estado',1)->first();
     View::share('ciclo_activo', $ciclo_activo);
 

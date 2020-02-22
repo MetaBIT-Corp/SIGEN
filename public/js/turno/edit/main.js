@@ -29,3 +29,12 @@ $(document).ready(function() {
     });
 
 });
+
+function showPassEdit() {
+  var x = document.getElementById("contraseña");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}

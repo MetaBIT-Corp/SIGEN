@@ -427,6 +427,8 @@ class IntentoController extends Controller
         $intento->save();
     }
     public function revisionEvaluacion($id_intento){
+
+        //este variable se encarga de informar si el estudiante ha realizado todos sus intentos para lograr ver la revisión
         $se_permite_revision = true;
         $estudiante=null;
         $intento=null;

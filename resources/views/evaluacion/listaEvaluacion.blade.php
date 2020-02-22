@@ -178,8 +178,8 @@
                             <button type="button" class="btn btn-info mt-1 mr-5" data-acceder-evaluacion="{{ $turno->id }}" data-descripcion-evaluacion="{{ $evaluacion->descripcion_evaluacion }}" >Acceder</button>
                             
                             <!-- Si se da revisión-->
-                            @if($evaluacion->revision == 1 || 
-                                $evaluacion->mostrar_nota == 1 && 
+                            @if(($evaluacion->revision == 1 || 
+                                $evaluacion->mostrar_nota == 1) && 
                                 !($turno->CantIntentos == $evaluacion->intentos))
 
                               <a class="btn btn-link btn-lg mb-1 float-right" title="Ver revisión" href="{{ URL::signedRoute('revision_evaluacion', ['id_intento' => $turno->IdIntento])}}">
@@ -201,8 +201,8 @@
                             <button type="button" class="btn btn-info mt-1 mr-3" data-acceder-evaluacion="{{ $turno->id }}" data-descripcion-evaluacion="{{ $evaluacion->descripcion_evaluacion }}" disabled="true">Acceder</button>
                             <a class="alert-link" style="color: #da4727;font-size: 13px">Ha realizado todos sus intentos!</a>
                             <!-- Si se da revisión-->
-                            @if($evaluacion->revision == 1 || 
-                                $evaluacion->mostrar_nota == 1 &&
+                            @if(($evaluacion->revision == 1 || 
+                                $evaluacion->mostrar_nota == 1) &&
                                 $turno->CantIntentos != $evaluacion->intentos)
                               <a class="btn btn-link btn-lg mb-1 float-right" title="Ver revisión" href="{{ URL::signedRoute('revision_evaluacion', ['id_intento' => $turno->IdIntento])}}">
                                 <span class="icon-eye"></span>

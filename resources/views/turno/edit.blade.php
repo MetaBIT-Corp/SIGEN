@@ -48,7 +48,8 @@
   <div class="form-group col-md-8">
     <label for="exampleInputPassword1">Contraseña:</label>
       <input type="password" name="contraseña" class="form-control" style="" id="contraseña" placeholder="Contraseña" value="{{ old('contraseña',"") }}">
-    <small class="form-text text-muted" style="">La contraseña será la misma sino se digita una nueva.</small>
+      <input type="checkbox" onclick="showPassEdit()"> Mostrar contraseña
+    <small class="form-text text-muted" style=""> (La contraseña será la misma sino se digita una nueva.)</small>
   </div><br>
   <div class="row offset-1">
      <div class="form-group">
