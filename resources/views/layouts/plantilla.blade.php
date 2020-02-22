@@ -2,6 +2,7 @@
     
     namespace App\Http\Controllers;
     use App\Ciclo;
+    use Request;
     use View;
     use URL;
     $ciclo_activo = Ciclo::where('estado',1)->first();

@@ -9,6 +9,7 @@ use App\CargaAcademica;
 use App\CicloMateria;
 use App\Estudiante;
 use App\Clave_Area;
+use App\Materia;
 use App\Intento;
 use App\Area;
 use App\Encuesta;
@@ -223,7 +224,8 @@ class TurnoController extends Controller
         $evaluacion = Evaluacion::where('id',$turno->evaluacion_id)->first();
         $carga = CargaAcademica::where('id_carg_aca',$evaluacion->id_carga)->first();
         $materiac = CicloMateria::where('id_mat_ci',$carga->id_mat_ci)->first();
-        $areas = Area::where("id_cat_mat",$materiac->id_mat_ci)->get();
+        $materia = Materia::where('id_cat_mat',$materiac->id_cat_mat)->first();
+        $areas = Area::where("id_cat_mat",$materia->id_cat_mat)->get();
         $id_areas = Clave_Area::where('clave_id',$clave->id)->pluck('area_id')->toArray();
         $peso_turno = (int)(Clave_Area::where('clave_id',$clave->id)->sum('peso'));
 

@@ -833,13 +833,88 @@ class ApiController extends Controller
     }
     /*------------------------------ FIN DE PUBLICAR EVALUACION -----------------------------*/
 
-    public function getEncuestasDocente($id_docente){
+    public function getEncuestasDocente($id_usuario){
 
-    	$encuestas = Encuesta::where('id_docente',$id_docente)->get();
+        $docente = Docente::where('user_id',$id_usuario)->first();
+    	$encuestas = Encuesta::where('id_docente',$docente->id_pdg_dcn)->get();
 
     	$data = [ 'encuestas'=>$encuestas];
 
         return response()->json($data, 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
+    }
+
+    public function publicarEncuesta($id_encuesta){
+
+        $todo_correcto = true;
+        $notification = "exito";
+        $message = "¡Encuesta publicada!";
+        
+        if($id_encuesta){
+            
+            $encuesta = Encuesta::find($id_encuesta); 
+
+            //se verifica que si tiene una clave agregada
+            if(Clave::where('encuesta_id', $encuesta->id)->exists()){
+                    foreach ($encuesta->claves as $clave) {
+                        //se verifica que tenga areas la clave
+                        if(Clave_Area::where('clave_id', $clave->id)->exists()){
+                            $clave_areas = $clave->clave_areas;
+                            //se verifica que la clave area tenga clave area preguntas
+                            foreach ($clave_areas as $clave_area) {
+                                //obtenemos el area para saber que tipo de item es
+                                $area = $clave_area->area;
+
+                                if($clave_area->claves_areas_preguntas->count()>0){
+                                    $claves_areas_preguntas = $clave_area->claves_areas_preguntas;
+                                    //se verifica que la clave area pregunta tenga pregunta
+                                    foreach ($claves_areas_preguntas as $clave_area_pregunta) {
+                                        if($clave_area_pregunta->pregunta->count()>0){
+                                            $pregunta = $clave_area_pregunta->pregunta;
+                                            //se verifica que la pregunta tengan opcion. en este caso las de respuesta corta no deben de tener respuesta, por lo que la exluimos de esta evaluación
+                                            if($area->tipo_item->id != 4){
+                                               if($pregunta->opciones->count()>0 ){
+                                                    
+                                                }else{
+                                                    $todo_correcto = false;
+                                                    $notification = "error";
+                                                    $message = "Error: Hay preguntas sin opciones";
+                                                }  
+                                            }     
+                                        }else{
+                                            $todo_correcto = false;
+                                            $notification = "error";
+                                            $message = "Error: No existen preguntas asignadas";
+                                        }
+                                    }
+                                }else{
+                                    $todo_correcto = false;
+                                    $notification = "error";
+                                    $message = "Error: Para la publicación debe agregar preguntas al área";
+                                }
+                            }     
+                        }else{
+                            $todo_correcto = false;
+                            $notification = "error";
+                            $message = "Error: Para la publicación debe agregar áreas de preguntas a la encuesta<br><br>";
+                        }
+                    }
+                    
+                }else{
+                    $todo_correcto = false;
+                    $notification = "error";
+                    $message = "Error: no posee clave la encuesta";
+                }  
+        //si todo es correcto publica la encuesta, en caso contrario no. 
+        if($todo_correcto){
+          $encuesta->visible = 1; 
+          $encuesta->save();  
+        }
+        
+        }else{
+            $notification = "error";
+            $message = "Error: la acción no se realizó con éxito, vuelva a intentar";
+        }
+        return back()->with($notification,$message); 
     }
     
 }
