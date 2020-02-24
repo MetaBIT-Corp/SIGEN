@@ -900,7 +900,6 @@ class ApiController extends Controller
     public function publicarEncuesta($id_encuesta){
 
         $todo_correcto = true;
-        $notification = "exito";
         $message = "¡Encuesta publicada!";
         
         if($id_encuesta){
@@ -930,32 +929,27 @@ class ApiController extends Controller
                                                     
                                                 }else{
                                                     $todo_correcto = false;
-                                                    $notification = "error";
                                                     $message = "Error: Hay preguntas sin opciones";
                                                 }  
                                             }     
                                         }else{
                                             $todo_correcto = false;
-                                            $notification = "error";
                                             $message = "Error: No existen preguntas asignadas";
                                         }
                                     }
                                 }else{
                                     $todo_correcto = false;
-                                    $notification = "error";
                                     $message = "Error: Para la publicación debe agregar preguntas al área";
                                 }
                             }     
                         }else{
                             $todo_correcto = false;
-                            $notification = "error";
                             $message = "Error: Para la publicación debe agregar áreas de preguntas a la encuesta<br><br>";
                         }
                     }
                     
                 }else{
                     $todo_correcto = false;
-                    $notification = "error";
                     $message = "Error: no posee clave la encuesta";
                 }  
         //si todo es correcto publica la encuesta, en caso contrario no. 
@@ -965,10 +959,9 @@ class ApiController extends Controller
         }
         
         }else{
-            $notification = "error";
             $message = "Error: la acción no se realizó con éxito, vuelva a intentar";
         }
-        return back()->with($notification,$message); 
+        return ['resultado'=>$message];
     }
     
 }
