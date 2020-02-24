@@ -53,7 +53,7 @@ class ApiController extends Controller
         $respuesta->id_pregunta = $request->pregunta_id;        //pregunts
         
         //Verifica si la pregunta es respuesta corta
-        if($es_respuesta_corta!=1){
+        if($es_respuesta_corta!=1 && $request->opcion_id != 0){
             $respuesta->id_opcion = $request->opcion_id;            //opcion
         }
 
