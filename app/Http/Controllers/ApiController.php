@@ -392,7 +392,7 @@ class ApiController extends Controller
         return ($evaluacion->intentos - $intento_realizados);
     }
     
-    public function getEncuesta($encuesta_id, $user_id){
+    public function getEncuesta($encuesta_id, $user_id, $clave_id){
         $encuesta_arr = array();
         //Primero obtenemos el objeto de Encuesta
         $encuesta = Encuesta::find($encuesta_id);
@@ -416,12 +416,32 @@ class ApiController extends Controller
         //$usuario = Usuario::find($user_id);
         //Ahora almacenamos en el Array al Usuario
         //$encuesta_arr['usuario'] = $usuario; //No es necesario, ya que este ya esta registrado en la BD del móvil
+
+        //Se verifica si la clave ya existe en el dispositivo móvil
+        if($clave_id != 0){
+            //Verificamos si el intento ya existe
+            $intento_get = Intento::where("clave_id", $clave_id)->where("user_id", $user_id)->get();
+            if(count($intento_get) > 0){
+                $encuesta_arr['intento'] = $intento_get[0];
+                return $encuesta_arr; //Si ya existe lo mandamos
+            }else{
+                $intento = new Intento(); 
+                $intento->estudiante_id = null;
+                $intento->user_id = $user_id;
+                $intento->clave_id = $clave_id;
+                $intento->numero_intento = 1;
+                $intento->fecha_inicio_intento = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
+                $intento->save();
+                $encuesta_arr['intento'] = $intento;
+                return $encuesta_arr;
+            }
+        }
         
         //Procederemos a obtener la Clave, la cual se relaciona con la Encuesta directamente
         //Se asume por el momento que una Encuesta solamente poseera una Clave
 
         $clave = Clave::where('encuesta_id', $encuesta->id)->first();
-        $encuesta_arr['clave'] = $clave;
+        $encuesta_arr['clave'] = $clave; 
         
         //Procederemos a crear el Intento
         $intento = new Intento(); 
