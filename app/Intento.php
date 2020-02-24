@@ -46,7 +46,7 @@ class Intento extends Model
         foreach($intento->respuestas as $respuesta){
 
             //Obtener la pregunta a la que pertenece la respuesta
-            $pregunta_id = $respuesta->pregunta->id;
+            $pregunta_id = $respuesta->id_pregunta;
 
             $clave_area_db = DB::table('clave_area as ca')
                             ->where('clave_id', $clave_id)
@@ -76,9 +76,17 @@ class Intento extends Model
             //Si la respuesta que seleccionó en la pregunta es correcta
             if($respuesta->opcion != null){
                 if($respuesta->opcion->correcta==1){
+                    if($modalidad==3){
 
-                   //Calcula la ponderación de la pregunta
-                    $nota += ($peso/$cantidad_preguntas)/10;
+                        if($pregunta_id==$respuesta->opcion->pregunta_id){
+                            $nota += ($peso/$cantidad_preguntas)/10;
+                        }
+
+                    }else{
+                        //Calcula la ponderación de la pregunta
+                        $nota += ($peso/$cantidad_preguntas)/10;
+                    }
+
                 }
             }else{
                 //Verifica si la pregunta pertenece a modalidad de respuesta corta
