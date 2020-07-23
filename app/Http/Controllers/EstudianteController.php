@@ -253,4 +253,23 @@ class EstudianteController extends Controller
         }
 
      }
+
+     public function indexGlobal(){
+         $estudiantes = Estudiante::all();
+         $last_update = Estudiante::max('updated_at');
+
+         return view('estudiante.index', compact('estudiantes', 'last_update'));
+     }
+
+     public function destroy(Request $request){
+
+        $cant_die = DetalleInscEst::where('id_est', $request['estudiante_id'])->count();
+
+        if($cant_die > 0)
+            return back()->with('notification-type','warning')->with('notification-message','El Estudiante no puede ser eliminado, debido a que posee inscripciones en distintas cargas académicas.');
+        
+        Estudiante::where('id_est', $request['estudiante_id'])->delete();
+
+        return back()->with('notification-type','success')->with('notification-message','El Estudiante se ha eliminado con éxito.');
+     }
 }

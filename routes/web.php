@@ -53,6 +53,13 @@ Route::post('/encuestas','EncuestaController@acceso')->name('acceso_encuesta');
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
 Route::group(['middleware' => 'admin'], function(){
 
+    //Rutas para Gestion de Docentes
+    Route::get('/docentes', 'DocenteController@index')->name('docentes_index');
+    Route::post('/docentes/eliminar', 'DocenteController@destroy')->name('docentes_destroy');
+
+    //Rutas para Gestion de Estudiantes
+    Route::get('/estudiantes', 'EstudianteController@indexGlobal')->name('estudiantes_index');
+    Route::post('/estudiantes/eliminar', 'EstudianteController@destroy')->name('estudiantes_destroy');
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente
