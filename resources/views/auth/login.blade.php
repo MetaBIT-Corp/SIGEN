@@ -26,7 +26,7 @@
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <strong>@lang('auth.failed')</strong>
                                     </span>
                                 @enderror
                             </div>
