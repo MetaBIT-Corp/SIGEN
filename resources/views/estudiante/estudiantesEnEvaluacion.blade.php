@@ -67,9 +67,9 @@
             <p class="col-md-12"><strong>Descripcion:</strong> {{$evaluacion->descripcion_evaluacion}}</p>
           </div>
           <div class="row">
-            <p class="col-md-4"><strong>Duración (minutos):</strong> {{$evaluacion->duracion}}</p>
-            <p class="col-md-4"><strong>Intentos Posibles:</strong> {{$evaluacion->intentos}}</p>
-            <p class="col-md-4">
+            <p class="col-md-3"><strong>Duración (minutos):</strong> {{$evaluacion->duracion}}</p>
+            <p class="col-md-3"><strong>Intentos Posibles:</strong> {{$evaluacion->intentos}}</p>
+            <p class="col-md-3">
               <strong>Revisión:</strong>
               @if($evaluacion->revision==1)
                 Permitida
@@ -77,6 +77,7 @@
                 No Permitida
               @endif
             </p>
+            <p class="col-md-3"><strong>Promedio: </strong> {{ $promedio }}</p>
           </div>
         </div>
       </div>
@@ -161,7 +162,6 @@
             </table>
           </div>
         </div>
-        <div class="card-footer small text-muted">Actualizado: fecha</div>
       </div>
     </div>
     <!-- /.container-fluid -->
