@@ -186,7 +186,9 @@ class EstudianteController extends Controller
 
         }
 
-        return view('estudiante.estudiantesEnEvaluacion')->with(compact('estudiantes','evaluacion_finalizada','evaluacion_id', 'evaluacion'));
+        $promedio = $this->getPromedioEvaluacion($evaluacion_id);
+
+        return view('estudiante.estudiantesEnEvaluacion')->with(compact('estudiantes','evaluacion_finalizada','evaluacion_id', 'evaluacion', 'promedio'));
     }
 
     public function evaluacionFinalizada($evaluacion_id){
@@ -271,5 +273,34 @@ class EstudianteController extends Controller
         Estudiante::where('id_est', $request['estudiante_id'])->delete();
 
         return back()->with('notification-type','success')->with('notification-message','El Estudiante se ha eliminado con éxito.');
+     }
+
+     /**
+      * Función para obtener la nota promedio de la evaluación
+      * @author Enrique Menjívar <mt16007@ues.edu.sv>
+      * @param  $evaluacion_id : id de la evlauación
+      * @return promedio : promedio de la evaluación
+      */
+     public function getPromedioEvaluacion($evaluacion_id){
+
+        $nota = 0;
+        
+        //Consulta para verficar si existe un intento de la evaluación, es decir, verificar que el estudiante ya haya iniciado la evaluación
+        $intentos_finalizados = DB::table('turno as t')
+                            ->where('t.evaluacion_id', $evaluacion_id)
+                            ->join('clave as c', 'c.turno_id', '=', 't.id')
+                            ->join('intento as i', 'i.clave_id', '=', 'c.id')
+                            ->whereNotNull('i.nota_intento')
+                            ->select('i.nota_intento')
+                            ->get();
+
+        //Se suman las notas de los intentos finalizados de la evaluacion correspondiente
+        foreach ($intentos_finalizados as $intento) {
+            $nota += $intento->nota_intento;
+        }
+
+        $cantidad = count($intentos_finalizados);
+
+        return round($nota/$cantidad, 2);
      }
 }

@@ -8,6 +8,13 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
+                    
+                    @if (session('block_message'))
+                      <div class="alert alert-danger">
+                          <h6 class="text-center">{!! session('block_message') !!}</h6>
+                      </div>
+                    @endif
+
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -19,7 +26,7 @@
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <strong>@lang('auth.failed')</strong>
                                     </span>
                                 @enderror
                             </div>
@@ -45,7 +52,7 @@
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
+                                        {{ __('Mantener sesión') }}
                                     </label>
                                 </div>
                             </div>
@@ -59,7 +66,7 @@
 
                                 @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
+                                        {{ __('¿Olvidaste tu contraseña?') }}
                                     </a>
                                 @endif
                             </div>
@@ -71,6 +78,11 @@
     </div>
 </div>
 
+<script>
+setTimeout(function() {
+    $(".alert").fadeOut();           
+},3000);
+</script>
 @section('encuestas')
 @endsection
 
