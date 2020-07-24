@@ -2,8 +2,6 @@
 @section("head")
 @section("css")
 	 <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" type="text/css" rel="stylesheet"> 
-	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.css')}}">
-	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
     <link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
     <link rel="stylesheet" href="{{asset('css/estilo.css')}}">
 @endsection

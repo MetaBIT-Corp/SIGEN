@@ -327,7 +327,6 @@ class EstudianteController extends Controller
      * @author Edwin palacios
      */
     public function postCreate(Request $request){
-<<<<<<< HEAD
         //dd($request->all());
         $rules =[
             
@@ -373,10 +372,6 @@ class EstudianteController extends Controller
         $estudiante->save();
         return redirect()->route("estudiantes_index")->with("notification-message", 'Estudiante registrado exitosamente')
                                                   ->with("notification-type", 'success');
-=======
-        dd($request->all());
-        return redirect('estudiantes_index');
->>>>>>> 2d7665ea9692b2f2556b060b5015afc080e9ab19
     }
 
     /**
@@ -384,16 +379,11 @@ class EstudianteController extends Controller
      * @param 
      * @author Edwin palacios
      */
-<<<<<<< HEAD
     public function getUpdate($estudiante_id){
         $estudiante = Estudiante::where('id_est', '=', $estudiante_id)->first();
         $user = User::find($estudiante->user_id);
         $email = $user->email;
         return view('estudiante.updateEstudiante')->with(compact('estudiante', 'email'));
-=======
-    public function getUpdate(){
-        return view('estudiante.updateEstudiante');
->>>>>>> 2d7665ea9692b2f2556b060b5015afc080e9ab19
     }
 
     /**
@@ -402,7 +392,6 @@ class EstudianteController extends Controller
      * @author Edwin palacios
      */
     public function postUpdate(Request $request){
-<<<<<<< HEAD
         //dd($request->all());
         $rules =[
             
@@ -448,12 +437,6 @@ class EstudianteController extends Controller
         $estudiante->save();
         return redirect()->route("estudiantes_index")->with("notification-message", 'Datos del estudiante actualizados exitosamente')
                                                   ->with("notification-type", 'success');
-
-
-=======
-        dd($request->all());
-        return redirect('estudiantes_index');
->>>>>>> 2d7665ea9692b2f2556b060b5015afc080e9ab19
     }
     /*
       * Cambia el estado del usuario del estudiante, si está bloqueado lo habilita y viceversa

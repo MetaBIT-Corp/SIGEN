@@ -15,7 +15,7 @@
     <div class="offset-8 btn-group" role="group" aria-label="Basic example">
 
         <!--Boton para agregar pregunta-->
-        <a class="btn btn-secondary" href="javascript:void(0)" data-target="#modal" data-toggle="modal" id="add_estudiante" title="Agregar Estudiante">
+        <a class="btn btn-secondary" href="{{ route('gc_estudiante')}}" title="Agregar Estudiante">
             <h6 class="mb-0">
                 <span class="icon-add-solid"></span>
             </h6>
@@ -68,10 +68,12 @@
               </div>
               <div class="card-body">
                 @if(auth()->user()->IsAdmin)
+                <!--
                     <a class="btn btn-md mb-3" href="{{ route('gc_estudiante')}}" title="Agregar">
                         <span class="icon-add-solid" style="color: #007bff"></span>
                         <b>Agregar Estudiante</b>
                     </a>
+                -->
                 @endif
                 <div class="table-responsive">
                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
