@@ -64,12 +64,18 @@
             </div>
             
             @if(auth()->check())
+            
+                
                 <div class="my-2 my-lg-2">
-
+                    @if (isset($ciclo_activo))
                     <a href="" class="navbar-brand mr-4">
                         <strong>Ciclo</strong>&nbsp;{{$ciclo_activo->num_ciclo}}&nbsp;|&nbsp;<strong>Año</strong>&nbsp;{{$ciclo_activo->anio}}
                     </a>
-
+                    @else
+                    <a class="navbar-brand mr-4 text-light">
+                        <strong>No hay ciclo activo</strong>&nbsp;
+                    </a>
+                     @endif
                     <a href="" class="navbar-brand mr-2"><i class="fas fa-user"></i>&nbsp;&nbsp;
                         @yield("a_perfil"){{auth()->user()->name}} | 
                         @switch(auth()->user()->role)
@@ -96,6 +102,7 @@
                     </form>
 
                 </div>
+            
             @else
                 <a href="/login" class="navbar-brand"><i class="fas fa-sign-in-alt"></i> Ingresar</a>
             @endif
@@ -130,6 +137,17 @@
                                         <span class="arrow-sidebar" data-feather="chevron-right"></span>
                                     </a>
                                 </li>
+                                
+                                 @if(auth()->user()->IsAdmin)
+                                 <li class="nav-item first-one">
+                                    <a class="nav-link " href="{{url('/ciclo')}}">
+                                        <span data-feather="home"></span>
+                                        Ciclos
+                                        <span class="arrow-sidebar" data-feather="chevron-right"></span>
+                                    </a>
+                                </li>
+                                 @endif
+
                                  @if(auth()->user()->IsTeacher)
                                 <li class="nav-item first-one">
                                     <a class="nav-link " href="

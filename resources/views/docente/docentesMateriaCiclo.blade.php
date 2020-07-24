@@ -11,6 +11,9 @@
 @section("body")
 
 @section("ol_breadcrumb")
+    @if(auth()->user()->IsAdmin)
+    <li class="breadcrumb-item"><a href="{{ route('ciclo.index') }}">Listado de Ciclos</a></li>
+    @endif
     <li class="breadcrumb-item"><a href="{{ route('materias') }}">Materia</a></li>
     <li class="breadcrumb-item">Docentes</li>
 @endsection

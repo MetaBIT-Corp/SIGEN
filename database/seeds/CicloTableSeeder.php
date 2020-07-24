@@ -15,7 +15,7 @@ class CicloTableSeeder extends Seeder
         Ciclo::create([
             'num_ciclo'=>1,
             'anio'=>2013,
-            'estado'=>0
+            'estado'=>0            
         ]);
          Ciclo::create([
             'num_ciclo'=>2,
@@ -45,43 +45,59 @@ class CicloTableSeeder extends Seeder
          Ciclo::create([
             'num_ciclo'=>1,
             'anio'=>2016,
-            'estado'=>0
+            'estado'=>0,
+            'inicio_ciclo'=>'2016-01-01',
+            'fin_ciclo'=>'2016-06-01'
         ]);
          Ciclo::create([
             'num_ciclo'=>2,
             'anio'=>2016,
-            'estado'=>0
+            'estado'=>0,
+            'inicio_ciclo'=>'2016-07-01',
+            'fin_ciclo'=>'2016-12-31'
         ]);
          Ciclo::create([
             'num_ciclo'=>1,
             'anio'=>2017,
-            'estado'=>0
+            'estado'=>0,
+            'inicio_ciclo'=>'2017-01-01',
+            'fin_ciclo'=>'2017-06-01'
         ]);
          Ciclo::create([
             'num_ciclo'=>2,
             'anio'=>2017,
-            'estado'=>0
+            'estado'=>0,
+            'inicio_ciclo'=>'2017-07-01',
+            'fin_ciclo'=>'2017-12-31'
         ]);
          Ciclo::create([
             'num_ciclo'=>1,
             'anio'=>2018,
-            'estado'=>0
+            'estado'=>0,
+            'inicio_ciclo'=>'2018-01-01',
+            'fin_ciclo'=>'2018-06-01'
         ]);
          Ciclo::create([
             'num_ciclo'=>2,
             'anio'=>2018,
-            'estado'=>0
+            'estado'=>0,
+            'inicio_ciclo'=>'2018-07-01',
+            'fin_ciclo'=>'2018-12-31'
         ]);
 
           Ciclo::create([
         	'num_ciclo'=>1,
         	'anio'=>2019,
-        	'estado'=>0
+            'estado'=>0,
+            'inicio_ciclo'=>'2019-01-01',
+            'fin_ciclo'=>'2019-06-01',
         ]);
            Ciclo::create([
         	'num_ciclo'=>2,
         	'anio'=>2019,
-        	'estado'=>1
+            'estado'=>1,
+            'inicio_ciclo'=>'2019-07-01',
+            'fin_ciclo'=>'2019-12-31'
         ]);
     }
 }

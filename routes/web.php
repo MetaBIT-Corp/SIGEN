@@ -52,7 +52,13 @@ Route::post('/encuestas','EncuestaController@acceso')->name('acceso_encuesta');
     
 //Aqui iran las rutas a las que tiene acceso solo el Administrador
 Route::group(['middleware' => 'admin'], function(){
+    // CRUD CICLOS
+    Route::resource('/ciclo', 'CicloController')->except(['edit']);
+    Route::get('/ciclo/edit/{id}','CicloController@edit')->name('ciclo.edit')->middleware('signed');
 
+    // MATERIA CICLO
+    Route::get('ciclo/{id}/materias','MateriaCicloController@index')->name('materias_ciclo')->middleware('signed');
+    Route::get('download/excel/{id}','MateriaCicloController@downloadExcel')->name('dmaterias_ciclo')->middleware('signed');
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente

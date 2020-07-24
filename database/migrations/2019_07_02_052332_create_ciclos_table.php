@@ -18,6 +18,8 @@ class CreateCiclosTable extends Migration
             $table->string('num_ciclo');
             $table->string('anio');
             $table->integer('estado');
+            $table->date('inicio_ciclo')->nullable();
+            $table->date('fin_ciclo')->nullable();
             $table->timestamps();
         });
     }
