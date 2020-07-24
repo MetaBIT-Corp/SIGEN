@@ -23,7 +23,7 @@ class CreateDocenteTable extends Migration
             $table->string('anio_titulo');
             $table->integer('activo');
             $table->integer('tipo_jornada')->nullable();
-            $table->text('descripcion_docente');
+            $table->text('descripcion_docente')->nullable();
             $table->integer('id_cargo_actual')->nullable();
             $table->integer('id_segundo_cargo')->nullable();
             $table->string('nombre_docente');
