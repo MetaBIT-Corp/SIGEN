@@ -20,7 +20,7 @@
                 <span class="icon-add-solid"></span>
             </h6>
         </a>
-
+ 
         <!--Icono para descargar plantilla-->
         <a class="btn btn-secondary" href="{{ route('plantilla_estudiantes') }}" title="Descargar Plantilla Excel">
             <h6 class="mb-0">
@@ -60,6 +60,25 @@
                 <h6 class="text-center">{!! session('message') !!}</h6>
             </div>
           @endif
+
+          <div class="text-center" id="spinner" hidden="true">
+              <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;" role="status" >
+              </div><br>
+              <span class="">Importando ...</span>
+          </div>
+          <div id="message-success" class="alert alert-success alert-dismissible fade show text-center" role="alert" hidden>
+              <strong id="text-success">Exito</strong>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div id="message-error" class="alert alert-danger alert-dismissible fade show text-center" role="alert" hidden>
+              <strong id="text-error">Error</strong>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+
             <!-- DataTables Example -->
             <div class="card mb-3">
               <div class="card-header">
@@ -215,6 +234,63 @@
           $("#estudiante_id").val(estudiante_id);
           $("#modal_destroy").modal();
         }
+
+        $(document).ready(function() {
+          function exito(datos) {
+              $("#message-success").removeAttr("hidden");
+              $("#text-success").text(datos.success);
+              //Para mover al inicio de la pagina el control
+              $('html, body').animate({
+                  scrollTop: 0
+              }, 'slow');
+              setTimeout(function() {
+                  $("#message-success").attr('hidden', true);
+                  location.reload();
+              }, 2000);
+          }
+
+          $('#importExcel').click(function(e) {
+              //Evita que se recarge la pagina, porque sino no guarda el archivo en la variable input type file.
+              e.preventDefault();
+              $('#fileExcel').click();
+          });
+          $('#fileExcel').on("change", function() {
+              var data = new FormData($("#form-excel")[0]);
+              //Mostrando Spinner
+              $("#spinner").removeAttr("hidden");
+              $.ajax({
+                  url: '/estudiantes/upload-excel/',
+                  type: "POST",
+                  data: data,
+                  contentType: false, //Importante para enviar el archivo
+                  processData: false, //Importante para enviar el archivo
+                  dataType: "json"
+              }).done(function(datos) {
+                  $('#fileExcel').val("");
+                  console.log(datos.type);
+                  if (datos.type == 2) {
+                      exito(datos);
+                  } else {
+                      $("#message-error").removeAttr("hidden");
+                      $("#text-error").text(datos.error);
+                      //Para mover al inicio de la pagina el control
+                      $('html, body').animate({
+                          scrollTop: 0
+                      }, 'slow');
+                      setTimeout(function() {
+                          $("#message-error").attr('hidden', true);
+                      }, 2000);
+                  }
+                  //Para ocultar spinner
+                  $("#spinner").attr("hidden",true);
+
+              }).fail(function(xhr, status, e) {
+                  //Para ocultar spinner
+                  $("#spinner").attr("hidden",true);
+                  console.log(e);
+              });
+          });
+      });
 
     </script>
 @endsection

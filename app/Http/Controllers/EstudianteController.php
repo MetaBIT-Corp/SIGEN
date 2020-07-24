@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Http\Request;
 use App\Estudiante;
 use App\DetalleInscEst;
@@ -14,6 +16,7 @@ use App\Evaluacion;
 use App\Intento;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use DB;
 use DateTime;
 use DateInterval;
@@ -272,7 +275,11 @@ class EstudianteController extends Controller
         if($cant_die > 0)
             return back()->with('notification-type','warning')->with('notification-message','El Estudiante no puede ser eliminado, debido a que posee inscripciones en distintas cargas académicas.');
         
+        $user_id = Estudiante::where('id_est', $request['estudiante_id'])->first()->user_id;
+
         Estudiante::where('id_est', $request['estudiante_id'])->delete();
+
+        User::destroy($user_id);
 
         return back()->with('notification-type','success')->with('notification-message','El Estudiante se ha eliminado con éxito.');
      }
@@ -309,6 +316,60 @@ class EstudianteController extends Controller
      public function downloadExcel(){
         return Storage::download("plantillaExcel/ImportarEstudiantes.xlsx","Listado_Estudiantes_SIGEN.xlsx");
      }
+
+     public function uploadExcel(Request $request){
+		//Se recupera el id del user y la hora actual para guardarlo momentaneamente
+        //con un nombre diferente y evitar conflictos a la hora de que hayan subidas multiples
+		$id_user = auth()->user()->id;
+
+		//Se guarda en la ruta storage/app/importExcel de manera temporal y se recupera la ruta
+		$ruta=Storage::putFileAs('importExcel',$request->file('archivo'),$id_user.Carbon::now()->format('His')."Excel.xlsx");
+		
+		//Mensaje de error por defecto
+		$message=['error'=>'Hubo un error en la importacion. Verifique que sea el formato adecuado.','type'=>1];
+		
+		//Se hara la importacion de las Docentes
+		$spreadsheet = null;
+		$data = null;
+
+		try{
+            //Se carga el archivo que subio el archivo para poder acceder a los datos
+			$spreadsheet = IOFactory::load(storage_path($path = "app/".$ruta));
+
+			//Todas las filas se convierten en un array que puede ser accedido por las letras de las columnas de archivo excel
+			$data = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+			
+        }catch(Exception $e){
+            return response()->json($message);
+		}
+		
+		if($spreadsheet->getActiveSheet()->getCell('I1')=="PE01"){
+			
+			for ($i=5; $i <= count($data) ; $i++) {
+				if($data[$i]["A"]!=null&&$data[$i]["B"]!=null&&$data[$i]["C"]!=null&&$data[$i]["D"]!=null&&$data[$i]["E"]!=null){
+					$user = new User();
+					$user->name = "Estudiante";
+					$user->email = $data[$i]["C"];
+					$user->role = 2;
+					$user->password = bcrypt(Str::random(10));
+					$user->save();
+
+					$estudiante = new Estudiante();
+					$estudiante->carnet = $data[$i]["A"];
+					$estudiante->nombre = $data[$i]["B"];
+					$estudiante->activo = 1;
+                    $estudiante->anio_ingreso = $data[$i]["E"];
+                    $estudiante->user_id = $user->id;
+                    $estudiante->save();
+				}
+			}
+			$message=['success'=>'La importacion de Estudiantes se efectuo exitosamente.','type'=>2];
+			return response()->json($message);
+		}else{
+			$message=['error'=>'Esta plantilla no es la indicada para esta funcionalidad.','type'=>1];
+			return response()->json($message);
+		}
+	}
 
      /**
      * Función que despliega el formulario de crear estudiante

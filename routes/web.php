@@ -57,6 +57,7 @@ Route::group(['middleware' => 'admin'], function(){
     Route::get('/docentes', 'DocenteController@index')->name('docentes_index');
     Route::post('/docentes/eliminar', 'DocenteController@destroy')->name('docentes_destroy');
     Route::get('/docentes/descargar/plantilla', 'DocenteController@downloadExcel')->name('plantilla_docentes');
+    Route::post('/docentes/upload-excel', 'DocenteController@uploadExcel')->name('plantilla_upload_docentes');
     Route::get('/docentes/docente/create', 'DocenteController@getCreate')->name('gc_docente');
     Route::post('/docentes/docente/create', 'DocenteController@postCreate')->name('pc_docente');
     Route::get('/docentes/docente/update', 'DocenteController@getUpdate')->name('gu_docente');
@@ -67,6 +68,7 @@ Route::group(['middleware' => 'admin'], function(){
     Route::get('/estudiantes', 'EstudianteController@indexGlobal')->name('estudiantes_index');
     Route::post('/estudiantes/eliminar', 'EstudianteController@destroy')->name('estudiantes_destroy');
     Route::get('/estudiantes/descargar/plantilla', 'EstudianteController@downloadExcel')->name('plantilla_estudiantes');
+    Route::post('/estudiantes/upload-excel', 'EstudianteController@uploadExcel')->name('plantilla_upload_estudiantes');
     Route::get('/estudiantes/estudiante/create', 'EstudianteController@getCreate')->name('gc_estudiante');
     Route::post('/estudiantes/estudiante/create', 'EstudianteController@postCreate')->name('pc_estudiante');
     Route::get('/estudiantes/estudiante/update', 'EstudianteController@getUpdate')->name('gu_estudiante');
