@@ -13,6 +13,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Mail;
 
 class DocenteController extends Controller
 {
@@ -83,11 +84,12 @@ class DocenteController extends Controller
 			
 			for ($i=5; $i <= count($data) ; $i++) {
 				if($data[$i]["A"]!=null&&$data[$i]["B"]!=null&&$data[$i]["C"]!=null&&$data[$i]["D"]!=null&&$data[$i]["E"]!=null&&$data[$i]["F"]!=null){
-					$user = new User();
+                    $pass = str_random(10);
+                    $user = new User();
 					$user->name = "Docente";
 					$user->email = $data[$i]["C"];
 					$user->role = 1;
-					$user->password = bcrypt(Str::random(10));
+					$user->password = bcrypt($pass);
 					$user->save();
 
 					$docente = new Docente();
@@ -100,7 +102,23 @@ class DocenteController extends Controller
 					$docente->id_cargo_actual = 1;
 					$docente->id_segundo_cargo = 1;
 					$docente->user_id = $user->id;
-					$docente->save();
+                    $docente->save();
+                    
+                    //Envio de correo
+                    $data = [
+                        "email" => $user->email,
+                        "password" => $pass,
+                        "titulo" => "Se ha registrado en SIGEN como Docente."
+                    ];
+
+                    $asunto="Creacion de usuario en SIGEN";
+                    $correo = $user->email;
+
+                    Mail::send('docente.emailNotification', $data , function($msj){
+                        $msj->from("sigen.fia.eisi@gmail.com","Sigen");
+                        $msj->subject("Creacion de usuario en SIGEN");
+                        $msj->to("diazcolato1997@gmail.com");
+                    });
 				}
 			}
 			$message=['success'=>'La importacion de Docentes se efectuo exitosamente.','type'=>2];
@@ -173,7 +191,23 @@ class DocenteController extends Controller
         if(isset($request->all()['activo']))
             $docente->activo = 1;
 
+        $data = [
+            "email" => $user->email,
+            "password" => $pass,
+            "titulo" => "Se ha registrado en SIGEN como Docente."
+        ];
+
+        $asunto="Creacion de usuario en SIGEN";
+        $correo = $user->email;
+
+        Mail::send('docente.emailNotification', $data , function($msj){
+            $msj->from("sigen.fia.eisi@gmail.com","Sigen");
+            $msj->subject("Creacion de usuario en SIGEN");
+            $msj->to("dc16009@ues.edu.sv");
+        });
+
         $docente->save();
+
         return redirect()->route("docentes_index")->with("notification-message", 'Docente registrado exitosamente')
                                                   ->with("notification-type", 'success');
     }

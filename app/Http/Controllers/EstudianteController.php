@@ -348,11 +348,12 @@ class EstudianteController extends Controller
 			
 			for ($i=5; $i <= count($data) ; $i++) {
 				if($data[$i]["A"]!=null&&$data[$i]["B"]!=null&&$data[$i]["C"]!=null&&$data[$i]["D"]!=null&&$data[$i]["E"]!=null){
-					$user = new User();
+                    $pass = str_random(10);
+                    $user = new User();
 					$user->name = "Estudiante";
 					$user->email = $data[$i]["C"];
 					$user->role = 2;
-					$user->password = bcrypt(Str::random(10));
+					$user->password = bcrypt($pass);
 					$user->save();
 
 					$estudiante = new Estudiante();
