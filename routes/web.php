@@ -60,8 +60,8 @@ Route::group(['middleware' => 'admin'], function(){
     Route::post('/docentes/upload-excel', 'DocenteController@uploadExcel')->name('plantilla_upload_docentes');
     Route::get('/docentes/docente/create', 'DocenteController@getCreate')->name('gc_docente');
     Route::post('/docentes/docente/create', 'DocenteController@postCreate')->name('pc_docente');
-    Route::get('/docentes/docente/update', 'DocenteController@getUpdate')->name('gu_docente');
-    Route::post('/docentes/docente/update', 'DocenteController@postUpdate')->name('pu_docente');
+    Route::get('/docentes/docente/{docente_id}/update/', 'DocenteController@getUpdate')->name('gu_docente')->middleware('signed');
+    Route::post('/docentes/docente/{docente_id}/update', 'DocenteController@postUpdate')->name('pu_docente')->middleware('signed');
     Route::post('/docente/change-state', 'DocenteController@changeStateDocente')->name('docente_change_state');
 
     //Rutas para Gestion de Estudiantes
@@ -71,8 +71,8 @@ Route::group(['middleware' => 'admin'], function(){
     Route::post('/estudiantes/upload-excel', 'EstudianteController@uploadExcel')->name('plantilla_upload_estudiantes');
     Route::get('/estudiantes/estudiante/create', 'EstudianteController@getCreate')->name('gc_estudiante');
     Route::post('/estudiantes/estudiante/create', 'EstudianteController@postCreate')->name('pc_estudiante');
-    Route::get('/estudiantes/estudiante/update', 'EstudianteController@getUpdate')->name('gu_estudiante');
-    Route::post('/estudiantes/estudiante/update', 'EstudianteController@postUpdate')->name('pu_estudiante');
+    Route::get('/estudiantes/estudiante/{estudiante_id}/update', 'EstudianteController@getUpdate')->name('gu_estudiante')->middleware('signed');
+    Route::post('/estudiantes/estudiante/{estudiante_id}/update', 'EstudianteController@postUpdate')->name('pu_estudiante')->middleware('signed');
     Route::post('/estudiante/change-state', 'EstudianteController@changeStateEstudiante')->name('estudiante_change_state');
 });
 

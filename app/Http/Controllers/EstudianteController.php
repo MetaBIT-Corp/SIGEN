@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
 use DB;
 use DateTime;
 use DateInterval;
+use Illuminate\Validation\Rule;
 
 class EstudianteController extends Controller
 {
@@ -387,8 +388,56 @@ class EstudianteController extends Controller
      * @author Edwin palacios
      */
     public function postCreate(Request $request){
+<<<<<<< HEAD
+        //dd($request->all());
+        $rules =[
+            
+            'nombre' => ['required', 'string','min:5','max:191'],
+            'carnet' => ['required', 'unique:estudiante,carnet'],
+            'anio_ingreso' => ['required'],
+            'email' => ['required', 'unique:users,email'],
+        ];
+        /* Mensaje de Reglas de Validación */
+        $messages = [
+            
+            'nombre.required' => 'Debe de ingresar el nombre del estudiante',
+            'nombre.min' => 'El nombre debe contener como mínimo 5 caracteres',
+            'nombre.max' => 'El nombre debe contener como máximo 191 caracteres',
+            'carnet.required' => 'Debe de indicar el carnet del estudiante',
+            'carnet.unique' => 'El carnet ya existe. Por favor ingreso uno nuevo',
+            'email.required' => 'Debe de indicar el email del estudiante',
+            'email.unique' => 'El email ya existe. Por favor ingreso uno nuevo',
+            'anio_ingreso.required' => 'Debe de indicar el año de ingreso',
+        ];
+        $this->validate($request,$rules,$messages);
+
+        $pass = str_random(10);
+
+        //Se crea usuario del docente
+        $user = new User();
+        $user->name = $request->input('nombre');
+        $user->email = $request ->input('email');
+        $user->password = bcrypt($pass);
+        $user->role = 2;
+        $user->save();
+
+        //Se crea el estudiante 
+        $estudiante = new Estudiante();
+        $estudiante->nombre = $request->input('nombre');
+        $estudiante->carnet = $request->input('carnet');
+        $estudiante->anio_ingreso = $request->input('anio_ingreso');
+        $estudiante->user_id = $user->id;
+
+        if(isset($request->all()['activo']))
+            $estudiante->activo = 1;
+
+        $estudiante->save();
+        return redirect()->route("estudiantes_index")->with("notification-message", 'Estudiante registrado exitosamente')
+                                                  ->with("notification-type", 'success');
+=======
         dd($request->all());
         return redirect('estudiantes_index');
+>>>>>>> 2d7665ea9692b2f2556b060b5015afc080e9ab19
     }
 
     /**
@@ -396,8 +445,16 @@ class EstudianteController extends Controller
      * @param 
      * @author Edwin palacios
      */
+<<<<<<< HEAD
+    public function getUpdate($estudiante_id){
+        $estudiante = Estudiante::where('id_est', '=', $estudiante_id)->first();
+        $user = User::find($estudiante->user_id);
+        $email = $user->email;
+        return view('estudiante.updateEstudiante')->with(compact('estudiante', 'email'));
+=======
     public function getUpdate(){
         return view('estudiante.updateEstudiante');
+>>>>>>> 2d7665ea9692b2f2556b060b5015afc080e9ab19
     }
 
     /**
@@ -406,8 +463,58 @@ class EstudianteController extends Controller
      * @author Edwin palacios
      */
     public function postUpdate(Request $request){
+<<<<<<< HEAD
+        //dd($request->all());
+        $rules =[
+            
+            'nombre' => ['required', 'string','min:5','max:191'],
+            'carnet' => ['required', Rule::unique('estudiante', 'carnet')
+                                    ->ignore($request->input('id_est'), 'id_est')],
+            'anio_ingreso' => ['required'],
+            'email' => ['required', Rule::unique('users', 'email')
+                                    ->ignore($request->input('user_id'))],
+        ];
+        /* Mensaje de Reglas de Validación */
+        $messages = [
+            
+            'nombre.required' => 'Debe de ingresar el nombre del estudiante',
+            'nombre.min' => 'El nombre debe contener como mínimo 5 caracteres',
+            'nombre.max' => 'El nombre debe contener como máximo 191 caracteres',
+            'carnet.required' => 'Debe de indicar el carnet del estudiante',
+            'carnet.unique' => 'El carnet ya existe. Por favor ingreso uno nuevo',
+            'email.required' => 'Debe de indicar el email del estudiante',
+            'email.unique' => 'El email ya existe. Por favor ingreso uno nuevo',
+            'anio_ingreso.required' => 'Debe de indicar el año de ingreso',
+        ];
+        $this->validate($request,$rules,$messages);
+        
+        //Se obtiene usuario del estudiante
+        $user = User::find($request->input('user_id'));
+        $user->name = $request->input('nombre');
+        $user->email = $request ->input('email');
+        $user->save();
+
+        //Se crea el estudiante 
+        $estudiante = Estudiante::where('id_est', '=', $request->input('id_est'))->first();
+        $estudiante->nombre = $request->input('nombre');
+        $estudiante->carnet = $request->input('carnet');
+        $estudiante->anio_ingreso = $request->input('anio_ingreso');
+
+        if(isset($request->all()['activo'])){
+            $estudiante->activo = 1;
+        }else{
+            $estudiante->activo = 0;
+        }
+
+        $estudiante->save();
+        return redirect()->route("estudiantes_index")->with("notification-message", 'Datos del estudiante actualizados exitosamente')
+                                                  ->with("notification-type", 'success');
+
+
+=======
         dd($request->all());
         return redirect('estudiantes_index');
+>>>>>>> 2d7665ea9692b2f2556b060b5015afc080e9ab19
     }
     /*
       * Cambia el estado del usuario del estudiante, si está bloqueado lo habilita y viceversa
@@ -432,4 +539,5 @@ class EstudianteController extends Controller
 
         return back()->with('message', $message);
      }
+
 }

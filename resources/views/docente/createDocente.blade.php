@@ -37,7 +37,7 @@
       <!-- Validaciones -->
         <form action="" method="POST">
           {{ csrf_field() }}
-            
+    
             <div class="form-group">
               <label for="nombre_docente"><b title="Campo Obligatorio">*</b>&nbsp;Nombre</label>
                 <input type="text" name="nombre_docente" id="nombre_docente" class="form-control" value="{{ old('nombre_docente') }}" required>
@@ -57,6 +57,7 @@
                     ?>
                     <select id="anio_titulo" name="anio_titulo" class="form-control">
                       <?php while ($cont >= $menor) { ?>
+
                         <option value="<?php echo($cont); ?>"><?php echo($cont);?></option>
                       <?php $cont = ($cont-1); } ?>
                     </select>
@@ -78,7 +79,7 @@
             
             <div class="form-group">
               <div class="form-check">
-                <input id="activo" type="checkbox" name="activo" class="form-check-input" required checked>
+                <input id="activo" type="checkbox" name="activo" class="form-check-input" checked>
                 <label for="activo">
                   <small for="activo" class="form-text text-muted"><strong>Activo.</strong> Seleccione para indicar que es un usuario activo
                   </small>

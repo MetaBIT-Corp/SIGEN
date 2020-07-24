@@ -129,7 +129,7 @@
                                             <span class="icon-delete"></span>
                                         </button>
 
-                                        <a href="{{route('gu_docente')}}" class="btn btn-option btn-sm" title="Editar" style="text-decoration:none; color: white;">
+                                        <a href="{{ URL::signedRoute('gu_docente', ['docente_id' => $docente->id_pdg_dcn]) }}" class="btn btn-option btn-sm" title="Editar" style="text-decoration:none; color: white;">
                                           <span class="icon-edit "></span>
                                         </a>
                                       @endif

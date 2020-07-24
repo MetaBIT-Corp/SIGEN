@@ -12,6 +12,7 @@ use App\CargaAcademica;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class DocenteController extends Controller
 {
@@ -126,19 +127,66 @@ class DocenteController extends Controller
      * @author Edwin palacios
      */
     public function postCreate(Request $request){
-        dd($request->all());
-        return redirect('docentes_index');
+        //dd($request->all());
+        $rules =[
+            
+            'nombre_docente' => ['required', 'string','min:5','max:191'],
+            'descripcion_docente' => ['max:191'],
+            'carnet_dcn' => ['required', 'unique:pdg_dcn_docente,carnet_dcn'],
+            'anio_titulo' => ['required'],
+            'email' => ['required', 'unique:users,email'],
+        ];
+        /* Mensaje de Reglas de Validación */
+        $messages = [
+            
+            'nombre_docente.required' => 'Debe de ingresar el nombre del docente',
+            'nombre_docente.min' => 'El nombre debe contener como mínimo 5 caracteres',
+            'nombre_docente.max' => 'El nombre debe contener como máximo 191 caracteres',
+            'descripcion_docente.max' => 'La descripción debe contener como máximo 191 caracteres',
+            'carnet_dcn.required' => 'Debe de indicar el carnet del docente',
+            'carnet_dcn.unique' => 'El carnet ya existe. Por favor ingreso uno nuevo',
+            'email.required' => 'Debe de indicar el email del docente',
+            'email.unique' => 'El email ya existe. Por favor ingreso uno nuevo',
+            'anio_titulo.required' => 'Debe de indicar el año de titulación',
+        ];
 
+        $this->validate($request,$rules,$messages);
 
+        $pass = str_random(10);
+
+        //Se crea usuario del docente
+        $user = new User();
+        $user->name = $request->input('nombre_docente');
+        $user->email = $request ->input('email');
+        $user->password = bcrypt($pass);
+        $user->role = 1;
+        $user->save();
+
+        //Se crea el docente
+        $docente = new Docente();
+        $docente->nombre_docente = $request->input('nombre_docente');
+        $docente->descripcion_docente = $request->input('descripcion_docente');
+        $docente->carnet_dcn = $request->input('carnet_dcn');
+        $docente->anio_titulo = $request->input('anio_titulo');
+        $docente->user_id = $user->id;
+
+        if(isset($request->all()['activo']))
+            $docente->activo = 1;
+
+        $docente->save();
+        return redirect()->route("docentes_index")->with("notification-message", 'Docente registrado exitosamente')
+                                                  ->with("notification-type", 'success');
     }
 
     /**
      * Función que despliega el formulario de editar docente
      * @author Edwin palacios
      */
-    public function getUpdate(){
-        return view('docente.updateDocente');
-
+    public function getUpdate($docente_id){
+         $docente = Docente::where('id_pdg_dcn', '=', $docente_id)->first();
+         $user = User::find($docente->user_id);
+         $email = $user->email;
+        return view('docente.updateDocente')->with(compact('docente', 'email'));
     }
 
     /**
@@ -147,8 +195,57 @@ class DocenteController extends Controller
      * @author Edwin palacios
      */
     public function postUpdate(Request $request){
-        dd($request->all());
-        return redirect('docentes_index');
+        //dd($request->all());
+        $rules =[
+            'nombre_docente' => ['required', 'string','min:5','max:191'],
+            'descripcion_docente' => ['max:191'],
+            'carnet_dcn' => ['required', 
+                                Rule::unique('pdg_dcn_docente', 'carnet_dcn')
+                                    ->ignore($request->input('id_pdg_dcn'), 'id_pdg_dcn')],
+            'anio_titulo' => ['required'],
+            'email' => ['required', 
+                                Rule::unique('users', 'email')
+                                    ->ignore($request->input('user_id'))],
+        ];
+        /* Mensaje de Reglas de Validación */
+        $messages = [
+            
+            'nombre_docente.required' => 'Debe de ingresar el nombre del docente',
+            'nombre_docente.min' => 'El nombre debe contener como mínimo 5 caracteres',
+            'nombre_docente.max' => 'El nombre debe contener como máximo 191 caracteres',
+            'descripcion_docente.max' => 'La descripción debe contener como máximo 191 caracteres',
+            'carnet_dcn.required' => 'Debe de indicar el carnet del docente',
+            'carnet_dcn.unique' => 'El carnet ya existe. Por favor ingreso uno nuevo',
+            'email.required' => 'Debe de indicar el email del docente',
+            'email.unique' => 'El email ya existe. Por favor ingreso uno nuevo',
+            'anio_titulo.required' => 'Debe de indicar el año de titulación',
+        ];
+
+        $this->validate($request,$rules,$messages);
+
+        
+        //Se obtiene usuario del docente
+        $user = User::find($request->input('user_id'));
+        $user->name = $request->input('nombre_docente');
+        $user->email = $request ->input('email');
+        $user->save();
+
+        //Se obtiene el docente
+        $docente = Docente::where('id_pdg_dcn', '=', $request->input('id_pdg_dcn'))->first();
+        $docente->nombre_docente = $request->input('nombre_docente');
+        $docente->descripcion_docente = $request->input('descripcion_docente');
+        $docente->carnet_dcn = $request->input('carnet_dcn');
+        $docente->anio_titulo = $request->input('anio_titulo');
+    
+        if(isset($request->all()['activo'])){
+            $docente->activo = 1;
+        }else{
+            $docente->activo = 0;
+        }
+
+        $docente->save();
+        return redirect()->route("docentes_index")->with("notification-message", 'Datos del docente actualizados exitosamente')
+                                                  ->with("notification-type", 'success');
     }
 
 	/**
