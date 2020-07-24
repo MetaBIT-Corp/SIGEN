@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
 use App\CicloMateria;
@@ -13,6 +13,8 @@ use App\CargaAcademica;
 use App\Docente;
 use App\Materia;
 use App\Ciclo;
+use App\Estudiante;
+use App\DetalleInscEst;
 use DB;
 
 class MateriaCicloController extends Controller
@@ -112,6 +114,82 @@ class MateriaCicloController extends Controller
             $message=['success'=>'La importacion de materias al ciclo se ejecuto correctamente.','type'=>2];
         }else{
             $message=['error'=>'La plantilla subida no es para agregar Materias al Ciclo.','type'=>1];
+        }
+        
+        //Eliminar el archivo subido, solo se utiliza para la importacion y luego de desecha
+        Storage::delete($ruta);
+
+        return response()->json($message);
+    }
+
+    /**
+     * Funcion encargada de retornar la plantilla Excel para posteiormente importar materias al ciclo.
+     * @return Excel.xlsx
+     * @author Edwin Palacios
+     */
+    public function downloadExcelInscripcionEstudiantes($materia_ciclo_id){
+        $ciclo_materia = CicloMateria::where('id_mat_ci', '=', $materia_ciclo_id)->first();
+        $ciclo = Ciclo::where('id_ciclo', $ciclo_materia->id_ciclo)->first();
+        $materia = Materia::where('id_cat_mat', '=', $ciclo_materia->id_cat_mat)->first();
+        $nombre_descarga="Inscripcion_Estudiantes_Ciclo_".$ciclo->num_ciclo.'_Año_'.$ciclo->anio.'_'.$materia->codigo_mat.'.xlsx';
+        $ruta='plantillaExcel/ImportarInscripcionEstudiantes.xlsx';
+        return Storage::download($ruta,$nombre_descarga);
+    }
+
+    /**
+     * Funcion que permite importar las inscripciones de estudiantes mediante un archivo excel
+     * @var int materia_ciclo_id
+     * @author Edwin Palacios
+     */
+    public function uploadExcelInscripcionEstudiantes(Request $request){
+        $ciclo_materia = CicloMateria::where('id_mat_ci', '=', $request->input('materia_ciclo_id'))->first();
+        $ciclo = Ciclo::where('id_ciclo', $ciclo_materia->id_ciclo)->first();
+        $materia = Materia::where('id_cat_mat', '=', $ciclo_materia->id_cat_mat)->first();
+
+        //Se guarda en la ruta storage/app/importExcel de manera temporal y se recupera la ruta
+        $ruta=Storage::putFileAs('importExcel',$request->file('archivo'),Carbon::now()->format('His')."Excel.xlsx");
+
+        //Mensaje por defecto
+        $message=['error'=>'Hubo un error en la importacion. Verifique que sea el formato adecuado.','type'=>1];
+
+        $spreadsheet=null;
+        $data=null;
+        try{
+            //Se carga el archivo que subio el archivo para poder acceder a los datos
+            $spreadsheet = IOFactory::load(storage_path($path = "app\\".str_replace("/","\\",$ruta)));
+
+            //Todas las filas se convierten en un array que puede ser accedido por las letras de las columnas de archivo excel
+            $data = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+            //dd($data);
+
+        }catch(Exception $e){
+            return response()->json($message);
+        }
+        
+        if($data[1]["I"]=="PI01"){
+            for($i = 5; $i<=count($data);$i++){
+                if($data[$i]["A"]!=null){
+                    $estudiante = Estudiante::where('carnet', strtoupper($data[$i]["A"]))->first();
+                    if(isset($estudiante)){
+                        $carga_cademica = CargaAcademica::where('id_mat_ci', $materia_ciclo_id)->first();
+                        if(isset($carga_academica)){
+                            $inscripcion = DetalleInscEst::
+                                  where('id_carg_aca',$carga_academica->id_carg_aca)
+                                ->where('id_est',$estudiante->id_est)->first();
+                            
+                            if(!isset($inscripcion)){
+                                $inscripcion_estudiante = new DetalleInscEst();
+                                $inscripcion_estudiante->id_carg_aca = $carga_academica->id_carg_aca;
+                                $inscripcion_estudiante->id_est = $estudiante->id_est;
+                                $inscripcion_estudiante->save();
+                            }
+                        }
+                    }
+                }
+            }
+            $message=['success'=>'La importacion de las inscripciones se ejecuto correctamente.','type'=>2];
+        }else{
+            $message=['error'=>'La plantilla subida no es la indicada para agregar Inscripciones al ciclo.','type'=>1];
         }
         
         //Eliminar el archivo subido, solo se utiliza para la importacion y luego de desecha

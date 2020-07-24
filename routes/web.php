@@ -58,6 +58,8 @@ Route::group(['middleware' => 'admin'], function(){
 
     // MATERIA CICLO
     Route::get('ciclo/{id}/materias','MateriaCicloController@index')->name('materias_ciclo')->middleware('signed');
+    Route::post('materia_ciclo/{id}','MateriaCicloController@destroy');
+    Route::post('store/mc','MateriaCicloController@registrar');
     Route::get('download/excel/{id}','MateriaCicloController@downloadExcel')->name('dmaterias_ciclo')->middleware('signed');
     Route::post('upload-excel/{id}','MateriaCicloController@uploadExcel')->name('umaterias_ciclo');
 
@@ -193,16 +195,22 @@ Route::group(['middleware' => 'teacher'], function(){
     
 });
 
-//Aqui iran las rutas a las que tiene acceso solo el Estudiante
+//Rutas a las que tiene acceso solo el Estudiante
 Route::group(['middleware' => 'student'], function(){
     Route::post('evaluacion/acceso','EvaluacionController@acceso')->name('acceso_evaluacion');
 
 });
 
-//Aqui iran las rutas a las que tiene acceso solamente el docente y el admin
+//Rutas a las que tiene acceso solamente el docente y el admin
 Route::group(['middleware' => 'admin_teacher'], function(){
     Route::get('/evaluacion/{id}/turnos', 'TurnoController@index')->name('listado_turnos')->middleware('signed');
     Route::get('/listado-encuesta','EncuestaController@listado')->name('listado_encuesta')->middleware('signed');
+
+    //Ciclo materia Estudiante (Inscripciones)
+    Route::get('/materias/listado_estudiante/{materia_ciclo_id}/download/excel/','MateriaCicloController@downloadExcelInscripcionEstudiantes')
+                ->name('download_inscripciones')->middleware('signed');
+    Route::post('/materias/listado_estudiante/upload/excel/',' MateriaCicloController@uploadExcelInscripcionEstudiantes')
+                ->name('upload_inscripciones');
 });
 
 Route::get('/evaluacion/{evaluacion_id}/estadisticos/porcentajes', 'EvaluacionController@getPorcentajeAprovadosReprobados');
