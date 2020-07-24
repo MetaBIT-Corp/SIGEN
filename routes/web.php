@@ -58,6 +58,8 @@ Route::group(['middleware' => 'admin'], function(){
 
     // MATERIA CICLO
     Route::get('ciclo/{id}/materias','MateriaCicloController@index')->name('materias_ciclo')->middleware('signed');
+    Route::post('materia_ciclo/{id}','MateriaCicloController@destroy');
+    Route::post('store/mc','MateriaCicloController@registrar');
     Route::get('download/excel/{id}','MateriaCicloController@downloadExcel')->name('dmaterias_ciclo')->middleware('signed');
     Route::post('upload-excel/{id}','MateriaCicloController@uploadExcel')->name('umaterias_ciclo');
 

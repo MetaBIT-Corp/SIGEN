@@ -15,6 +15,12 @@
 <div class="col-2">
     <div class="btn-group" role="group" aria-label="Basic example">
 
+        <!--Boton para agregar pregunta-->
+        <a class="btn btn-secondary" href="javascript:void(0)" data-target="#modal" data-toggle="modal" id="add_pregunta" title="Agregar Materia Ciclo">
+                <h6 class="mb-0"><span class="icon-add-solid">
+                </span></h6>
+            </a>
+
         <!--Icono para descargar plantilla-->
         <a class="btn btn-secondary text-light"  title="Descargar Plantilla Excel" href="{{ URL::signedRoute('dmaterias_ciclo', ['id' => $ciclo->id_ciclo]) }}">
             <h6 class="mb-0"><span class="icon-download">
@@ -55,6 +61,22 @@
           </button>
         </div>
 
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+            <strong id="text-success">{{ session('success') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        @endif
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+            <strong id="text-success">{{ session('error') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        @endif
 <!--DATA TABLE-->
 <div class="container mt-4 mb-3">
     <div class="table-responsive mt-4">
@@ -78,7 +100,7 @@
                             <span class="icon-file-text"></span>
                         </a>
                     @if($ciclo->estado == 1)
-                        <a class="btn-eliminar btn ml-2 btn-sm" data-target="#modal1" data-toggle="modal" id="btn_eliminar" title="Eliminar Materia Ciclo" data-id="{{$ciclo->id_ciclo}}">
+                        <a class="btn-eliminar btn ml-2 btn-sm" data-target="#modal1" data-toggle="modal" id="btn_eliminar" title="Eliminar Materia Ciclo" data-id="{{$materia->id_mat_ci}}">
                             <span class="icon-delete">
                             </span>
                         </a>
@@ -109,7 +131,7 @@
             <div class="modal-header">
                 <span class="h4 text-danger icon-information-solid mr-2 mt-1"></span>
                 <h5 class="modal-title" id="exampleModalLabel">
-                   Eliminar Ciclo
+                   Eliminar Materia del Ciclo
                 </h5>
                 <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                     <span aria-hidden="true">
@@ -119,14 +141,12 @@
             </div>
             <form method="POST" id="form-delete" action="">
                 @csrf
-                @method('DELETE')
                 <div class="modal-body">
                     <div class="form-group row">
                         <label class="col-12 col-form-label" for="inputPassword">
-                            <strong>¿Esta seguro que desea eliminar el ciclo seleccionado? </strong>
+                            <strong>¿Esta seguro que desea eliminar la materia y los docentes inscritos en la carga academica del ciclo? </strong>
                         </label>
-                        <input hidden="" id="id_ciclo" name="id_ciclo" type="number"/>
-                        <p class="ml-3 mr-3 mb-0 text-justify">Si este ya posee materias inscritas no se podra eliminar el ciclo.</p>
+                        <p class="ml-3 mr-3 mb-0 text-justify">Se eliminara solo si no posee estudiantes inscritos en la materia. </p>
                         
                     </div>
                 </div>
@@ -141,6 +161,45 @@
     </div>
 </div>
 
+<!--Modal de Registro-->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="modal" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Registrar Materia Ciclo | Docente</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                    <div class="alert alert-danger" role="alert" id="error_register" hidden>
+                        
+                    </div>
+                    <div class="col-md-12 mt-4">
+                        <form class="form-inline" method="POST" id="form_register">
+                        @csrf
+                        <div class="form-row">
+                        <input type="text" class="form-control" name="id_ciclo" value="{{$ciclo->id_ciclo}}" hidden>
+                            <div class="form-group col-md-6">
+                                <label>*Codigo Materia</label>
+                                <input type="text" class="form-control" name="codigo_mat" id="codigo_mat">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>*Carnet Docente</label>
+                                <input type="text" class="form-control" name="carnet_dcn" id="carnet_dcn">
+                            </div>
+                                
+                        </div>
+                        </form>
+                    </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cerrar">Cerrar</button>
+              <button type="button" class="btn btn-primary" id="registrar">Registrar</button>
+            </div>
+          </div>
+        </div>
+</div>
 
 @endsection
 @section('js')
@@ -153,83 +212,6 @@
     <!-- Page level plugin JavaScript-->
     <script type="text/javascript" src="{{asset('vendor/datatables/jquery.dataTables.js' )}}"></script>
     <script type="text/javascript" src="{{asset('vendor/datatables/dataTables.bootstrap4.js' )}}"></script>
-      <script type="text/javascript" src="{{asset('js/demo/datatables-demo.js')}}"></script>
-      <script>
-        $('#dataTable').DataTable({
-            "responsive": true,
-            "autoWidth": false,
-            "columnDefs": [
-                { "width": "18%", "targets": 1 }
-            ]
-        });
-
-        $('#btn_add').on('click',function(){
-            $('#modal').modal('show');
-        });
-        $('.btn-eliminar').on('click',function(){
-            $('#form-delete').attr('action','/ciclo/'+$(this).data('id'));
-        });
-
-
-
-      </script>
-      <script>
-          $(document).ready(function() {
-    function exito(datos) {
-        $("#message-success").removeAttr("hidden");
-        $("#text-success").text(datos.success);
-        //Para mover al inicio de la pagina el control
-        $('html, body').animate({
-            scrollTop: 0
-        }, 'slow');
-        setTimeout(function() {
-            $("#message-success").attr('hidden', true);
-            location.reload();
-        }, 2000);
-    }
-
-    $('#importExcel').click(function(e) {
-        //Evita que se recarge la pagina, porque sino no guarda el archivo en la variable input type file.
-        e.preventDefault();
-        $('#fileExcel').click();
-    });
-    $('#fileExcel').on("change", function() {
-        var ciclo = $(this).data('ciclo');
-        var data = new FormData($("#form-excel")[0]);
-        //Mostrando Spinner
-        $("#spinner").removeAttr("hidden");
-        $.ajax({
-            url: '/upload-excel/' + ciclo,
-            type: "POST",
-            data: data,
-            contentType: false, //Importante para enviar el archivo
-            processData: false, //Importante para enviar el archivo
-            dataType: "json"
-        }).done(function(datos) {
-            $('#fileExcel').val("");
-            console.log(datos.type);
-            if (datos.type == 2) {
-                exito(datos);
-            } else {
-                $("#message-error").removeAttr("hidden");
-                $("#text-error").text(datos.error);
-                //Para mover al inicio de la pagina el control
-                $('html, body').animate({
-                    scrollTop: 0
-                }, 'slow');
-                setTimeout(function() {
-                    $("#message-error").attr('hidden', true);
-                }, 2000);
-            }
-            //Para ocultar spinner
-            $("#spinner").attr("hidden",true);
-
-        }).fail(function(xhr, status, e) {
-            //Para ocultar spinner
-            $("#spinner").attr("hidden",true);
-            console.log(e);
-        });
-    });
-});
+      <script src="{{asset('js/materia_ciclo/materia_ciclo.js')}}">
       </script>
 @endsection

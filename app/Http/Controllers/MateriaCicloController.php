@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
 use App\CicloMateria;
@@ -118,6 +118,76 @@ class MateriaCicloController extends Controller
         Storage::delete($ruta);
 
         return response()->json($message);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $materia_ciclo = new  CicloMateria;
+        if($materia_ciclo->estudiantesIncritos($id)){
+            return redirect()->back()->with('error','No puede ser eliminada hay estudiantes inscritos en esta materia de este ciclo.');
+        }else{
+            DB::table('carga_academica')->where('id_mat_ci',$id)->delete();
+            DB::table('materia_ciclo')->where('id_mat_ci',$id)->delete();
+            return redirect()->back()->with('success','La materia y los docentes que la imparten han sido eliminados correctamente');
+        }
+    }
+
+    public function registrar(Request $request){
+        $rules = [
+            'codigo_mat' => 'required|exists:cat_mat_materia,codigo_mat',
+            'carnet_dcn' => 'required|exists:pdg_dcn_docente,carnet_dcn'
+        ];
+
+        $messages = [
+            'codigo_mat.required'=>"El campo codigo de materia es requerido",
+            'carnet_dcn.required'=>"El campo carnet de docente es requerido",
+            'codigo_mat.exists'=>"El codigo de materia ingresado no existe.",
+            'carnet_dcn.exists'=>"El codigo de docente ingresado no existe."
+        ];
+
+        $validator = Validator::make($request->all(),$rules,$messages);
+
+        if($validator->fails()){
+            $errors = $validator->messages()->get('*');
+            return response()->json($errors,404);
+        }
+
+        $materia = Materia::where('codigo_mat', strtoupper($request->codigo_mat))->first();
+        $docente = Docente::where('carnet_dcn', strtoupper($request->carnet_dcn))->first();
+
+        $materia_ciclo = CicloMateria::
+            where('id_cat_mat',$materia->id_cat_mat)
+            ->where('id_ciclo',$request->id_ciclo)->first();
+
+        if(isset($materia_ciclo)){
+            $carga = CargaAcademica::
+                where('id_mat_ci',$materia_ciclo->id_mat_ci)
+                ->where('id_pdg_dcn',$docente->id_pdg_dcn)->first();
+                            
+            if(!isset($carga)){
+                $carga = new CargaAcademica;
+                $carga->id_mat_ci = $materia_ciclo->id_mat_ci;
+                $carga->id_pdg_dcn = $docente->id_pdg_dcn;
+                $carga->save();
+            }
+        }else{
+            $materia_ciclo = new  CicloMateria;
+            $materia_ciclo->id_ciclo = $request->id_ciclo;
+            $materia_ciclo->id_cat_mat = $materia->id_cat_mat;
+            $materia_ciclo->save();
+
+            $carga = new CargaAcademica;
+            $carga->id_mat_ci = $materia_ciclo->id;
+            $carga->id_pdg_dcn = $docente->id_pdg_dcn;
+            $carga->save();
+        }
+        return response()->json(["success"=>"Exito"],200);
     }
 
 }
