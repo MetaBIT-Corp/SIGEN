@@ -42,13 +42,13 @@
           Encuestas </div>
         <div class="card-body">
 
-            @if(auth()->user()->IsTeacher) 
-            <a class="btn btn-sm mb-3" href="{{ URL::signedRoute('gc_encuesta') }}" title="Agregar">
-                <span class="icon-add-solid "></span>
-                <b>Nueva Encuesta</b>
-            </a>
-            @endif
-          
+          @if(auth()->user()->IsTeacher) 
+          <a class="btn btn-md mb-3" href="{{ URL::signedRoute('gc_encuesta') }}" title="Agregar">
+              <span class="icon-add-solid " style="color: #007bff"></span>
+              <b>Nueva Encuesta</b>
+          </a>
+          @endif
+
           @if($encuestas)
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

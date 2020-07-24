@@ -38,4 +38,45 @@ class DocenteController extends Controller
 		return back()->with('notification-type','success')->with('notification-message','El Docente se ha eliminado con éxito.');
 	}
 
+	 /**
+     * Función que despliega el formulario de crear docente
+     * @author Edwin palacios
+     */
+    public function getCreate(){
+        return view('docente.createDocente');
+
+    }
+
+    /**
+     * Función que recibe el request del formulario de crear docente
+     * @param Request del formulario
+     * @author Edwin palacios
+     */
+    public function postCreate(Request $request){
+        dd($request->all());
+        return redirect('docentes_index');
+
+
+    }
+
+    /**
+     * Función que despliega el formulario de editar docente
+     * @author Edwin palacios
+     */
+    public function getUpdate(){
+        return view('docente.updateDocente');
+
+    }
+
+    /**
+     * Función que recibe el request del formulario de editar docente
+     * @param Request del formulario
+     * @author Edwin palacios
+     */
+    public function postUpdate(Request $request){
+        dd($request->all());
+        return redirect('docentes_index');
+
+
+    }
 }

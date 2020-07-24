@@ -56,10 +56,18 @@ Route::group(['middleware' => 'admin'], function(){
     //Rutas para Gestion de Docentes
     Route::get('/docentes', 'DocenteController@index')->name('docentes_index');
     Route::post('/docentes/eliminar', 'DocenteController@destroy')->name('docentes_destroy');
+    Route::get('/docentes/docente/create', 'DocenteController@getCreate')->name('gc_docente');
+    Route::post('/docentes/docente/create', 'DocenteController@postCreate')->name('pc_docente');
+    Route::get('/docentes/docente/update', 'DocenteController@getUpdate')->name('gu_docente');
+    Route::post('/docentes/docente/update', 'DocenteController@postUpdate')->name('pu_docente');
 
     //Rutas para Gestion de Estudiantes
     Route::get('/estudiantes', 'EstudianteController@indexGlobal')->name('estudiantes_index');
     Route::post('/estudiantes/eliminar', 'EstudianteController@destroy')->name('estudiantes_destroy');
+    Route::get('/estudiantes/estudiante/create', 'EstudianteController@getCreate')->name('gc_estudiante');
+    Route::post('/estudiantes/estudiante/create', 'EstudianteController@postCreate')->name('pc_estudiante');
+     Route::get('/estudiantes/estudiante/update', 'EstudianteController@getUpdate')->name('gu_estudiante');
+    Route::post('/estudiantes/estudiante/update', 'EstudianteController@postUpdate')->name('pu_estudiante');
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente

@@ -18,40 +18,40 @@
 @endsection
 
 @section("main")
-            <!-- Notificacion  -->
-            @if (session('notification'))
-                  <div class="alert alert-success">
-                        {!!session('notification')!!}
-                  </div>
-            @endif
-            <!-- Notificacion -->
-            <!--Mostrará mensaje de éxito-->
-            @if (session('exito'))
-              <div class="alert alert-success">
-                {!!session('exito')!!}
-              </div>
-            @endif
+  <!-- Notificacion  -->
+  @if (session('notification'))
+        <div class="alert alert-success">
+              {!!session('notification')!!}
+        </div>
+  @endif
+  <!-- Notificacion -->
+  <!--Mostrará mensaje de éxito-->
+  @if (session('exito'))
+    <div class="alert alert-success">
+      {!!session('exito')!!}
+    </div>
+  @endif
 
-            <!--Mostrará mensaje de error -->
-            @if (session('error'))
-              <div class="alert alert-danger">
-                {!!session('error')!!}
-              </div>
-            @endif
+  <!--Mostrará mensaje de error -->
+  @if (session('error'))
+    <div class="alert alert-danger">
+      {!!session('error')!!}
+    </div>
+  @endif
 
-            <!--Mostrará mensaje de informacion -->
-            @if (session('info'))
-              <div class="alert alert-info">
-               {!!session('info')!!}
-              </div>
-            @endif
+  <!--Mostrará mensaje de informacion -->
+  @if (session('info'))
+    <div class="alert alert-info">
+     {!!session('info')!!}
+    </div>
+  @endif
 
-            <!--Mostrará mensaje de advertencia -->
-            @if (session('warning'))
-              <div class="alert alert-warning">
-               {!!session('warning')!!}
-              </div>
-            @endif
+  <!--Mostrará mensaje de advertencia -->
+  @if (session('warning'))
+    <div class="alert alert-warning">
+     {!!session('warning')!!}
+    </div>
+  @endif
 
   <div id="wrapper">
   <div id="content-wrapper">
@@ -63,13 +63,11 @@
           Evaluaciones | Materia
           </div>
         <div class="card-body">
-         
-            @if(auth()->user()->role==1) 
-            <a class="btn btn-sm mb-3" href="{{ URL::signedRoute('gc_evaluacion', ['id' => $id_carga]) }}" title="Agregar">
-              <span class="icon-add-solid "></span>
-              <b>Nueva Evaluacion</b>
-            </a>
-            
+          @if(auth()->user()->role==1) 
+          <a class="btn btn-md mb-3" href="{{ URL::signedRoute('gc_evaluacion', ['id' => $id_carga]) }}" title="Agregar">
+            <span class="icon-add-solid " style="color: #007bff"></span>
+            <b>Nueva Evaluacion</b>
+          </a> 
           @endif
           @if(auth()->user()->role==1 | auth()->user()->role==0)
           <div class="table-responsive">

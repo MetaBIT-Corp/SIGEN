@@ -303,4 +303,48 @@ class EstudianteController extends Controller
 
         return round($nota/$cantidad, 2);
      }
+
+     /**
+     * Función que despliega el formulario de crear estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function getCreate(){
+        return view('estudiante.createEstudiante');
+
+    }
+
+    /**
+     * Función que recibe el request del formulario de crear estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function postCreate(Request $request){
+        dd($request->all());
+        return redirect('estudiantes_index');
+
+
+    }
+
+    /**
+     * Función que despliega el formulario de editar estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function getUpdate(){
+        return view('estudiante.updateEstudiante');
+
+    }
+
+    /**
+     * Función que recibe el request del formulario de editar estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function postUpdate(Request $request){
+        dd($request->all());
+        return redirect('estudiantes_index');
+
+
+    }
 }

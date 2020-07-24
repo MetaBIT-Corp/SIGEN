@@ -31,6 +31,12 @@
                 <i class="fas fa-table"></i>
                 Listado de Docentes | Global</div>
                 <div class="card-body">
+                @if(auth()->user()->IsAdmin)
+                    <a class="btn btn-md mb-3" href="{{ route('gc_docente')}}" title="Agregar">
+                        <span class="icon-add-solid" style="color: #007bff"></span>
+                        <b>Agregar Docente</b>
+                    </a>
+                @endif
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -66,6 +72,9 @@
                                             onclick="activateModalDestroy(this);">
                                             <span class="icon-delete"></span>
                                         </button>
+                                         <a href="{{route('gu_docente')}}" class="btn btn-option btn-sm" title="Editar" style="text-decoration:none; color: white;">
+                                            <span class="icon-edit "></span>
+                                          </a>
                                     </td>
                                 </tr>
                             @endforeach
