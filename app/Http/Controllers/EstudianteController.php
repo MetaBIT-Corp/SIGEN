@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Estudiante;
 use App\DetalleInscEst;
@@ -302,5 +303,9 @@ class EstudianteController extends Controller
         $cantidad = count($intentos_finalizados);
 
         return round($nota/$cantidad, 2);
+     }
+
+     public function downloadExcel(){
+        return Storage::download("plantillaExcel/ImportarEstudiantes.xlsx","Listado_Estudiantes_SIGEN.xlsx");
      }
 }

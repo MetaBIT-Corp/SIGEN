@@ -11,6 +11,35 @@
 @section("ol_breadcrumb")
     <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
     <li class="breadcrumb-item">Estudiantes</li>
+
+    <div class="offset-8 btn-group" role="group" aria-label="Basic example">
+
+        <!--Boton para agregar pregunta-->
+        <a class="btn btn-secondary" href="javascript:void(0)" data-target="#modal" data-toggle="modal" id="add_estudiante" title="Agregar Estudiante">
+            <h6 class="mb-0">
+                <span class="icon-add-solid"></span>
+            </h6>
+        </a>
+
+        <!--Icono para descargar plantilla-->
+        <a class="btn btn-secondary" href="{{ route('plantilla_estudiantes') }}" title="Descargar Plantilla Excel">
+            <h6 class="mb-0">
+                <span class="icon-download"></span>
+            </h6>
+        </a>
+
+        <!--Icoono para importar preguntas -->
+        <a class="btn btn-secondary" href="#" title="Importar Estudiantes" id="importExcel">
+            <h6 class="mb-0">
+                <span class="icon-importExcel"></span>
+            </h6>
+        </a>
+    </div>
+    <!--Formulario para subida de archivos de excel-->
+    <form method="POST" id="form-excel" enctype="multipart/form-data">
+            @csrf
+        <input type="file" name="archivo" accept=".xlsx" id="fileExcel" data-area='' hidden="" />
+    </form>
 @endsection
 
 @section("main")

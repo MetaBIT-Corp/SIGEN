@@ -214,7 +214,7 @@ class PreguntaController extends Controller
      * @return type
      * @author Ricardo Estupinian
      */
-    public function downloadExcel($modalidad_area,$id_area){
+    public function downloadExcel($modalidad_area,$id_area){ 
 
         //Se busca el area para concatenarla al nombre del area al documento
         $area=Area::find($id_area);
