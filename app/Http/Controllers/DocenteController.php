@@ -107,10 +107,16 @@ class DocenteController extends Controller
                     //Envio de correo
                     $this->emailSend($user->email, $pass);
 				}
-			}
+            }
+            //Eliminar el archivo subido, solo se utiliza para la importacion y luego de desecha
+            Storage::delete($ruta);
+
 			$message=['success'=>'La importación de Docentes se efectuo éxitosamente.','type'=>2];
 			return response()->json($message);
 		}else{
+            //Eliminar el archivo subido, solo se utiliza para la importacion y luego de desecha
+            Storage::delete($ruta);
+            
 			$message=['error'=>'Esta plantilla no es la indicada para esta funcionalidad.','type'=>1];
 			return response()->json($message);
 		}
