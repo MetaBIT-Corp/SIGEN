@@ -327,7 +327,7 @@ class EstudianteController extends Controller
 		$ruta=Storage::putFileAs('importExcel',$request->file('archivo'),$id_user.Carbon::now()->format('His')."Excel.xlsx");
 		
 		//Mensaje de error por defecto
-		$message=['error'=>'Hubo un error en la importacion. Verifique que sea el formato adecuado.','type'=>1];
+		$message=['error'=>'Hubo un error en la importación. Verifique que sea el formato adecuado.','type'=>1];
 		
 		//Se hara la importacion de las Docentes
 		$spreadsheet = null;
@@ -363,15 +363,36 @@ class EstudianteController extends Controller
                     $estudiante->anio_ingreso = $data[$i]["E"];
                     $estudiante->user_id = $user->id;
                     $estudiante->save();
+
+                    //Envio de correo
+                    $this->emailSend($user->email, $pass);
 				}
 			}
-			$message=['success'=>'La importacion de Estudiantes se efectuo exitosamente.','type'=>2];
+			$message=['success'=>'La importación de Estudiantes se efectuo éxitosamente.','type'=>2];
 			return response()->json($message);
 		}else{
 			$message=['error'=>'Esta plantilla no es la indicada para esta funcionalidad.','type'=>1];
 			return response()->json($message);
 		}
-	}
+    }
+    
+    public function emailSend($correo, $pass){
+        $data = [
+            "email" => $correo,
+            "password" => $pass,
+            "titulo" => "Se ha registrado en SIGEN como Estudiante."
+        ];
+
+        $asunto="SIGEN: Creación de Usuario";
+        
+        Mail::send('estudiante.emailNotification', $data , function($msj) use($asunto, $correo){
+            $msj->from("sigen.fia.eisi@gmail.com","Sigen");
+            $msj->subject($asunto);
+            $msj->to($correo);
+        });
+
+        return redirect()->back();
+    }
 
      /**
      * Función que despliega el formulario de crear estudiante

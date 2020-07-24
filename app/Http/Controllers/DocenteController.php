@@ -63,7 +63,7 @@ class DocenteController extends Controller
 		$ruta=Storage::putFileAs('importExcel',$request->file('archivo'),$id_user.Carbon::now()->format('His')."Excel.xlsx");
 		
 		//Mensaje de error por defecto
-		$message=['error'=>'Hubo un error en la importacion. Verifique que sea el formato adecuado.','type'=>1];
+		$message=['error'=>'Hubo un error en la importación. Verifique que sea el formato adecuado.','type'=>1];
 		
 		//Se hara la importacion de las Docentes
 		$spreadsheet = null;
@@ -105,23 +105,10 @@ class DocenteController extends Controller
                     $docente->save();
                     
                     //Envio de correo
-                    $data = [
-                        "email" => $user->email,
-                        "password" => $pass,
-                        "titulo" => "Se ha registrado en SIGEN como Docente."
-                    ];
-
-                    $asunto="Creacion de usuario en SIGEN";
-                    $correo = $user->email;
-
-                    Mail::send('docente.emailNotification', $data , function($msj){
-                        $msj->from("sigen.fia.eisi@gmail.com","Sigen");
-                        $msj->subject("Creacion de usuario en SIGEN");
-                        $msj->to("diazcolato1997@gmail.com");
-                    });
+                    $this->emailSend($user->email, $pass);
 				}
 			}
-			$message=['success'=>'La importacion de Docentes se efectuo exitosamente.','type'=>2];
+			$message=['success'=>'La importación de Docentes se efectuo éxitosamente.','type'=>2];
 			return response()->json($message);
 		}else{
 			$message=['error'=>'Esta plantilla no es la indicada para esta funcionalidad.','type'=>1];
@@ -129,6 +116,23 @@ class DocenteController extends Controller
 		}
 	}
 
+    public function emailSend($correo, $pass){
+        $data = [
+            "email" => $correo,
+            "password" => $pass,
+            "titulo" => "Se ha registrado en SIGEN como Docente."
+        ];
+
+        $asunto="SIGEN: Creación de Usuario";
+        
+        Mail::send('docente.emailNotification', $data , function($msj) use($asunto, $correo){
+            $msj->from("sigen.fia.eisi@gmail.com","Sigen");
+            $msj->subject($asunto);
+            $msj->to($correo);
+        });
+
+        return redirect()->back();
+    }
 
 	 /**
      * Función que despliega el formulario de crear docente
@@ -187,26 +191,10 @@ class DocenteController extends Controller
         $docente->carnet_dcn = $request->input('carnet_dcn');
         $docente->anio_titulo = $request->input('anio_titulo');
         $docente->user_id = $user->id;
+        $docente->save();
 
         if(isset($request->all()['activo']))
             $docente->activo = 1;
-
-        $data = [
-            "email" => $user->email,
-            "password" => $pass,
-            "titulo" => "Se ha registrado en SIGEN como Docente."
-        ];
-
-        $asunto="Creacion de usuario en SIGEN";
-        $correo = $user->email;
-
-        Mail::send('docente.emailNotification', $data , function($msj){
-            $msj->from("sigen.fia.eisi@gmail.com","Sigen");
-            $msj->subject("Creacion de usuario en SIGEN");
-            $msj->to("dc16009@ues.edu.sv");
-        });
-
-        $docente->save();
 
         return redirect()->route("docentes_index")->with("notification-message", 'Docente registrado exitosamente')
                                                   ->with("notification-type", 'success');
