@@ -141,13 +141,13 @@ class MateriaCicloController extends Controller
      * @var int materia_ciclo_id
      * @author Edwin Palacios
      */
-    public function uploadExcelInscripcionEstudiantes(Request $request){
-        $ciclo_materia = CicloMateria::where('id_mat_ci', '=', $request->input('materia_ciclo_id'))->first();
+    public function uploadExcelInscripcionEstudiantes(Request $request, $materia_ciclo_id){
+        $ciclo_materia = CicloMateria::where('id_mat_ci', '=', $materia_ciclo_id)->first();
         $ciclo = Ciclo::where('id_ciclo', $ciclo_materia->id_ciclo)->first();
         $materia = Materia::where('id_cat_mat', '=', $ciclo_materia->id_cat_mat)->first();
 
         //Se guarda en la ruta storage/app/importExcel de manera temporal y se recupera la ruta
-        $ruta=Storage::putFileAs('importExcel',$request->file('archivo'),Carbon::now()->format('His')."Excel.xlsx");
+        $ruta=Storage::putFileAs('importExcel',$request->file('archivo'),Carbon::now()->format('His')."_Inscripcion_Excel.xlsx");
 
         //Mensaje por defecto
         $message=['error'=>'Hubo un error en la importacion. Verifique que sea el formato adecuado.','type'=>1];
@@ -167,16 +167,17 @@ class MateriaCicloController extends Controller
         }
         
         if($data[1]["I"]=="PI01"){
-            for($i = 5; $i<=count($data);$i++){
+            for($i = 7; $i<=count($data);$i++){
                 if($data[$i]["A"]!=null){
                     $estudiante = Estudiante::where('carnet', strtoupper($data[$i]["A"]))->first();
+                    
                     if(isset($estudiante)){
-                        $carga_cademica = CargaAcademica::where('id_mat_ci', $materia_ciclo_id)->first();
+                        $carga_academica = CargaAcademica::where('id_mat_ci', $materia_ciclo_id)->first();
+
                         if(isset($carga_academica)){
                             $inscripcion = DetalleInscEst::
                                   where('id_carg_aca',$carga_academica->id_carg_aca)
                                 ->where('id_est',$estudiante->id_est)->first();
-                            
                             if(!isset($inscripcion)){
                                 $inscripcion_estudiante = new DetalleInscEst();
                                 $inscripcion_estudiante->id_carg_aca = $carga_academica->id_carg_aca;
@@ -196,6 +197,63 @@ class MateriaCicloController extends Controller
         Storage::delete($ruta);
 
         return response()->json($message);
+    }
+
+    public function desinscripcionEstudiante(Request $request){
+        $message = "Se desinscribió al estudiante exitosamente";
+        $type = "success";
+
+        $carga_academica = CargaAcademica::where('id_mat_ci', $request->input('id_mat_ci'))->first();
+        if(isset($carga_academica)){
+            $inscripcion = DetalleInscEst::where('id_carg_aca',$carga_academica->id_carg_aca)
+                                         ->where('id_est',$request->input('id_est'))->first();
+            if(isset($inscripcion)){
+                $inscripcion->delete();
+            }else{
+                $message = "El estudiante no está inscrito";
+                $type = "danger";
+            }
+        }else{
+            $message = "No se posee carga academica";
+            $type = "danger";
+        }
+        return back()->with("notification-message", $message)->with("notification-type", $type);
+    }
+
+    public function inscripcionEstudiante(Request $request){
+        //dd($request->all());
+        $message = "Se inscribió al estudiante exitosamente";
+        $type = "success";
+        $carnet = strtoupper($request->input('carnet'));
+        $id_mat_ci = $request->input('id_mat_ci');
+
+        $estudiante = Estudiante::where('carnet', $carnet)->first();          
+        if(isset($estudiante)){
+            $carga_academica = CargaAcademica::where('id_mat_ci', $id_mat_ci )->first();
+
+            if(isset($carga_academica)){
+                $inscripcion = DetalleInscEst::
+                      where('id_carg_aca',$carga_academica->id_carg_aca)
+                    ->where('id_est',$estudiante->id_est)->first();
+                if(!isset($inscripcion)){
+                    $inscripcion_estudiante = new DetalleInscEst();
+                    $inscripcion_estudiante->id_carg_aca = $carga_academica->id_carg_aca;
+                    $inscripcion_estudiante->id_est = $estudiante->id_est;
+                    $inscripcion_estudiante->save();
+                }else{
+                    $message = "El estudiante ya se encuentra inscrito";
+                    $type = "warning";
+                }
+            }else{
+                $message = "No se posee carga academica";
+                $type = "danger";
+            }
+        }else{
+            $message = "No se encuentra un estudiante con el carnet ". $carnet;
+            $type = "danger";
+        }
+        return back()->with("notification-message", $message)
+                     ->with("notification-type", $type);
     }
 
 }
