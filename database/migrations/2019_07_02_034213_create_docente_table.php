@@ -22,10 +22,10 @@ class CreateDocenteTable extends Migration
             $table->string('carnet_dcn');
             $table->string('anio_titulo');
             $table->integer('activo');
-            $table->integer('tipo_jornada');
+            $table->integer('tipo_jornada')->nullable();
             $table->text('descripcion_docente');
-            $table->integer('id_cargo_actual');
-            $table->integer('id_segundo_cargo');
+            $table->integer('id_cargo_actual')->nullable();
+            $table->integer('id_segundo_cargo')->nullable();
             $table->string('nombre_docente');
 
             $table->timestamps();

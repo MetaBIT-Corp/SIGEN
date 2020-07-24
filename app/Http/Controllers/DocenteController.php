@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Docente;
 use App\CargaAcademica;
+use App\User;
 
 class DocenteController extends Controller
 {
@@ -43,4 +44,68 @@ class DocenteController extends Controller
 		return Storage::download("plantillaExcel/ImportarDocentes.xlsx","Listado_Docentes_SIGEN.xlsx");
 	}
 
+
+	 /**
+     * Función que despliega el formulario de crear docente
+     * @author Edwin palacios
+     */
+    public function getCreate(){
+        return view('docente.createDocente');
+
+    }
+
+    /**
+     * Función que recibe el request del formulario de crear docente
+     * @param Request del formulario
+     * @author Edwin palacios
+     */
+    public function postCreate(Request $request){
+        dd($request->all());
+        return redirect('docentes_index');
+
+
+    }
+
+    /**
+     * Función que despliega el formulario de editar docente
+     * @author Edwin palacios
+     */
+    public function getUpdate(){
+        return view('docente.updateDocente');
+
+    }
+
+    /**
+     * Función que recibe el request del formulario de editar docente
+     * @param Request del formulario
+     * @author Edwin palacios
+     */
+    public function postUpdate(Request $request){
+        dd($request->all());
+        return redirect('docentes_index');
+    }
+
+	/**
+      * Cambia el estado del usuario del docente, si está bloqueado lo habilita y viceversa
+      * @author Enrique Menjívar <mt16007@ues.edu.sv>
+      * @param  Request $request Datos enviados desde el frontend
+      */
+     public function changeStateDocente(Request $request){
+        $id_docente = $request->input('docente_id');
+        $docente = Docente::where('id_pdg_dcn', $id_docente)->first();
+
+        $user = User::findOrFail($docente->user_id);
+
+        if($user->enabled == 1){
+            $user->enabled = 0;
+            $message = 'El Docente con carnet <em><b>' . $docente->carnet_dcn  . '</b></em> fue bloqueado con éxito';
+        }else{
+            $user->enabled = 1;
+            $message = 'El Docente con carnet <em><b>' . $docente->carnet_dcn  . '</b></em> fue desbloqueado con éxito';
+        }
+
+        $user->save();
+
+        return back()->with('message', $message);
+     }
 }

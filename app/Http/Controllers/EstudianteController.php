@@ -12,6 +12,7 @@ use App\Ciclo;
 use App\Materia;
 use App\Evaluacion;
 use App\Intento;
+use App\User;
 use Carbon\Carbon;
 use DB;
 use DateTime;
@@ -307,5 +308,67 @@ class EstudianteController extends Controller
 
      public function downloadExcel(){
         return Storage::download("plantillaExcel/ImportarEstudiantes.xlsx","Listado_Estudiantes_SIGEN.xlsx");
+     }
+
+     /**
+     * Función que despliega el formulario de crear estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function getCreate(){
+        return view('estudiante.createEstudiante');
+
+    }
+
+    /**
+     * Función que recibe el request del formulario de crear estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function postCreate(Request $request){
+        dd($request->all());
+        return redirect('estudiantes_index');
+    }
+
+    /**
+     * Función que despliega el formulario de editar estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function getUpdate(){
+        return view('estudiante.updateEstudiante');
+    }
+
+    /**
+     * Función que recibe el request del formulario de editar estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function postUpdate(Request $request){
+        dd($request->all());
+        return redirect('estudiantes_index');
+    }
+    /*
+      * Cambia el estado del usuario del estudiante, si está bloqueado lo habilita y viceversa
+      * @author Enrique Menjívar <mt16007@ues.edu.sv>
+      * @param  Request $request Datos enviados desde el frontend
+      */
+     public function changeStateEstudiante(Request $request){
+        $id_est = $request->input('est_id');
+        $estudiante = Estudiante::where('id_est', $id_est)->first();
+
+        $user = User::findOrFail($estudiante->user_id);
+
+        if($user->enabled == 1){
+            $user->enabled = 0;
+            $message = 'El Estudiante con carnet <em><b>' . $estudiante->carnet  . '</b></em> fue bloqueado con éxito';
+        }else{
+            $user->enabled = 1;
+            $message = 'El Estudiante con carnet <em><b>' . $estudiante->carnet  . '</b></em> fue desbloqueado con éxito';
+        }
+
+        $user->save();
+
+        return back()->with('message', $message);
      }
 }
