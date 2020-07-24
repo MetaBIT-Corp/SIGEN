@@ -56,6 +56,7 @@ Route::group(['middleware' => 'admin'], function(){
     //Rutas para Gestion de Docentes
     Route::get('/docentes', 'DocenteController@index')->name('docentes_index');
     Route::post('/docentes/eliminar', 'DocenteController@destroy')->name('docentes_destroy');
+    Route::get('/docentes/descargar/plantilla', 'DocenteController@downloadExcel')->name('plantilla_docentes');
     Route::get('/docentes/docente/create', 'DocenteController@getCreate')->name('gc_docente');
     Route::post('/docentes/docente/create', 'DocenteController@postCreate')->name('pc_docente');
     Route::get('/docentes/docente/{docente_id}/update/', 'DocenteController@getUpdate')->name('gu_docente')->middleware('signed');
@@ -65,6 +66,7 @@ Route::group(['middleware' => 'admin'], function(){
     //Rutas para Gestion de Estudiantes
     Route::get('/estudiantes', 'EstudianteController@indexGlobal')->name('estudiantes_index');
     Route::post('/estudiantes/eliminar', 'EstudianteController@destroy')->name('estudiantes_destroy');
+    Route::get('/estudiantes/descargar/plantilla', 'EstudianteController@downloadExcel')->name('plantilla_estudiantes');
     Route::get('/estudiantes/estudiante/create', 'EstudianteController@getCreate')->name('gc_estudiante');
     Route::post('/estudiantes/estudiante/create', 'EstudianteController@postCreate')->name('pc_estudiante');
     Route::get('/estudiantes/estudiante/{estudiante_id}/update', 'EstudianteController@getUpdate')->name('gu_estudiante')->middleware('signed');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\Docente;
 use App\CargaAcademica;
 use App\User;
@@ -38,6 +39,10 @@ class DocenteController extends Controller
 		Docente::where('id_pdg_dcn', $request['docente_id'])->delete();
 
 		return back()->with('notification-type','success')->with('notification-message','El Docente se ha eliminado con éxito.');
+	}
+
+	public function downloadExcel(){
+		return Storage::download("plantillaExcel/ImportarDocentes.xlsx","Listado_Docentes_SIGEN.xlsx");
 	}
 
 
@@ -175,7 +180,6 @@ class DocenteController extends Controller
         $docente->save();
         return redirect()->route("docentes_index")->with("notification-message", 'Datos del docente actualizados exitosamente')
                                                   ->with("notification-type", 'success');
-
     }
 
 	/**
