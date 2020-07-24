@@ -59,6 +59,8 @@ Route::group(['middleware' => 'admin'], function(){
     // MATERIA CICLO
     Route::get('ciclo/{id}/materias','MateriaCicloController@index')->name('materias_ciclo')->middleware('signed');
     Route::get('download/excel/{id}','MateriaCicloController@downloadExcel')->name('dmaterias_ciclo')->middleware('signed');
+    Route::post('upload-excel/{id}','MateriaCicloController@uploadExcel')->name('umaterias_ciclo');
+
     //Rutas para Gestion de Docentes
     Route::get('/docentes', 'DocenteController@index')->name('docentes_index');
     Route::post('/docentes/eliminar', 'DocenteController@destroy')->name('docentes_destroy');

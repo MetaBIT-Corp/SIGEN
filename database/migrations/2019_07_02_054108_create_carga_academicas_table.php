@@ -19,7 +19,7 @@ class CreateCargaAcademicasTable extends Migration
             $table->integer('id_mat_ci')->unsigned();
             $table->foreign('id_mat_ci')->references('id_mat_ci')->on('materia_ciclo');
 
-            $table->integer('id_grup_carg')->unsigned();
+            $table->integer('id_grup_carg')->unsigned()->nullable();
             $table->foreign('id_grup_carg')->references('id_grup_carg')->on('grupo_carga');
 
             $table->integer('id_pdg_dcn')->unsigned();

@@ -30,29 +30,30 @@
         <!--Formulario para subida de archivos de excel-->
         <form method="POST" id="form-excel" enctype="multipart/form-data">
             @csrf
-           <input type="file" name="archivo" accept=".xlsx" id="fileExcel" data-area='{{ $ciclo->id_ciclo }}' hidden="" />
+           <input type="file" name="archivo" accept=".xlsx" id="fileExcel" data-ciclo='{{ $ciclo->id_ciclo }}' hidden="" />
        </form>
     </div>
 </div>
 @endsection
 @section("main")
 
-@if(session('success'))
-<div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-    <strong id="text-success">{{ session('success') }}</strong>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-@endif
-@if(session('error'))
-<div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
-    <strong id="text-success">{{ session('error') }}</strong>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-@endif
+<div class="text-center" id="spinner" hidden="true">
+        <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;" role="status" >
+        </div><br>
+        <span class="">Importando ...</span>
+    </div>
+        <div id="message-success" class="alert alert-success alert-dismissible fade show text-center" role="alert" hidden>
+          <strong id="text-success">Exito</strong>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div id="message-error" class="alert alert-danger alert-dismissible fade show text-center" role="alert" hidden>
+          <strong id="text-error">Error</strong>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
 
 <!--DATA TABLE-->
 <div class="container mt-4 mb-3">
@@ -168,5 +169,67 @@
         $('.btn-eliminar').on('click',function(){
             $('#form-delete').attr('action','/ciclo/'+$(this).data('id'));
         });
+
+
+
+      </script>
+      <script>
+          $(document).ready(function() {
+    function exito(datos) {
+        $("#message-success").removeAttr("hidden");
+        $("#text-success").text(datos.success);
+        //Para mover al inicio de la pagina el control
+        $('html, body').animate({
+            scrollTop: 0
+        }, 'slow');
+        setTimeout(function() {
+            $("#message-success").attr('hidden', true);
+            location.reload();
+        }, 2000);
+    }
+
+    $('#importExcel').click(function(e) {
+        //Evita que se recarge la pagina, porque sino no guarda el archivo en la variable input type file.
+        e.preventDefault();
+        $('#fileExcel').click();
+    });
+    $('#fileExcel').on("change", function() {
+        var ciclo = $(this).data('ciclo');
+        var data = new FormData($("#form-excel")[0]);
+        //Mostrando Spinner
+        $("#spinner").removeAttr("hidden");
+        $.ajax({
+            url: '/upload-excel/' + ciclo,
+            type: "POST",
+            data: data,
+            contentType: false, //Importante para enviar el archivo
+            processData: false, //Importante para enviar el archivo
+            dataType: "json"
+        }).done(function(datos) {
+            $('#fileExcel').val("");
+            console.log(datos.type);
+            if (datos.type == 2) {
+                exito(datos);
+            } else {
+                $("#message-error").removeAttr("hidden");
+                $("#text-error").text(datos.error);
+                //Para mover al inicio de la pagina el control
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 'slow');
+                setTimeout(function() {
+                    $("#message-error").attr('hidden', true);
+                }, 2000);
+            }
+            //Para ocultar spinner
+            $("#spinner").attr("hidden",true);
+
+        }).fail(function(xhr, status, e) {
+            //Para ocultar spinner
+            $("#spinner").attr("hidden",true);
+            console.log(e);
+        });
+    });
+});
       </script>
 @endsection
