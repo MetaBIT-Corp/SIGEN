@@ -2,10 +2,15 @@
 @section("head")
 @section("css")
 	 <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" type="text/css" rel="stylesheet"> 
+<<<<<<< HEAD
 	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.css')}}">
 	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
    <link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
    <link rel="stylesheet" href="{{asset('css/estilo.css')}}">
+=======
+    <link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
+    <link rel="stylesheet" href="{{asset('css/estilo.css')}}">
+>>>>>>> 96848b8467537afb1bf5eb6eca27e4eaec9e1c1a
 @endsection
 @endsection
 
@@ -18,40 +23,40 @@
 @endsection
 
 @section("main")
-            <!-- Notificacion  -->
-            @if (session('notification'))
-                  <div class="alert alert-success">
-                        {!!session('notification')!!}
-                  </div>
-            @endif
-            <!-- Notificacion -->
-            <!--Mostrará mensaje de éxito-->
-            @if (session('exito'))
-              <div class="alert alert-success">
-                {!!session('exito')!!}
-              </div>
-            @endif
+  <!-- Notificacion  -->
+  @if (session('notification'))
+        <div class="alert alert-success">
+              {!!session('notification')!!}
+        </div>
+  @endif
+  <!-- Notificacion -->
+  <!--Mostrará mensaje de éxito-->
+  @if (session('exito'))
+    <div class="alert alert-success">
+      {!!session('exito')!!}
+    </div>
+  @endif
 
-            <!--Mostrará mensaje de error -->
-            @if (session('error'))
-              <div class="alert alert-danger">
-                {!!session('error')!!}
-              </div>
-            @endif
+  <!--Mostrará mensaje de error -->
+  @if (session('error'))
+    <div class="alert alert-danger">
+      {!!session('error')!!}
+    </div>
+  @endif
 
-            <!--Mostrará mensaje de informacion -->
-            @if (session('info'))
-              <div class="alert alert-info">
-               {!!session('info')!!}
-              </div>
-            @endif
+  <!--Mostrará mensaje de informacion -->
+  @if (session('info'))
+    <div class="alert alert-info">
+     {!!session('info')!!}
+    </div>
+  @endif
 
-            <!--Mostrará mensaje de advertencia -->
-            @if (session('warning'))
-              <div class="alert alert-warning">
-               {!!session('warning')!!}
-              </div>
-            @endif
+  <!--Mostrará mensaje de advertencia -->
+  @if (session('warning'))
+    <div class="alert alert-warning">
+     {!!session('warning')!!}
+    </div>
+  @endif
 
   <div id="wrapper">
   <div id="content-wrapper">
@@ -63,13 +68,11 @@
           Evaluaciones | Materia
           </div>
         <div class="card-body">
-         
-            @if(auth()->user()->role==1) 
-            <a class="btn btn-sm mb-3" href="{{ URL::signedRoute('gc_evaluacion', ['id' => $id_carga]) }}" title="Agregar">
-              <span class="icon-add-solid "></span>
-              <b>Nueva Evaluacion</b>
-            </a>
-            
+          @if(auth()->user()->role==1) 
+          <a class="btn btn-md mb-3" href="{{ URL::signedRoute('gc_evaluacion', ['id' => $id_carga]) }}" title="Agregar">
+            <span class="icon-add-solid " style="color: #007bff"></span>
+            <b>Nueva Evaluacion</b>
+          </a> 
           @endif
           @if(auth()->user()->role==1 | auth()->user()->role==0)
           <div class="table-responsive">

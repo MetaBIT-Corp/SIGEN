@@ -165,6 +165,43 @@
                                     </a>
                                 </li>
                                 @endif
+                                    @if(auth()->user()->IsAdmin)
+                                    <li class="nav-item first-one">
+                                        <a class="nav-link " href="{{route('docentes_index')}}">
+                                            <span data-feather="home"></span>
+                                                Docentes
+                                            <span class="arrow-sidebar" data-feather="chevron-right"></span>
+                                        </a>
+                                    </li>
+                                    @endif
+
+                                    @if(auth()->user()->IsAdmin)
+                                    <li class="nav-item first-one">
+                                        <a class="nav-link " href="{{route('estudiantes_index')}}">
+                                            <span data-feather="home"></span>
+                                                Estudiantes
+                                            <span class="arrow-sidebar" data-feather="chevron-right"></span>
+                                        </a>
+                                    </li>
+                                    @endif
+                                    
+                                    @if(auth()->user()->IsTeacher)
+                                    <li class="nav-item first-one">
+                                        <a class="nav-link " href="
+                                        {{ URL::signedRoute('listado_encuesta') }}">
+                                            <span data-feather=""></span>
+                                            Listado Encuesta
+                                            <span class="arrow-sidebar" data-feather="chevron-right"></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item first-one">
+                                        <a class="nav-link " href="{{route('areas_encuestas')}}">
+                                            <span data-feather="home"></span>
+                                            Area - Encuestas
+                                            <span class="arrow-sidebar" data-feather="chevron-right"></span>
+                                        </a>
+                                    </li>
+                                    @endif
                                 @endif
                             </ul>
                         </div>

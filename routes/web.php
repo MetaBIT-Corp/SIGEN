@@ -59,6 +59,27 @@ Route::group(['middleware' => 'admin'], function(){
     // MATERIA CICLO
     Route::get('ciclo/{id}/materias','MateriaCicloController@index')->name('materias_ciclo')->middleware('signed');
     Route::get('download/excel/{id}','MateriaCicloController@downloadExcel')->name('dmaterias_ciclo')->middleware('signed');
+    //Rutas para Gestion de Docentes
+    Route::get('/docentes', 'DocenteController@index')->name('docentes_index');
+    Route::post('/docentes/eliminar', 'DocenteController@destroy')->name('docentes_destroy');
+    Route::get('/docentes/descargar/plantilla', 'DocenteController@downloadExcel')->name('plantilla_docentes');
+    Route::post('/docentes/upload-excel', 'DocenteController@uploadExcel')->name('plantilla_upload_docentes');
+    Route::get('/docentes/docente/create', 'DocenteController@getCreate')->name('gc_docente');
+    Route::post('/docentes/docente/create', 'DocenteController@postCreate')->name('pc_docente');
+    Route::get('/docentes/docente/{docente_id}/update/', 'DocenteController@getUpdate')->name('gu_docente')->middleware('signed');
+    Route::post('/docentes/docente/{docente_id}/update', 'DocenteController@postUpdate')->name('pu_docente')->middleware('signed');
+    Route::post('/docente/change-state', 'DocenteController@changeStateDocente')->name('docente_change_state');
+
+    //Rutas para Gestion de Estudiantes
+    Route::get('/estudiantes', 'EstudianteController@indexGlobal')->name('estudiantes_index');
+    Route::post('/estudiantes/eliminar', 'EstudianteController@destroy')->name('estudiantes_destroy');
+    Route::get('/estudiantes/descargar/plantilla', 'EstudianteController@downloadExcel')->name('plantilla_estudiantes');
+    Route::post('/estudiantes/upload-excel', 'EstudianteController@uploadExcel')->name('plantilla_upload_estudiantes');
+    Route::get('/estudiantes/estudiante/create', 'EstudianteController@getCreate')->name('gc_estudiante');
+    Route::post('/estudiantes/estudiante/create', 'EstudianteController@postCreate')->name('pc_estudiante');
+    Route::get('/estudiantes/estudiante/{estudiante_id}/update', 'EstudianteController@getUpdate')->name('gu_estudiante')->middleware('signed');
+    Route::post('/estudiantes/estudiante/{estudiante_id}/update', 'EstudianteController@postUpdate')->name('pu_estudiante')->middleware('signed');
+    Route::post('/estudiante/change-state', 'EstudianteController@changeStateEstudiante')->name('estudiante_change_state');
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente

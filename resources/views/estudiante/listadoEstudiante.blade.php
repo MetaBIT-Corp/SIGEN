@@ -4,8 +4,7 @@
 
 @section("css")
 	 <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" type="text/css" rel="stylesheet"> 
-	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.css')}}">
-	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
+   <link rel="stylesheet" href="{{asset('css/estilo.css')}}">
    <link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
 
 @endsection
@@ -65,6 +64,9 @@
                    " class="btn btn-sm btn-option">
                       <span class="icon-student"></span>
                     </a>
+                    <button title="Desinscribir estudiante" class="btn btn-sm btn-danger">
+                      <span class="icon-minus-circle"></span>
+                    </button>
                   </td>
                 </tr>
                  @endforeach

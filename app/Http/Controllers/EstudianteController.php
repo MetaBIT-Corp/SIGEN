@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Http\Request;
 use App\Estudiante;
 use App\DetalleInscEst;
@@ -11,10 +14,13 @@ use App\Ciclo;
 use App\Materia;
 use App\Evaluacion;
 use App\Intento;
+use App\User;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use DB;
 use DateTime;
 use DateInterval;
+use Illuminate\Validation\Rule;
 
 class EstudianteController extends Controller
 {
@@ -186,7 +192,9 @@ class EstudianteController extends Controller
 
         }
 
-        return view('estudiante.estudiantesEnEvaluacion')->with(compact('estudiantes','evaluacion_finalizada','evaluacion_id', 'evaluacion'));
+        $promedio = $this->getPromedioEvaluacion($evaluacion_id);
+
+        return view('estudiante.estudiantesEnEvaluacion')->with(compact('estudiantes','evaluacion_finalizada','evaluacion_id', 'evaluacion', 'promedio'));
     }
 
     public function evaluacionFinalizada($evaluacion_id){
@@ -253,4 +261,266 @@ class EstudianteController extends Controller
         }
 
      }
+
+     public function indexGlobal(){
+         $estudiantes = Estudiante::all();
+         $last_update = Estudiante::max('updated_at');
+
+         return view('estudiante.index', compact('estudiantes', 'last_update'));
+     }
+
+     public function destroy(Request $request){
+
+        $cant_die = DetalleInscEst::where('id_est', $request['estudiante_id'])->count();
+
+        if($cant_die > 0)
+            return back()->with('notification-type','warning')->with('notification-message','El Estudiante no puede ser eliminado, debido a que posee inscripciones en distintas cargas académicas.');
+        
+        $user_id = Estudiante::where('id_est', $request['estudiante_id'])->first()->user_id;
+
+        Estudiante::where('id_est', $request['estudiante_id'])->delete();
+
+        User::destroy($user_id);
+
+        return back()->with('notification-type','success')->with('notification-message','El Estudiante se ha eliminado con éxito.');
+     }
+
+     /**
+      * Función para obtener la nota promedio de la evaluación
+      * @author Enrique Menjívar <mt16007@ues.edu.sv>
+      * @param  $evaluacion_id : id de la evlauación
+      * @return promedio : promedio de la evaluación
+      */
+     public function getPromedioEvaluacion($evaluacion_id){
+
+        $nota = 0;
+        
+        //Consulta para verficar si existe un intento de la evaluación, es decir, verificar que el estudiante ya haya iniciado la evaluación
+        $intentos_finalizados = DB::table('turno as t')
+                            ->where('t.evaluacion_id', $evaluacion_id)
+                            ->join('clave as c', 'c.turno_id', '=', 't.id')
+                            ->join('intento as i', 'i.clave_id', '=', 'c.id')
+                            ->whereNotNull('i.nota_intento')
+                            ->select('i.nota_intento')
+                            ->get();
+
+        //Se suman las notas de los intentos finalizados de la evaluacion correspondiente
+        foreach ($intentos_finalizados as $intento) {
+            $nota += $intento->nota_intento;
+        }
+
+        $cantidad = count($intentos_finalizados);
+
+        return round($nota/$cantidad, 2);
+     }
+
+     public function downloadExcel(){
+        return Storage::download("plantillaExcel/ImportarEstudiantes.xlsx","Listado_Estudiantes_SIGEN.xlsx");
+     }
+
+     public function uploadExcel(Request $request){
+		//Se recupera el id del user y la hora actual para guardarlo momentaneamente
+        //con un nombre diferente y evitar conflictos a la hora de que hayan subidas multiples
+		$id_user = auth()->user()->id;
+
+		//Se guarda en la ruta storage/app/importExcel de manera temporal y se recupera la ruta
+		$ruta=Storage::putFileAs('importExcel',$request->file('archivo'),$id_user.Carbon::now()->format('His')."Excel.xlsx");
+		
+		//Mensaje de error por defecto
+		$message=['error'=>'Hubo un error en la importacion. Verifique que sea el formato adecuado.','type'=>1];
+		
+		//Se hara la importacion de las Docentes
+		$spreadsheet = null;
+		$data = null;
+
+		try{
+            //Se carga el archivo que subio el archivo para poder acceder a los datos
+			$spreadsheet = IOFactory::load(storage_path($path = "app/".$ruta));
+
+			//Todas las filas se convierten en un array que puede ser accedido por las letras de las columnas de archivo excel
+			$data = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+			
+        }catch(Exception $e){
+            return response()->json($message);
+		}
+		
+		if($spreadsheet->getActiveSheet()->getCell('I1')=="PE01"){
+			
+			for ($i=5; $i <= count($data) ; $i++) {
+				if($data[$i]["A"]!=null&&$data[$i]["B"]!=null&&$data[$i]["C"]!=null&&$data[$i]["D"]!=null&&$data[$i]["E"]!=null){
+					$user = new User();
+					$user->name = "Estudiante";
+					$user->email = $data[$i]["C"];
+					$user->role = 2;
+					$user->password = bcrypt(Str::random(10));
+					$user->save();
+
+					$estudiante = new Estudiante();
+					$estudiante->carnet = $data[$i]["A"];
+					$estudiante->nombre = $data[$i]["B"];
+					$estudiante->activo = 1;
+                    $estudiante->anio_ingreso = $data[$i]["E"];
+                    $estudiante->user_id = $user->id;
+                    $estudiante->save();
+				}
+			}
+			$message=['success'=>'La importacion de Estudiantes se efectuo exitosamente.','type'=>2];
+			return response()->json($message);
+		}else{
+			$message=['error'=>'Esta plantilla no es la indicada para esta funcionalidad.','type'=>1];
+			return response()->json($message);
+		}
+	}
+
+     /**
+     * Función que despliega el formulario de crear estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function getCreate(){
+        return view('estudiante.createEstudiante');
+
+    }
+
+    /**
+     * Función que recibe el request del formulario de crear estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function postCreate(Request $request){
+        //dd($request->all());
+        $rules =[
+            
+            'nombre' => ['required', 'string','min:5','max:191'],
+            'carnet' => ['required', 'unique:estudiante,carnet'],
+            'anio_ingreso' => ['required'],
+            'email' => ['required', 'unique:users,email'],
+        ];
+        /* Mensaje de Reglas de Validación */
+        $messages = [
+            
+            'nombre.required' => 'Debe de ingresar el nombre del estudiante',
+            'nombre.min' => 'El nombre debe contener como mínimo 5 caracteres',
+            'nombre.max' => 'El nombre debe contener como máximo 191 caracteres',
+            'carnet.required' => 'Debe de indicar el carnet del estudiante',
+            'carnet.unique' => 'El carnet ya existe. Por favor ingreso uno nuevo',
+            'email.required' => 'Debe de indicar el email del estudiante',
+            'email.unique' => 'El email ya existe. Por favor ingreso uno nuevo',
+            'anio_ingreso.required' => 'Debe de indicar el año de ingreso',
+        ];
+        $this->validate($request,$rules,$messages);
+
+        $pass = str_random(10);
+
+        //Se crea usuario del docente
+        $user = new User();
+        $user->name = $request->input('nombre');
+        $user->email = $request ->input('email');
+        $user->password = bcrypt($pass);
+        $user->role = 2;
+        $user->save();
+
+        //Se crea el estudiante 
+        $estudiante = new Estudiante();
+        $estudiante->nombre = $request->input('nombre');
+        $estudiante->carnet = $request->input('carnet');
+        $estudiante->anio_ingreso = $request->input('anio_ingreso');
+        $estudiante->user_id = $user->id;
+
+        if(isset($request->all()['activo']))
+            $estudiante->activo = 1;
+
+        $estudiante->save();
+        return redirect()->route("estudiantes_index")->with("notification-message", 'Estudiante registrado exitosamente')
+                                                  ->with("notification-type", 'success');
+    }
+
+    /**
+     * Función que despliega el formulario de editar estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function getUpdate($estudiante_id){
+        $estudiante = Estudiante::where('id_est', '=', $estudiante_id)->first();
+        $user = User::find($estudiante->user_id);
+        $email = $user->email;
+        return view('estudiante.updateEstudiante')->with(compact('estudiante', 'email'));
+    }
+
+    /**
+     * Función que recibe el request del formulario de editar estudiante
+     * @param 
+     * @author Edwin palacios
+     */
+    public function postUpdate(Request $request){
+        //dd($request->all());
+        $rules =[
+            
+            'nombre' => ['required', 'string','min:5','max:191'],
+            'carnet' => ['required', Rule::unique('estudiante', 'carnet')
+                                    ->ignore($request->input('id_est'), 'id_est')],
+            'anio_ingreso' => ['required'],
+            'email' => ['required', Rule::unique('users', 'email')
+                                    ->ignore($request->input('user_id'))],
+        ];
+        /* Mensaje de Reglas de Validación */
+        $messages = [
+            
+            'nombre.required' => 'Debe de ingresar el nombre del estudiante',
+            'nombre.min' => 'El nombre debe contener como mínimo 5 caracteres',
+            'nombre.max' => 'El nombre debe contener como máximo 191 caracteres',
+            'carnet.required' => 'Debe de indicar el carnet del estudiante',
+            'carnet.unique' => 'El carnet ya existe. Por favor ingreso uno nuevo',
+            'email.required' => 'Debe de indicar el email del estudiante',
+            'email.unique' => 'El email ya existe. Por favor ingreso uno nuevo',
+            'anio_ingreso.required' => 'Debe de indicar el año de ingreso',
+        ];
+        $this->validate($request,$rules,$messages);
+        
+        //Se obtiene usuario del estudiante
+        $user = User::find($request->input('user_id'));
+        $user->name = $request->input('nombre');
+        $user->email = $request ->input('email');
+        $user->save();
+
+        //Se crea el estudiante 
+        $estudiante = Estudiante::where('id_est', '=', $request->input('id_est'))->first();
+        $estudiante->nombre = $request->input('nombre');
+        $estudiante->carnet = $request->input('carnet');
+        $estudiante->anio_ingreso = $request->input('anio_ingreso');
+
+        if(isset($request->all()['activo'])){
+            $estudiante->activo = 1;
+        }else{
+            $estudiante->activo = 0;
+        }
+
+        $estudiante->save();
+        return redirect()->route("estudiantes_index")->with("notification-message", 'Datos del estudiante actualizados exitosamente')
+                                                  ->with("notification-type", 'success');
+    }
+    /*
+      * Cambia el estado del usuario del estudiante, si está bloqueado lo habilita y viceversa
+      * @author Enrique Menjívar <mt16007@ues.edu.sv>
+      * @param  Request $request Datos enviados desde el frontend
+      */
+     public function changeStateEstudiante(Request $request){
+        $id_est = $request->input('est_id');
+        $estudiante = Estudiante::where('id_est', $id_est)->first();
+
+        $user = User::findOrFail($estudiante->user_id);
+
+        if($user->enabled == 1){
+            $user->enabled = 0;
+            $message = 'El Estudiante con carnet <em><b>' . $estudiante->carnet  . '</b></em> fue bloqueado con éxito';
+        }else{
+            $user->enabled = 1;
+            $message = 'El Estudiante con carnet <em><b>' . $estudiante->carnet  . '</b></em> fue desbloqueado con éxito';
+        }
+
+        $user->save();
+
+        return back()->with('message', $message);
+     }
+
 }

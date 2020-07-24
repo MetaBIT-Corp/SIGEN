@@ -2,8 +2,7 @@
 @section("head")
 @section("css")
 	 <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" type="text/css" rel="stylesheet"> 
-	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.css')}}">
-	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
+	 <link rel="stylesheet" href="{{asset('css/estilo.css')}}">
    <link rel="stylesheet" href="{{asset('icomoon/style.css')}}">
 @endsection
 @endsection
@@ -42,13 +41,13 @@
           Encuestas </div>
         <div class="card-body">
 
-            @if(auth()->user()->IsTeacher) 
-            <a class="btn btn-sm mb-3" href="{{ URL::signedRoute('gc_encuesta') }}" title="Agregar">
-                <span class="icon-add-solid "></span>
-                <b>Nueva Encuesta</b>
-            </a>
-            @endif
-          
+          @if(auth()->user()->IsTeacher) 
+          <a class="btn btn-md mb-3" href="{{ URL::signedRoute('gc_encuesta') }}" title="Agregar">
+              <span class="icon-add-solid " style="color: #007bff"></span>
+              <b>Nueva Encuesta</b>
+          </a>
+          @endif
+
           @if($encuestas)
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
