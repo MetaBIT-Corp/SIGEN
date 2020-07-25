@@ -10,7 +10,7 @@
 @section("ol_breadcrumb")
     <li class="breadcrumb-item">Materia</li>
     @if(auth()->user()->role!=2)
-    <div class="col-11 text-right">
+    <div class="col-md-10 text-right">
       <div class="dropdown">
         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Ciclos a Mostrar

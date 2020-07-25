@@ -72,6 +72,10 @@
                     
                   </div>
                 @empty
+                  <div class="offset-4 col-md-4" align="center">
+                    <img src="{{asset('img/no-data.svg')}}" alt="no-data" width="50%">
+                    <p>No se encuentran encuestas <br>disponibles</p>
+                  </div>
                 @endforelse
             </div>
         		</div>

@@ -193,9 +193,10 @@
       <form action="{{ route('inscripcion_estudiante') }}" method="post">
       <div class="modal-body"> 
         @csrf
-        <input type="hidden" name="id_mat_ci" id="id_mat_ci" value="{{$id_mat_ci}}">
+        <input type="hidden" name="id_mat_ci_inscribir" id="id_mat_ci_inscribir" value="{{$id_mat_ci}}">
         <label for="carnet">Carnet</label>
-        <input type="text" name="carnet" id="carnet" class="form-control" placeholder="Ingrese el carnet del estudiante">
+        <input type="text" name="carnet" id="carnet" class="form-control" placeholder="Ingrese el carnet del estudiante" autocomplete="off">
+        <div class="alert alert-secondary mt-3" role="alert" style="display: none;" id="resultado_estudiante"></div>
       </div> 
       <div class="modal-footer">    
         <button type="submit" class="btn btn-primary">Confirmar</button> 
@@ -241,6 +242,21 @@
         function activateModalInscripcion(param){
           $("#modal_inscribir").modal();
         }
+
+        $("#carnet").keyup(function() {
+          var carnet = $("#carnet").val();
+          if(carnet.length > 0){
+            $.get('/api/verificar-inscripcion-estudiante/'+carnet,  function(data){
+              var nombre = data['nombre'];
+              if(nombre != undefined){
+                $('#resultado_estudiante').html(`<strong>Estudiante: </strong>`+ nombre);
+                $('#resultado_estudiante').show();
+              }else{
+                $('#resultado_estudiante').hide();
+              }
+            });
+          }
+        });
 
         $(document).ready(function() {
           function exito(datos) {

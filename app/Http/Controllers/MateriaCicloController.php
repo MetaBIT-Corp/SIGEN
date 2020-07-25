@@ -225,7 +225,7 @@ class MateriaCicloController extends Controller
         $message = "Se inscribió al estudiante exitosamente";
         $type = "success";
         $carnet = strtoupper($request->input('carnet'));
-        $id_mat_ci = $request->input('id_mat_ci');
+        $id_mat_ci = $request->input('id_mat_ci_inscribir');
 
         $estudiante = Estudiante::where('carnet', $carnet)->first();          
         if(isset($estudiante)){

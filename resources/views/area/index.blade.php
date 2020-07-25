@@ -8,11 +8,9 @@
 
 @section("body")
 @section("ol_breadcrumb")
-    <div class="col-9 mt-2">
+    <div class="col-8">
         <a class="mr-2" href="{{ route('materias') }}">
-            
             Materias
-           
         </a>
         /
         <a class="ml-2 mr-2">
