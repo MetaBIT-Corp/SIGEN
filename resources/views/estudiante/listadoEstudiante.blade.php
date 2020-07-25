@@ -15,15 +15,13 @@
     <li class="breadcrumb-item"><a href="{{route('materias')}}">Materia</a></li>
     <li class="breadcrumb-item">Estudiante</li>
 
-
-
     <div class="offset-8 btn-group" role="group" aria-label="Basic example">
         <!--Boton para agregar pregunta-->
-        <a class="btn btn-secondary" href="#" title="Inscribir estudiante">
+        <button class="btn btn-secondary" href="#" title="Inscribir estudiante" onclick="activateModalInscripcion(this);" >
             <h6 class="mb-0">
                 <span class="icon-add-solid"></span>
             </h6>
-        </a>
+        </button>
 
         <!--Icono para descargar plantilla-->
         <a class="btn btn-secondary text-light"  title="Descargar plantilla para inscripciones" href="{{ URL::signedRoute('download_inscripciones', ['materia_ciclo_id' => $id_mat_ci]) }}">
@@ -36,15 +34,14 @@
             <h6 class="mb-0"><span class="icon-importExcel">
             </span></h6>
         </a>
-
+         <!--Formulario para subida de archivos de excel-->
+        <form method="POST" id="form-excel" enctype="multipart/form-data">
+            @csrf
+           <input type="file" name="archivo" accept=".xlsx" id="fileExcel" data-materia-ciclo='{{$id_mat_ci}}' hidden="" />
+       </form>
         
     </div>
-    <!--Formulario para subida de archivos de excel-->
-    <form method="POST" id="form-excel" enctype="multipart/form-data">
-        @csrf
-       <input type="file" name="archivo" accept=".xlsx" id="fileExcel" hidden="" />
-       <input type="hidden" name="materia_ciclo_id" value="{{$id_mat_ci}}"/>
-   </form>
+   
 
 @endsection
 @section("main")
@@ -52,6 +49,16 @@
 <div id="wrapper">
   <div id="content-wrapper">
     <div class="container-fluid">
+
+      @if(session('notification-message') and session('notification-type'))
+        <div class="alert alert-{{ session('notification-type') }} text-center alert-dismissible fade show" role="alert">
+          <h5>{{ session('notification-message') }}</h5>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      @endif
+
       <div class="text-center" id="spinner" hidden="true">
           <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;" role="status" >
           </div><br>
@@ -114,7 +121,11 @@
                    " class="btn btn-sm btn-option">
                       <span class="icon-student"></span>
                     </a>
-                    <button title="Desinscribir estudiante" class="btn btn-sm btn-danger">
+                    <button title="Desinscribir estudiante" class="btn btn-sm btn-danger" 
+                      onclick="activateModalDesinscripcion(this);" 
+                      data-id_est="{{$estudiante->id_est}}" 
+                      data-id_mat_ciclo="{{$id_mat_ci}}" 
+                      data-carnet="{{$estudiante->carnet}}">
                       <span class="icon-minus-circle"></span>
                     </button>
                   </td>
@@ -145,6 +156,56 @@
   <i class="fas fa-angle-up"></i>
 </a>
 
+<div id="modal_desinscribir" class="modal" tabindex="-1" role="dialog"> 
+  <div class="modal-dialog" role="document"> 
+    <div class="modal-content"> 
+      <div class="modal-header"> 
+        <h5 class="modal-title">Desinscripción</h5> 
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+          <span aria-hidden="true">&times;</span> 
+        </button> 
+      </div> 
+      <div class="modal-body"> 
+        <p id="p_mensaje_body"></p> 
+      </div> 
+      <div class="modal-footer"> 
+        <form action="{{ route('desinscripcion_estudiante') }}" method="post">
+            @csrf
+            <input type="hidden" name="id_mat_ci" id="id_mat_ci">
+            <input type="hidden" name="id_est" id="id_est">
+            <button type="submit" class="btn btn-danger">Confirmar</button> 
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>    
+        </form>
+      </div> 
+    </div> 
+  </div> 
+</div>
+
+<div id="modal_inscribir" class="modal" tabindex="-1" role="dialog"> 
+  <div class="modal-dialog" role="document"> 
+    <div class="modal-content"> 
+      <div class="modal-header"> 
+        <h5 class="modal-title">Inscripción</h5> 
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+          <span aria-hidden="true">&times;</span> 
+        </button> 
+      </div> 
+      <form action="{{ route('inscripcion_estudiante') }}" method="post">
+      <div class="modal-body"> 
+        @csrf
+        <input type="hidden" name="id_mat_ci" id="id_mat_ci" value="{{$id_mat_ci}}">
+        <label for="carnet">Carnet</label>
+        <input type="text" name="carnet" id="carnet" class="form-control" placeholder="Ingrese el carnet del estudiante">
+      </div> 
+      <div class="modal-footer">    
+        <button type="submit" class="btn btn-primary">Confirmar</button> 
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>    
+      </div> 
+      </form>
+    </div> 
+  </div> 
+</div>
+
 @endsection
 @endsection
 
@@ -167,6 +228,20 @@
     <script type="text/javascript" src="{{asset('js/demo/datatables-demo.js')}}"></script>
     <script type="text/javascript">
 
+        function activateModalDesinscripcion(param){
+          var id_est = $(param).attr("data-id_est");
+          var id_mat_ciclo = $(param).attr("data-id_mat_ciclo");
+          var carnet = $(param).attr("data-carnet");
+          document.getElementById("p_mensaje_body").innerHTML = "<p>¿Esta seguro que desea desinscribir al estudiante con carnet: <b>" + carnet + "</b>?";
+          $("#id_est").val(id_est);
+          $("#id_mat_ci").val(id_mat_ciclo);
+          $("#modal_desinscribir").modal();
+        }
+
+        function activateModalInscripcion(param){
+          $("#modal_inscribir").modal();
+        }
+
         $(document).ready(function() {
           function exito(datos) {
               $("#message-success").removeAttr("hidden");
@@ -188,10 +263,11 @@
           });
           $('#fileExcel').on("change", function() {
               var data = new FormData($("#form-excel")[0]);
+              var materia_ciclo_id = $(this).data('materia-ciclo');
               //Mostrando Spinner
               $("#spinner").removeAttr("hidden");
               $.ajax({
-                  url: '/estudiantes/upload-excel/',
+                  url: '/materias/listado_estudiante/'+materia_ciclo_id+'/upload/excel/',
                   type: "POST",
                   data: data,
                   contentType: false, //Importante para enviar el archivo

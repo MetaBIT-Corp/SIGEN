@@ -194,7 +194,7 @@ class DocenteController extends Controller
         $docente = new Docente();
         $docente->nombre_docente = $request->input('nombre_docente');
         $docente->descripcion_docente = $request->input('descripcion_docente');
-        $docente->carnet_dcn = $request->input('carnet_dcn');
+        $docente->carnet_dcn = strtoupper($request->input('carnet_dcn'));
         $docente->anio_titulo = $request->input('anio_titulo');
         $docente->user_id = $user->id;
         $docente->save();
@@ -262,7 +262,7 @@ class DocenteController extends Controller
         $docente = Docente::where('id_pdg_dcn', '=', $request->input('id_pdg_dcn'))->first();
         $docente->nombre_docente = $request->input('nombre_docente');
         $docente->descripcion_docente = $request->input('descripcion_docente');
-        $docente->carnet_dcn = $request->input('carnet_dcn');
+        $docente->carnet_dcn = strtoupper($request->input('carnet_dcn'));
         $docente->anio_titulo = $request->input('anio_titulo');
     
         if(isset($request->all()['activo'])){

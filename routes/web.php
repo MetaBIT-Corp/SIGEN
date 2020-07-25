@@ -209,8 +209,14 @@ Route::group(['middleware' => 'admin_teacher'], function(){
     //Ciclo materia Estudiante (Inscripciones)
     Route::get('/materias/listado_estudiante/{materia_ciclo_id}/download/excel/','MateriaCicloController@downloadExcelInscripcionEstudiantes')
                 ->name('download_inscripciones')->middleware('signed');
-    Route::post('/materias/listado_estudiante/upload/excel/',' MateriaCicloController@uploadExcelInscripcionEstudiantes')
-                ->name('upload_inscripciones');
+    Route::post('/materias/listado_estudiante/{materia_ciclo_id}/upload/excel/','MateriaCicloController@uploadExcelInscripcionEstudiantes')
+                ->name('upload_inscripciones'); 
+    Route::post('/materias/listado_estudiante/desinscripcion','MateriaCicloController@desinscripcionEstudiante')
+                ->name('desinscripcion_estudiante'); 
+
+    Route::post('/materias/listado_estudiante/inscripcion','MateriaCicloController@inscripcionEstudiante')
+                ->name('inscripcion_estudiante'); 
+
 });
 
 Route::get('/evaluacion/{evaluacion_id}/estadisticos/porcentajes', 'EvaluacionController@getPorcentajeAprovadosReprobados');

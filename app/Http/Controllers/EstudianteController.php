@@ -451,7 +451,7 @@ class EstudianteController extends Controller
         //Se crea el estudiante 
         $estudiante = new Estudiante();
         $estudiante->nombre = $request->input('nombre');
-        $estudiante->carnet = $request->input('carnet');
+        $estudiante->carnet = strtoupper($request->input('carnet'));
         $estudiante->anio_ingreso = $request->input('anio_ingreso');
         $estudiante->user_id = $user->id;
 
@@ -514,7 +514,7 @@ class EstudianteController extends Controller
         //Se crea el estudiante 
         $estudiante = Estudiante::where('id_est', '=', $request->input('id_est'))->first();
         $estudiante->nombre = $request->input('nombre');
-        $estudiante->carnet = $request->input('carnet');
+        $estudiante->carnet = strtoupper($request->input('carnet'));
         $estudiante->anio_ingreso = $request->input('anio_ingreso');
 
         if(isset($request->all()['activo'])){
