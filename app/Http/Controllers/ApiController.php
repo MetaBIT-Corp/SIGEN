@@ -963,5 +963,17 @@ class ApiController extends Controller
         }
         return ['resultado'=>$message];
     }
-    
+
+    /**
+     * Funcion para cargar los turnos de una evaluacion mediante AJAX 
+     *(Utilizada para mostrar los turnos a publicar).
+     * @param Request
+     * @author Edwin Palacios
+     */
+    public function verificarInscripcionEstudiante($carnet){
+        $data = null;
+        $estudiante = Estudiante::where('carnet', $carnet)->first();
+        if(isset($estudiante)) $data = ['nombre'=>$estudiante->nombre];  
+        return $data;
+    }  
 }

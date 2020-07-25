@@ -58,3 +58,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/encuestas-docente/{id_docente}','ApiController@getEncuestasDocente');
 Route::get('/publicar-encuesta/{id_encuesta}','ApiController@publicarEncuesta');
+
+Route::get('/verificar-inscripcion-estudiante/{carnet}', 'ApiController@verificarInscripcionEstudiante');
