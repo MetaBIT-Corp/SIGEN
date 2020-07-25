@@ -100,6 +100,8 @@
                         <tr>
                         <th>Carnet</th>
                         <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Año Titulación</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                         </tr>
@@ -108,6 +110,8 @@
                         <tr>
                         <th>Carnet</th>
                         <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Año Titulación</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                         </tr>
@@ -118,10 +122,12 @@
                                 <tr>
                                     <td>{{ $docente->carnet_dcn }}</td>
                                     <td>{{ $docente->nombre_docente }}</td>
+                                    <td>{{ App\User::find($docente->user_id)->email }}</td>
+                                    <td>{{ $docente->anio_titulo }}</td>
                                     @if( $docente->activo==1)
-                                        <td>Activo</td>
+                                        <td><span class="badge badge-success col-md-8">Activo</span></td>
                                     @else
-                                        <td>Inactivo</td>
+                                        <td><span class="badge badge-warning col-md-8">Inactivo</span></td>
                                     @endif
                                     <td>
                                       @if(auth()->user()->IsAdmin)  
@@ -245,7 +251,7 @@
                 setTimeout(function() {
                     $("#message-success").attr('hidden', true);
                     location.reload();
-                }, 2000);
+                }, 6000);
             }
 
             $('#importExcel').click(function(e) {
@@ -278,7 +284,7 @@
                         }, 'slow');
                         setTimeout(function() {
                             $("#message-error").attr('hidden', true);
-                        }, 2000);
+                        }, 6000);
                     }
                     //Para ocultar spinner
                     $("#spinner").attr("hidden",true);

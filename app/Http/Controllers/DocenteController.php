@@ -81,12 +81,31 @@ class DocenteController extends Controller
 		}
 		
 		if($spreadsheet->getActiveSheet()->getCell('G1')=="PD01"){
-			
+            $inserted = 0;
+            $total = 0;
 			for ($i=5; $i <= count($data) ; $i++) {
+
+                if($data[$i]["A"]!=null)
+                    $total++;
+
 				if($data[$i]["A"]!=null&&$data[$i]["B"]!=null&&$data[$i]["C"]!=null&&$data[$i]["D"]!=null&&$data[$i]["E"]!=null&&$data[$i]["F"]!=null){
+                    //Validaciones
+
+                    //Verificamos que el correo sea valido
+                    if (!filter_var($data[$i]["C"], FILTER_VALIDATE_EMAIL))
+                        continue;
+                    
+                    //De ser valido, se verifica que el correo no se encuentre registrado
+                    if(User::where('email', $data[$i]["C"])->count() > 0)    
+                        continue;
+
+                    //Verificamos que el carnet no se encuentre registrado
+                    if(Docente::where('carnet_dcn', $data[$i]["A"])->count() > 0)
+                        continue;
+
                     $pass = str_random(10);
                     $user = new User();
-					$user->name = "Docente";
+					$user->name = $data[$i]["B"];
 					$user->email = $data[$i]["C"];
 					$user->role = 1;
 					$user->password = bcrypt($pass);
@@ -96,14 +115,20 @@ class DocenteController extends Controller
 					$docente->carnet_dcn = $data[$i]["A"];
 					$docente->nombre_docente = $data[$i]["B"];
 					$docente->descripcion_docente = $data[$i]["D"];
-					$docente->anio_titulo = $data[$i]["E"];
-					$docente->activo = 1;
+                    $docente->anio_titulo = str_replace(",","",$data[$i]["E"]);;
+                    $docente->activo = 1;
+
+                    if($data[$i]["F"] == 'N')
+                        $docente->activo = 0;
+
 					$docente->tipo_jornada = 1;
 					$docente->id_cargo_actual = 1;
 					$docente->id_segundo_cargo = 1;
 					$docente->user_id = $user->id;
                     $docente->save();
                     
+                    $inserted++;
+
                     //Envio de correo
                     $this->emailSend($user->email, $pass);
 				}
@@ -111,7 +136,7 @@ class DocenteController extends Controller
             //Eliminar el archivo subido, solo se utiliza para la importacion y luego de desecha
             Storage::delete($ruta);
 
-			$message=['success'=>'La importación de Docentes se efectuo éxitosamente.','type'=>2];
+			$message=['success'=>'La importación de Docentes se efectuo éxitosamente; se insertarón ' . $inserted . '/' . $total . ' registros.' ,'type'=>2];
 			return response()->json($message);
 		}else{
             //Eliminar el archivo subido, solo se utiliza para la importacion y luego de desecha

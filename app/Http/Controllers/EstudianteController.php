@@ -21,6 +21,7 @@ use DB;
 use DateTime;
 use DateInterval;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class EstudianteController extends Controller
 {
@@ -345,12 +346,33 @@ class EstudianteController extends Controller
 		}
 		
 		if($spreadsheet->getActiveSheet()->getCell('I1')=="PE01"){
-			
+            
+            $inserted = 0;
+            $total = 0;
+
 			for ($i=5; $i <= count($data) ; $i++) {
+
+                if($data[$i]["A"]!=null)
+                    $total++;
+
 				if($data[$i]["A"]!=null&&$data[$i]["B"]!=null&&$data[$i]["C"]!=null&&$data[$i]["D"]!=null&&$data[$i]["E"]!=null){
+                    //Validaciones
+
+                    //Verificamos que el correo sea valido
+                    if (!filter_var($data[$i]["C"], FILTER_VALIDATE_EMAIL))
+                        continue;
+                    
+                    //De ser valido, se verifica que el correo no se encuentre registrado
+                    if(User::where('email', $data[$i]["C"])->count() > 0)    
+                        continue;
+
+                    //Verificamos que el carnet no se encuentre registrado
+                    if(Estudiante::where('carnet', $data[$i]["A"])->count() > 0)
+                        continue;
+
                     $pass = str_random(10);
                     $user = new User();
-					$user->name = "Estudiante";
+					$user->name = $data[$i]["B"];
 					$user->email = $data[$i]["C"];
 					$user->role = 2;
 					$user->password = bcrypt($pass);
@@ -359,10 +381,16 @@ class EstudianteController extends Controller
 					$estudiante = new Estudiante();
 					$estudiante->carnet = $data[$i]["A"];
 					$estudiante->nombre = $data[$i]["B"];
-					$estudiante->activo = 1;
-                    $estudiante->anio_ingreso = $data[$i]["E"];
+                    $estudiante->activo = 1;
+                    
+                    if($data[$i]["D"] == 'N')
+                        $estudiante->activo = 0;
+
+                    $estudiante->anio_ingreso = str_replace(",","",$data[$i]["E"]);
                     $estudiante->user_id = $user->id;
                     $estudiante->save();
+
+                    $inserted++;
 
                     //Envio de correo
                     $this->emailSend($user->email, $pass);
@@ -371,7 +399,7 @@ class EstudianteController extends Controller
             //Eliminar el archivo subido, solo se utiliza para la importacion y luego de desecha
             Storage::delete($ruta);
 
-			$message=['success'=>'La importación de Estudiantes se efectuo éxitosamente.','type'=>2];
+			$message=['success'=>'La importación de Estudiantes se efectuo éxitosamente; se insertarón ' . $inserted . '/' . $total . ' registros.','type'=>2];
 			return response()->json($message);
 		}else{
             //Eliminar el archivo subido, solo se utiliza para la importacion y luego de desecha

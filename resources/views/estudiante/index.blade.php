@@ -100,8 +100,9 @@
                       <tr>
                         <th>Carnet</th>
                         <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Año Ingreso</th>
                         <th>Estado</th>
-                        <th>Año de ingreso</th>
                         <th>Acciones</th>
                       </tr>
                     </thead>
@@ -109,8 +110,9 @@
                       <tr>
                         <th>Carnet</th>
                         <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Año Ingreso</th>
                         <th>Estado</th>
-                        <th>Año de ingreso</th>
                         <th>Acciones</th>
                       </tr>
                     </tfoot>
@@ -120,12 +122,13 @@
                       <tr>
                         <td>{{$estudiante->carnet}}</td>
                         <td>{{$estudiante->nombre}}</td>
-                        @if($estudiante->activo==1)
-                        <td>Activo</td>
-                        @else
-                        <td>Inactivo</td>
-                        @endif
+                        <td>{{ App\User::find($estudiante->user_id)->email }}</td>
                         <td>{{$estudiante->anio_ingreso}}</td>
+                        @if($estudiante->activo==1)
+                          <td><span class="badge badge-success col-md-8">Activo</span></td>
+                        @else
+                          <td><span class="badge badge-warning col-md-8">Inactivo</span></td>
+                        @endif
                         <td>
                           @if(auth()->user()->IsAdmin)
                           <button id="btn_eliminar" class="btn btn-sm" title="Eliminar"
@@ -248,7 +251,7 @@
               setTimeout(function() {
                   $("#message-success").attr('hidden', true);
                   location.reload();
-              }, 2000);
+              }, 6000);
           }
 
           $('#importExcel').click(function(e) {
@@ -281,7 +284,7 @@
                       }, 'slow');
                       setTimeout(function() {
                           $("#message-error").attr('hidden', true);
-                      }, 2000);
+                      }, 6000);
                   }
                   //Para ocultar spinner
                   $("#spinner").attr("hidden",true);
