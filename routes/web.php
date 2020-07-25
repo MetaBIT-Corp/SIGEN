@@ -16,7 +16,7 @@ use App\Area;
 //Rutas de pruebas
 Auth::routes();
 Route::get('/', function () {
-    return view('layouts.plantilla');
+    return view('index');
 });
 Route::get('/home', 'HomeController@index')->name('home');
 

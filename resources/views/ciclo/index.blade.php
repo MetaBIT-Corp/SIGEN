@@ -7,12 +7,12 @@
 @endsection
 @endsection
 @section("ol_breadcrumb")
-<div class="col-9 mt-2">
+<div class="col-md-8 breadcrumb-item">
     <a class="mr-2">
         Listado de Ciclos
     </a>
 </div>
-<div class="col-3">
+<div class="col-md-3">
     <a class="btn" href="{{url('ciclo/create')}}">
         <span class="icon-add text-primary">
         </span>
