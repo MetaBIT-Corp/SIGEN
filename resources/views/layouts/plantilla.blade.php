@@ -193,7 +193,6 @@
                         <main role="main" class="ml-md-0 pt-2 px-5 mb-5 pb-3">
 
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><strong>SIGEN</strong></li>
                                     @yield("ol_breadcrumb")
                                 </ol>
 
