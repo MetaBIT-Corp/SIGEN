@@ -571,6 +571,7 @@ class EstudianteController extends Controller
             $message = 'El Estudiante con carnet <em><b>' . $estudiante->carnet  . '</b></em> fue bloqueado con éxito';
         }else{
             $user->enabled = 1;
+            $user->attempts = 0;
             $message = 'El Estudiante con carnet <em><b>' . $estudiante->carnet  . '</b></em> fue desbloqueado con éxito';
         }
 

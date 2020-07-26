@@ -51,7 +51,7 @@ class LoginController extends Controller
      * @return array
      */
      protected function credentials(Request $request){
-        
+        error_log('-----------------------------------------------Entró.');
         $credentials = $request->only($this->username(), 'password');
         $email = $request->input('email');
         
@@ -61,7 +61,12 @@ class LoginController extends Controller
             if(!$user->is_admin){
                 $user->attempts = $user->attempts + 1;
                 $user->save();
+                //error_log('----------------------------Existe y no es admin.');
+            }else{
+              //  error_log('----------------------------Es admin.');
             }
+        }else{
+            //error_log('----------------------------Usuario no existe.');
         }
 
         if($user != null){

@@ -317,6 +317,7 @@ class DocenteController extends Controller
             $message = 'El Docente con carnet <em><b>' . $docente->carnet_dcn  . '</b></em> fue bloqueado con éxito';
         }else{
             $user->enabled = 1;
+            $user->attempts = 0;
             $message = 'El Docente con carnet <em><b>' . $docente->carnet_dcn  . '</b></em> fue desbloqueado con éxito';
         }
 
