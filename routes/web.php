@@ -84,6 +84,14 @@ Route::group(['middleware' => 'admin'], function(){
     Route::get('/estudiantes/estudiante/{estudiante_id}/update', 'EstudianteController@getUpdate')->name('gu_estudiante')->middleware('signed');
     Route::post('/estudiantes/estudiante/{estudiante_id}/update', 'EstudianteController@postUpdate')->name('pu_estudiante')->middleware('signed');
     Route::post('/estudiante/change-state', 'EstudianteController@changeStateEstudiante')->name('estudiante_change_state');
+
+    //Rutas para Gestión de Materias del Sistema
+    Route::get('/materias/index', 'MateriaController@index')->name('materias_index');
+    Route::post('/materias/{materia_id}/update', 'MateriaController@update')->name('materia_update');
+    Route::post('/materias/store', 'MateriaController@update')->name('materia_store');
+    Route::get('/materias/descargar/plantilla', 'MateriaController@downloadExcel')->name('materia_plantilla');
+    Route::post('/materias/upload-excel', 'MateriaController@uploadExcel')->name('materia_upload_planilla');
+
 });
 
 //Aqui iran las rutas a las que tiene acceso solo el Docente

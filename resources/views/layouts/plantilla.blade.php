@@ -184,6 +184,15 @@
                                         </a>
                                     </li>
                                     @endif
+                                    @if(auth()->user()->IsAdmin)
+                                    <li class="nav-item first-one">
+                                        <a class="nav-link " href="{{route('materias_index')}}">
+                                            <span data-feather="home"></span>
+                                                Materias
+                                            <span class="arrow-sidebar" data-feather="chevron-right"></span>
+                                        </a>
+                                    </li>
+                                    @endif
                                 @endif
                             </ul>
                         </div>
@@ -192,7 +201,7 @@
                         @yield("main_footer")
                         <main role="main" class="ml-md-0 pt-2 px-5 mb-5 pb-3">
 
-                                <ol class="breadcrumb">
+                                <ol class="breadcrumb row">
                                     <li class="breadcrumb-item"><strong>SIGEN</strong></li>
                                     @yield("ol_breadcrumb")
                                 </ol>
