@@ -31,8 +31,8 @@ class LoginController extends Controller
     //protected $redirectTo = '/home';
     protected $redirectTo = '/materias';
 
-    //Bloquear al usuario después de 3 intentos fallidos
-    protected $maxAttempts = 3;
+    //Bloquear al usuario después de 10 intentos fallidos
+    protected $maxAttempts = 100;
 
     /**
      * Create a new controller instance.
@@ -51,7 +51,6 @@ class LoginController extends Controller
      * @return array
      */
      protected function credentials(Request $request){
-        error_log('-----------------------------------------------Entró.');
         $credentials = $request->only($this->username(), 'password');
         $email = $request->input('email');
         
@@ -61,12 +60,7 @@ class LoginController extends Controller
             if(!$user->is_admin){
                 $user->attempts = $user->attempts + 1;
                 $user->save();
-                //error_log('----------------------------Existe y no es admin.');
-            }else{
-              //  error_log('----------------------------Es admin.');
             }
-        }else{
-            //error_log('----------------------------Usuario no existe.');
         }
 
         if($user != null){
