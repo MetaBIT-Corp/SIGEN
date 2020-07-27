@@ -31,8 +31,8 @@ class LoginController extends Controller
     //protected $redirectTo = '/home';
     protected $redirectTo = '/materias';
 
-    //Bloquear al usuario después de 3 intentos fallidos
-    protected $maxAttempts = 3;
+    //Bloquear al usuario después de 10 intentos fallidos
+    protected $maxAttempts = 100;
 
     /**
      * Create a new controller instance.
@@ -51,7 +51,6 @@ class LoginController extends Controller
      * @return array
      */
      protected function credentials(Request $request){
-        
         $credentials = $request->only($this->username(), 'password');
         $email = $request->input('email');
         

@@ -55,7 +55,13 @@ class CicloController extends Controller
             $fecha_fin_ciclo_anterior = Carbon::parse($ciclo_anterior->fin_ciclo);
             if(Carbon::parse($ciclo_anterior->fin_ciclo)>=$fecha_inicio){
                 return redirect('ciclo/create')
-                        ->withErrors(['inicio_ciclo_menor'=>'La fecha del nuevo ciclo debe de ser mayor la fecha de finalizacion del ciclo anterior.'])
+                        ->withErrors(['inicio_ciclo_menor'=>'La fecha del nuevo ciclo debe de ser mayor a la fecha de finalizacion del ciclo anterior.'])
+                        ->withInput();
+            }
+
+            if($fecha_fin_ciclo_anterior>Carbon::now()){
+                return redirect('ciclo/create')
+                        ->withErrors(['no_create_ciclo'=>'No se puede crear un ciclo hasta que finalice el anterior. Ciclo actual finaliza el '.$fecha_fin_ciclo_anterior->format('d/m/Y')])
                         ->withInput();
             }
         }
@@ -124,6 +130,20 @@ class CicloController extends Controller
             return redirect('ciclo/edit')
                         ->withErrors($validator)
                         ->withInput();
+        }
+
+        $ciclo_anterior = DB::table('ciclo')->where('id_ciclo','<>',$id)->latest()->first();
+        //dd($ciclo_anterior);
+        $fecha_inicio = Carbon::parse($request->inicio_ciclo);
+
+        // Validacion de fechas mayores al ciclo anterior
+        if(isset($ciclo_anterior)){
+            $fecha_fin_ciclo_anterior = Carbon::parse($ciclo_anterior->fin_ciclo);
+            if(Carbon::parse($ciclo_anterior->fin_ciclo)>=$fecha_inicio){
+                return back()
+                        ->withErrors(['inicio_ciclo_menor'=>'La fecha del nuevo ciclo debe de ser mayor a la fecha de finalizacion del ciclo anterior.'])
+                        ->withInput();
+            }
         }
 
         // Actualizando ciclo

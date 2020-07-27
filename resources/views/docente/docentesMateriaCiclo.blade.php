@@ -4,8 +4,7 @@
 
 @section("css")
 	 <link href="{{asset('vendor/datatables/dataTables.bootstrap4.css')}}" type="text/css" rel="stylesheet"> 
-	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.css')}}">
-	 <link rel="stylesheet" type="text/css" href="{{asset('css/sb-admin.min.css')}}">
+   <link rel="stylesheet" href="{{asset('css/estilo.css')}}">
 @endsection
 
 @section("body")
@@ -76,10 +75,10 @@
   <!-- /.content-wrapper -->
 </div>
 
-<!-- Scroll to Top Button-->
+<!-- Scroll to Top Button
 <a class="scroll-to-top rounded" href="#page-top">
   <i class="fas fa-angle-up"></i>
-</a>
+</a>-->
 
 @endsection
 @endsection

@@ -222,11 +222,14 @@ class DocenteController extends Controller
         $docente->carnet_dcn = strtoupper($request->input('carnet_dcn'));
         $docente->anio_titulo = $request->input('anio_titulo');
         $docente->user_id = $user->id;
-        $docente->save();
+        $docente->activo = 0;
 
         if(isset($request->all()['activo']))
             $docente->activo = 1;
-
+        $docente->save();
+        
+        //Envio de correo
+        $this->emailSend($user->email, $pass);
         return redirect()->route("docentes_index")->with("notification-message", 'Docente registrado exitosamente')
                                                   ->with("notification-type", 'success');
     }
@@ -317,6 +320,7 @@ class DocenteController extends Controller
             $message = 'El Docente con carnet <em><b>' . $docente->carnet_dcn  . '</b></em> fue bloqueado con éxito';
         }else{
             $user->enabled = 1;
+            $user->attempts = 0;
             $message = 'El Docente con carnet <em><b>' . $docente->carnet_dcn  . '</b></em> fue desbloqueado con éxito';
         }
 
