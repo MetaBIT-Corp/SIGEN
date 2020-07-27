@@ -22,6 +22,7 @@ use DateTime;
 use DateInterval;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use Mail;
 
 class EstudianteController extends Controller
 {
@@ -482,11 +483,14 @@ class EstudianteController extends Controller
         $estudiante->carnet = strtoupper($request->input('carnet'));
         $estudiante->anio_ingreso = $request->input('anio_ingreso');
         $estudiante->user_id = $user->id;
+        $estudiante->activo = 0;
 
         if(isset($request->all()['activo']))
             $estudiante->activo = 1;
 
         $estudiante->save();
+        //Envio de correo
+        $this->emailSend($user->email, $pass);
         return redirect()->route("estudiantes_index")->with("notification-message", 'Estudiante registrado exitosamente')
                                                   ->with("notification-type", 'success');
     }

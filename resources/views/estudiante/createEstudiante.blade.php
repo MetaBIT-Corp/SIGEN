@@ -72,7 +72,7 @@
             
             <div class="form-group">
               <div class="form-check">
-                <input id="activo" type="checkbox" name="activo" class="form-check-input" required checked>
+                <input id="activo" type="checkbox" name="activo" class="form-check-input"  checked>
                 <label for="activo">
                   <small for="activo" class="form-text text-muted"><strong>Activo.</strong> Seleccione para indicar que es un usuario activo
                   </small>

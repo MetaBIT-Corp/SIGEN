@@ -77,7 +77,7 @@
             
             <div class="form-group">
               <div class="form-check">
-                <input id="activo" type="checkbox" name="activo" class="form-check-input" required
+                <input id="activo" type="checkbox" name="activo" class="form-check-input" 
                 @if($estudiante->activo)
                 checked
                 >
