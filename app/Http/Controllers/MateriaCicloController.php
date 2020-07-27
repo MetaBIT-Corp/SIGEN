@@ -54,6 +54,8 @@ class MateriaCicloController extends Controller
      * @author Ricardo Estupinian
      */
     public function uploadExcel(Request $request,$id_ciclo){
+        $contador_total = 0;
+        $contador_insertados = 0;
         $ciclo = Ciclo::where('id_ciclo',$id_ciclo)->first();
 
         //Se guarda en la ruta storage/app/importExcel de manera temporal y se recupera la ruta
@@ -83,6 +85,7 @@ class MateriaCicloController extends Controller
                     $docente = Docente::where('carnet_dcn', strtoupper($data[$i]["B"]))->first();
 
                     if(isset($materia) && isset($docente)){
+                        $contador_total++;
                         $materia_ciclo = CicloMateria::
                                   where('id_cat_mat',$materia->id_cat_mat)
                                 ->where('id_ciclo',$ciclo->id_ciclo)->first();
@@ -96,6 +99,7 @@ class MateriaCicloController extends Controller
                                 $carga->id_mat_ci = $materia_ciclo->id_mat_ci;
                                 $carga->id_pdg_dcn = $docente->id_pdg_dcn;
                                 $carga->save();
+                                $contador_insertados++;
                             }
                         }else{
                             $materia_ciclo = new  CicloMateria;
@@ -107,11 +111,12 @@ class MateriaCicloController extends Controller
                             $carga->id_mat_ci = $materia_ciclo->id;
                             $carga->id_pdg_dcn = $docente->id_pdg_dcn;
                             $carga->save();
+                            $contador_insertados++;
                         }
                     }
                 }
             }
-            $message=['success'=>'La importacion de materias al ciclo se ejecuto correctamente.','type'=>2];
+            $message=['success'=>'La importacion se ejecuto correctamente. Se almacenaron '.$contador_insertados.'/'.$contador_total.' registros.','type'=>2];
         }else{
             $message=['error'=>'La plantilla subida no es para agregar Materias al Ciclo.','type'=>1];
         }
