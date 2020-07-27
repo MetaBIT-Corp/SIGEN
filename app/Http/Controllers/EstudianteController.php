@@ -380,7 +380,7 @@ class EstudianteController extends Controller
 					$user->save();
 
 					$estudiante = new Estudiante();
-					$estudiante->carnet = $data[$i]["A"];
+					$estudiante->carnet = strtoupper($data[$i]["A"]);
 					$estudiante->nombre = $data[$i]["B"];
                     $estudiante->activo = 1;
                     

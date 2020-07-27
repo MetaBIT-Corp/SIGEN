@@ -66,7 +66,7 @@ class MateriaController extends Controller
                 
                 $materia = Materia::where('id_cat_mat',$request->materia_id)->update(
                 [
-                    'codigo_mat'=>$request->materia_codigo,
+                    'codigo_mat'=> strtoupper($request->materia_codigo),
                     'nombre_mar'=>$request->materia,
                     'es_electiva'=>$request->materia_tipo,
                     'maximo_cant_preguntas'=>$request->materia_preguntas
@@ -75,7 +75,7 @@ class MateriaController extends Controller
             }else{
 
                 $materia = new Materia;
-                $materia->codigo_mat =$request->materia_codigo;
+                $materia->codigo_mat =strtoupper($request->materia_codigo);
                 $materia->nombre_mar =$request->materia;
                 $materia->es_electiva =$request->materia_tipo;
                 $materia->maximo_cant_preguntas =$request->materia_preguntas;
@@ -134,7 +134,7 @@ class MateriaController extends Controller
 
                     //Validaciones
 
-                    if(Materia::where('codigo_mat', $data[$i]["A"])->count() > 0)
+                    if(Materia::where('codigo_mat', strtoupper($data[$i]["A"]))->count() > 0)
                         continue;
                     if(Materia::where('nombre_mar', $data[$i]["B"])->count() > 0)
                         continue;
@@ -143,7 +143,7 @@ class MateriaController extends Controller
                         continue;
 
                     $materia = new Materia();
-                    $materia->codigo_mat = $data[$i]["A"];
+                    $materia->codigo_mat = strtoupper($data[$i]["A"]);
                     $materia->nombre_mar = $data[$i]["B"];
 
                     if($data[$i]["C"]=='Si'){

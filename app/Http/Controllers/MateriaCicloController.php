@@ -83,9 +83,9 @@ class MateriaCicloController extends Controller
                 if($data[$i]["A"]!=null && $data[$i]["B"]!=null){
                     $materia = Materia::where('codigo_mat', strtoupper($data[$i]["A"]))->first();
                     $docente = Docente::where('carnet_dcn', strtoupper($data[$i]["B"]))->first();
-
+                    $contador_total++;
                     if(isset($materia) && isset($docente)){
-                        $contador_total++;
+                        
                         $materia_ciclo = CicloMateria::
                                   where('id_cat_mat',$materia->id_cat_mat)
                                 ->where('id_ciclo',$ciclo->id_ciclo)->first();

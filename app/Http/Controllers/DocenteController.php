@@ -112,7 +112,7 @@ class DocenteController extends Controller
 					$user->save();
 
 					$docente = new Docente();
-					$docente->carnet_dcn = $data[$i]["A"];
+					$docente->carnet_dcn = strtoupper($data[$i]["A"]);
 					$docente->nombre_docente = $data[$i]["B"];
 					$docente->descripcion_docente = $data[$i]["D"];
                     $docente->anio_titulo = str_replace(",","",$data[$i]["E"]);;

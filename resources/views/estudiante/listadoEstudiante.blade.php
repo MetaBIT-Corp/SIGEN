@@ -14,7 +14,7 @@
 @section("ol_breadcrumb")
     <li class="breadcrumb-item"><a href="{{route('materias')}}">Materia</a></li>
     <li class="breadcrumb-item">Estudiante</li>
-    @if(auth()->user()->IsAdmin or auth()->user()->IsDocente)
+    @if(auth()->user()->IsAdmin or auth()->user()->IsTeacher)
     <div class="offset-8 btn-group" role="group" aria-label="Basic example">
         <!--Boton para agregar pregunta-->
         <button class="btn btn-secondary" href="#" title="Inscribir estudiante" onclick="activateModalInscripcion(this);" >
@@ -121,7 +121,7 @@
                    " class="btn btn-sm btn-option">
                       <span class="icon-student"></span>
                     </a>
-                     @if(auth()->user()->IsAdmin or auth()->user()->IsDocente)
+                     @if(auth()->user()->IsAdmin or auth()->user()->IsTeacher)
                     <button title="Desinscribir estudiante" class="btn btn-sm btn-danger" 
                       onclick="activateModalDesinscripcion(this);" 
                       data-id_est="{{$estudiante->id_est}}" 
