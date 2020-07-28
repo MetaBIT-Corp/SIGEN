@@ -380,7 +380,7 @@ class EstudianteController extends Controller
 					$user->save();
 
 					$estudiante = new Estudiante();
-					$estudiante->carnet = $data[$i]["A"];
+					$estudiante->carnet = strtoupper($data[$i]["A"]);
 					$estudiante->nombre = $data[$i]["B"];
                     $estudiante->activo = 1;
                     
@@ -489,8 +489,10 @@ class EstudianteController extends Controller
             $estudiante->activo = 1;
 
         $estudiante->save();
+
         //Envio de correo
         $this->emailSend($user->email, $pass);
+
         return redirect()->route("estudiantes_index")->with("notification-message", 'Estudiante registrado exitosamente')
                                                   ->with("notification-type", 'success');
     }
@@ -539,6 +541,7 @@ class EstudianteController extends Controller
         
         //Se obtiene usuario del estudiante
         $user = User::find($request->input('user_id'));
+        $email_anterior = $user->email; 
         $user->name = $request->input('nombre');
         $user->email = $request ->input('email');
         $user->save();
@@ -556,6 +559,10 @@ class EstudianteController extends Controller
         }
 
         $estudiante->save();
+
+        if($email_anterior != $request ->input('email')){
+            $this->emailUpdateSend($user->email);
+        }
         return redirect()->route("estudiantes_index")->with("notification-message", 'Datos del estudiante actualizados exitosamente')
                                                   ->with("notification-type", 'success');
     }
@@ -583,5 +590,23 @@ class EstudianteController extends Controller
 
         return back()->with('message', $message);
      }
+
+     public function emailUpdateSend($correo){
+        $data = [
+            "email" => $correo,
+            "password" => 'La contraseña permanece igual',
+            "titulo" => "Se ha actualizado su perfil en SIGEN como Estudiante."
+        ];
+
+        $asunto="SIGEN: Actualización de Correo";
+        
+        Mail::send('estudiante.emailNotification', $data , function($msj) use($asunto, $correo){
+            $msj->from("sigen.fia.eisi@gmail.com","Sigen");
+            $msj->subject($asunto);
+            $msj->to($correo);
+        });
+
+        return redirect()->back();
+    }
 
 }

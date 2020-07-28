@@ -112,7 +112,7 @@ class DocenteController extends Controller
 					$user->save();
 
 					$docente = new Docente();
-					$docente->carnet_dcn = $data[$i]["A"];
+					$docente->carnet_dcn = strtoupper($data[$i]["A"]);
 					$docente->nombre_docente = $data[$i]["B"];
 					$docente->descripcion_docente = $data[$i]["D"];
                     $docente->anio_titulo = str_replace(",","",$data[$i]["E"]);;
@@ -282,6 +282,7 @@ class DocenteController extends Controller
         
         //Se obtiene usuario del docente
         $user = User::find($request->input('user_id'));
+        $email_anterior = $user->email;
         $user->name = $request->input('nombre_docente');
         $user->email = $request ->input('email');
         $user->save();
@@ -300,6 +301,11 @@ class DocenteController extends Controller
         }
 
         $docente->save();
+
+        if($email_anterior != $request ->input('email')){
+            $this->emailUpdateSend($user->email);
+        }
+
         return redirect()->route("docentes_index")->with("notification-message", 'Datos del docente actualizados exitosamente')
                                                   ->with("notification-type", 'success');
     }
@@ -328,4 +334,22 @@ class DocenteController extends Controller
 
         return back()->with('message', $message);
      }
+
+     public function emailUpdateSend($correo){
+        $data = [
+            "email" => $correo,
+            "password" => 'La contraseña permanece igual',
+            "titulo" => "Se ha actualizado su perfil en SIGEN como Docente."
+        ];
+
+        $asunto="SIGEN: Actualización de Correo";
+        
+        Mail::send('estudiante.emailNotification', $data , function($msj) use($asunto, $correo){
+            $msj->from("sigen.fia.eisi@gmail.com","Sigen");
+            $msj->subject($asunto);
+            $msj->to($correo);
+        });
+
+        return redirect()->back();
+    }
 }

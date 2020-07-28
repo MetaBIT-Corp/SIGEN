@@ -83,9 +83,9 @@ class MateriaCicloController extends Controller
                 if($data[$i]["A"]!=null && $data[$i]["B"]!=null){
                     $materia = Materia::where('codigo_mat', strtoupper($data[$i]["A"]))->first();
                     $docente = Docente::where('carnet_dcn', strtoupper($data[$i]["B"]))->first();
-
+                    $contador_total++;
                     if(isset($materia) && isset($docente)){
-                        $contador_total++;
+                        
                         $materia_ciclo = CicloMateria::
                                   where('id_cat_mat',$materia->id_cat_mat)
                                 ->where('id_ciclo',$ciclo->id_ciclo)->first();
@@ -147,6 +147,8 @@ class MateriaCicloController extends Controller
      * @author Edwin Palacios
      */
     public function uploadExcelInscripcionEstudiantes(Request $request, $materia_ciclo_id){
+        $contador_total = 0;
+        $contador_insertados = 0;
         $ciclo_materia = CicloMateria::where('id_mat_ci', '=', $materia_ciclo_id)->first();
         $ciclo = Ciclo::where('id_ciclo', $ciclo_materia->id_ciclo)->first();
         $materia = Materia::where('id_cat_mat', '=', $ciclo_materia->id_cat_mat)->first();
@@ -174,11 +176,10 @@ class MateriaCicloController extends Controller
         if($data[1]["I"]=="PI01"){
             for($i = 5; $i<=count($data);$i++){
                 if($data[$i]["A"]!=null){
+                    $contador_total++;
                     $estudiante = Estudiante::where('carnet', strtoupper($data[$i]["A"]))->first();
-                    
                     if(isset($estudiante)){
                         $carga_academica = CargaAcademica::where('id_mat_ci', $materia_ciclo_id)->first();
-
                         if(isset($carga_academica)){
                             $inscripcion = DetalleInscEst::
                                   where('id_carg_aca',$carga_academica->id_carg_aca)
@@ -188,12 +189,13 @@ class MateriaCicloController extends Controller
                                 $inscripcion_estudiante->id_carg_aca = $carga_academica->id_carg_aca;
                                 $inscripcion_estudiante->id_est = $estudiante->id_est;
                                 $inscripcion_estudiante->save();
+                                $contador_insertados++;
                             }
                         }
                     }
                 }
             }
-            $message=['success'=>'La importacion de las inscripciones se ejecuto correctamente.','type'=>2];
+            $message=['success'=>'La importacion de las inscripciones se ejecuto correctamente. Se almacenaron '.$contador_insertados.'/'.$contador_total.' registros.','type'=>2];
         }else{
             $message=['error'=>'La plantilla subida no es la indicada para agregar Inscripciones al ciclo.','type'=>1];
         }

@@ -14,7 +14,7 @@
 @section("ol_breadcrumb")
     <li class="breadcrumb-item"><a href="{{route('materias')}}">Materia</a></li>
     <li class="breadcrumb-item">Estudiante</li>
-
+    @if(auth()->user()->IsAdmin or auth()->user()->IsTeacher)
     <div class="offset-8 btn-group" role="group" aria-label="Basic example">
         <!--Boton para agregar pregunta-->
         <button class="btn btn-secondary" href="#" title="Inscribir estudiante" onclick="activateModalInscripcion(this);" >
@@ -41,7 +41,7 @@
        </form>
         
     </div>
-   
+   @endif
 
 @endsection
 @section("main")
@@ -121,6 +121,7 @@
                    " class="btn btn-sm btn-option">
                       <span class="icon-student"></span>
                     </a>
+                     @if(auth()->user()->IsAdmin or auth()->user()->IsTeacher)
                     <button title="Desinscribir estudiante" class="btn btn-sm btn-danger" 
                       onclick="activateModalDesinscripcion(this);" 
                       data-id_est="{{$estudiante->id_est}}" 
@@ -128,6 +129,7 @@
                       data-carnet="{{$estudiante->carnet}}">
                       <span class="icon-minus-circle"></span>
                     </button>
+                    @endif
                   </td>
                 </tr>
                  @endforeach
@@ -151,11 +153,11 @@
 </div>
 <!-- /#wrapper -->
 
-<!-- Scroll to Top Button-->
+<!-- Scroll to Top Button
 <a class="scroll-to-top rounded" href="#page-top">
   <i class="fas fa-angle-up"></i>
 </a>
-
+-->
 <div id="modal_desinscribir" class="modal" tabindex="-1" role="dialog"> 
   <div class="modal-dialog" role="document"> 
     <div class="modal-content"> 
