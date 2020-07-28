@@ -99,4 +99,58 @@ $(document).ready(function(){
 
     });
 
+    $('#deleteModal').on('show.bs.modal', function(event){
+
+        $('#errorDivDelete').hide();
+
+        var modal = $(this);
+        var link = $(event.relatedTarget);
+
+        var id = link.data('id');
+        var codigo = link.data('codigo');
+        var materia = link.data('materia');
+
+        modal.find('.modal-footer #materia-id-delete').val(id);
+
+    });
+
+    $('#materiaDeleteBtnSubmit').click(function(e){
+        e.preventDefault();
+
+        var form = $(this).parents('form');
+        var url = form.attr('action');
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: form.serialize(),
+            dataType: "json"
+        }).done(function(datos){
+
+            if(datos.status==0){
+                $('#materiaDeleteBtnSubmit').attr("disabled", true);
+                location.reload(true);
+            }else{
+
+                $('#errorDivDelete').show();
+
+                /*Limpiamos la lista del Div de Alerta.*/
+                var child = document.getElementById("errorUlDelete").lastElementChild;
+                while (child) {
+                    document.getElementById("errorUlDelete").removeChild(child);
+                    child = document.getElementById("errorUlDelete").lastElementChild;
+                }
+
+                var li = document.createElement('li');
+                var liContent = document.createTextNode(datos.error);
+                li.appendChild(liContent);
+                document.getElementById("errorUlDelete").appendChild(li);
+
+            }
+
+        }).fail(function(xhr, status, e){
+            console.log(e);
+        });
+    });
+
 });

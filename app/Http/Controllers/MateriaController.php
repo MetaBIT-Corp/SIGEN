@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Materia;
+use App\CicloMateria;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -86,6 +87,21 @@ class MateriaController extends Controller
             return response()->json(['materia'=>$materia]);
             
         }
+
+    }
+
+    public function delete(Request $request){
+
+        $materiaCiclo = CicloMateria::where('id_cat_mat',$request->materia_id_delete)->first();
+
+        if(!$materiaCiclo){
+            Materia::where('id_cat_mat',$request->materia_id_delete)->delete();
+            $message=['success'=>'La materia fue eliminada.','status'=>0];
+        }else{
+            $message=['error'=>'La materia no puede ser eliminada, ya está siendo utilizada.','status'=>1];
+        }
+
+        return response()->json($message);
 
     }
 

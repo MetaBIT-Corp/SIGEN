@@ -89,6 +89,7 @@ Route::group(['middleware' => 'admin'], function(){
     Route::get('/materias/index', 'MateriaController@index')->name('materias_index');
     Route::post('/materias/{materia_id}/update', 'MateriaController@update')->name('materia_update');
     Route::post('/materias/store', 'MateriaController@update')->name('materia_store');
+    Route::post('/materias/{materia_id}/delete', 'MateriaController@delete')->name('materia_delete');
     Route::get('/materias/descargar/plantilla', 'MateriaController@downloadExcel')->name('materia_plantilla');
     Route::post('/materias/upload-excel', 'MateriaController@uploadExcel')->name('materia_upload_planilla');
 

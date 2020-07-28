@@ -206,8 +206,7 @@
 						</div>
 
 						<div id="errorDiv" class="alert alert-danger m-3">
-							<ul id="errorUl">
-								
+							<ul id="errorUl">								
 							</ul>
 						</div>
 					
@@ -225,7 +224,41 @@
 		</div>
 	</div>
 
-	<!-- Fin de modal para edición de opcion -->
+	<!-- Fin de modal para edición de materia -->
+
+	<!-- Modal para la eliminacioón de materia -->
+
+	<div class="modal" id="deleteModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Eliminar Materia</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<legend>¿Está seguro que quiere eliminar la materia?</legend>
+					<div id="errorDivDelete" class="alert alert-danger pt-2 pb-0">
+						<ul id="errorUlDelete"></ul>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<form action="{{ route('materia_delete',$materia->id_cat_mat)}}" method="POST">
+						<div class="form-group d-none">
+							<label class="col-form-label" for="materia-id-delete">Materia ID:</label>
+							<input type="text" class="form-control" name="materia_id_delete" placeholder="ID de Materia" id="materia-id-delete">
+						</div>
+						{{ csrf_field() }}
+						<button type="submit" id="materiaDeleteBtnSubmit" class="btn btn-danger">Si, eliminar</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Fin de modal para eliminación de materia -->
 
 @endsection
 
