@@ -11,7 +11,9 @@
   <div class="col-lg-7 my-auto ">
     <div class="header-content mx-auto animate__animated animate__bounceInLeft">
       <h1 class="mb-5">Sistema de Información para la Gestión de Encuestas y Evaluaciones (SIGEN)</h1>
-      <a href="/login" class="btn btn-option btn-lg" style="text-decoration: none; color: #FFFFFF">Iniciar Sesión!</a>
+      @if(!auth()->check())
+        <a href="/login" class="btn btn-option btn-lg" style="text-decoration: none; color: #FFFFFF">Iniciar Sesión!</a>
+      @endif
     </div>
   </div>
   <div class="col-lg-5 my-auto">

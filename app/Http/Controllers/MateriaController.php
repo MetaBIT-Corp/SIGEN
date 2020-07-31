@@ -43,7 +43,7 @@ class MateriaController extends Controller
 
         $rules = [
             'materia'=> 'required',
-            'materia_codigo' => 'required',
+            'materia_codigo' => 'required|between:1,7',
             'materia_preguntas' => 'required|integer|min:1'
         ];
 
@@ -51,6 +51,7 @@ class MateriaController extends Controller
 
             'materia.required' => 'Nombre de Materia no ingresado.',
             'materia_codigo.required' => 'Código de Materia no ingresado',
+            'materia_codigo.between' => 'Código de Materia no está en el límite permitido de caracteres',
             'materia_preguntas.required' => 'Cantidad de Preguntas de Materia no ingresada',
 
             'materia_preguntas.integer' => 'Cantidad de Preguntas de Materia ingresada no es un valor numérico entero',
@@ -95,13 +96,16 @@ class MateriaController extends Controller
         $materiaCiclo = CicloMateria::where('id_cat_mat',$request->materia_id_delete)->first();
 
         if(!$materiaCiclo){
+
             Materia::where('id_cat_mat',$request->materia_id_delete)->delete();
             $message=['success'=>'La materia fue eliminada.','status'=>0];
-        }else{
-            $message=['error'=>'La materia no puede ser eliminada, ya está siendo utilizada.','status'=>1];
-        }
 
-        return response()->json($message);
+            return back()->with('notification-type','success')->with('notification-message','La materia se ha eliminado con éxito.');
+        }else{
+
+            $message=['error'=>'La materia no puede ser eliminada, ya está siendo utilizada.','status'=>1];
+            return back()->with('notification-type','warning')->with('notification-message','La Materia no puede ser eliminada, debido a que ha sido registrada en uno o más ciclos.');
+        }
 
     }
 

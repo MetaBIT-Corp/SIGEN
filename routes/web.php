@@ -20,8 +20,6 @@ Route::get('/', function () {
 });
 Route::get('/home', 'HomeController@index')->name('home');
 
-
-
 //Rutas relacionadas con Clave Area
 Route::get('random/', 'EvaluacionController@random');
 Route::post('turno/claves', 'ClaveController@asignarPreguntas')->name('agregar_clave_area');

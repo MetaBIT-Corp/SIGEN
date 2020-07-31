@@ -114,43 +114,43 @@ $(document).ready(function(){
 
     });
 
-    $('#materiaDeleteBtnSubmit').click(function(e){
-        e.preventDefault();
+    // $('#materiaDeleteBtnSubmit').click(function(e){
+    //     e.preventDefault();
 
-        var form = $(this).parents('form');
-        var url = form.attr('action');
+    //     var form = $(this).parents('form');
+    //     var url = form.attr('action');
 
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: form.serialize(),
-            dataType: "json"
-        }).done(function(datos){
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: url,
+    //         data: form.serialize(),
+    //         dataType: "json"
+    //     }).done(function(datos){
 
-            if(datos.status==0){
-                $('#materiaDeleteBtnSubmit').attr("disabled", true);
-                location.reload(true);
-            }else{
+    //         if(datos.status==0){
+    //             $('#materiaDeleteBtnSubmit').attr("disabled", true);
+    //             location.reload(true);
+    //         }else{
 
-                $('#errorDivDelete').show();
+    //             $('#errorDivDelete').show();
 
-                /*Limpiamos la lista del Div de Alerta.*/
-                var child = document.getElementById("errorUlDelete").lastElementChild;
-                while (child) {
-                    document.getElementById("errorUlDelete").removeChild(child);
-                    child = document.getElementById("errorUlDelete").lastElementChild;
-                }
+    //             /*Limpiamos la lista del Div de Alerta.*/
+    //             var child = document.getElementById("errorUlDelete").lastElementChild;
+    //             while (child) {
+    //                 document.getElementById("errorUlDelete").removeChild(child);
+    //                 child = document.getElementById("errorUlDelete").lastElementChild;
+    //             }
 
-                var li = document.createElement('li');
-                var liContent = document.createTextNode(datos.error);
-                li.appendChild(liContent);
-                document.getElementById("errorUlDelete").appendChild(li);
+    //             var li = document.createElement('li');
+    //             var liContent = document.createTextNode(datos.error);
+    //             li.appendChild(liContent);
+    //             document.getElementById("errorUlDelete").appendChild(li);
 
-            }
+    //         }
 
-        }).fail(function(xhr, status, e){
-            console.log(e);
-        });
-    });
+    //     }).fail(function(xhr, status, e){
+    //         console.log(e);
+    //     });
+    // });
 
 });

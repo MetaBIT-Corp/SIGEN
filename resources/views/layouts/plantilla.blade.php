@@ -222,7 +222,7 @@
                             @yield("footer")
                             <div class="container">
                                 <div class="copyright">
-                                    <span>Derechos Reservados © SIGPAD/SIGEN 2019</span>
+                                    <span>Derechos Reservados © SIGEN 2020</span>
                                 </div>
                             </div>                            
                         </footer>

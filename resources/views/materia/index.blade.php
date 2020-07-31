@@ -47,7 +47,7 @@
 
 @section('main')
 
-@if(session('notification-message') and session('notification-type'))
+		  @if(session('notification-message') and session('notification-type'))
           <div class="alert alert-{{ session('notification-type') }} text-center alert-dismissible fade show" role="alert">
             <h5>{{ session('notification-message') }}</h5>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
