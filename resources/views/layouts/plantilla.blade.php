@@ -5,7 +5,10 @@
     use Request;
     use View;
     use URL;
+    use App\User;
     //use Request;
+    
+    $users = User::all();
     $ciclo_activo = Ciclo::where('estado',1)->first();
     View::share('ciclo_activo', $ciclo_activo);
 
@@ -104,7 +107,12 @@
                 </div>
             
             @else
-                <a href="/login" class="navbar-brand"><i class="fas fa-sign-in-alt"></i> Ingresar</a>
+                <div class="text-right">
+                    <a href="/login" class="navbar-brand"><i class="fas fa-sign-in-alt"></i> Ingresar</a>
+                    @if(count($users) == 0)
+                        <a href="/register" class="navbar-brand"><i class="fas fa-user"></i> Registrar</a>
+                    @endif
+                </div>
             @endif
             
         </nav>
