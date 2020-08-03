@@ -30,7 +30,7 @@
         </a>
 
         <!--Icono para importar Docentes -->
-        <a class="btn btn-secondary" href="" title="Importar Docentes" id="importExcel">
+        <a class="btn btn-secondary" href="" title="Importar Materias" id="importExcel">
             <h6 class="mb-0">
                 <span class="icon-importExcel"></span>
             </h6>

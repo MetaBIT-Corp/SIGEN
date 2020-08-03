@@ -53,6 +53,12 @@ class LoginController extends Controller
      protected function credentials(Request $request){
         $credentials = $request->only($this->username(), 'password');
         $email = $request->input('email');
+        $admin = User::where('role', 0)->first();
+        $admin_email = '';
+
+        if($admin != null){
+            $admin_email = $admin->email;
+        }
         
         $user = User::where('email', $email)->first();
 
@@ -69,7 +75,7 @@ class LoginController extends Controller
                 $user->save();
                 $failed_credentials = array("email" => null, "password" => null);
 
-                Session::put('block_message', 'Este usuario ha consumido la cantidad máxima de intentos, favor contactar al administrador');
+                Session::put('block_message', 'Este usuario ha consumido la cantidad máxima de intentos, favor contactar al administrador: <b>' . $admin_email) . '</b>';
 
                 return array_add($failed_credentials, 'enabled', 1);
             }

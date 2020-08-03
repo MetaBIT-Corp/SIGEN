@@ -81,7 +81,7 @@
 <script>
 setTimeout(function() {
     $(".alert").fadeOut();           
-},3000);
+},20000);
 </script>
 @section('encuestas')
 @endsection
