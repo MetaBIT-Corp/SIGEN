@@ -32,9 +32,13 @@ $(document).ready(function(){
 
         e.preventDefault();
 
-        var form = $(this).parents('form');
-        var url = form.attr('action');
+        if($('#materia-id').val()==""){
+            var url = "/materias/store"
+        }else{
+            var url = "/materias/"+$('#materia-id').val()+"/update";
+        }
 
+        var form = $(this).parents('form');
         $.ajax({
             type: 'POST',
             url: url,

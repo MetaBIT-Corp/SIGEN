@@ -170,7 +170,11 @@
 					</button>
 				</div>
 
+				@isset($materia)
 				<form action="{{ route('materia_update',$materia->id_cat_mat)}}" method="POST" class="mb-0">
+				@else
+				<form action="" method="POST" class="mb-0">
+				@endisset
 					
 					<div class="modal-body">
 
@@ -244,7 +248,11 @@
 					</div>
 				</div>
 				<div class="modal-footer">
+					@isset($materia)
 					<form action="{{ route('materia_delete',$materia->id_cat_mat)}}" method="POST">
+					@else
+					<form action="" method="POST">
+					@endisset
 						<div class="form-group d-none">
 							<label class="col-form-label" for="materia-id-delete">Materia ID:</label>
 							<input type="text" class="form-control" name="materia_id_delete" placeholder="ID de Materia" id="materia-id-delete">

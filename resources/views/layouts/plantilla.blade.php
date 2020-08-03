@@ -49,9 +49,7 @@
         
     </head>
 
-
-
-    <body id="page-top" style="background: white;" onload="deshabilitaRetroceso()">
+    <body id="page-top" style="background: white;">
 
 
         @yield("body")
